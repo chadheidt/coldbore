@@ -1,0 +1,78 @@
+# GitHub Actions workflow that builds Cold Bore.app on every push and on
+# every release tag. Auto-attaches the .app.zip to GitHub Releases when a
+# tag like v0.7.0 is pushed.
+#
+# To use this:
+#   1. Push the code to your GitHub repo (chadheidt/coldbore)
+#   2. GitHub will run this workflow automatically on each push to main
+#   3. To cut a release: bump APP_VERSION in app/version.py + setup.py, commit,
+#      then run: git tag v0.7.0 && git push origin v0.7.0
+#   4. Workflow builds the .app, zips it, attaches the zip to the release
+#   5. Update manifest.json in the repo to point at the new release URL
+#
+# Requires: nothing (uses GitHub-hosted macOS runners — free for public repos).
+
+name: Build Cold Bore.app
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  release:
+    types: [created]
+  # Allow manual runs from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Run pytest
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest openpyxl PyQt5
+      - name: Run tests
+        run: pytest tests/ -v
+
+  build:
+    name: Build .app bundle
+    needs: test
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install build dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools openpyxl PyQt5 py2app
+      - name: Generate app icon
+        run: python app/resources/generate_icon.py
+      - name: Build .app
+        run: python setup.py py2app
+      - name: Zip the .app
+        run: |
+          cd dist
+          ditto -c -k --keepParent "Cold Bore.app" "Cold Bore.zip"
+      - name: Upload .app.zip as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ColdBore-${{ github.sha }}
+          path: dist/Cold Bore.zip
+      # If this is a release event, attach the zip to the release automatically
+      - name: Attach to GitHub Release (release events only)
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/Cold Bore.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

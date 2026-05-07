@@ -1,0 +1,8 @@
+{
+  "app_version": "0.6.0",
+  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.6.0/Cold.Bore.zip",
+  "app_release_notes": "Initial Cold Bore release. Brass-cartridge icon, drag-on-icon import, pluggable parser registry, and the Cold Bore rebrand.",
+  "template_version": "1.0",
+  "template_download_url": "",
+  "template_release_notes": ""
+}

@@ -1,0 +1,54 @@
+# --- User data — DO NOT COMMIT TO PUBLIC REPO ---
+# Your actual working workbooks, CSVs, backups, generated load cards
+*.xlsx
+.backups/
+Garmin Imports/
+BallisticX Imports/
+Completed Loads/
+Load Cards/
+Shared Loads/
+
+# Allow Garmin Imports/ and BallisticX Imports/ folder structure but not contents.
+# (We could include sample CSVs by un-ignoring specific files, but for now exclude everything.)
+
+# --- Build artifacts ---
+build/
+dist/
+*.egg-info/
+*.spec
+
+# --- Generated icon resources (regenerate via Generate Icon.command) ---
+app/resources/AppIcon.icns
+app/resources/icon.iconset/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+
+# --- macOS metadata ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+
+# --- Editor / IDE ---
+.vscode/
+.idea/
+*.swp
+*~
+.~lock.*
+
+# --- Excel temp lockfiles ---
+~$*.xlsx
+~$*.xltx
+
+# --- Test artifacts ---
+.pytest_cache/
+.coverage
+htmlcov/
