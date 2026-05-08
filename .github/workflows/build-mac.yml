@@ -63,10 +63,19 @@ jobs:
         run: python app/resources/generate_icon.py
       - name: Build .app
         run: python setup.py py2app
-      - name: Zip the .app
+      - name: Zip the .app + Quick Start guide
+        # ditto preserves macOS metadata on the .app bundle; we then add the
+        # Quick Start.docx alongside so friends get install instructions and
+        # the app from a single download.
         run: |
           cd dist
           ditto -c -k --keepParent "Cold Bore.app" "Cold Bore.zip"
+          if [ -f "../Cold Bore — Quick Start.docx" ]; then
+            cp "../Cold Bore — Quick Start.docx" .
+            zip "Cold Bore.zip" "Cold Bore — Quick Start.docx"
+          else
+            echo "Warning: Quick Start.docx not found, zipping app only"
+          fi
       - name: Upload .app.zip as workflow artifact
         uses: actions/upload-artifact@v4
         with:
