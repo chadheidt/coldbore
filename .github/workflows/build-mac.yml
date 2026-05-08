@@ -45,6 +45,10 @@ jobs:
     name: Build .app bundle
     needs: test
     runs-on: macos-latest
+    # Allow this job's GITHUB_TOKEN to upload assets to releases.
+    # Without this, action-gh-release@v2 fails with "Resource not accessible by integration".
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.11
