@@ -6,7 +6,7 @@
 
 set -e
 
-PROJECT="$HOME/Documents/Claude/Projects/Rifle Load Data"
+PROJECT="$HOME/Projects/Rifle Load Data"
 cd "$PROJECT"
 
 echo "============================================================"

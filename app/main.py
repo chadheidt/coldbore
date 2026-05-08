@@ -12,7 +12,9 @@ Run from the project folder:
 
 import io
 import os
+import re
 import shutil
+import subprocess
 import sys
 import traceback
 from contextlib import redirect_stdout
@@ -51,20 +53,25 @@ REPO_ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 sys.path.insert(0, REPO_ROOT)
 
-from csv_router import detect_csv_type  # legacy, still used elsewhere
 from parsers import detect_parser, chronograph_parsers, group_parsers
 import import_data
 import config as app_config
 from setup_wizard import run_wizard
 from updater import UpdateChecker, DEFAULT_MANIFEST_URL
-from version import APP_NAME, APP_VERSION, DISCLAIMER_TEXT
-from disclaimer import needs_disclaimer, show_disclaimer
+from version import APP_NAME, APP_VERSION
+from disclaimer import needs_disclaimer, show_disclaimer, view_disclaimer
 from settings_dialog import show_settings
+from help_dialog import show_help
+from new_cycle_dialog import show_new_cycle
+from welcome_tutorial import needs_tutorial, show_tutorial
 import theme
 
 
-WINDOW_W = 600
-WINDOW_H = 540
+# Default window size — large enough that all UI elements have room to
+# breathe and the user has space to drag CSVs in. Saved+restored across
+# launches via QSettings (see _restore_window_state / _save_window_state).
+WINDOW_W = 960
+WINDOW_H = 760
 
 
 class RifleLoadApp(QApplication):
@@ -241,7 +248,15 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.project = str(project_folder)
         self.setWindowTitle(f"{APP_NAME}  v{APP_VERSION}")
-        self.resize(WINDOW_W, WINDOW_H)
+
+        # Restore window size+position from config if we have one saved,
+        # otherwise default to a generous size.
+        cfg_for_window = app_config.load_config()
+        saved_geom = cfg_for_window.get("window_geometry")  # [x, y, w, h]
+        if saved_geom and isinstance(saved_geom, list) and len(saved_geom) == 4:
+            self.setGeometry(*saved_geom)
+        else:
+            self.resize(WINDOW_W, WINDOW_H)
 
         # Per-session staging counter — reset after each import
         self.staged_garmin = 0
@@ -260,6 +275,35 @@ class MainWindow(QMainWindow):
         layout.setContentsMargins(theme.PAD_WINDOW, theme.PAD_WINDOW,
                                   theme.PAD_WINDOW, theme.PAD_WINDOW)
         layout.setSpacing(theme.GAP_LARGE)
+
+        # Tools-menu banner — points new users at the menu bar (which is in
+        # macOS's system menu, easy to overlook). Dismissed by clicking the X;
+        # acceptance saved to config so it doesn't keep popping back.
+        cfg_for_banner = app_config.load_config()
+        if not cfg_for_banner.get("tools_banner_dismissed"):
+            self.tools_banner = QLabel(
+                "↑  More options live in the <b>Tools</b> menu in the macOS menu bar "
+                "above this window — How to Use, Settings, Generate Load Card, "
+                "and more.   "
+                "<a href='dismiss:tools-banner' style='color:#888;'>(dismiss)</a>"
+            )
+            self.tools_banner.setOpenExternalLinks(False)
+            self.tools_banner.setWordWrap(True)
+            self.tools_banner.setTextInteractionFlags(Qt.LinksAccessibleByMouse)
+            self.tools_banner.linkActivated.connect(self._on_tools_banner_link)
+            self.tools_banner.setStyleSheet(
+                f"QLabel {{ "
+                f"  background-color: {theme.BG_SURFACE}; "
+                f"  border: 1px solid {theme.BORDER_SUBTLE}; "
+                f"  border-radius: 6px; "
+                f"  padding: 10px 14px; "
+                f"  color: {theme.TEXT_PRIMARY}; "
+                f"  font-size: {theme.FONT_SIZE_SMALL}px; "
+                f"}}"
+            )
+            layout.addWidget(self.tools_banner)
+        else:
+            self.tools_banner = None
 
         # Update banner — hidden by default, shown when an update is found
         self.update_banner = QLabel()
@@ -288,6 +332,11 @@ class MainWindow(QMainWindow):
         )
         wb_row.addWidget(self.wb_picker_label)
         self.wb_picker = QComboBox()
+        self.wb_picker.setToolTip(
+            "Pick which workbook to import data into. Useful if you're "
+            "developing loads for multiple cartridges. The choice is "
+            "remembered between launches."
+        )
         self.wb_picker.setStyleSheet(
             f"QComboBox {{ "
             f"  background-color: {theme.BG_ELEVATED}; "
@@ -302,6 +351,10 @@ class MainWindow(QMainWindow):
         # Refresh button to rescan the folder for newly-added workbooks
         self.wb_refresh_btn = QPushButton("Refresh")
         self.wb_refresh_btn.setMaximumWidth(90)
+        self.wb_refresh_btn.setToolTip(
+            "Re-scan the project folder for working .xlsx files. Click this "
+            "after creating a new workbook from the template."
+        )
         self.wb_refresh_btn.clicked.connect(self._refresh_workbooks)
         wb_row.addWidget(self.wb_refresh_btn)
         self.wb_row_widget = QWidget()
@@ -316,6 +369,14 @@ class MainWindow(QMainWindow):
         # hide custom items, so we use "Tools" instead.
         menu = self.menuBar().addMenu("Tools")
 
+        # Help is the most-needed item for new users, so it's the first menu entry
+        help_action = QAction(f"How to Use {APP_NAME}…", self)
+        help_action.setMenuRole(QAction.NoRole)
+        help_action.triggered.connect(self._show_help)
+        menu.addAction(help_action)
+
+        menu.addSeparator()
+
         check_action = QAction("Check for Updates…", self)
         check_action.setMenuRole(QAction.NoRole)
         check_action.triggered.connect(lambda: self._start_update_check(manual=True))
@@ -326,10 +387,25 @@ class MainWindow(QMainWindow):
         settings_action.triggered.connect(self._show_settings)
         menu.addAction(settings_action)
 
+        run_now_action = QAction("Run Import Now (use existing folder contents)", self)
+        run_now_action.setMenuRole(QAction.NoRole)
+        run_now_action.triggered.connect(self._run_import_now_menu)
+        menu.addAction(run_now_action)
+
+        restore_action = QAction("Restore From Backup…", self)
+        restore_action.setMenuRole(QAction.NoRole)
+        restore_action.triggered.connect(self._restore_from_backup)
+        menu.addAction(restore_action)
+
         load_card_action = QAction("Generate Load Card…", self)
         load_card_action.setMenuRole(QAction.NoRole)
         load_card_action.triggered.connect(self._generate_load_card)
         menu.addAction(load_card_action)
+
+        new_cycle_action = QAction("Start New Cycle…", self)
+        new_cycle_action.setMenuRole(QAction.NoRole)
+        new_cycle_action.triggered.connect(self._start_new_cycle)
+        menu.addAction(new_cycle_action)
 
         export_load_action = QAction("Export Suggested Load…", self)
         export_load_action.setMenuRole(QAction.NoRole)
@@ -385,6 +461,11 @@ class MainWindow(QMainWindow):
 
         # Drop zone
         self.drop = DropZone(self.handle_drops)
+        self.drop.setToolTip(
+            "Drag your Garmin and BallisticX CSVs here. "
+            "Cold Bore detects the format automatically and routes each file "
+            "to the right import folder. Click Run Import when you've dropped everything."
+        )
         layout.addWidget(self.drop)
 
         # Supported-devices caption — pulled live from the parser registry so
@@ -415,6 +496,10 @@ class MainWindow(QMainWindow):
 
         self.clear_button = QPushButton("Clear")
         self.clear_button.setEnabled(False)
+        self.clear_button.setToolTip(
+            "Reset the staged file count. Doesn't delete your CSVs — they "
+            "stay in the import folders and will still be picked up next time."
+        )
         self.clear_button.clicked.connect(self.clear_staged)
         button_row.addWidget(self.clear_button)
 
@@ -422,6 +507,10 @@ class MainWindow(QMainWindow):
         self.go_button.setObjectName("primary")  # picks up the orange #primary style
         self.go_button.setEnabled(False)
         self.go_button.setDefault(True)
+        self.go_button.setToolTip(
+            "Read every CSV in your import folders, write the data into your "
+            "active workbook, and open the workbook in Excel."
+        )
         self.go_button.clicked.connect(self.run_import_clicked)
         button_row.addWidget(self.go_button)
 
@@ -441,6 +530,13 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.log, stretch=1)
 
         self._log("Ready. Drop CSV files into the box above.", color=theme.LOG_INFO)
+        self._log("New here? Tools → How to Use Cold Bore… walks you through "
+                  "labels, workflow, and tips.", color=theme.LOG_DIM)
+
+        # Show a snapshot of what's already in the workbook so the user knows
+        # state at a glance. Done after a short delay so the rest of the UI
+        # paints first.
+        QTimer.singleShot(300, self._log_workbook_state)
 
         # Kick off a non-blocking update check 1 second after launch.
         QTimer.singleShot(1000, lambda: self._start_update_check(manual=False))
@@ -580,11 +676,64 @@ class MainWindow(QMainWindow):
         if self.staged_garmin or self.staged_bx:
             QTimer.singleShot(200, self.run_import_clicked)
 
+    def _preflight_check(self):
+        """Quick scan over the import folders before running the actual import.
+        Surfaces likely issues as warnings in the log so the user can fix
+        them before the workbook gets touched."""
+        from parsers._common import parse_label
+        warnings = []
+
+        for parser in chronograph_parsers() + group_parsers():
+            folder = os.path.join(self.project, parser.IMPORT_FOLDER)
+            if not os.path.isdir(folder):
+                continue
+            for fn in os.listdir(folder):
+                if not fn.lower().endswith(".csv"):
+                    continue
+                full = os.path.join(folder, fn)
+
+                # Check the parser actually claims this file
+                try:
+                    if not parser.detect(full):
+                        # File is in this parser's folder but doesn't match the
+                        # format. Could be a misplaced CSV.
+                        warnings.append(
+                            f"  {parser.IMPORT_FOLDER}/{fn} doesn't look like "
+                            f"a {parser.NAME} CSV — will be skipped."
+                        )
+                        continue
+                except Exception:
+                    pass
+
+                # For BallisticX, the filename is the label source. Check that
+                # the filename parses to something usable.
+                if parser.KEY == "ballisticx":
+                    base = os.path.splitext(fn)[0]
+                    tag, charge, _ = parse_label(base)
+                    if not tag or charge is None:
+                        warnings.append(
+                            f"  {fn} (BallisticX): filename doesn't look like a load label "
+                            f"(needs format like 'P1 45.5 H4350.csv'). The data will be "
+                            f"imported but may not land in the right row."
+                        )
+
+        return warnings
+
     def run_import_clicked(self):
         """User clicked the green Run Import button. Run the import on everything in the folders."""
         self._log("")
         self._log("=" * 60, color=theme.LOG_SUCCESS)
         self._log("Running import…", color=theme.LOG_SUCCESS)
+
+        # Preflight check — surface issues before touching the workbook
+        preflight_warnings = self._preflight_check()
+        if preflight_warnings:
+            self._log(f"Preflight check found {len(preflight_warnings)} issue(s):",
+                      color=theme.LOG_WARNING)
+            for w in preflight_warnings:
+                self._log(w, color=theme.LOG_WARNING)
+            self._log("(Continuing the import — review the warnings above.)",
+                      color=theme.LOG_DIM)
 
         # Disable buttons during import to prevent double-clicks
         self.go_button.setEnabled(False)
@@ -649,12 +798,21 @@ class MainWindow(QMainWindow):
         if result.get("safety_stop"):
             self._log("Safety stop — workbook left unchanged.", color=theme.LOG_WARNING)
         else:
+            n_g = result["garmin_rows"]
+            n_b = result["ballisticx_rows"]
             self._log(
-                f"SUCCESS — wrote {result['garmin_rows']} Garmin rows "
-                f"and {result['ballisticx_rows']} BallisticX rows.",
+                f"SUCCESS — wrote {n_g} Garmin rows and {n_b} BallisticX rows.",
                 color=theme.LOG_SUCCESS,
             )
             self._log("Workbook opened in Excel.", color=theme.LOG_SUCCESS)
+
+            # macOS notification — useful when the user has switched to Excel
+            # or another app and wants to know when the import is complete.
+            self._show_macos_notification(
+                title=f"{APP_NAME} — import complete",
+                message=f"Imported {n_g} chronograph rows and {n_b} group rows. "
+                        "Workbook open in Excel.",
+            )
 
     # ---------- update check ----------
 
@@ -753,14 +911,69 @@ class MainWindow(QMainWindow):
             url = link
         QDesktopServices.openUrl(QUrl(url))
 
+    def _on_tools_banner_link(self, link):
+        """Dismiss the Tools-menu banner permanently."""
+        if link == "dismiss:tools-banner":
+            cfg = app_config.load_config()
+            cfg["tools_banner_dismissed"] = True
+            app_config.save_config(cfg)
+            if self.tools_banner is not None:
+                self.tools_banner.setVisible(False)
+
+    def _show_macos_notification(self, title, message):
+        """Show a macOS Notification Center notification using osascript.
+        Silent failure if osascript isn't available or the notification is
+        suppressed by macOS — never block the import flow on this."""
+        try:
+            # Escape double quotes for AppleScript safety
+            esc_title = title.replace('"', '\\"')
+            esc_message = message.replace('"', '\\"')
+            script = f'display notification "{esc_message}" with title "{esc_title}"'
+            subprocess.run(
+                ["osascript", "-e", script],
+                timeout=3,
+                capture_output=True,
+            )
+        except Exception:
+            pass  # never let a notification failure break anything
+
+    def closeEvent(self, event):
+        """Save window geometry on quit. Also confirm if files are staged but
+        not yet imported — gentle nudge so the user doesn't accidentally lose
+        their click-Run-Import intent by closing the window."""
+        # If staged but not imported, ask before closing
+        if self.staged_garmin or self.staged_bx:
+            reply = QMessageBox.question(
+                self,
+                "Files staged",
+                f"You have {self.staged_garmin + self.staged_bx} file(s) staged "
+                "but haven't run the import yet.\n\n"
+                "Quit anyway? Staged files stay in the import folders and "
+                "will be picked up next time you click Run Import.",
+                QMessageBox.Yes | QMessageBox.No,
+                QMessageBox.No,
+            )
+            if reply != QMessageBox.Yes:
+                event.ignore()
+                return
+
+        # Save window geometry so next launch opens at the same size+position
+        try:
+            geom = self.geometry()
+            cfg = app_config.load_config()
+            cfg["window_geometry"] = [geom.x(), geom.y(), geom.width(), geom.height()]
+            app_config.save_config(cfg)
+        except Exception:
+            pass  # never block quit on a config save error
+
+        super().closeEvent(event)
+
     def _show_disclaimer(self):
-        """Show the full disclaimer in a read-only dialog (for users who want
-        to review it again after the first-launch acceptance)."""
-        QMessageBox.information(
-            self,
-            f"{APP_NAME} — Notice & Disclaimer",
-            DISCLAIMER_TEXT,
-        )
+        """Show the full disclaimer in a read-only, scrollable dialog (for
+        users who want to review it again after the first-launch acceptance).
+        Uses DisclaimerViewer rather than QMessageBox so the long text scrolls
+        properly on smaller screens."""
+        view_disclaimer(parent=self)
 
     def _refresh_workbooks(self):
         """Re-scan the project folder for working .xlsx files and update the
@@ -818,9 +1031,214 @@ class MainWindow(QMainWindow):
         workbooks = import_data.list_workbooks(project_dir=self.project)
         return workbooks[0] if workbooks else None
 
+    def _log_workbook_state(self):
+        """Show a one-line summary of the current workbook contents in the
+        activity log. Called on startup so the user sees what's already loaded."""
+        wb_path = self._selected_workbook()
+        if not wb_path:
+            self._log("\nNo working .xlsx in the project folder yet. Save a "
+                      "copy from the .xltx template to start.", color=theme.LOG_WARNING)
+            return
+
+        try:
+            from openpyxl import load_workbook
+            wb = load_workbook(wb_path, data_only=True, keep_vba=False)
+        except Exception:
+            return  # silent fail — not worth alarming the user
+
+        def _count_distinct_tags(sheet_name, pattern):
+            """Count distinct tags in column A whose uppercase form matches the
+            given regex pattern (anchored)."""
+            if sheet_name not in wb.sheetnames:
+                return 0
+            sht = wb[sheet_name]
+            tags = set()
+            for row in sht.iter_rows(min_row=2, max_col=1, values_only=True):
+                tag = (row[0] or "")
+                if not isinstance(tag, str):
+                    continue
+                tag_u = tag.upper()
+                if pattern.match(tag_u):
+                    tags.add(tag_u)
+            return len(tags)
+
+        # Powder ladder: P followed by a digit (P1, P2, ...). S-tags need a digit
+        # too so they don't match user-typed labels like "SHOT-3" or "SUNDAY".
+        n_powder = _count_distinct_tags("GarminSessions", re.compile(r"^P\d"))
+        n_seating = _count_distinct_tags("GarminSessions", re.compile(r"^S\d"))
+        n_confirm = _count_distinct_tags("GarminSessions", re.compile(r"^CONFIRM"))
+
+        # Read suggested charge / jump from Charts
+        try:
+            suggested_charge = wb["Charts"]["B3"].value
+        except Exception:
+            suggested_charge = None
+        try:
+            suggested_jump = wb["Seating Depth"]["D2"].value
+        except Exception:
+            suggested_jump = None
+
+        # Build the summary line
+        parts = []
+        if n_powder:
+            parts.append(f"{n_powder} powder ladder load{'s' if n_powder != 1 else ''}")
+        if n_seating:
+            parts.append(f"{n_seating} seating depth test{'s' if n_seating != 1 else ''}")
+        if n_confirm:
+            parts.append(f"{n_confirm} confirmation group{'s' if n_confirm != 1 else ''}")
+
+        # Only show the workbook filename in the log when there are multiple
+        # workbooks in the project folder — otherwise it's redundant noise
+        # (the user already knows which workbook they're working with).
+        all_workbooks = import_data.list_workbooks(project_dir=self.project)
+        if len(all_workbooks) > 1:
+            wb_name_prefix = f"{os.path.basename(wb_path)}: "
+        else:
+            wb_name_prefix = ""
+
+        if not parts:
+            self._log(f"\n{wb_name_prefix}Workbook is empty so far. Drop CSVs to import.",
+                      color=theme.LOG_INFO)
+            return
+
+        self._log(f"\n{wb_name_prefix}Currently has " + " · ".join(parts) + ".",
+                  color=theme.LOG_INFO)
+
+        # Report suggested winners if they exist. Use `is not None` rather than
+        # truthiness so a legitimate result of 0.0 (e.g., a seating jump of 0.0
+        # = touching the lands) doesn't get silently dropped.
+        winner_parts = []
+        if isinstance(suggested_charge, (int, float)) and suggested_charge is not None:
+            winner_parts.append(f"suggested charge {suggested_charge:g} gr")
+        if isinstance(suggested_jump, (int, float)) and suggested_jump is not None:
+            winner_parts.append(f"suggested jump {suggested_jump:g}\"")
+        if winner_parts:
+            self._log("  Current winner: " + ", ".join(winner_parts) + ".",
+                      color=theme.LOG_SUCCESS)
+        elif n_powder < 3 or n_seating < 3:
+            self._log("  (Need at least 3 loads in either ladder before "
+                      "Cold Bore picks a suggested winner.)",
+                      color=theme.LOG_DIM)
+
+    def _show_help(self):
+        """Tools → How to Use Cold Bore…"""
+        show_help(parent=self)
+
     def _show_settings(self):
         """Tools → Settings…"""
         show_settings(self.project, parent=self)
+
+    def _run_import_now_menu(self):
+        """Tools → Run Import Now — runs import on whatever's already in the
+        Garmin/BallisticX folders, no dropping required. Useful for re-running
+        after fixing a CSV name or adding files outside the GUI."""
+        # Same flow as run_import_clicked but doesn't require staged files
+        self.run_import_clicked()
+
+    def _start_new_cycle(self):
+        """Tools → Start New Cycle… — wraps up the current cycle and sets up
+        a fresh workbook in one step."""
+        current = self._selected_workbook()
+        new_path = show_new_cycle(self.project, current, parent=self)
+        if new_path:
+            # Refresh the picker so the new workbook becomes selectable, and
+            # auto-select it
+            self._refresh_workbooks()
+            idx = self.wb_picker.findData(new_path)
+            if idx >= 0:
+                self.wb_picker.setCurrentIndex(idx)
+            self._log(f"\nNew cycle started: {os.path.basename(new_path)}",
+                      color=theme.LOG_SUCCESS)
+            self._log("Drop CSVs from your next range trip to begin.",
+                      color=theme.LOG_INFO)
+
+    def _restore_from_backup(self):
+        """Tools → Restore From Backup… — opens the .backups/ folder, lets
+        the user pick a backup .xlsx, copies it over the current workbook
+        (after backing up the CURRENT current workbook first, so this
+        operation itself is undoable)."""
+        backups_dir = os.path.join(self.project, ".backups")
+        if not os.path.isdir(backups_dir) or not os.listdir(backups_dir):
+            QMessageBox.information(
+                self,
+                "No backups yet",
+                "Cold Bore hasn't created any backups yet. Backups are saved "
+                "to the .backups/ folder before each import.",
+            )
+            return
+
+        from PyQt5.QtWidgets import QFileDialog
+        backup_path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Pick a backup to restore",
+            backups_dir,
+            "Excel workbooks (*.xlsx);;All files (*)",
+        )
+        if not backup_path:
+            return
+
+        target_path = self._selected_workbook()
+        if not target_path:
+            QMessageBox.warning(
+                self, "No workbook",
+                "There's no active workbook to restore over. Save a copy from "
+                "the .xltx template first.",
+            )
+            return
+
+        backup_name = os.path.basename(backup_path)
+        target_name = os.path.basename(target_path)
+        reply = QMessageBox.question(
+            self,
+            "Confirm restore",
+            f"Replace '{target_name}' with '{backup_name}'?\n\n"
+            "Your current workbook will itself be backed up first, so you "
+            "can undo this if needed.",
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No,
+        )
+        if reply != QMessageBox.Yes:
+            return
+
+        # Back up the CURRENT workbook before overwriting (so this is undoable).
+        # Honors the user's backup_keep_count setting; if backups are turned off,
+        # we still take an unconditional safety copy alongside the workbook so
+        # the restore is undoable even with retention disabled.
+        backup_keep = import_data._read_backup_keep_setting(default=5)
+        try:
+            if backup_keep > 0:
+                import_data._rotate_workbook_backups(target_path, keep=backup_keep)
+            else:
+                # Backups disabled — drop a one-shot safety copy next to the workbook
+                from datetime import datetime
+                stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+                safety_path = f"{target_path}.before-restore-{stamp}.xlsx"
+                shutil.copy2(target_path, safety_path)
+        except Exception as e:
+            QMessageBox.warning(
+                self, "Couldn't create safety backup",
+                f"Stopping the restore to be safe.\n\nError: {e}",
+            )
+            return
+
+        # Replace the target with the chosen backup
+        try:
+            shutil.copy2(backup_path, target_path)
+        except Exception as e:
+            QMessageBox.warning(
+                self, "Restore failed",
+                f"Couldn't copy backup over the current workbook.\n\nError: {e}",
+            )
+            return
+
+        self._log(f"\nRestored '{target_name}' from backup '{backup_name}'.",
+                  color=theme.LOG_SUCCESS)
+        self._log("Your previous version was backed up first. "
+                  "Use Restore From Backup again to revert if needed.",
+                  color=theme.LOG_INFO)
+
+        # Open the restored workbook so the user can verify
+        subprocess.run(["open", target_path])
 
     def _generate_load_card(self):
         """Tools → Generate Load Card…
@@ -929,7 +1347,6 @@ class MainWindow(QMainWindow):
     def _reveal_in_finder(self, path):
         """Open the given folder in macOS Finder. Creates the folder first if
         it doesn't exist (e.g., .backups before the first import)."""
-        import subprocess
         if not os.path.isdir(path):
             try:
                 os.makedirs(path, exist_ok=True)
@@ -1039,6 +1456,11 @@ def main():
     win.show()
     win.raise_()
     win.activateWindow()
+
+    # First-launch tutorial — only shows if the user hasn't seen this
+    # tutorial version yet. Tracked via config; users see it once.
+    if needs_tutorial():
+        QTimer.singleShot(300, lambda: show_tutorial(parent=win))
 
     # CSVs passed on the command line (e.g., dragged onto the .app icon while
     # it wasn't running — py2app forwards those via sys.argv on launch).

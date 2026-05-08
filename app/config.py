@@ -69,10 +69,13 @@ def save_config(cfg):
         json.dump(cfg, f, indent=2)
 
 
+# Generic locations a returning user might already have a project folder in.
+# Intentionally does NOT include any developer-specific paths — those would
+# silently auto-adopt on a beta tester's machine if they happen to have a
+# matching folder for unrelated reasons.
 CANDIDATE_LEGACY_LOCATIONS = (
     "~/Documents/Cold Bore Loads",
     "~/Documents/Cold Bore",
-    "~/Documents/Claude/Projects/Rifle Load Data",
     "~/Documents/Rifle Loads",
     "~/Documents/Rifle Load Data",
 )

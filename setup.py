@@ -24,7 +24,7 @@ sys.path.insert(0, str(HERE / "app"))
 
 APP_DISPLAY_NAME = "Cold Bore"
 APP_BUNDLE_ID = "com.chadheidt.coldbore"
-APP_VERSION = "0.6.0"  # keep in sync with app/version.py
+APP_VERSION = "0.7.0"  # keep in sync with app/version.py
 
 # The main entry script
 ENTRY = ["app/main.py"]
@@ -90,6 +90,14 @@ OPTIONS = {
         "version",
         "theme",
         "import_data",
+        "disclaimer",
+        "settings_dialog",
+        "load_card",
+        "load_sharing",
+        "crash_reporter",
+        "help_dialog",
+        "new_cycle_dialog",
+        "welcome_tutorial",
     ],
     "excludes": [
         # Reduce bundle size — exclude things py2app might pull in that we don't need

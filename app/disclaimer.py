@@ -118,3 +118,63 @@ def show_disclaimer(parent=None):
     dlg = DisclaimerDialog(parent)
     dlg.exec_()
     return dlg.accepted_disclaimer
+
+
+class DisclaimerViewer(QDialog):
+    """Read-only variant of the disclaimer dialog used by Tools → View Disclaimer.
+    Same scrollable layout, but a single 'Close' button — no accept/quit
+    semantics, since the user has already accepted on first launch."""
+
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle(f"{APP_NAME} — Notice & Disclaimer")
+        self.setModal(True)
+        self.setMinimumSize(600, 540)
+
+        try:
+            import theme
+            self._t = theme
+        except ImportError:
+            self._t = None
+
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(24, 24, 24, 20)
+        layout.setSpacing(14)
+
+        title = QLabel(f"{APP_NAME} — Notice & Disclaimer")
+        f = QFont()
+        f.setPointSize(17)
+        f.setWeight(QFont.DemiBold)
+        title.setFont(f)
+        if self._t:
+            title.setStyleSheet(f"color: {self._t.TEXT_PRIMARY};")
+        layout.addWidget(title)
+
+        body = QLabel(DISCLAIMER_TEXT)
+        body.setWordWrap(True)
+        body.setTextFormat(Qt.PlainText)
+        body_font = QFont()
+        body_font.setPointSize(12)
+        body.setFont(body_font)
+        if self._t:
+            body.setStyleSheet(f"color: {self._t.TEXT_PRIMARY}; padding: 8px 0;")
+
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setWidget(body)
+        scroll.setFrameShape(QScrollArea.NoFrame)
+        layout.addWidget(scroll, stretch=1)
+
+        button_row = QHBoxLayout()
+        button_row.addStretch(1)
+        close_btn = QPushButton("Close")
+        close_btn.setDefault(True)
+        close_btn.clicked.connect(self.accept)
+        button_row.addWidget(close_btn)
+        layout.addLayout(button_row)
+
+
+def view_disclaimer(parent=None):
+    """Show a read-only, scrollable view of the disclaimer (no accept/quit)."""
+    dlg = DisclaimerViewer(parent)
+    dlg.exec_()

@@ -20,10 +20,6 @@ import subprocess
 from datetime import datetime
 from openpyxl import load_workbook
 
-PROJECT = os.path.expanduser("~/Documents/Claude/Projects/Rifle Load Data")
-GARMIN_DIR = os.path.join(PROJECT, "Garmin Imports")
-BX_DIR = os.path.join(PROJECT, "BallisticX Imports")
-
 # Make the parser registry importable. import_data.py runs from the project
 # root (CLI flow) and from inside the bundled .app, so add app/ to sys.path.
 _HERE = os.path.dirname(os.path.abspath(__file__))
@@ -32,6 +28,27 @@ if os.path.isdir(_APP_DIR) and _APP_DIR not in sys.path:
     sys.path.insert(0, _APP_DIR)
 
 from parsers import ALL_PARSERS, chronograph_parsers, group_parsers
+
+
+def _default_project_dir():
+    """Resolve the project folder for CLI-only callers. The GUI always passes
+    project_dir= explicitly, so this is only used when import_data.py is run
+    directly from the command line."""
+    try:
+        # Lazy import — config lives under app/, which we've already added to sys.path
+        import config as _app_config
+        p = _app_config.get_project_folder()
+        if p and os.path.isdir(p):
+            return p
+    except Exception:
+        pass
+    # Last-resort fallback: project folder is the directory this script lives in
+    return _HERE
+
+
+PROJECT = _default_project_dir()
+GARMIN_DIR = os.path.join(PROJECT, "Garmin Imports")
+BX_DIR = os.path.join(PROJECT, "BallisticX Imports")
 
 
 # Backwards-compatible re-exports for any old callers that imported these
@@ -186,6 +203,10 @@ def list_workbooks(project_dir=None):
     """
     if project_dir is None:
         project_dir = PROJECT
+    # Match the canonical template filename only — we used to strip any .xlsx
+    # whose name contained "template", which silently hid user files like
+    # "Template Test 6.5CM.xlsx" or "MyTemplate.xlsx".
+    canonical_template = "rifle loads template (do not edit).xlsx"
     candidates = []
     for f in os.listdir(project_dir):
         full = os.path.join(project_dir, f)
@@ -193,8 +214,11 @@ def list_workbooks(project_dir=None):
             continue
         if f.startswith("~$") or f.startswith("."):
             continue
-        if f.lower().endswith(".xlsx") and "template" not in f.lower():
-            candidates.append(full)
+        if not f.lower().endswith(".xlsx"):
+            continue
+        if f.lower() == canonical_template:
+            continue
+        candidates.append(full)
     candidates.sort(key=os.path.getmtime, reverse=True)
     return candidates
 
@@ -382,9 +406,15 @@ def run_import(workbook_path, project_dir=None, open_excel=True):
                 group_records.extend(result)
                 print(f"  parsed: {fn}  →  {len(result)} group(s)")
             else:
-                # Chronograph parser — single record
-                chronograph_records.append(result)
+                # Chronograph parser — single record. Skip records that have
+                # neither shots nor an average velocity — these would otherwise
+                # write a Tag-only row to GarminSessions and shove a real row's
+                # data into the wrong cell when re-imported.
                 shots_count = len(result.get("Shots") or [])
+                if shots_count == 0 and result.get("AvgVel") in (None, ""):
+                    print(f"  skip: {fn}  (no shots — empty session)")
+                    continue
+                chronograph_records.append(result)
                 print(
                     f"  parsed: {fn}  →  Tag={result.get('Tag')!r}, "
                     f"Charge={result.get('ChargeOrJump')}, "

@@ -6,6 +6,124 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## 🟧 When you come back (note to Chad, not Claude)
+
+If it's been weeks or months since you worked on Cold Bore and you're not sure how to pick up — read this section first. It's written for you, not for Claude.
+
+### How to resume
+
+1. Open **Cowork** (the Claude desktop app).
+2. Make sure it's pointed at your project folder: `~/Projects/Rifle Load Data`.
+3. Type or paste this exact phrase to start:
+
+> **"Continue building Cold Bore. Read Notes for next session.md and Build progress.md to catch up."**
+
+Claude will read both files (about 30 seconds) and have full context of where the project stands. From there, ask whatever you need — "I want to add a LabRadar parser," "let's fix this bug," "let's start the iOS app," whatever.
+
+### Quick sanity check before you start work
+
+Run through these to make sure nothing rotted while you were away:
+
+1. **Cold Bore.app still launches** — open from Applications → does the window appear?
+2. **Update check works** — Tools → Check for Updates… → should say "you're up to date" (or show an available update if you've shipped a newer version since)
+3. **Build still works** — double-click `Build App.command` → should succeed and produce a fresh `dist/Cold Bore.app`
+4. **Tests still pass** — double-click `Run Tests.command` → should be all green
+5. **GitHub still has your repo** — visit `https://github.com/chadheidt/coldbore` → code is there
+
+If any of those fail, that's the first thing to fix. Tell Claude: "this step is failing, here's the error" and paste whatever you see.
+
+### Things that could break over time
+
+| What might go wrong | Symptom | Fix |
+|---|---|---|
+| macOS update broke Python paths | `.command` files do nothing or error | Re-run `Build App.command` — sometimes pip needs to reinstall packages |
+| PyQt5 / openpyxl outdated | Tests fail or app crashes on launch | `pip install --upgrade --user PyQt5 openpyxl` |
+| GitHub Actions deprecated | CI red X with "Node.js 20 deprecated" or similar | Tell Claude — usually a one-line fix in `.github/workflows/build-mac.yml` |
+| Garmin or BallisticX changed CSV format | Imports fail with "no parser detected" or weird values | Send Claude a sample of the new CSV, we update the parser |
+| Friends say their app stopped checking for updates | Manifest URL might have moved | Check that `https://raw.githubusercontent.com/chadheidt/coldbore/main/manifest.json` opens in browser |
+
+### Where things live (refresher)
+
+- **Your project folder**: `~/Projects/Rifle Load Data` — code, workbooks, breadcrumbs
+- **Your config**: `~/Library/Application Support/Cold Bore/config.json` — auto-update preferences, project folder pointer
+- **GitHub repo**: `https://github.com/chadheidt/coldbore` — public, releases, manifest
+- **Support email**: `coldboreapp@gmail.com` (forwards to your personal Gmail)
+
+### Important: project was moved out of iCloud (May 2026)
+
+The project folder used to live at `~/Documents/Claude/Projects/Rifle Load Data`, which was synced to iCloud Drive via macOS's "Documents & Desktop" feature. That caused two real risks:
+
+1. iCloud's "Optimize Mac Storage" feature could evict local copies of files we hadn't touched recently, which would silently break builds and tests.
+2. iCloud sometimes scrambled the `.git/` directory (sync conflict files in git's internal metadata), which can corrupt the local repo.
+
+So we moved the folder to `~/Projects/Rifle Load Data` (a non-iCloud location) and updated all the path references:
+
+- `import_data.py` `PROJECT` constant
+- `app/config.py` `CANDIDATE_LEGACY_LOCATIONS` list (new path is now first)
+- All `.command` launcher files (Build / Test / Generate Icon / Run Tests / Test Update URL / Clean Up Old App)
+
+The config auto-migrates on first launch after the move because the old path no longer exists, so `get_project_folder()` falls back to the legacy locations list and finds the folder at the new path.
+
+**Don't put it back in iCloud.** GitHub already provides versioned backup for the code. For the workbooks/CSV data, recommend Time Machine backups to an external drive instead of iCloud.
+
+### Things to avoid
+
+- **Don't delete the project folder** even if you stop using Cold Bore. Coming back from "I have the .app and GitHub but not the source" is much harder than starting cold.
+- **Don't move the project folder** without telling Claude. The config has the path baked in. (If you do move it, just tell Claude — easy to update.)
+- **Don't lose the GitHub login** — if you forget your GitHub password, recovery is annoying. Save it in your password manager now if you haven't.
+
+### Once a year ritual (recommended)
+
+Even if you have no changes to ship, run `Build App.command` once a year. If it fails, fix it then — when there's no pressure. The fix is usually one line. Letting failures pile up makes resuming much harder.
+
+### Tool choice: Cowork vs Claude Code
+
+Cold Bore was built using **Claude Cowork** (the desktop app) and that's what you should keep using. The other option — **Claude Code** (terminal-based CLI) — would be faster for pure coding work but loses Cowork's friendly UX, drag-and-drop file picker, plugin system, and the ability to mix code work with productivity tasks (Word docs, Excel, etc.).
+
+You're not a developer. You value friendly explanations and clear next steps. Cowork fits that perfectly. The pace we've been working at — shipping releases monthly or so — doesn't need Claude Code's speed.
+
+**Stick with Cowork unless one of these happens:**
+- You're doing long debugging sessions where the sandbox round-trip starts to feel slow
+- You want to run dev servers locally and watch them in real time
+- Cowork stops working on a platform you need (e.g., if Cowork-for-Windows ever has issues during the Phase 7 port)
+
+If any of those happens, Claude Code is the upgrade path — same Anthropic backend, just a more developer-focused interface. The project's breadcrumbs and conventions are tool-agnostic; both would understand Cold Bore the same way.
+
+### To ship a new version
+
+**Easiest path: come back here and ask Claude to walk you through it.** The release procedure has a few finicky steps (version bumps in two files, manifest URL update, GitHub release creation) and Claude can do most of the file editing for you. Sequence:
+
+1. Tell Claude: "I want to ship Cold Bore v0.X.0 with [list of changes]"
+2. Claude bumps version in `app/version.py` and `setup.py`, asks you to commit + push
+3. Claude walks you through creating the GitHub release in the browser
+4. CI auto-builds and attaches the zip (~3-5 min)
+5. Claude updates `manifest.json` with the new version + URL, asks you to commit + push that
+6. Done — friends' apps see the update on next launch
+
+Each step where Claude does file editing replaces a manual step you'd otherwise have to do. Total time: 10-15 minutes including chat back-and-forth. Roughly half what it'd take solo, with no risk of forgetting to bump one of the two version files.
+
+**Backup path if Claude isn't available**: see **`Cold Bore — How to Send Out Updates.docx`** in the project folder. Step-by-step in 5th-grade English.
+
+---
+
+### 📌 Note for future Claude (read carefully)
+
+Chad's preferred mode of operation: **he comes back here for help on updates and changes** rather than doing them solo from the docs. Default to "helper mode" — when he asks for an update, walk him through it interactively, do the file edits yourself via the Edit tool, and only have him click buttons in GitHub Desktop / browser that require his hands.
+
+Don't dump the "How to Send Out Updates" doc on him as the answer. The doc is the backup for emergencies. Default workflow is collaborative.
+
+The `app/version.py` and `setup.py` version-bump in particular is something he should never have to do manually — that's two files that have to stay in sync, easy to forget one. Always do that for him.
+
+**Bug report and crash report workflow** — same pattern. Chad will paste:
+- A user's email containing a Python traceback (from the in-app crash reporter), OR
+- A user's verbal description of a bug + activity log text
+
+Read the traceback or the log carefully. Identify the offending code path. Fix it in the appropriate file. Write or update a test in `tests/` that would have caught it. Bump the version (patch release for bug fixes — `0.6.0` → `0.6.1`). Walk Chad through commit + push + create release. Detailed playbooks for him to reference are in `Handling Crash Reports.md` and `Handling Bug Reports.md`.
+
+---
+
+---
+
 ## What this project is
 
 Chad is a precision rifle shooter doing systematic load development. He uses:
@@ -52,6 +170,9 @@ Two main test types per load development cycle:
 | `theme.py` | Color palette, QSS, drop-zone & banner stylesheets, carbon-fiber tile generator |
 | `disclaimer.py` | First-launch modal disclaimer dialog + acceptance tracking |
 | `settings_dialog.py` | Tools → Settings… UI (auto-update toggle, manifest URL override, backup retention) |
+| `help_dialog.py` | Tools → How to Use Cold Bore… UI (label format, workflow, workbook-tab guide, 3-load minimum, safety reminder). Non-modal so users can keep it open while they work. First menu item in Tools for discoverability. |
+| `new_cycle_dialog.py` | Tools → Start New Cycle… — checkbox wizard for archiving current workbook + CSVs and starting fresh. |
+| `welcome_tutorial.py` | First-launch multi-step welcome tour. 6 cards covering basics. Tracked via `tutorial_seen_version` config; bump `TUTORIAL_VERSION` to re-prompt returning users. |
 | `load_card.py` | Tools → Generate Load Card… — reads workbook, writes printable HTML to `Load Cards/` |
 | `load_sharing.py` | Tools → Export/Import Shared Load — `.coldbore` JSON file format for sharing loads with friends |
 | `crash_reporter.py` | Opt-in crash dialog with copy-to-clipboard / email-to-support actions |
@@ -159,13 +280,21 @@ The first space-separated word is the Tag (uppercased). First numeric token = Ch
 - One-page printable After Range Day cheat sheet with both scenarios.
 - Setup Instructions.docx with troubleshooting.
 
-**GUI app build (in progress, see `Build progress.md`):**
+**GUI app build (v0.7.0 IN CODE; v0.6.0 currently SHIPPED. See `Build progress.md` for phase details):**
 - Phase 1 ✅ — PyQt5 drop-target window with CSV auto-detection
 - Phase 2 ✅ — Drops copy into the right folder; Run Import button triggers import; Excel opens
 - Phase 3 ✅ — First-run wizard + persistent config; auto-detects existing project folders
-- Phase 4 ✅ — Background update check + manual "Check for Updates" menu + yellow banner notification
-- Phase 5 ⏳ — Visual styling pass (deferred, Chad explicitly wants this last)
-- Phase 6 ⏳ — py2app bundling into a real `.app` for sharing with friends
+- Phase 4 ✅ — Background update check + manual "Check for Updates" menu + yellow banner notification + GitHub Actions CI/CD live
+- Phase 5 ✅ — Visual styling pass (dark/orange theme; carbon-fiber background still deferred)
+- Phase 6 ✅ — py2app bundle shipping (Cold Bore.app at v0.6.0)
+- Phase 6.5 ✅ — Pluggable parser registry (Garmin Xero + BallisticX, more pluggable in)
+- Phase 6.7 ✅ — Drag-on-Dock-icon support
+- Phase 10 ✅ — Polish round (workbook lockdown, validation, backups, settings panel, load card, load sharing, crash reporter, multi-workbook switcher, tests)
+- Phase 11 ✅ — UX polish round / v0.7.0 (workbook state on launch, tooltips, larger window with state-saving, Tools-menu banner, Tools→Run Import Now / Restore From Backup / Start New Cycle, macOS notifications, CSV preflight check, confirm-on-quit, first-launch tutorial)
+- Open: Quick Start guide for friends (next gating item before broader sharing)
+- Open: Carbon-fiber background (still disabled, needs reference image)
+- Open: Ship v0.7.0 release on GitHub (build, tag, CI auto-attach, update manifest.json)
+- Future: iOS port (Phase 8), Windows port (Phase 7), commercialization (Phase 9)
 
 ## Likely future requests / open ideas
 
@@ -180,11 +309,27 @@ The first space-separated word is the Tag (uppercased). First numeric token = Ch
 
 ## Quick "where do I look" map for future Claude
 
-- **Label parsing** → `parse_label()` in `import_data.py` (~line 22).
-- **Garmin CSV format** → `parse_garmin_csv()` (~line 70). Title on line 1, per-shot rows have integer in col 1 + velocity in col 2, stat rows have keyword in col 1 + value in col 2.
-- **BallisticX CSV format** → `parse_ballisticx_csv()` (~line 138). Standard `csv.DictReader`, one row per group. Filename routing logic at the top of the function.
-- **Workbook discovery** → `find_workbook()` (~line 173). Multi-file prompt is here.
-- **Safety stop** → `main()` (~line 290).
-- **Hidden sheet writers** → `write_garmin()` (~line 196) and `write_ballisticx()` (~line 226).
+After the parser-registry refactor (Phase 6.5) the parsing logic moved from `import_data.py` into the `app/parsers/` package. The map below reflects current locations:
 
-If you (future Claude) need to change CSV parsing, openpyxl's read/write API works fine here — just remember `wb.template = False` before save and use cell-range refs not structured refs.
+- **Label parsing** → `parse_label()` in `app/parsers/_common.py`. Shared helper used by all parsers.
+- **Locale-aware number parsing** → `extract_inches()` and `extract_signed()` in `app/parsers/_common.py`. Handles US (1,234.56) and European (1.234,56) decimal formats.
+- **Garmin Xero parser** → `app/parsers/garmin_xero.py`. Title on line 1 of the CSV, per-shot rows have integer in col 1 + velocity in col 2, stat rows have keyword in col 1 + value in col 2.
+- **BallisticX parser** → `app/parsers/ballisticx.py`. Standard `csv.DictReader`, one row per group. Filename-as-label routing logic at the top of `parse()`.
+- **Parser registry / detection** → `app/parsers/__init__.py`. `ALL_PARSERS` list, `detect_parser()`, `parser_by_key()`. Adding a new parser = drop a module here + add it to `ALL_PARSERS`.
+- **Workbook discovery** → `list_workbooks()` and `find_workbook()` in `import_data.py` (around line 200). Multi-file prompt is in `find_workbook()` for CLI flow; GUI uses the picker.
+- **Safety stop** (no CSVs found) → `run_import()` in `import_data.py` (around line 350).
+- **Validation** → `_validate_chronograph_record`, `_validate_group_record`, `_check_duplicate_tags` in `import_data.py` (around line 130).
+- **Workbook backup before import** → `_rotate_workbook_backups()` in `import_data.py` (around line 200).
+- **Hidden sheet writers** → `write_chronograph_records()` and `write_group_records()` in `import_data.py` (around lines 270 and 320). Sheet names are still `GarminSessions` and `BallisticXGroups` for backwards compatibility, but the writers are source-agnostic now.
+- **GUI main loop** → `app/main.py`. `MainWindow` class, drop handler, Tools menu, settings + load card + load sharing + crash reporter all wired in here.
+- **Update check** → `app/updater.py` (`UpdateChecker(QThread)` + `DEFAULT_MANIFEST_URL`).
+
+If you (future Claude) need to change CSV parsing, the parser modules are independent — adding a LabRadar parser is a new file + one line in `app/parsers/__init__.py:ALL_PARSERS`. No other code changes needed; the GUI and import script auto-discover via the registry.
+
+When working with the workbook itself, remember:
+- `wb.template = False` before save (avoids the template content-type bug)
+- Use cell-range refs (`$A$2:$A$200`) not structured table refs (Excel 2016 incompatible)
+- Don't put formulas in the cells the import script writes to (hidden sheets); formulas live on the visible tabs.
+- **Hide-zero formula pattern**: when a cell pulls from `'Garmin Xero Import'!XYZ` or `'BallisticX Import'!XYZ`, always use `=IF(OR('Sheet'!XYZ="",'Sheet'!XYZ=0),"",'Sheet'!XYZ)` — NOT just `=IF('Sheet'!XYZ="","",'Sheet'!XYZ)`. The OR-check on 0 is required because Excel's LOOKUP returns 0 when the source cell is empty (a quirk of LOOKUP), and we don't want unused shot cells / unfilled rows to display as 0. The patch script that fixed this everywhere is `outputs/patch_zero_display.py` (run once, sets all matching cells correctly). If you add a new column or row to Load Log / Seating Depth that pulls from the import sheets, follow the OR-pattern from the start.
+
+The scoring math itself is NOT affected by the 0-display issue, because Avg/SD/ES are pulled from Garmin's pre-computed values (which Garmin computes correctly over however many shots the user actually fired). Individual shot cells (C-G on Load Log, D-H on Seating Depth) are display-only — they don't feed into any formula on the Charts sheet.

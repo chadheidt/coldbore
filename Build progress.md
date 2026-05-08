@@ -75,11 +75,22 @@ To force-test the wizard itself: temporarily delete or rename
 `~/Library/Application Support/Cold Bore/config.json` AND move/rename the auto-detected
 project folder; relaunch and the wizard should appear.
 
-### Phase 4 — Update check  ✅ COMPLETE & TESTED END-TO-END
+### Phase 4 — Update check  ✅ COMPLETE & TESTED END-TO-END WITH CI/CD LIVE
 
-**Update channel hosted at:** `https://github.com/chadheidt/coldbore`
+**GitHub repo:** `https://github.com/chadheidt/coldbore` (public)
 **Manifest URL (baked into `app/updater.py:DEFAULT_MANIFEST_URL`):** `https://raw.githubusercontent.com/chadheidt/coldbore/main/manifest.json`
 **Support email:** `coldboreapp@gmail.com` (forwards to Chad's personal Gmail; appears as "Cold Bore Support" in the recipient field via display-name in mailto)
+**CI/CD:** GitHub Actions runs `pytest` on every push, builds `Cold Bore.app` on every release tag, auto-attaches `Cold Bore.zip` to the release. See `.github/workflows/build-mac.yml`.
+
+**v0.6.0 release notes:** the v0.6.0 release on GitHub had `Cold.Bore.2.app.zip` as the asset filename (got the `.2` suffix because of a re-upload). The manifest.json points at that exact name. For v0.7.0+, delete prior uploads on the release page before re-uploading, OR rename the local zip first, to avoid the suffix. Or just let CI auto-attach (no name collisions there).
+
+**Standard release procedure going forward:**
+1. Bump `APP_VERSION` in `app/version.py` AND `setup.py` to (e.g.) `0.7.0`
+2. Commit + push (CI runs tests on push)
+3. On GitHub: **Releases → Draft new release → tag v0.7.0 → Publish**
+4. CI auto-builds the .app, zips it, attaches `Cold Bore.zip` to the release (~3-5 min)
+5. Edit `manifest.json` in the repo (raw URL or via local commit + push) to bump `app_version` and update `app_download_url`
+6. Friends' apps see the new version on next launch and show the yellow update banner
 
 **Shipping a new version (the procedure):**
 1. Bump `APP_VERSION` in `app/version.py` AND in `setup.py`
@@ -292,6 +303,83 @@ When these need new fields, update the schema doc and bump the version. Don't ch
 - The .command launcher files
 
 When making changes, mentally ask "would this work the same way in a Swift app?" If no, it should live in a Mac-specific module (main.py, setup_wizard.py) and not pollute the parser or schema layer.
+
+## Phase 11 — UX polish round (v0.7.0)  ✅ CODE COMPLETE
+
+A round dedicated to filling in UX gaps — discovery, feedback loops, error
+recovery, and first-launch experience. APP_VERSION bumped 0.6.0 → 0.7.0.
+
+**Items shipped (10 of 15 considered):**
+
+1. **Workbook state on launch** — `MainWindow._log_workbook_state()`. Reads the
+   active workbook on startup, counts distinct P-tags / S-tags / CONFIRM-tags
+   in `GarminSessions`, and reports current state plus the suggested winner
+   from the Charts sheet. If <3 loads, shows a hint about the 3-load minimum.
+
+2. **Tooltips** on drop zone, Run Import button, Clear button, workbook picker,
+   Refresh button. Helps non-developer friends understand what each control does.
+
+3. **Window geometry** — default size bumped to 960×760 (was 600×540). Position
+   and size persisted to config (`window_geometry` field) and restored on next
+   launch. Override in `closeEvent`.
+
+   **Tools-menu banner** — visible until dismissed, points new users at the
+   macOS system menu bar (which is in the screen menu bar, easy to overlook on
+   macOS). Click "(dismiss)" sets `tools_banner_dismissed=True` in config.
+
+4. **Tools → Run Import Now** (`_run_import_now_menu`) — runs the import on
+   whatever's already in the import folders, without requiring fresh drops.
+   Handy for re-runs after manually adjusting CSVs.
+
+5. **Tools → Restore From Backup…** (`_restore_from_backup`) — opens a file
+   picker pointing at `.backups/`, lets the user pick one, backs up the
+   CURRENT workbook first (so the restore is itself undoable), then copies the
+   selected backup over the active workbook.
+
+6. **macOS notification on import success** (`_show_macos_notification`). Uses
+   `osascript -e 'display notification …'` to surface a notification when the
+   user has switched to another app. Silent failure if osascript unavailable.
+
+7. **Tools → Start New Cycle…** — new module `app/new_cycle_dialog.py`. Checkbox
+   wizard with options to: move current workbook to `Completed Loads/`, archive
+   CSVs in Garmin/BallisticX Imports to dated subfolders (`Archive YYYY-MM-DD`),
+   and create a fresh workbook from the .xltx template. After completion,
+   refreshes the workbook picker and auto-selects the new file.
+
+8. **CSV preflight check** (`MainWindow._preflight_check`) — scans the import
+   folders before `run_import_clicked` writes anything. Surfaces warnings for:
+   files in the wrong format folder, BallisticX filenames that don't parse to a
+   load label, etc. Non-blocking; user can still proceed.
+
+9. **Confirm-on-quit if staged** — `MainWindow.closeEvent` checks `staged_garmin`
+   and `staged_bx`; if either is non-zero, prompts the user before closing.
+   Same handler also saves window geometry to config.
+
+10. **First-launch tutorial** — new module `app/welcome_tutorial.py`. Multi-step
+    modal dialog with 6 cards: Welcome, Label Format, Export CSVs (with the
+    BallisticX-rename trip-up), Drop on Cold Bore, Things to Know (3-load
+    minimum, close Excel first, backups, new cycle), and "You're all set"
+    pointing at the Tools menu help. `Skip / Back / Next / Got it` controls.
+    Acceptance tracked via `tutorial_seen_version` config field; bump
+    `TUTORIAL_VERSION` constant to re-prompt users with new content.
+
+**Items considered but skipped (Chad's call):**
+- Cost-per-shot tracking (deferred from earlier round)
+- Round count / barrel life tracker (deferred)
+- Atmospheric corrections (deferred)
+- DOPE auto-fill from confirmed loads (deferred)
+- "Undo last import" (already covered by Restore From Backup)
+
+**Items in `setup.py` `includes`:** updated to bundle `disclaimer`,
+`settings_dialog`, `load_card`, `load_sharing`, `crash_reporter`, `help_dialog`,
+`new_cycle_dialog`, `welcome_tutorial`. (Earlier rounds added these modules
+but the bundle config wasn't updated until this phase. Without this fix the
+new menu items would crash the bundled .app with ModuleNotFoundError.)
+
+**For Chad to ship v0.7.0:** standard release procedure — `Build App.command`
+→ create release with tag `v0.7.0` on GitHub → CI auto-attaches the zip → edit
+`manifest.json` to bump `app_version` and update the download URL → friends'
+apps see the update banner on next launch.
 
 ## Phase 10 — Polish, safety, and quality (added day 4)  ✅ CODE COMPLETE
 

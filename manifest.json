@@ -1,7 +1,7 @@
 {
-  "app_version": "0.6.0",
-  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.6.0/Cold.Bore.2.app.zip",
-  "app_release_notes": "Initial Cold Bore release. Brass-cartridge icon, drag-on-icon import, pluggable parser registry, and the Cold Bore rebrand.",
+  "app_version": "0.7.0",
+  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.7.0/Cold%20Bore.zip",
+  "app_release_notes": "UX polish round: full-window launch with state-saving, Tools menu banner, Run Import / Restore From Backup / Start New Cycle menu entries, macOS notifications, CSV preflight check, confirm-on-quit, and a first-launch tutorial.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
