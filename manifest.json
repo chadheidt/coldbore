@@ -1,7 +1,7 @@
 {
-  "app_version": "0.7.0",
-  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.7.0/Cold%20Bore.zip",
-  "app_release_notes": "UX polish round: full-window launch with state-saving, Tools menu banner, Run Import / Restore From Backup / Start New Cycle menu entries, macOS notifications, CSV preflight check, confirm-on-quit, and a first-launch tutorial.",
+  "app_version": "0.7.1",
+  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.7.1/Cold%20Bore.zip",
+  "app_release_notes": "Quick Start guide is now bundled into the release zip — friends get the .app and the install instructions in one download. No app changes since v0.7.0.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
