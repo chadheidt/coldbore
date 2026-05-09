@@ -526,6 +526,7 @@ Chad asked "how marketable is Cold Bore?" and indicated interest in selling it. 
 - [ ] **iOS app (Phase 8)** — modern shooters expect mobile; App Store gives discoverability you can't get elsewhere.
 - [ ] **Quick Start guide** — single-page friend-facing doc (already on the open list).
 - [ ] **In-app help / first-run polish** — error messages for the 10 ways users will break it that we haven't predicted yet.
+- [ ] **Migrate to Sparkle for auto-updates (Level 3 of the auto-update path)** — see Phase 12 below. v0.8.0 ships a custom Python-based self-installer that works without code-signing, but it has rough edges (Gatekeeper warnings on each update because the new download isn't signed; no signature verification on the manifest URL). When commercializing, swap in [Sparkle](https://sparkle-project.org/), which is the industry standard for non-App-Store Mac apps. Sparkle handles: code-signed update verification, professional progress UI, multi-user filesystem permissions, rollback on failure. Required prerequisites: Apple Developer ID for code signing ($99/yr — already in the commercialization budget), Sparkle.framework embedded in the .app via py2app's `frameworks` config (4-8 hours of work), generating an `appcast.xml` feed (replaces or supplements `manifest.json`), and signing each release zip with an EdDSA key (Sparkle's `sign_update` tool). Walk through this when Path B kicks off — it's the single most user-visible polish item that separates "indie weekend project" from "real Mac app."
 
 **Distribution setup (1-2 weeks once products are ready):**
 - [ ] **Mac / Windows: Gumroad or Paddle** for direct download + credit card processing + automatic sales tax handling (~5-10% cut). AVOID the Mac App Store — Apple takes 30% and the review process is annoying for utilities.
@@ -580,9 +581,59 @@ Chad has a Windows PC he wants to build a Windows version on, *after* the Mac ve
 5. **Friends-of-Chad install path on Windows:** unzip, double-click .exe, Windows SmartScreen will warn (similar to macOS Gatekeeper) — click "More info → Run anyway" once. From then on it's just an .exe.
 6. **Excel for Windows compatibility:** the workbook should work fine — openpyxl produces standard .xlsx, and Excel for Windows handles them better than Excel for Mac 2016 in some cases (Power Query is available, etc., but our Python-based architecture works everywhere).
 
+## Phase 12 — In-app self-installer (v0.8.0)  ✅ CODE COMPLETE
+
+Replaces the old "click link → browser → manual drag-to-Applications" flow with an in-app **Install Update** button. One click, app downloads, swaps itself in, relaunches.
+
+**The Level 2 design** (per the auto-update tier framework — see Phase 9 for Level 3 / Sparkle):
+- We are NOT using Sparkle. Sparkle is the right answer when commercializing (code-signing + appcast + EdDSA signature verification), but it's overkill for the friends-and-family stage and gated on the $99/yr Apple Developer Program.
+- We ARE rolling a custom Python+bash self-installer. Limited but free.
+
+**New modules:**
+- `app/installer.py` — pure-Python (no PyQt). Owns the helper-script generator and the spawn-then-quit lifecycle. Key functions:
+  - `can_self_install()` — returns False in dev mode or read-only filesystems, so caller falls back to manual link
+  - `launch_install_swap(zip_path)` — writes a bash helper script to `/tmp`, spawns it detached, returns True (caller should immediately quit). Returns False on any prereq failure.
+  - `consume_last_install_error()` — reads + deletes a marker file the helper writes on failure, so the next app launch can surface what went wrong via a `QMessageBox.warning`. Called from `main()` right after the window is shown.
+- `app/updater.py` — added `UpdateDownloader(QThread)` next to `UpdateChecker`. Streams the .zip with progress signals, throttled at 256 KB increments to avoid flooding the event loop on fast networks. Caps downloads at 500 MB to catch misconfigured manifests.
+
+**Helper-script flow** (the bash that does the actual swap):
+1. `sleep 3` — wait for parent Cold Bore to fully quit (macOS holds bundle open while Python is alive)
+2. Create staging dir next to current .app (same filesystem → atomic rename later)
+3. `unzip` the downloaded `Cold.Bore.zip` into staging
+4. `find` the new .app inside staging (handles whatever directory structure the zip has)
+5. `xattr -dr com.apple.quarantine` — strip Gatekeeper's "downloaded from internet" attribute so relaunch doesn't hard-block
+6. `mv` old .app aside (rollback target if next step fails)
+7. `mv` new .app into the old's place
+8. `rm` staging + zip + helper script (self-delete)
+9. `open` the new .app
+- On any failure, `log_fail` writes the error to `~/Library/Application Support/Cold Bore/last_install_error.log` and surfaces a non-blocking macOS notification, then exits non-zero. Next app launch reads + deletes the log so user sees "previous update failed" once.
+
+**Banner state machine** (in `MainWindow._render_update_banner`):
+- `ready` — "App update: vX.Y.Z is available. **Install Update** · Or download manually"
+- `downloading` — "Downloading vX.Y.Z   45% · Cancel"
+- `installing` — "Update vX.Y.Z ready. **Quit and Install**"
+- `error` — "Couldn't install automatically. <error>. Download manually instead"
+
+State transitions: ready→downloading on Install Update click; downloading→ready on Cancel; downloading→installing on success; downloading→error on download failure; installing→app-quits on Quit and Install click; install spawn failure→error.
+
+**Tests** (`tests/test_installer.py`):
+- `can_self_install` correctly returns False in dev mode (no .app bundle parent)
+- `_build_helper_script` includes all required commands (unzip, xattr, mv, open)
+- Path-with-spaces handling (single-quote shell escaping)
+- `consume_last_install_error` reads and deletes the log file
+- `launch_install_swap` declines gracefully without a zip / without a .app bundle
+
+**Known limitations of Level 2** (compared to Level 3 / Sparkle):
+- No code-signing → friends still see the "Apple cannot check this for malicious software" warning the very first time they open the new bundle, EXCEPT we strip the quarantine attribute as part of the swap. So in practice, post-swap launch should NOT trigger Gatekeeper. (This is a security tradeoff: stripping quarantine bypasses Gatekeeper. For a niche tool sent to known friends it's acceptable; for commercial distribution it's not.)
+- No signature verification on the manifest URL → if `raw.githubusercontent.com/chadheidt/coldbore/main/manifest.json` is ever spoofed (DNS hijack, MITM), an attacker could push malicious updates. Realistic risk is very low for a github.com-hosted manifest, but it's worth noting.
+- No rollback if the new version crashes on launch → user has to manually re-download the previous release. Sparkle handles this with a watchdog timer.
+- Self-install is bash + Python — works on macOS but won't carry to the Windows port. Phase 7 will need its own approach (likely a `.bat` helper that does the equivalent).
+
+**For Chad to ship v0.8.0:** standard release procedure (commit + push, create release at tag v0.8.0, CI auto-attaches the zip — note: per Phase 11 lessons, create the release directly, NOT as a draft, so the `release: created` event fires; and the asset URL will be `Cold.Bore.zip` not `Cold%20Bore.zip` because of the GitHub space-rename quirk).
+
 ## Where I am, in case I have to resume
 
-**Latest state (May 9, 2026):** v0.7.1 shipped. Both v0.7.0 and v0.7.1 are live on GitHub Releases (v0.7.1 is Latest). The release zip now bundles `Cold Bore — Quick Start.docx` alongside `Cold Bore.app` — friends get both in a single download. Chad is **cleared to send the zip to friends**. The shareable link is `https://github.com/chadheidt/coldbore/releases/latest`. See the project root file `Send Cold Bore to friends.md` for the canonical sharing link, copy-paste-ready messages, and a running version history.
+**Latest state (May 9, 2026):** v0.7.1 shipped to friends. v0.8.0 is **code-complete locally** with the in-app self-installer (Phase 12) — needs commit + push + release on GitHub. v0.8.0 is what tests the auto-update flow end-to-end: Chad's still-running v0.7.0 will see the manifest reporting v0.8.0, click Install Update, and the new bundle will swap itself in. See the project root file `Send Cold Bore to friends.md` for the canonical sharing link.
 
 ---
 

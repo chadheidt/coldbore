@@ -6,6 +6,39 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## 🚧 v0.8.0 IN-FLIGHT — May 9, 2026 (auto-update feature)
+
+**Where we left off:** Chad and Claude built **Phase 12: in-app self-installer** in this session. Code is complete locally but **not yet committed/pushed/released**. v0.8.0 will be Cold Bore's first version with one-click in-app updates (Level 2 — see Build progress.md Phase 12 for full design and Phase 9 for the Sparkle/Level 3 plan when commercializing).
+
+**What's done:**
+- ✅ `app/updater.py` — added `UpdateDownloader(QThread)` (streams the .zip with progress signals, 500MB cap, 256KB-throttled progress emits)
+- ✅ `app/installer.py` (NEW) — pure-Python module that builds and spawns the bash helper script that does the .app swap. Includes `can_self_install()`, `launch_install_swap()`, `consume_last_install_error()`. PyQt-free so it can be unit-tested without a display server.
+- ✅ `app/main.py` — banner state machine (ready/downloading/installing/error), Install Update button, Quit and Install button, cancel handling, fallback to manual download link, surfacing of previous install errors at startup
+- ✅ `setup.py` — added `installer` to py2app's `includes`, version bumped to 0.8.0
+- ✅ `app/version.py` — `APP_VERSION = "0.8.0"`
+- ✅ `manifest.json` — bumped to 0.8.0 with the v0.8.0 download URL (uses `Cold.Bore.zip` to match GitHub's space-rename behavior)
+- ✅ `tests/test_installer.py` (NEW) — 7 tests covering script generation, dev-mode safety, consume-error log lifecycle
+- ✅ Build progress.md — added Phase 12 section with design rationale, helper-script step list, banner state machine, known limitations
+- ✅ Build progress.md — added Sparkle migration plan to Phase 9 (Path B / commercialization checklist)
+
+**What's pending — the release flow:**
+1. Open GitHub Desktop. You should see ~9 changed files (4 .py edits, 1 new installer.py, 1 new test_installer.py, manifest.json, setup.py, Build progress.md, Notes for next session.md).
+2. Commit message: `v0.8.0 — in-app self-installer (Phase 12)`
+3. Click **Commit to main** → **Push origin**.
+4. Wait ~5 min for CI green at https://github.com/chadheidt/coldbore/actions
+5. Create the v0.8.0 release at https://github.com/chadheidt/coldbore/releases/new — **DO NOT save as draft**, use the green Publish release button directly so the `release: created` event fires for CI's asset-attach step. (See lessons-learned in this file.)
+6. After ~5 min, verify `Cold.Bore.zip` is attached to the v0.8.0 release.
+7. **Test the auto-update flow on Chad's Mac.** He's still running v0.7.0, so opening Cold Bore will show the new banner. Click **Install Update**, watch the download progress, click **Quit and Install** when ready. Cold Bore should close, the helper script should swap in v0.8.0, and Cold Bore should reopen on v0.8.0. The Tools → About dialog should now report v0.8.0.
+8. **Acceptance criteria for v0.8.0**: a clean install-update-relaunch cycle with no Gatekeeper warnings on the relaunch (because the helper strips the quarantine xattr).
+
+**Edge cases to watch for during the v0.8.0 test:**
+- Helper script's `sleep 3` should be enough for parent quit. If the swap fails because Cold Bore is still alive, we'd see a "Couldn't move old app aside" error — bump the sleep.
+- If Chad's Cold Bore is in `/Applications/` and that's not writable for some reason (rare), `can_self_install()` returns False and the banner falls back to "Or download manually" — still works, just no one-click.
+- The helper script writes errors to `~/Library/Application Support/Cold Bore/last_install_error.log`. Next launch surfaces them via QMessageBox. If anything goes wrong, that's the place to look.
+- If something REALLY goes wrong and Cold Bore can't relaunch after the swap, Chad can manually re-install: download `Cold.Bore.zip` from https://github.com/chadheidt/coldbore/releases/latest, drag into Applications.
+
+---
+
 ## ✅ v0.7.1 SHIPPED — May 9, 2026
 
 **Status: pre-beta complete. Chad is cleared to share Cold Bore with friends.**

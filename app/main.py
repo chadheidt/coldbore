@@ -57,7 +57,8 @@ from parsers import detect_parser, chronograph_parsers, group_parsers
 import import_data
 import config as app_config
 from setup_wizard import run_wizard
-from updater import UpdateChecker, DEFAULT_MANIFEST_URL
+from updater import UpdateChecker, UpdateDownloader, DEFAULT_MANIFEST_URL
+import installer
 from version import APP_NAME, APP_VERSION
 from disclaimer import needs_disclaimer, show_disclaimer, view_disclaimer
 from settings_dialog import show_settings
@@ -265,6 +266,18 @@ class MainWindow(QMainWindow):
         # Holds the last manifest from a successful update check
         self._last_manifest = None
         self._update_checker = None
+
+        # In-app updater state. The full flow:
+        #   _pending_app_update_url   — set when the manifest reports a newer
+        #     version; used by the Install Update button and the manual fallback
+        #   _pending_app_update_version — display string for the new version
+        #   _update_downloader        — QThread streaming the .zip
+        #   _downloaded_zip_path      — local path once download is complete;
+        #     consumed by installer.launch_install_swap on Quit-and-Install
+        self._pending_app_update_url = None
+        self._pending_app_update_version = None
+        self._update_downloader = None
+        self._downloaded_zip_path = None
 
         # Carbon-fiber background is built (CarbonBackground class) but
         # disabled for now — Chad wants a flat graphite background while
@@ -872,37 +885,130 @@ class MainWindow(QMainWindow):
                 )
             return
 
-        # Build banner text
-        parts = []
-        if result["app_update"]:
-            new_v = manifest.get("app_version", "?")
-            parts.append(
-                f"<b>App update:</b> v{new_v} is available "
-                f"(you have v{APP_VERSION})."
-            )
-            url = manifest.get("app_download_url")
-            if url:
-                parts.append(f'<a href="app:{url}">Download new version</a>')
+        # Stash app update URL for the install flow's use. Template updates
+        # still go through the browser (template files aren't bundled into a
+        # .app, so there's nothing to swap — user picks them up via the
+        # workbook the next time they Save As from a fresh template).
+        self._pending_app_update_url = manifest.get("app_download_url") if result["app_update"] else None
+        self._pending_app_update_version = manifest.get("app_version") if result["app_update"] else None
 
-        if result["template_update"]:
+        # Render the initial "ready to install" banner state.
+        self._render_update_banner(state="ready", manifest=manifest, result=result)
+        self.update_banner.setVisible(True)
+
+    def _render_update_banner(self, state, manifest=None, result=None,
+                              progress_pct=None, error=None):
+        """Render the update banner in one of several states:
+            'ready'      — update available, primary action: Install Update
+            'downloading' — download in flight, show progress
+            'installing' — download complete, primary action: Quit and Install
+            'error'      — install or download failed, show fallback link
+
+        Keeping this in one method so the markup stays consistent and we
+        don't accidentally drift between paths."""
+        if manifest is None:
+            manifest = self._last_manifest or {}
+        if result is None:
+            # Synthesize a minimal result if we're being called from a
+            # progress/install path that doesn't have one handy.
+            result = {
+                "app_update": bool(self._pending_app_update_url),
+                "template_update": False,
+            }
+
+        parts = []
+
+        if result.get("app_update"):
+            new_v = self._pending_app_update_version or manifest.get("app_version", "?")
+
+            if state == "ready":
+                parts.append(
+                    f"<b>App update:</b> v{new_v} is available "
+                    f"(you have v{APP_VERSION})."
+                )
+                # Primary action: in-app install. Fallback: browser download.
+                if installer.can_self_install() and self._pending_app_update_url:
+                    parts.append(
+                        '<a href="install:start"><b>Install Update</b></a>'
+                        ' &nbsp;·&nbsp; '
+                        f'<a href="app:{self._pending_app_update_url}" '
+                        'style="color:#aaa;">Or download manually</a>'
+                    )
+                elif self._pending_app_update_url:
+                    # Dev mode or read-only filesystem — no self-install path.
+                    parts.append(
+                        f'<a href="app:{self._pending_app_update_url}">Download new version</a>'
+                    )
+
+            elif state == "downloading":
+                pct_text = f"{progress_pct}%" if progress_pct is not None else "…"
+                parts.append(
+                    f"<b>Downloading v{new_v}</b> &nbsp; {pct_text} "
+                    '&nbsp;·&nbsp; '
+                    '<a href="install:cancel" style="color:#aaa;">Cancel</a>'
+                )
+
+            elif state == "installing":
+                parts.append(
+                    f"<b>Update v{new_v} ready.</b> "
+                    'Cold Bore will close, install the update, and reopen.'
+                )
+                parts.append(
+                    '<a href="install:swap"><b>Quit and Install</b></a>'
+                )
+
+            elif state == "error":
+                parts.append(
+                    f"<b>Update v{new_v}:</b> couldn't install automatically."
+                )
+                if error:
+                    parts.append(f"<i>{error}</i>")
+                if self._pending_app_update_url:
+                    parts.append(
+                        f'<a href="app:{self._pending_app_update_url}">'
+                        'Download manually instead</a>'
+                    )
+
+        if result.get("template_update") and state == "ready":
             new_t = manifest.get("template_version", "?")
             parts.append(f"<b>Template update:</b> v{new_t} is available.")
             url = manifest.get("template_download_url")
             if url:
                 parts.append(f'<a href="template:{url}">Download new template</a>')
 
-        notes_app = manifest.get("app_release_notes", "").strip()
-        notes_t = manifest.get("template_release_notes", "").strip()
-        notes = " · ".join(n for n in (notes_app, notes_t) if n)
-        if notes:
-            parts.append(f"<i>{notes}</i>")
+        # Release notes on the ready/error states only — we don't want the
+        # downloading state to be a wall of text.
+        if state in ("ready", "error"):
+            notes_app = manifest.get("app_release_notes", "").strip()
+            notes_t = manifest.get("template_release_notes", "").strip()
+            notes = " · ".join(n for n in (notes_app, notes_t) if n)
+            if notes:
+                parts.append(f"<i>{notes}</i>")
 
         self.update_banner.setText("<br>".join(parts))
-        self.update_banner.setVisible(True)
 
     def _on_update_link(self, link):
-        """Open download URLs in the user's browser. Links are prefixed with
-        'app:' or 'template:' so we know which kind."""
+        """Handle banner link clicks.
+
+        Link prefixes:
+            install:start  — kick off the in-app download
+            install:cancel — cancel an in-flight download
+            install:swap   — quit and let the helper script swap in the new app
+            app:URL        — open URL in the browser (manual download fallback)
+            template:URL   — open URL in the browser (templates are browser-only)
+        """
+        if link == "install:start":
+            self._begin_update_download()
+            return
+
+        if link == "install:cancel":
+            self._cancel_update_download()
+            return
+
+        if link == "install:swap":
+            self._perform_install_swap()
+            return
+
         if link.startswith("app:"):
             url = link[len("app:"):]
         elif link.startswith("template:"):
@@ -910,6 +1016,76 @@ class MainWindow(QMainWindow):
         else:
             url = link
         QDesktopServices.openUrl(QUrl(url))
+
+    def _begin_update_download(self):
+        """Start downloading the update zip in the background."""
+        url = self._pending_app_update_url
+        if not url:
+            return
+
+        if self._update_downloader and self._update_downloader.isRunning():
+            return
+
+        self._render_update_banner(state="downloading", progress_pct=0)
+
+        self._update_downloader = UpdateDownloader(url, parent=self)
+        self._update_downloader.progress.connect(self._on_download_progress)
+        self._update_downloader.finished_with_result.connect(self._on_download_finished)
+        self._update_downloader.start()
+
+    def _cancel_update_download(self):
+        """Cancel an in-flight download and revert the banner."""
+        if self._update_downloader and self._update_downloader.isRunning():
+            self._update_downloader.cancel()
+        # Revert to ready state so the user can try again
+        self._render_update_banner(state="ready")
+
+    def _on_download_progress(self, downloaded, total):
+        """Update the banner with current progress percentage."""
+        if total > 0:
+            pct = min(100, int(downloaded * 100 / total))
+        else:
+            pct = None  # indeterminate
+        self._render_update_banner(state="downloading", progress_pct=pct)
+
+    def _on_download_finished(self, result):
+        """Either swap directly into "Quit and Install" state, or surface
+        the error and fall back to the manual link."""
+        if not result["ok"]:
+            err = result.get("error") or "Download failed"
+            if err == "Cancelled":
+                # User-initiated; banner already reverted by cancel handler
+                return
+            self._render_update_banner(state="error", error=err)
+            return
+
+        self._downloaded_zip_path = result["file_path"]
+        self._render_update_banner(state="installing")
+
+    def _perform_install_swap(self):
+        """User clicked Quit and Install. Spawn the helper script and quit."""
+        zip_path = self._downloaded_zip_path
+        if not zip_path:
+            self._render_update_banner(
+                state="error",
+                error="Internal error: no downloaded zip path."
+            )
+            return
+
+        ok = installer.launch_install_swap(zip_path)
+        if not ok:
+            self._render_update_banner(
+                state="error",
+                error=(
+                    "Cold Bore couldn't swap in the new version automatically. "
+                    "Use the download link to install manually."
+                ),
+            )
+            return
+
+        # Helper is running detached. Quit cleanly so the helper can do its
+        # work without macOS holding the bundle open.
+        QApplication.quit()
 
     def _on_tools_banner_link(self, link):
         """Dismiss the Tools-menu banner permanently."""
@@ -1456,6 +1632,23 @@ def main():
     win.show()
     win.raise_()
     win.activateWindow()
+
+    # If the previous launch attempted a self-install and the helper script
+    # bailed out, surface that so the user knows what happened. The error
+    # log is consumed (deleted) on read so we don't keep nagging.
+    last_install_err = installer.consume_last_install_error()
+    if last_install_err:
+        QTimer.singleShot(
+            500,
+            lambda: QMessageBox.warning(
+                win,
+                "Last update didn't install",
+                "Cold Bore tried to install an update but couldn't finish:\n\n"
+                f"{last_install_err}\n\n"
+                "You're still on the previous version. Use the update banner "
+                "to try again, or download the new version manually from GitHub."
+            ),
+        )
 
     # First-launch tutorial — only shows if the user hasn't seen this
     # tutorial version yet. Tracked via config; users see it once.
