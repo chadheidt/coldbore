@@ -1,7 +1,7 @@
 {
-  "app_version": "0.8.0",
-  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.8.0/Cold.Bore.zip",
-  "app_release_notes": "Auto-update! Click \"Install Update\" in the banner — Cold Bore downloads the new version, swaps it in, and reopens itself. No more manual drag-to-Applications.",
+  "app_version": "0.8.1",
+  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.8.1/Cold.Bore.zip",
+  "app_release_notes": "Build now runs on Intel — works on every Mac, including older Intel models. (Previous builds were Apple Silicon-only.) First version where the in-app Install Update button is real-world tested.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

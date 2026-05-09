@@ -2,6 +2,15 @@
 # every release tag. Auto-attaches the .app.zip to GitHub Releases when a
 # tag like v0.7.0 is pushed.
 #
+# IMPORTANT: build runs on macos-13 (Intel). Apple Silicon GitHub runners
+# (macos-14+) produce arm64-only bundles that won't run on Intel Macs.
+# An Intel binary, by contrast, runs natively on Intel AND on Apple Silicon
+# via Rosetta 2 (which all Apple Silicon Macs ship with). Performance hit is
+# negligible for a small PyQt app. macos-13 is GA on GitHub-hosted runners
+# and is currently the simplest single-binary path that covers both
+# architectures. When macos-13 is retired by GitHub, switch to a universal2
+# build matrix (see Phase 12 notes in Build progress.md for the alternative).
+#
 # To use this:
 #   1. Push the code to your GitHub repo (chadheidt/coldbore)
 #   2. GitHub will run this workflow automatically on each push to main
@@ -27,7 +36,7 @@ on:
 jobs:
   test:
     name: Run pytest
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.11
@@ -44,7 +53,7 @@ jobs:
   build:
     name: Build .app bundle
     needs: test
-    runs-on: macos-latest
+    runs-on: macos-13
     # Allow this job's GITHUB_TOKEN to upload assets to releases.
     # Without this, action-gh-release@v2 fails with "Resource not accessible by integration".
     permissions:

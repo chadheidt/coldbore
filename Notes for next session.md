@@ -6,7 +6,43 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🚧 v0.8.0 IN-FLIGHT — May 9, 2026 (auto-update feature)
+## 🚧 v0.8.1 IN-FLIGHT — May 9, 2026 (CI architecture fix + first auto-update test)
+
+**Where we left off:** Chad got v0.8.0 running locally (Build App.command on his Intel Mac) but **the v0.8.0 zip on GitHub Releases is Apple Silicon-only and crashes on Intel Macs.** This is because GitHub's `macos-latest` runner is now ARM64 by default in 2026, and produced an arm64-only py2app bundle. Chad has an Intel Mac (`uname -m` → `x86_64`) so the bundle exited immediately on launch with a swallowed PyQt5 ImportError.
+
+v0.8.1 fixes this by switching CI from `macos-latest` to `macos-13` (Intel runner). Intel binaries run natively on Intel AND on Apple Silicon via Rosetta 2 (which ships with every Apple Silicon Mac), so a single Intel build covers both architectures. Performance impact for a small PyQt app is invisible.
+
+**What's done in v0.8.1:**
+- ✅ `.github/workflows/build-mac.yml` — both `test` and `build` jobs now `runs-on: macos-13`. Header comment explains why and points future-Claude at the universal2 alternative when macos-13 is eventually retired by GitHub.
+- ✅ Version bumps to 0.8.1 in `app/version.py`, `setup.py`, `manifest.json`
+- ✅ Release notes in manifest highlight the Intel fix
+
+**What's pending — the release flow:**
+1. Open GitHub Desktop. ~4 changed files (workflow, version.py, setup.py, manifest.json) plus this breadcrumb file.
+2. Commit message: `v0.8.1 — CI fix: build on Intel runner so bundle works on every Mac`
+3. **Commit to main → Push origin**.
+4. Wait ~5 min for CI green. Note: the `test` job uses `macos-13` now too, which has slightly slower startup than `macos-latest` — first run may take longer than usual.
+5. Create v0.8.1 release at https://github.com/chadheidt/coldbore/releases/new — direct publish, NOT draft.
+6. Wait for `Cold.Bore.zip` to attach to the release.
+
+**The big test: in-app auto-update.** Once the v0.8.1 release is live with its zip attached:
+
+1. Chad opens his locally-built v0.8.0 Cold Bore (currently in /Applications)
+2. Manifest reports v0.8.1 available → yellow banner appears with **Install Update** button
+3. Chad clicks **Install Update** → banner shows download progress
+4. When download done → banner shows **Quit and Install** button
+5. Chad clicks → Cold Bore quits, helper script swaps in v0.8.1, Cold Bore reopens on v0.8.1
+6. Tools → About reports v0.8.1, banner is gone
+
+**Why this is the moment of truth:** v0.8.0 had the new in-app updater code but Chad was still running v0.7.0 when we tried to test it, so we got the OLD banner ("Download new version" → browser). Now Chad's running v0.8.0 locally, and v0.8.1 will be the first time his own machine sees the new "Install Update" button on a real update event.
+
+**If the swap fails for some reason:** ~/Library/Application Support/Cold Bore/last_install_error.log will have the helper script's exit message. Next launch, Cold Bore reads that log and surfaces it via QMessageBox. Have Chad paste whatever it says.
+
+**Friend distribution status:** Chad has NOT sent any zips to friends yet. So the broken v0.7.0/v0.7.1/v0.8.0 GitHub zips never reached anyone. Once v0.8.1 is live and verified, the zip on `releases/latest` will be Intel-binary (works on every Mac) and friend distribution can begin in earnest.
+
+---
+
+## ✅ v0.8.0 SHIPPED (locally) — May 9, 2026 (auto-update feature)
 
 **Where we left off:** Chad and Claude built **Phase 12: in-app self-installer** in this session. Code is complete locally but **not yet committed/pushed/released**. v0.8.0 will be Cold Bore's first version with one-click in-app updates (Level 2 — see Build progress.md Phase 12 for full design and Phase 9 for the Sparkle/Level 3 plan when commercializing).
 
