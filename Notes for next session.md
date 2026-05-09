@@ -6,6 +6,44 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## ✅ v0.7.1 SHIPPED — May 9, 2026
+
+**Status: pre-beta complete. Chad is cleared to share Cold Bore with friends.**
+
+**What's live:**
+- v0.7.0 and v0.7.1 both published at https://github.com/chadheidt/coldbore/releases
+- v0.7.1 is set as **Latest**, has the workflow change that bundles `Cold Bore — Quick Start.docx` into `Cold Bore.zip` alongside the .app
+- Verified by Chad: downloading the zip from the release page yields both the .app AND the Quick Start docx
+- The shareable link friends should use: **https://github.com/chadheidt/coldbore/releases/latest** (always points at newest release)
+
+**The friend-sharing reference doc** lives at the project root: `Send Cold Bore to friends.md`. It has the link, copy-paste-ready text/email messages, common questions, and a running version history. **When Chad asks "where's the link to send to friends," point him there.**
+
+### gh CLI (still deferred)
+
+Chad started exploring `brew install gh` + `gh auth login` so future releases can be one-liners (`gh release create v0.X.Y --title "..." --notes "..." --latest`) instead of clicking through the website. Never finished the install. Not blocking — next time he does a release, ask if he wants to set this up first or just push through with the manual flow again.
+
+### Lessons learned from v0.7.1's release flow (read before next release)
+
+The v0.7.1 release got messy because Chad and the previous Claude weren't on the same page about what was already done. Specifically:
+
+1. **The breadcrumb said "NOT pushed" but the commits were already on GitHub.** Always verify actual state with `git log origin/main..HEAD --oneline` and a fetch from the public release page before trusting a breadcrumb.
+2. **A v0.7.1 release was created as a Draft early in the session (before the breadcrumb was written), and a v0.7.1 git tag had been pushed.** The next session's "create release" form rejected v0.7.1 as a duplicate tag, then offered to "edit existing notes" — which led Chad to a pre-existing release record. Confusing.
+3. **GitHub's `/releases` page is cached for ~1-2 minutes** after a release is published. The direct tag URL (`/releases/tag/v0.7.1`) refreshes immediately. When verifying a fresh publish, prefer the tag URL.
+4. **Chad got confused about CI vs releases.** He saw a green check on the Actions page after pushing and assumed that meant the release was published. It wasn't — CI runs on every push, not just releases. Be explicit about this distinction in walkthroughs.
+5. **GitHub renames release assets with spaces.** Cold Bore's CI uploads `Cold Bore.zip`, but GitHub stores it as `Cold.Bore.zip` (spaces → periods). The first manifest had `Cold%20Bore.zip` (URL-encoded space) and 404'd in the in-app banner. Fix was changing manifest URL to `Cold.Bore.zip`. **Going forward, either the workflow's zip step should produce a no-spaces name (`ColdBore.zip` or `Cold.Bore.zip`) directly so the rename never happens, OR future manifest URLs should always use the period form. Pick one and document it.** The breadcrumb actually mentioned this gotcha from v0.6.0 days but it didn't get applied to the manifest. Next time we ship a new release: either fix the workflow filename, or bake "use periods, not spaces, in the manifest URL" into the release procedure.
+
+**Future-Claude checklist before walking Chad through a release:**
+- [ ] Run `git log --oneline -10` and `git tag -l` locally to see what commits and tags actually exist
+- [ ] Web-fetch `https://github.com/chadheidt/coldbore/releases/tag/v0.X.Y` BEFORE assuming the release doesn't exist
+- [ ] Check `git log origin/main..HEAD` to see unpushed commits, and `git ls-remote --tags origin | grep v0.X.Y` to see if the tag is on GitHub (note: this needs Chad's network — sandbox can't reach GitHub directly via git)
+- [ ] If a tag already exists, the "create new release" form will show it in the dropdown. SELECT it instead of trying to create a new tag of the same name
+- [ ] If a release already exists as a Draft, finish publishing it via the existing record — don't try to re-create
+- [ ] After CI finishes the release build, **verify the asset filename on the release page matches what's in `manifest.json`**. GitHub renames spaces to periods. Check `https://github.com/chadheidt/coldbore/releases/download/v0.X.Y/<exact-filename>` resolves before declaring victory.
+
+---
+
+---
+
 ## 🟧 When you come back (note to Chad, not Claude)
 
 If it's been weeks or months since you worked on Cold Bore and you're not sure how to pick up — read this section first. It's written for you, not for Claude.

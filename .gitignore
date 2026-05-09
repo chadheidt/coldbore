@@ -52,3 +52,6 @@ Icon
 .pytest_cache/
 .coverage
 htmlcov/
+
+# --- Claude / Cowork internal state ---
+.claude/

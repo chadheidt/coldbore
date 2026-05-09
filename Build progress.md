@@ -582,6 +582,10 @@ Chad has a Windows PC he wants to build a Windows version on, *after* the Mac ve
 
 ## Where I am, in case I have to resume
 
+**Latest state (May 9, 2026):** v0.7.1 shipped. Both v0.7.0 and v0.7.1 are live on GitHub Releases (v0.7.1 is Latest). The release zip now bundles `Cold Bore — Quick Start.docx` alongside `Cold Bore.app` — friends get both in a single download. Chad is **cleared to send the zip to friends**. The shareable link is `https://github.com/chadheidt/coldbore/releases/latest`. See the project root file `Send Cold Bore to friends.md` for the canonical sharing link, copy-paste-ready messages, and a running version history.
+
+---
+
 Phases 1, 2, 2.5, 3, 4, and 5 are all code-complete. Phase 6 (py2app bundling) build script is ready — Chad needs to run `Build App.command` and report whether the .app builds and runs correctly. Carbon-fiber background and custom icon are deferred to a final polish pass.
 
 Current `app/` layout:
