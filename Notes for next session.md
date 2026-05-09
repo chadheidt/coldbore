@@ -6,7 +6,72 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🚧 v0.8.2 IN-FLIGHT — May 9, 2026 (universal2 build, first auto-update test)
+## 🚧 PAUSED MID-RELEASE-LOOP — May 9, 2026 (v0.8.5, the auto-update saga)
+
+**Chad needs a break.** When he comes back, this is the first thing to resume. Read this section all the way through before doing anything else — there are several pieces of state that aren't obvious from looking at the code or the GitHub repo.
+
+### Current state (the snapshot)
+
+- **Local working tree (uncommitted):** v0.8.5 changes are staged. 4 modified files:
+  - `.github/workflows/build-mac.yml` — runner reverted from `macos-latest` back to `macos-13`
+  - `setup.py` — removed `arch = 'universal2'`, bumped to 0.8.5
+  - `app/version.py` — 0.8.5
+  - `manifest.json` — 0.8.5 with new release notes
+  - These are sitting in Chad's GitHub Desktop waiting to be committed.
+- **GitHub main branch:** at v0.8.4 (commit hash unknown — check `git log` to find)
+- **GitHub releases that exist:** v0.6.0, v0.7.0, v0.7.1, possibly v0.8.1/v0.8.2 (stale, from intermediate attempts), v0.8.3, v0.8.4. Latest is whatever was published most recently — likely v0.8.4.
+- **Manifest on GitHub main (raw URL):** says v0.8.4 is available, points at v0.8.4 release zip.
+- **Chad's `/Applications/Cold Bore.app`:** **BROKEN.** Last successful auto-update swapped in v0.8.4 (whose CI build had universal2 launcher but arm64-only PyQt5). The .app launches → silent crash → quits. Confirmed via `"/Applications/Cold Bore.app/Contents/MacOS/Cold Bore"` printing the PyQt5 ImportError. The bundle's launcher binary IS universal2 (`file` confirmed both archs) but PyQt5 inside is arm64-only.
+- **Chad's last known working version on his machine:** v0.8.3 (locally built via `Build App.command`). He replaced it via the v0.8.3→v0.8.4 auto-update, which then broke things.
+
+### Why we're at v0.8.5
+
+Long version-bump saga today, summarized:
+- v0.8.0 — Phase 12 in-app self-installer code complete. Tested in v0.7.0 (running locally), banner showed old "Download new version" link because the running v0.7.0 didn't have the new code.
+- v0.8.1 — switched CI to `macos-13` (Intel) to fix arch issues; got stuck in 13+ min queue.
+- v0.8.2 — switched CI to `macos-latest` with `arch = 'universal2'` for fast queue; the build's launcher was universal2 but PyQt5 came in arm64-only on Apple Silicon runner.
+- v0.8.3 — fixed an em-dash crash in the helper script (Python 3.9 ASCII encoding issue when writing the bash script). Chad locally rebuilt + installed.
+- v0.8.4 — trivial bump to test auto-update from v0.8.3. Auto-update flow worked (download + swap) but the new bundle crashed on launch due to arm64-only PyQt5 (universal2 didn't carry to Python C extensions).
+- v0.8.5 — back to `macos-13` (Intel-only build, runs everywhere via Rosetta 2 on Apple Silicon). Trade slow CI queue for a build that actually works. Code complete locally, NOT pushed.
+
+### Resume checklist (do in order)
+
+When Chad comes back, walk him through these steps:
+
+1. **First: get Cold Bore working again on Chad's Mac.** Open Finder → `~/Projects/Rifle Load Data` → double-click `Build App.command`. This locally rebuilds Cold Bore at v0.8.5 using Chad's Intel Mac's Python and Intel PyQt5 (so the resulting bundle is Intel-only and works fine on his Intel Mac).
+2. After ~3 minutes, the Finder should auto-open dist/. Drag `dist/Cold Bore.app` → `/Applications`. Click **Replace** when prompted.
+3. In Terminal: `xattr -dr com.apple.quarantine "/Applications/Cold Bore.app"`
+4. In Terminal: `open "/Applications/Cold Bore.app"` — should open. Verify Tools → About says **0.8.5**.
+5. **Now push v0.8.5.** GitHub Desktop should still show the 4 changed files. Commit message:
+   > `v0.8.5 - back to macos-13 (Intel) for CI; universal2 was producing arm64-only PyQt5`
+   Commit to main → Push origin.
+6. **Wait for CI.** macos-13 queue can take 10-20 min. Watch https://github.com/chadheidt/coldbore/actions. The "v0.8.5..." run goes orange (queued) → yellow (running) → green (done).
+7. **Create the v0.8.5 release directly (NOT draft):**
+   https://github.com/chadheidt/coldbore/releases/new
+   - Tag: `v0.8.5`
+   - Title: `Cold Bore 0.8.5`
+   - Description: "Build fixed for Intel Macs. Uses macos-13 CI runner so PyQt5 ships as Intel binary - works natively on Intel and via Rosetta 2 on Apple Silicon."
+   - ☑ Set as latest → green Publish release
+8. **Wait ~5 min for `Cold.Bore.zip` to attach** to the v0.8.5 release. Verify via the page or with web_fetch.
+9. **(Optional cleanup)** Delete the stale v0.8.1 / v0.8.2 / v0.8.3 / v0.8.4 release records on GitHub if they exist (don't delete the tags — only the release record). Keeps the releases page tidy. v0.7.1 is the lowest-version release worth keeping for friends who might still want to grab it.
+10. **Now the moment of truth — but we still need a v0.8.6 to test the auto-update against.** v0.8.5 in /Applications == v0.8.5 in manifest == no banner. To test the auto-update flow, Chad needs to push a trivial v0.8.6 (Claude prepares the version bumps; Chad pushes; CI builds; Chad creates v0.8.6 release). Then his v0.8.5 sees v0.8.6 available, clicks **Install Update**, and the swap completes successfully (since v0.8.5's installer has the em-dash fix AND the new build is Intel which works on his Mac).
+
+### Lessons learned from today's saga (read before doing future releases)
+
+These are critical and have saved repeat sessions before; don't drop them.
+
+1. **Never use `arch = 'universal2'` in setup.py without also forcing universal2 wheels for binary deps.** Tried in v0.8.4. The launcher is universal but PyQt5's C extensions only get whatever pip downloaded, which on an Apple Silicon CI runner is arm64-only. The bundle then crashes on Intel.
+2. **`macos-13` Intel CI runner is the simplest path.** Slow queue (10-20 min during peak) but produces an Intel binary that works natively on Intel and via Rosetta 2 on Apple Silicon. One zip, every Mac. When `macos-13` is retired by GitHub (not soon), revisit by forcing universal2 wheels via `pip download --platform macosx_11_0_universal2 --only-binary=:all:` or build matrix.
+3. **The .app bundle's Python is older (3.9 system Python on macOS).** Don't use any Python 3.10+ features in `installer.py`, `updater.py`, or anywhere else that runs in the bundle. Specifically: no `Path | None` syntax (use plain returns), no `match` statements, no `:=` walrus inside expressions where 3.9 doesn't allow it. Stick to 3.8-compatible syntax.
+4. **The .app's bundled Python may have ASCII as default file-write encoding.** Always pass `encoding="utf-8"` explicitly when opening files for write (`open(path, "w", encoding="utf-8")`). The em-dash crash in v0.8.0→v0.8.4 came from this. Code now does this in installer.py but watch for it elsewhere.
+5. **Keep the bash helper script in `installer._build_helper_script` ASCII-only.** Don't put em dashes or curly quotes in comments — they propagate into the script body and can blow up if the file write encoding regresses. Use plain `-` instead of `—`.
+6. **Never put non-ASCII in commit messages either.** The Cold.Bore.zip filename + GitHub's space-rename + the release notes all need to be ASCII-only to avoid surprises across editors and CI tools.
+
+### gh CLI (still deferred)
+
+Chad started exploring `brew install gh` + `gh auth login` for one-line releases (`gh release create ...`). Never finished. Not blocking; today's saga still uses the GitHub web UI flow. If we keep doing releases this often, the gh CLI would be worth setting up at the start of the next session — it'd save Chad ~5 minutes per release of clicking through the web form.
+
+---
 
 **Updated approach over v0.8.1:** The macos-13 (Intel) runner approach in v0.8.1 hit GitHub free-tier queue saturation — 13+ minutes queued. v0.8.2 takes a different angle: build a **universal2** binary on `macos-latest` (which has fast queue availability). Universal2 binaries contain BOTH arm64 and x86_64 code in one bundle, so a single zip works natively on every Mac architecture without Rosetta 2.
 

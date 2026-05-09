@@ -2,22 +2,23 @@
 # every release tag. Auto-attaches the .app.zip to GitHub Releases when a
 # tag like v0.7.0 is pushed.
 #
-# IMPORTANT: build runs on macos-latest (Apple Silicon) but produces a
-# universal2 binary containing BOTH arm64 and x86_64 code. This single
-# bundle works natively on Apple Silicon Macs AND Intel Macs. py2app reads
-# `arch = 'universal2'` from setup.py and combines the two architectures
-# into one fat binary.
+# IMPORTANT: build runs on macos-13 (Intel x86_64). This produces an Intel
+# binary that runs:
+#   - Natively on Intel Macs (older models)
+#   - Via Rosetta 2 on Apple Silicon Macs (which all M1+ Macs have or can
+#     install with one prompt)
 #
-# Why not Intel-only on macos-13: Intel runners on the free tier are
-# heavily oversubscribed in 2026 and queue times reached 15+ minutes during
-# the v0.8.1 release. macos-latest queues are usually <2 minutes.
-# Why not separate matrix builds: one zip is simpler for friend-distribution
-# (no "pick the right one for your Mac"), and universal2 is what every
-# professional Mac app ships.
+# Why not universal2 on macos-latest: tried in v0.8.4. The launcher binary
+# came out universal2, but PyQt5's Python C extensions only came in as
+# arm64 (because pip on the Apple Silicon runner pulled the arm64-specific
+# wheel). The bundle launched on Apple Silicon but crashed on Intel with
+# PyQt5 ImportError. Forcing pip to download universal2 wheels for all
+# binary deps is doable but brittle. macos-13 sidesteps this entirely.
 #
-# Prerequisites for universal2: setup-python provides a universal2 Python
-# interpreter on macos-latest, and pip pulls universal2 wheels for PyQt5
-# (5.15+ on Python 3.9+) and openpyxl (pure Python — works on any arch).
+# Tradeoff: macos-13 runners can queue for 15+ minutes during peak hours.
+# Acceptable cost for a release that ships maybe weekly. When macos-13 is
+# eventually retired by GitHub, revisit universal2 with explicit
+# `pip download --platform macosx_11_0_universal2` for binary deps.
 #
 # To use this:
 #   1. Push the code to your GitHub repo (chadheidt/coldbore)
@@ -44,7 +45,7 @@ on:
 jobs:
   test:
     name: Run pytest
-    runs-on: macos-latest
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python 3.11
@@ -61,7 +62,7 @@ jobs:
   build:
     name: Build .app bundle
     needs: test
-    runs-on: macos-latest
+    runs-on: macos-13
     # Allow this job's GITHUB_TOKEN to upload assets to releases.
     # Without this, action-gh-release@v2 fails with "Resource not accessible by integration".
     permissions:

@@ -633,7 +633,7 @@ State transitions: ready→downloading on Install Update click; downloading→re
 
 ## Where I am, in case I have to resume
 
-**Latest state (May 9, 2026):** v0.7.1 shipped to friends. v0.8.0 is **code-complete locally** with the in-app self-installer (Phase 12) — needs commit + push + release on GitHub. v0.8.0 is what tests the auto-update flow end-to-end: Chad's still-running v0.7.0 will see the manifest reporting v0.8.0, click Install Update, and the new bundle will swap itself in. See the project root file `Send Cold Bore to friends.md` for the canonical sharing link.
+**Latest state (May 9, 2026 evening):** Mid-saga around the v0.8.x auto-update / build-architecture work. v0.8.5 is **code-complete locally, not yet pushed**. Chad's `/Applications/Cold Bore.app` is currently broken (it's the v0.8.4 build whose universal2 launcher couldn't carry PyQt5's arm64-only C extensions to Intel). Chad on a break — see the **PAUSED MID-RELEASE-LOOP** section at the top of `Notes for next session.md` for the full state snapshot, the resume checklist, and the lessons learned. **Don't follow the standard release procedure here — read the breadcrumb first.** Friends have NOT received any zips yet, so the broken intermediate releases never reached anyone.
 
 ---
 

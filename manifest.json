@@ -1,7 +1,7 @@
 {
-  "app_version": "0.8.4",
-  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.8.4/Cold.Bore.zip",
-  "app_release_notes": "First successful in-app auto-update test. No app changes since v0.8.3 - version bump exists purely so v0.8.3 has something to update to.",
+  "app_version": "0.8.5",
+  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.8.5/Cold.Bore.zip",
+  "app_release_notes": "Build fixed for Intel Macs. Uses macos-13 CI runner so PyQt5 ships as Intel binary - works natively on Intel and via Rosetta 2 on Apple Silicon.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
