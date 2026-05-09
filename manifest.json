@@ -1,7 +1,7 @@
 {
-  "app_version": "0.8.1",
-  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.8.1/Cold.Bore.zip",
-  "app_release_notes": "Build now runs on Intel — works on every Mac, including older Intel models. (Previous builds were Apple Silicon-only.) First version where the in-app Install Update button is real-world tested.",
+  "app_version": "0.8.2",
+  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.8.2/Cold.Bore.zip",
+  "app_release_notes": "Universal binary — single zip works on every Mac (Intel and Apple Silicon). Faster CI, no more queue waits. First real-world test of the in-app Install Update button.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

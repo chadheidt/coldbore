@@ -6,7 +6,31 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🚧 v0.8.1 IN-FLIGHT — May 9, 2026 (CI architecture fix + first auto-update test)
+## 🚧 v0.8.2 IN-FLIGHT — May 9, 2026 (universal2 build, first auto-update test)
+
+**Updated approach over v0.8.1:** The macos-13 (Intel) runner approach in v0.8.1 hit GitHub free-tier queue saturation — 13+ minutes queued. v0.8.2 takes a different angle: build a **universal2** binary on `macos-latest` (which has fast queue availability). Universal2 binaries contain BOTH arm64 and x86_64 code in one bundle, so a single zip works natively on every Mac architecture without Rosetta 2.
+
+**v0.8.2 changes from v0.8.1:**
+- Reverted runner from `macos-13` back to `macos-latest`
+- Added `"arch": "universal2"` to setup.py's py2app OPTIONS
+- Workflow comment updated explaining the universal2 approach
+
+**Why universal2 is the better long-term answer:**
+- One zip, every Mac → no friend-distribution complexity
+- Native performance on both architectures (no Rosetta 2 overhead on Apple Silicon)
+- Future-proof: when GitHub eventually retires macos-13, this build path is unaffected
+- Industry standard: universal2 is what professional Mac apps ship
+
+**Prerequisites that must hold:**
+- `actions/setup-python@v5` provides a universal2 Python on macos-latest (true as of 2026)
+- PyQt5's universal2 wheels exist on PyPI (true for 5.15+ on Python 3.9+)
+- openpyxl is pure Python (true — universal by definition)
+
+**v0.8.1 status:** A v0.8.1 commit + tag + release exist locally but the CI run was stuck queued when we pivoted to v0.8.2. Either let it eventually complete (the resulting zip would be Intel-only, also functional) or just ignore it — v0.8.2 supersedes it. If anything's confused on GitHub, deleting the v0.8.1 release record is fine.
+
+---
+
+## 🚧 v0.8.1 (DEPRECATED) — May 9, 2026 (Intel runner fix)
 
 **Where we left off:** Chad got v0.8.0 running locally (Build App.command on his Intel Mac) but **the v0.8.0 zip on GitHub Releases is Apple Silicon-only and crashes on Intel Macs.** This is because GitHub's `macos-latest` runner is now ARM64 by default in 2026, and produced an arm64-only py2app bundle. Chad has an Intel Mac (`uname -m` → `x86_64`) so the bundle exited immediately on launch with a swallowed PyQt5 ImportError.
 
