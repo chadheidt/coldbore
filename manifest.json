@@ -1,7 +1,7 @@
 {
-  "app_version": "0.8.2",
-  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.8.2/Cold.Bore.zip",
-  "app_release_notes": "Universal binary — single zip works on every Mac (Intel and Apple Silicon). Faster CI, no more queue waits. First real-world test of the in-app Install Update button.",
+  "app_version": "0.8.3",
+  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.8.3/Cold.Bore.zip",
+  "app_release_notes": "Self-installer fix - removed non-ASCII chars in helper script that crashed Quit and Install on older Python. Real-world test of the new auto-update flow.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

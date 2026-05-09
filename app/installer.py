@@ -99,7 +99,7 @@ ERR_LOG={q(error_log_path)}
 
 log_fail() {{
     echo "[$(date)] $1" >> "$ERR_LOG"
-    # Give the user a heads-up via osascript — non-blocking, dismissable.
+    # Give the user a heads-up via osascript - non-blocking, dismissable.
     osascript -e "display notification \\"Cold Bore update install failed: $1\\" with title \\"Cold Bore\\"" 2>/dev/null
     exit 1
 }}
@@ -118,7 +118,7 @@ STAGING="$(mktemp -d "$APP_DIR/.coldbore-update.XXXXXX")" \\
 
 # 3. Unzip the downloaded zip into staging
 /usr/bin/unzip -q "$ZIP" -d "$STAGING" \\
-    || log_fail "Unzip failed — zip may be corrupt"
+    || log_fail "Unzip failed - zip may be corrupt"
 
 # 4. Find the new .app inside staging (it's typically at the root)
 NEW_APP="$(find "$STAGING" -maxdepth 2 -type d -name "*.app" -print -quit)"
@@ -139,7 +139,7 @@ if ! mv "$NEW_APP" "$APP"; then
     # Roll back: put the old one back so the user isn't left without an app
     mv "$TRASH" "$APP" 2>/dev/null
     rm -rf "$STAGING" "$ZIP"
-    log_fail "Couldn't move new app into place — rolled back to old version"
+    log_fail "Couldn't move new app into place - rolled back to old version"
 fi
 
 # 7. Tidy up
@@ -187,7 +187,12 @@ def launch_install_swap(zip_path: str) -> bool:
     import tempfile
     fd, helper_path = tempfile.mkstemp(prefix="coldbore-install-", suffix=".sh")
     try:
-        with os.fdopen(fd, "w") as f:
+        # Force UTF-8 encoding here. On older macOS Pythons (3.9 system Python)
+        # the locale's preferred encoding can default to ASCII, which causes
+        # writing any non-ASCII char in the script body to raise UnicodeEncodeError.
+        # Even though the helper script is currently pure ASCII, this is cheap
+        # insurance — the script may grow over time.
+        with os.fdopen(fd, "w", encoding="utf-8") as f:
             f.write(script_body)
         # Make it executable
         st = os.stat(helper_path)
