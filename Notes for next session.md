@@ -6,6 +6,50 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## ✅ v0.10.1 SHIPPED — May 10, 2026 (late afternoon, same day)
+
+**License dialog polished + auto-updater fixed.** The two follow-ups flagged after v0.10.0 are both done. Chad ran the new dialog locally and confirmed it looks right.
+
+### What's new in v0.10.1
+
+1. **License dialog UI redesign.** The locked-out screen now shows:
+   - Cold Bore icon at the top (from `docs/assets/icon.png`, bundled by setup.py)
+   - Wordmark + version line
+   - Screenshot of the main window (`docs/assets/screenshot.png`)
+   - One-paragraph description of what Cold Bore does
+   - License key entry field at the bottom
+   - Quit / Unlock buttons
+
+   Implementation: `app/license_dialog.py` rewritten. `_resource_path()` helper finds bundled images in both dev mode (`docs/assets/`) and the .app bundle (`Contents/Resources/`). `setup.py` now adds `icon.png` and `screenshot.png` to `data_files` so they're available at runtime.
+
+2. **Auto-updater fix: `unzip` → `ditto`.** `app/installer.py`'s helper script now uses `ditto -x -k` to extract the downloaded zip instead of `unzip`. BSD `unzip` drops macOS metadata that codesign relies on; `ditto` is macOS-native and preserves the bundle exactly. Should make v0.10.1 → v0.10.2+ swaps clean.
+
+   **Caveat:** the fix is in v0.10.1's installer code. Existing v0.10.0 installs still have the broken `unzip` installer, so v0.10.0 → v0.10.1 still required Chad to do a manual fresh-install from the .dmg (not auto-update). Future v0.10.1 → vX.Y.Z transitions should work via the in-app banner. **THIS HAS NOT YET BEEN END-TO-END TESTED.** First chance is whenever the next release ships.
+
+### Other improvements made this same evening
+
+- **Permission-prompt sound** — `~/.claude/settings.json` now has hooks for both `Notification` and `PermissionRequest` events, both running `afplay /System/Library/Sounds/Glass.aiff`. Chad confirms permission-prompt sound works. The Notification event also fires on idle waits but is harder to trigger on demand.
+- **Project-level Cold Bore allowlist** — `.claude/settings.json` (gitignored, local only) auto-allows the project's signing/notarization tools: `xcrun *`, `codesign *`, `security find-identity *`, `security import *`, `spctl *`, `create-dmg *`. These came up repeatedly during today's release work.
+- **Cleaned up project folder** (~120 MB → 4.9 MB) by deleting the local `dist/`, `/tmp/coldbore-build/`, the Desktop signing folder, and accumulated old Cold Bore copies in Downloads.
+- **`Cold Bore — How to Issue License Keys.docx`** lives on Chad's Desktop — click-by-click guide for issuing keys, recording recipients, shipping releases with new keys, and revoking.
+
+### Final state on Chad's machine
+
+- `/Applications/Cold Bore.app` runs **v0.10.1** (Tools → About confirms)
+- License key: `CBORE-DDCX-AEGK-J2FR-2SIB` saved in config (Chad's local-testing key)
+- `main` HEAD: `74df94e` ("v0.10.1 - dialog UI polish + installer ditto fix")
+- v0.10.0 + v0.10.1 GitHub releases both published with .dmg + .zip
+- Beta-tester key slots 1-5 still unassigned in `app/license.py` and `beta-keys.txt`
+
+### What's pending — TODO when ready
+
+- **Issue keys to specific testers.** The two friends Chad already gave the website link to will eventually ping him asking for a key (per his decision today: option 2, wait for the ping). Refer to `~/Desktop/Cold Bore — How to Issue License Keys.docx`.
+- **Send the v0.10.1 link to the wider pro-shooter beta cohort.** Each tester gets a unique key + the website link. Cold Bore is now ready for real beta distribution.
+- **First v0.10.1 → vX.Y.Z auto-update.** Whenever Chad ships the next minor bump, this will be the first proof that the `ditto` fix actually works. If it doesn't, the next investigation is whether the helper script needs additional xattr hygiene (e.g., re-strip `com.apple.quarantine` AFTER the swap, not just before).
+- **Phase 9 commercialization** (when ready): LLC, EULA, USPTO trademark, `coldbore.app` domain, Gumroad/Stripe, public launch.
+
+---
+
 ## ✅ v0.10.0 SHIPPED — May 10, 2026 (afternoon, same day as v0.9.0)
 
 **Beta lockdown is live.** Cold Bore now refuses to open past a license-key dialog on first launch (and re-validates the stored key on every launch). v0.10.0 is signed + notarized and on Chad's `/Applications`; his test key `CBORE-DDCX-AEGK-J2FR-2SIB` unlocks it.
