@@ -566,6 +566,54 @@ Chad asked "how marketable is Cold Bore?" and indicated interest in selling it. 
 - If Chad is still on Path A: keep building, ship to friends, watch for signal
 - Either way: the Windows port (Phase 7) and iOS app (Phase 8) are the next high-value engineering work
 
+## Architecture decision: desktop app vs SaaS (web app)
+
+Captured during the v0.8.5 release saga (May 9, 2026). One of Chad's developer friends suggested he commercialize Cold Bore as a SaaS instead of a desktop app — "it won't differentiate between operating systems and be an app users can get there." Friend's point is real and worth preserving alongside the desktop-app commercialization plan above.
+
+### What "SaaS" would mean here
+
+Users go to a website (e.g., `coldbore.app`), sign up, log in, use Cold Bore in their browser. No installation. Works on every device with a browser — Mac, Windows, iOS, Android, even office computers without admin rights. All the architecture pain we hit in the v0.8.x release saga (universal2, Gatekeeper, code-signing, Apple Developer Program, Windows port) just goes away.
+
+### Tradeoffs honestly
+
+**SaaS wins on:**
+- One codebase covers every platform — no Phase 7 (Windows) or Phase 8 (iOS) needed
+- Auto-updates are free — deploy once, every user gets the new version instantly. No `installer.py`, no manifest URLs, no architecture saga
+- Easy monetization: Stripe + subscription billing is standard SaaS plumbing
+- Easy onboarding: sign up with email, start using
+- Sync across devices: same data accessible from phone + Mac + tablet
+
+**SaaS loses for Cold Bore specifically:**
+1. **Range trips happen where cell signal is spotty.** Outdoor rifle ranges are often rural. A web app needs internet. The current desktop app works offline. If a user is at the range entering shot data and the website won't load, they're stuck.
+2. **Reloaders are weirdly privacy-conscious about their data.** Custom load recipes feel proprietary to people. Some users will refuse to put their loads in the cloud no matter how secure the storage is.
+3. **Excel integration is harder.** The current Cold Bore writes directly to a local .xlsx workbook. Browsers can't write to local disk directly; they can only download files. So a SaaS Cold Bore either replaces the workbook with its own database (and gives up Excel entirely) or does a download-upload dance every time, which is friction.
+4. **Building a SaaS is a fundamentally different skill set.** Current Cold Bore: Python + PyQt5 desktop. A SaaS: Python backend (Django/Flask/FastAPI) + JavaScript frontend (React/Vue/Next.js) + database (Postgres/SQLite) + deployment (Render/Fly.io/Vercel) + authentication + file upload handling. It's essentially a from-scratch rewrite in a new stack. Months of work.
+5. **Hosting costs ongoing money.** Free tiers exist for low traffic, but with even modest growth you'd pay $20-100/month for servers, database, file storage. Desktop app costs $0 to operate.
+6. **Uptime obligations.** When SaaS is down, every user is affected. When a friend's desktop app crashes, only they are. Solo dev SaaS = you're on call.
+
+### The hybrid path (probably the right answer if commercializing)
+
+Keep the **desktop app as the main tool** — it does the heavy lifting (CSV imports, Excel writes, scoring math, range-day workflow), works offline, owns the data locally.
+
+Add a **lightweight web companion** later — a read-only viewer where users sign in and SEE their loads from any device. Optional features: shared loads between friends, public leaderboards, comparative ballistics. Stuff that benefits from cloud + every-device access but doesn't need offline use or Excel writes.
+
+This is what many polished indie apps do (Things, Bear, Day One, Drafts): strong native apps + a web companion for casual cross-device access. Best of both worlds.
+
+### Decision for now (May 2026)
+
+**Stay on desktop.** Reasoning:
+- Cold Bore's audience is small (3-4 friends → maybe 50-100 enthusiasts later). The pain of today's release saga is one-time setup pain, not ongoing pain.
+- The two SaaS-killer features (offline range use + local Excel ownership) are exactly what Cold Bore's target users care about most.
+- Pivoting to SaaS = restarting the project. Two months of work just to get back to feature parity. Hard to justify before there's commercial signal.
+- Phase 7 + Phase 8 (Windows + iOS ports) are doable and progressive — each one brings Cold Bore to a new audience without giving up the desktop strengths.
+
+**When to revisit:**
+- If feedback from friends/early users is consistently "I wish I could check my loads from my phone" or "I want to share my load library with so-and-so" → consider adding the web companion (hybrid path).
+- If we ever decide to target shooters who don't care about offline use AND don't have an existing workbook habit → pure SaaS becomes more attractive.
+- If the Mac+Windows+iOS port total work starts looking heavier than rewriting as SaaS, the math changes.
+
+For now, the existing plan stands: Mac (shipped) → Windows (Phase 7) → iOS (Phase 8) → consider SaaS companion later if/when commercializing (Phase 9, Path B).
+
 ## Future: Windows build (Phase 7)
 
 Chad has a Windows PC he wants to build a Windows version on, *after* the Mac version is fully shipped to friends. Plan:

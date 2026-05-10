@@ -43,6 +43,7 @@ Icon
 *.swp
 *~
 .~lock.*
+*.code-workspace
 
 # --- Excel temp lockfiles ---
 ~$*.xlsx

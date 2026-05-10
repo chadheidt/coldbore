@@ -6,23 +6,123 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🚧 PAUSED MID-RELEASE-LOOP — May 9, 2026 (v0.8.5, the auto-update saga)
+## 🚧 SWITCHING TO CLAUDE CODE / PLAN B — May 9, 2026 (v0.8.5)
 
-**Chad needs a break.** When he comes back, this is the first thing to resume. Read this section all the way through before doing anything else — there are several pieces of state that aren't obvious from looking at the code or the GitHub repo.
+**Important:** This breadcrumb is being read by Claude Code (in VS Code), not Cowork. Claude Code has direct shell access to Chad's Mac — it can run `python3 setup.py py2app`, run `git push`, manipulate files, etc., without asking Chad to copy-paste commands. Use that capability. Don't make Chad do things you can do directly.
+
+**Decision made:** macos-13 CI queue has been stuck >1 hour with no movement. We're abandoning the CI path for v0.8.5 and going to **plan B — manual local build + drag-and-drop upload to GitHub release**. Then for v0.8.6 (the trivial auto-update test target), we may try CI again or just repeat plan B if the queue is still bad.
+
+**Chad's frustration is real after a long release-engineering day.** Be efficient. Don't over-explain steps Claude Code can just execute. Reserve the talking for the things Chad needs to do himself (browser-based tasks like clicking Publish on GitHub).
+
+### What Claude Code should do (action-oriented checklist)
+
+1. **Cancel the stuck CI run.** Use `gh` if Chad has it installed (`gh run cancel 25608316391 --repo chadheidt/coldbore`); if `gh` not installed, just have Chad click Cancel workflow on https://github.com/chadheidt/coldbore/actions/runs/25608316391. Skip if the run already ended.
+
+2. **Build the v0.8.5 zip locally.** Run from the project folder:
+   ```
+   cd "/Users/macbook/Projects/Rifle Load Data"
+   rm -rf dist build
+   python3 setup.py py2app
+   cd dist
+   ditto -c -k --keepParent "Cold Bore.app" "Cold.Bore.zip"
+   cp "../Cold Bore — Quick Start.docx" .
+   zip "Cold.Bore.zip" "Cold Bore — Quick Start.docx"
+   ```
+   Watch for build errors. py2app on Chad's Intel Mac uses his system Python 3.9 — should produce a working Intel bundle. Verify with `file dist/Cold.Bore.zip` and `unzip -l dist/Cold.Bore.zip` afterward to confirm both `Cold Bore.app` and `Cold Bore — Quick Start.docx` are inside.
+
+3. **Hand the zip off to Chad for the GitHub release.** Tell him:
+   - Open https://github.com/chadheidt/coldbore/releases/new
+   - Tag: `v0.8.5`, Title: `Cold Bore 0.8.5`
+   - Description: "Build fixed for Intel Macs. Uses macos-13 CI runner so PyQt5 ships as Intel binary - works natively on Intel and via Rosetta 2 on Apple Silicon."
+   - ☑ Set as the latest release
+   - Drag `dist/Cold.Bore.zip` into the "Attach binaries" area at the bottom
+   - Wait for upload (~30-60 sec)
+   - Click green Publish release
+   - Paste the resulting URL back so you can verify
+
+4. **After v0.8.5 is shipped, prep v0.8.6** for the auto-update test:
+   - Edit `app/version.py`, `setup.py`, `manifest.json` to v0.8.6
+   - Manifest release notes: "First successful in-app auto-update test. Trivial bump from v0.8.5 to give Chad's running app something to update to."
+   - Also commit the pending Build progress.md SaaS-analysis section that's been sitting in his working tree (uncommitted). And the `Rifle Load Data.code-workspace` file — that should be added to `.gitignore` (it's a VS Code-specific workspace file, no value in committing).
+   - Commit message: `v0.8.6 - bump for auto-update test (and SaaS architecture decision in Build progress.md)`
+   - Push to main.
+   - Try CI first; if it queues again, repeat plan B for v0.8.6 too.
+
+5. **The actual auto-update test.** Once v0.8.6 release is published with `Cold.Bore.zip` attached:
+   - Have Chad open Cold Bore on his Mac
+   - Yellow banner should appear: "App update: v0.8.6 is available."
+   - Click **Install Update** → progress bar → click **Quit and Install** → app quits → ~3 sec → app reopens at v0.8.6
+   - Verify Tools → About reports 0.8.6
+   - If anything fails, check `~/Library/Application Support/Cold Bore/last_install_error.log` for the helper script's error.
+
+### State on Chad's machine right now
+
+- v0.8.5 is committed and pushed to main (commit `0d66b5c`)
+- `/Applications/Cold Bore.app` runs v0.8.5 (Chad locally rebuilt earlier)
+- Manifest on `main` says v0.8.5; download URL points at v0.8.5 release zip that doesn't exist yet
+- Working tree has uncommitted: `Build progress.md` (SaaS analysis), `Notes for next session.md` (this breadcrumb), and `Rifle Load Data.code-workspace` (untracked, ignore-worthy)
+- Chad is on Intel Mac (macos 14 Sonoma, x86_64). Python 3.9 system Python, with PyQt5 Intel installed.
+- `gh` CLI may or may not be installed — Chad started exploring it earlier today but never finished. Check with `which gh` before assuming.
 
 ### Current state (the snapshot)
 
-- **Local working tree (uncommitted):** v0.8.5 changes are staged. 4 modified files:
-  - `.github/workflows/build-mac.yml` — runner reverted from `macos-latest` back to `macos-13`
-  - `setup.py` — removed `arch = 'universal2'`, bumped to 0.8.5
-  - `app/version.py` — 0.8.5
-  - `manifest.json` — 0.8.5 with new release notes
-  - These are sitting in Chad's GitHub Desktop waiting to be committed.
-- **GitHub main branch:** at v0.8.4 (commit hash unknown — check `git log` to find)
-- **GitHub releases that exist:** v0.6.0, v0.7.0, v0.7.1, possibly v0.8.1/v0.8.2 (stale, from intermediate attempts), v0.8.3, v0.8.4. Latest is whatever was published most recently — likely v0.8.4.
-- **Manifest on GitHub main (raw URL):** says v0.8.4 is available, points at v0.8.4 release zip.
-- **Chad's `/Applications/Cold Bore.app`:** **BROKEN.** Last successful auto-update swapped in v0.8.4 (whose CI build had universal2 launcher but arm64-only PyQt5). The .app launches → silent crash → quits. Confirmed via `"/Applications/Cold Bore.app/Contents/MacOS/Cold Bore"` printing the PyQt5 ImportError. The bundle's launcher binary IS universal2 (`file` confirmed both archs) but PyQt5 inside is arm64-only.
-- **Chad's last known working version on his machine:** v0.8.3 (locally built via `Build App.command`). He replaced it via the v0.8.3→v0.8.4 auto-update, which then broke things.
+- **v0.8.5 is committed and pushed to `main`** — commit `0d66b5c` ("v0.8.5 - back to macos-13 (Intel) for CI; universal2 was producing arm64-only PyQt5"). Visible at https://github.com/chadheidt/coldbore/commits/main.
+- **CI run #20 has been queued for 1+ hour on the macos-13 free-tier runner.** No movement. URL: https://github.com/chadheidt/coldbore/actions/runs/25608316391. May or may not eventually go green depending on GitHub's queue.
+- **No v0.8.5 release exists on GitHub yet.** Won't until either CI completes or we go to plan B (manual upload).
+- **GitHub releases that exist:** Chad cleaned up the stale v0.8.0–v0.8.4 release records earlier. So the visible releases on GitHub are now **v0.6.0, v0.7.0, v0.7.1** — and v0.7.1 is currently flagged as Latest (since v0.8.x are all gone). NOTE: those are all GitHub-CI-built and were Apple Silicon-only, so they're broken on Intel Macs. Chad has NOT sent any zip to friends yet, so this hasn't reached anyone.
+- **Manifest on GitHub `main` (raw URL):** says v0.8.5 is available with download URL pointing at v0.8.5 release zip. Friend's app would 404 if it tried to update right now (release doesn't exist). Chad's own app is on v0.8.5 too so no update banner appears for him locally.
+- **Chad's `/Applications/Cold Bore.app`:** **WORKING.** Currently runs v0.8.5 — he locally rebuilt via Build App.command earlier, replaced /Applications/, and stripped quarantine. Tools → About reports 0.8.5.
+- **Local working tree:** ONE uncommitted change — `Build progress.md` has a new section "Architecture decision: desktop app vs SaaS (web app)" added during the wait. Chad asked to capture his developer friend's SaaS suggestion and the analysis. Push this whenever he commits next; it doesn't gate anything.
+- **Project folder cleanup happened:** Chad deleted `build/`, `__pycache__/`, `dist/`, `test.xlsx`, all `.DS_Store` files. Project size went from ~12 MB to ~3.8 MB.
+
+### New tooling installed in this session (matters for next session)
+
+Chad set up **VS Code + Claude Code (CLI + extension)** during the CI wait. From now on he can work in VS Code instead of (or in addition to) Cowork. The breadcrumbs are tool-agnostic — Claude Code reads them the same way Cowork does.
+
+How he'd resume in VS Code:
+1. Open VS Code (it should auto-reopen with the `~/Projects/Rifle Load Data` folder)
+2. Click the Claude icon in the left sidebar (or run `claude` in VS Code's integrated Terminal panel — Ctrl+\` to open it)
+3. Tell Claude: *"Continue Cold Bore. Read Notes for next session.md to catch up — we're paused waiting on CI for v0.8.5."*
+
+How he'd resume in Cowork:
+- Same as before: open Cowork, point at `~/Projects/Rifle Load Data`, type the same resume prompt.
+
+Either works. Chad indicated VS Code will be his primary going forward but is comfortable using either.
+
+### Resume checklist when Chad returns
+
+1. **Check CI status** at https://github.com/chadheidt/coldbore/actions — if the v0.8.5 run finally went green, jump to step 3. If still queued or red, see step 2.
+
+2. **Decide: keep waiting or go plan B?**
+   - **Keep waiting**: do nothing. The queue may eventually clear. Risk: could be more hours.
+   - **Plan B — manual upload**: build the zip locally and upload it to a fresh v0.8.5 release on GitHub manually. Bypasses CI. Steps:
+     a. Cancel the stuck CI run via "Cancel workflow" button on the actions/runs/25608316391 page.
+     b. Run in Terminal (or VS Code's integrated terminal):
+        ```
+        cd "/Users/macbook/Projects/Rifle Load Data"
+        rm -rf dist build
+        python3 setup.py py2app
+        cd dist
+        ditto -c -k --keepParent "Cold Bore.app" "Cold.Bore.zip"
+        cp "../Cold Bore — Quick Start.docx" .
+        zip "Cold.Bore.zip" "Cold Bore — Quick Start.docx"
+        ```
+     c. Open https://github.com/chadheidt/coldbore/releases/new
+     d. Tag: `v0.8.5`, Title: `Cold Bore 0.8.5`, Description: "Build fixed for Intel Macs. Uses macos-13 CI runner so PyQt5 ships as Intel binary - works natively on Intel and via Rosetta 2 on Apple Silicon."
+     e. ☑ Set as latest. Drag `dist/Cold.Bore.zip` into the "Attach binaries" area at the bottom. Wait for upload (~30-60 sec).
+     f. Click green Publish release.
+
+3. **If CI was green or after manual upload succeeds**, verify the v0.8.5 release page shows `Cold.Bore.zip` in Assets. Quickly fetch via web_fetch to confirm.
+
+4. **Now ship v0.8.6 to test the auto-update banner.** Chad's running v0.8.5; the manifest currently also says v0.8.5; no banner will fire. Bump to v0.8.6 to give v0.8.5 something to update to. Steps:
+   - Edit `app/version.py`, `setup.py`, `manifest.json` to v0.8.6 with new release notes (something like "First successful in-app auto-update test from v0.8.5").
+   - Commit + push (along with the SaaS analysis in Build progress.md that's still pending).
+   - Wait for CI on v0.8.6 (or if queue is still bad, repeat plan B).
+   - Create v0.8.6 release.
+
+5. **Then test the auto-update for real.** Open Cold Bore on Chad's Mac. Yellow banner should appear: "App update: v0.8.6 is available." Click **Install Update** → progress bar → click **Quit and Install** → app quits → ~3 seconds → app reopens at v0.8.6. Tools → About reports 0.8.6.
+
+6. **If that all works**: Cold Bore is shipped with working in-app auto-updates. Chad can send the link to friends. The link is in `Send Cold Bore to friends.md` at the project root.
 
 ### Why we're at v0.8.5
 
