@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cold Bore — precision rifle load development for Mac</title>
+<meta name="description" content="Cold Bore turns Garmin Xero and BallisticX CSV exports into a structured load development workbook. No more typing velocities by hand.">
+<meta property="og:title" content="Cold Bore">
+<meta property="og:description" content="Precision rifle load development for Mac. Auto-import your chronograph and target data. Find your node faster.">
+<meta property="og:type" content="website">
+<style>
+:root {
+  --orange: #d97706;
+  --orange-dark: #b45309;
+  --bg: #0e0f12;
+  --bg-mid: #1a1c20;
+  --bg-light: #252830;
+  --text: #f5f5f5;
+  --text-dim: #9ca3af;
+  --text-muted: #6b7280;
+  --border: #2d3036;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 16px;
+}
+.container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+nav {
+  position: sticky;
+  top: 0;
+  background: rgba(14, 15, 18, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  z-index: 100;
+  padding: 16px 0;
+}
+nav .container { display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 20px; font-weight: 700; color: var(--orange); letter-spacing: -0.5px; }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a { color: var(--text-dim); text-decoration: none; font-size: 15px; transition: color 0.15s; }
+.nav-links a:hover { color: var(--text); }
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  background: var(--orange);
+  color: white !important;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.btn:hover { background: var(--orange-dark); }
+.btn-large { padding: 16px 36px; font-size: 17px; }
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text) !important;
+}
+.btn-outline:hover { background: var(--bg-light); }
+header.hero {
+  padding: 80px 0 40px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+header.hero h1 {
+  font-size: 56px;
+  font-weight: 800;
+  letter-spacing: -1.5px;
+  margin-bottom: 24px;
+  line-height: 1.1;
+}
+header.hero h1 .accent { color: var(--orange); }
+header.hero .tagline {
+  font-size: 22px;
+  color: var(--text-dim);
+  margin-bottom: 36px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+header.hero .cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+header.hero .platform-note {
+  margin-top: 20px;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+.screenshot-wrap {
+  margin: 64px auto 0;
+  max-width: 940px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+}
+.screenshot-wrap img { display: block; width: 100%; height: auto; }
+.screenshot-placeholder {
+  aspect-ratio: 16 / 10;
+  background: linear-gradient(135deg, var(--bg-mid) 0%, var(--bg-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  font-size: 18px;
+  font-style: italic;
+}
+section { padding: 80px 0; }
+section h2 {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+section h2 .accent { color: var(--orange); }
+section .section-sub {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 18px;
+  max-width: 640px;
+  margin: 0 auto 48px;
+}
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.feature {
+  background: var(--bg-mid);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+}
+.feature .icon {
+  display: inline-block;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--orange);
+  color: white;
+  text-align: center;
+  line-height: 44px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.feature h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.feature p { color: var(--text-dim); font-size: 15px; }
+.install {
+  background: var(--bg-mid);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-top: 48px;
+}
+.step {
+  text-align: center;
+  padding: 24px;
+}
+.step .num {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--orange);
+  color: white;
+  text-align: center;
+  line-height: 48px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.step h3 { font-size: 17px; margin-bottom: 8px; }
+.step p { color: var(--text-dim); font-size: 14.5px; }
+.beta-callout {
+  margin: 48px auto 0;
+  max-width: 760px;
+  background: rgba(217, 119, 6, 0.1);
+  border: 1px solid var(--orange);
+  border-radius: 12px;
+  padding: 24px 28px;
+  text-align: center;
+}
+.beta-callout strong { color: var(--orange); }
+.faq-grid { display: grid; gap: 16px; max-width: 800px; margin: 0 auto; }
+.faq-item {
+  background: var(--bg-mid);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+}
+.faq-item h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.faq-item p { color: var(--text-dim); font-size: 15px; }
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 0;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+footer a { color: var(--orange); text-decoration: none; }
+footer p { margin-bottom: 8px; }
+.disclaimer {
+  margin-top: 16px;
+  padding: 16px;
+  background: var(--bg-mid);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+@media (max-width: 720px) {
+  header.hero h1 { font-size: 38px; }
+  header.hero .tagline { font-size: 18px; }
+  section h2 { font-size: 28px; }
+  .nav-links a:not(.btn) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="logo">COLD BORE</div>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#install">Install</a>
+      <a href="#faq">FAQ</a>
+      <a href="https://github.com/chadheidt/coldbore/releases/latest" class="btn">Download</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <h1>Precision rifle load development<br>for <span class="accent">Mac</span>.</h1>
+    <p class="tagline">
+      Drop your Garmin Xero and BallisticX CSV exports onto Cold Bore. It auto-imports velocity, SD, group size, mean radius, and more — straight into a structured load development workbook with built-in scoring. Find your node faster.
+    </p>
+    <div class="cta-row">
+      <a href="https://github.com/chadheidt/coldbore/releases/latest" class="btn btn-large">Download Cold Bore</a>
+      <a href="#install" class="btn btn-large btn-outline">How to Install</a>
+    </div>
+    <div class="platform-note">macOS 10.13+ &middot; Intel and Apple Silicon &middot; Free during beta</div>
+
+    <div class="screenshot-wrap">
+      <!-- Replace with assets/screenshot.png once Chad provides one -->
+      <div class="screenshot-placeholder">
+        Screenshot of Cold Bore goes here<br>
+        <span style="font-size: 14px;">(Cmd+Shift+4, capture the main app window with some real load data on screen)</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="features">
+  <div class="container">
+    <h2>Built by a <span class="accent">precision shooter</span>, for precision shooters.</h2>
+    <p class="section-sub">No more retyping shot velocities into Excel after every range trip. Cold Bore does the data entry; you focus on finding the node.</p>
+    <div class="features">
+      <div class="feature">
+        <div class="icon">→</div>
+        <h3>Drag-and-drop import</h3>
+        <p>Drop CSVs from Garmin Xero (chronograph) and BallisticX (target groups) onto the window or the Dock icon. Cold Bore figures out which is which and routes them to the right place.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📊</div>
+        <h3>Composite node scoring</h3>
+        <p>Every load gets a score combining SD, group size, and vertical dispersion. The suggested winner shows up at the top of your Load Log automatically.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📁</div>
+        <h3>Structured workbook</h3>
+        <p>Powder ladder, seating depth, confirmation groups, DOPE table, charts — all on one workbook with consistent labeling. Includes a one-page printable cheat sheet.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🎯</div>
+        <h3>Label-driven workflow</h3>
+        <p>Use a simple label format (<code>P1 45.5 H4350</code>) on your CSVs and Cold Bore routes everything correctly. Works with the test types you already run: powder ladder, seating depth, confirmation.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">↻</div>
+        <h3>One-click updates</h3>
+        <p>When a new version ships, click <strong>Install Update</strong> in the app — no manual re-downloading or drag-to-Applications. Your data stays untouched.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">🛡</div>
+        <h3>Your data, your machine</h3>
+        <p>Cold Bore writes to a regular Excel file on your Mac. No cloud, no account, no subscription. Workbooks are yours; uninstall whenever, your data stays.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="install" class="install">
+  <div class="container">
+    <h2>Install in <span class="accent">three steps</span>.</h2>
+    <p class="section-sub">Tested on Sonoma and Sequoia. About one minute from download to first import.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>Download</h3>
+        <p>Click the Download button at the top of the page. Save the zip file (about 57 MB).</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>Drag to Applications</h3>
+        <p>Unzip. Drag <strong>Cold Bore.app</strong> into your Applications folder. The Quick Start guide is in the same zip.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>Right-click → Open</h3>
+        <p>The first time you launch, right-click the app and choose <strong>Open</strong>. macOS will ask once; click <strong>Open</strong> again. Future launches are normal.</p>
+      </div>
+    </div>
+
+    <div class="beta-callout">
+      <strong>Beta note:</strong> Cold Bore is in beta. The right-click → Open step is a macOS quirk that goes away once we're code-signed (rolling out shortly). Until then, this one-time step is normal for indie Mac apps.
+    </div>
+  </div>
+</section>
+
+<section id="faq">
+  <div class="container">
+    <h2>Common <span class="accent">questions</span>.</h2>
+    <p class="section-sub">If you don't see your question here, email <a href="mailto:coldboreapp@gmail.com" style="color: var(--orange);">coldboreapp@gmail.com</a>.</p>
+    <div class="faq-grid">
+      <div class="faq-item">
+        <h3>What's the workflow look like in practice?</h3>
+        <p>Range trip → CSV from your Xero, CSV from BallisticX → drop both onto Cold Bore → workbook opens in Excel with all the velocity, SD, ES, group size, mean radius numbers filled in. You add notes, save, done.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does it work with [other chronograph]?</h3>
+        <p>Currently supports Garmin Xero (ShotView CSVs) and BallisticX. The architecture is pluggable — adding LabRadar, MagnetoSpeed, Athlon Rangecraft, etc. is straightforward. If you'd like one added, send a sample CSV to coldboreapp@gmail.com.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is my data going to the cloud?</h3>
+        <p>No. Cold Bore writes to a regular .xlsx file on your Mac. No account, no sync, no telemetry. Your loads stay on your machine.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Why does my Mac say "Apple cannot check this for malicious software"?</h3>
+        <p>Standard message for indie apps without an Apple Developer signature ($99/yr). The right-click → Open trick is the documented Apple-approved bypass. Code-signing is on the immediate roadmap.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Does it work on Apple Silicon?</h3>
+        <p>Yes — runs natively on Intel Macs and via Rosetta 2 on M-series. Performance is fine; Cold Bore is a small app.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What about Windows / iOS?</h3>
+        <p>Both ports are planned. Mac is the current focus; Windows is next on the roadmap. iOS is a longer-term project.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p><strong>Cold Bore</strong> &middot; <a href="https://github.com/chadheidt/coldbore">View on GitHub</a> &middot; <a href="mailto:coldboreapp@gmail.com">coldboreapp@gmail.com</a></p>
+    <p>&copy; 2026 Chad Heidt. All rights reserved.</p>
+    <div class="disclaimer">
+      <strong>Reloading safety disclaimer:</strong> Cold Bore is a tool for organizing data you collect during precision rifle load development. It is NOT a source of load data and does not recommend specific charge weights, bullet types, or seating depths for your firearm. Always cross-reference loads against published reloading manuals from powder, bullet, and cartridge manufacturers. Watch for pressure signs. Start below maximum loads and work up. The developer is not liable for any damage, injury, or loss resulting from use of this app.
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
