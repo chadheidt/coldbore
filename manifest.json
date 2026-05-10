@@ -1,7 +1,7 @@
 {
-  "app_version": "0.8.6",
-  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.8.6/Cold.Bore.zip",
-  "app_release_notes": "First successful in-app auto-update test. Trivial bump from v0.8.5 to give the running app something to update to.",
+  "app_version": "0.9.0",
+  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.9.0/Cold.Bore.zip",
+  "app_release_notes": "First Apple-signed and notarized build. New installs from the website now ship as a proper .dmg installer. No more 'Apple cannot check this for malicious software' warning on first launch.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

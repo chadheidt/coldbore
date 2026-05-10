@@ -35,9 +35,9 @@ cd "$PROJECT"
 
 # ----- Configuration (edit these once your Dev ID is issued) -----------------
 # After enrolling in Apple Developer, fill these in:
-SIGNING_IDENTITY=""             # e.g. "Developer ID Application: Chad Heidt (XXXXXXXXXX)"
+SIGNING_IDENTITY="Developer ID Application: Chad Heidt (NY3D844C6W)"
 NOTARY_PROFILE="coldbore-notary" # name of stored credentials in keychain (see prereqs)
-APPLE_TEAM_ID=""                 # 10-char team ID from your developer portal
+APPLE_TEAM_ID="NY3D844C6W"
 
 ENTITLEMENTS="$PROJECT/entitlements.plist"
 APP_NAME="Cold Bore"
@@ -89,7 +89,7 @@ if ! command -v create-dmg &> /dev/null; then
 fi
 
 # ----- Step 1: Clean + build the unsigned .app -------------------------------
-echo "[1/7] Cleaning and building the .app via py2app…"
+echo "[1/8] Cleaning and building the .app via py2app…"
 rm -rf build dist
 /usr/bin/python3 setup.py py2app
 
@@ -101,7 +101,7 @@ fi
 
 # ----- Step 2: Code-sign every binary, then the bundle ------------------------
 # Order matters: sign inner-most binaries first, then the .app itself.
-echo "[2/7] Code-signing the .app and all embedded binaries…"
+echo "[2/8] Code-signing the .app and all embedded binaries…"
 
 # Sign every executable Mach-O file inside the bundle (frameworks, dylibs, etc.)
 # We use --deep at the end as a safety net; signing each leaf-level file first
@@ -125,12 +125,12 @@ codesign --force --deep --options runtime \
     "$APP_PATH"
 
 # ----- Step 3: Verify the signature ------------------------------------------
-echo "[3/7] Verifying signature…"
+echo "[3/8] Verifying signature…"
 codesign --verify --deep --strict --verbose=2 "$APP_PATH" 2>&1 | tail -10
 spctl -a -v "$APP_PATH" 2>&1 || true  # may say "rejected" before notarization; that's expected
 
 # ----- Step 4: Build the DMG -------------------------------------------------
-echo "[4/7] Building DMG…"
+echo "[4/8] Building DMG…"
 DMG_PATH="$PROJECT/dist/$DMG_NAME"
 rm -f "$DMG_PATH"
 
@@ -162,21 +162,39 @@ fi
 codesign --force --sign "$SIGNING_IDENTITY" "$DMG_PATH"
 
 # ----- Step 5: Submit for notarization ---------------------------------------
-echo "[5/7] Submitting DMG to Apple for notarization (this can take 1-15 min)…"
+echo "[5/8] Submitting DMG to Apple for notarization (this can take 1-15 min)…"
 xcrun notarytool submit "$DMG_PATH" \
     --keychain-profile "$NOTARY_PROFILE" \
     --wait
 
 # ----- Step 6: Staple the notarization ticket --------------------------------
-echo "[6/7] Stapling notarization ticket to DMG…"
+echo "[6/8] Stapling notarization ticket to DMG…"
 xcrun stapler staple "$DMG_PATH"
 
 # ----- Step 7: Final verification --------------------------------------------
-echo "[7/7] Final verification…"
+echo "[7/8] Final verification…"
 spctl -a -t install -v "$DMG_PATH"
 xcrun stapler validate "$DMG_PATH"
 
+# ----- Step 8: Also produce Cold.Bore.zip for auto-update compatibility ------
+# The in-app self-installer (v0.8.x and later) downloads a .zip and swaps the
+# .app inside. We keep producing that zip alongside the .dmg so existing users
+# can auto-update smoothly while new users from the website download the .dmg.
+echo "[8/8] Building Cold.Bore.zip for v0.8.x auto-update path…"
+ZIP_PATH="$PROJECT/dist/Cold.Bore.zip"
+rm -f "$ZIP_PATH"
+cd "$PROJECT/dist"
+ditto -c -k --keepParent "Cold Bore.app" "Cold.Bore.zip"
+if [ -f "$QUICKSTART" ]; then
+    cp "$QUICKSTART" .
+    QS_BASENAME=$(basename "$QUICKSTART")
+    zip -j "Cold.Bore.zip" "$QS_BASENAME"
+    rm -f "$QS_BASENAME"
+fi
+cd "$PROJECT"
+
 DMG_SIZE=$(du -sh "$DMG_PATH" | awk '{print $1}')
+ZIP_SIZE=$(du -sh "$ZIP_PATH" | awk '{print $1}')
 
 echo ""
 echo "============================================================"
@@ -185,6 +203,11 @@ echo ""
 echo "  $DMG_PATH"
 echo "  size: $DMG_SIZE"
 echo ""
-echo "Ship it: drag the .dmg into a GitHub release."
+echo "  $ZIP_PATH"
+echo "  size: $ZIP_SIZE"
+echo ""
+echo "Ship both to the v0.9.0 GitHub release:"
+echo "  - .dmg → website download button (new users)"
+echo "  - .zip → auto-update path (manifest URL)"
 echo "============================================================"
 open "$PROJECT/dist"
