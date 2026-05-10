@@ -510,6 +510,67 @@ That answers "does the architecture translate cleanly to iOS, and does it feel r
 
 When ready: say "let's start the iOS app" and I'll write the step-by-step Xcode setup guide as the first action.
 
+## License lockdown (Phase 9.0) — beta and beyond
+
+**Triggered by Chad on 2026-05-10:** he wants a license-key gate even for friends-and-family beta. *"Whether I ship it to them or they buy it, I want it locked down."*
+
+The .dmg is signed and notarized but currently has no licensing layer — anyone with a copy can install and use it. We need a key system before sending Cold Bore to the first beta tester.
+
+### Phased approach
+
+#### Phase 9.0a — Beta lockdown (build first, ~1 week of focused work)
+
+A **locally-validated license key** with a **revocable key list bundled in each app release**. Minimum viable, no server required.
+
+**User flow:**
+1. Friend opens Cold Bore for the first time.
+2. License entry dialog appears (similar architecture to the existing disclaimer screen — a modal that blocks the main UI until satisfied).
+3. Friend pastes the key Chad emailed them, e.g. `CBORE-LAGE-7N3X-PWQQ`.
+4. Cold Bore validates against a list of allowed keys, saves the validated key in `~/Library/Application Support/Cold Bore/config.json`, never asks again on this Mac.
+5. Without a valid stored key, the app shows the license-entry dialog and refuses imports.
+
+**Implementation pieces:**
+- New module `app/license.py` with:
+  - `VALID_KEYS = {"CBORE-XXXX-XXXX-XXXX": "Friend Name", ...}` constant — Chad fills this in per release.
+  - `validate(key) -> bool` — checks key format + membership.
+  - `is_licensed() -> bool` — reads config for stored key, validates it again (in case revoked).
+- New `app/license_dialog.py` — Qt dialog for key entry, similar pattern to `disclaimer.py`.
+- Hook in `app/main.py`: on launch, if `not is_licensed()`, show dialog before proceeding to main window.
+- Tracker file outside the repo: `~/Projects/Rifle Load Data/beta-keys.txt` (gitignored) — Chad's notes mapping each key to the recipient (e.g. `CBORE-LAGE-7N3X-PWQQ → John Smith, given 2026-05-15`).
+- Key generator script `tools/generate_license_key.py` — outputs a random 16-char key in groups of four. Chad runs once per tester.
+
+**Revocation:** if Chad sees a key being shared (or wants to cut someone off), remove the key from `VALID_KEYS` in the next app release. Auto-update path delivers the new build; on next launch, the revoked key fails validation and the app reverts to the license-entry dialog. The tester is locked out until Chad gives them a new key.
+
+**Honest limitations of Phase 9.0a:**
+- A friend can give their `.app` AND key to someone else, who can paste the same key on their own Mac and use Cold Bore. There's no machine-binding without a server. **For beta, this is fine** — Chad knows who he gave each key to, and revocation is one app update away.
+- Determined pirates can patch the binary to skip the check. Not worth defending against for a niche app — the same person could just rewrite Cold Bore from scratch if they were that motivated.
+
+#### Phase 9.0b — Online activation (add later, when shifting to paid sales)
+
+Adds a tiny activation server (a single endpoint that records "key + machine ID" pairs). On first key entry, the app calls the server to register; the server enforces "1 activation per key" (or 2 for laptop+desktop scenarios).
+
+- Each key allows **N=1** activations by default. Customer can email Chad if they need to move to a new Mac → he resets the activation in the server.
+- Server can be a Cloudflare Worker (free tier) or a $5/mo Hetzner / DigitalOcean droplet running a 50-line Flask script with SQLite.
+- App falls back gracefully if the server is unreachable on first launch — give a 7-day grace period before requiring online check.
+- Hooks straight into Gumroad: when a customer buys, Gumroad's webhook tells the activation server to whitelist the new key.
+
+**This is the layer that makes "buy once, use anywhere" work cleanly without enabling free sharing.** Build it when you're ready to charge money, not before.
+
+#### Phase 9.0c — Algorithmic keys (eventual)
+
+Replace the hardcoded `VALID_KEYS` dict with a math-based validation: each key is a hash signed with a private key Chad holds. The app verifies the signature with a bundled public key. New keys can be issued without rebuilding the app.
+
+This is what Gumroad/Paddle/Lemon Squeezy do under the hood. Adds about a day of crypto work; not needed for the beta.
+
+### Recommended sequence
+
+1. **First**: implement Phase 9.0a (locked beta).
+2. **Ship v0.10.0** with license gating to Chad's beta list.
+3. **Once 5-10 testers have used it for a few weeks**: incorporate feedback, decide whether to commercialize.
+4. **If commercializing**: layer Phase 9.0b (online activation) and 9.0c (algorithmic keys) on top, sign up for Gumroad, set a price.
+
+---
+
 ## Future: Sales readiness (Phase 9) — commercialization plan
 
 Chad asked "how marketable is Cold Bore?" and indicated interest in selling it. Captured the realistic path here.
