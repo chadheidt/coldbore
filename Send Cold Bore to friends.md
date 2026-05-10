@@ -6,26 +6,38 @@ Bookmark this file. Everything you need to share Cold Bore is here.
 
 ## The link
 
-This URL ALWAYS points to the newest release. Never changes, even when you ship updates.
+This is the only URL you ever need to share. Never changes.
 
 ```
-https://github.com/chadheidt/coldbore/releases/latest
+https://chadheidt.github.io/coldbore/
 ```
 
-When a friend clicks it:
-1. They land on the release page.
-2. They click **Cold Bore.zip** under "Assets" to download.
-3. The zip contains both the app AND the Quick Start guide — they open the .docx, follow the instructions, and they're running.
+Cold Bore is in private beta — the website Download button is gated behind a unique access code. Each tester needs both **the link AND their personal access code** to install.
+
+---
+
+## Before you send: issue the tester a key
+
+Every new tester needs a unique CBORE-XXXX-XXXX-XXXX-XXXX code. The full click-by-click for issuing a code is in `Cold Bore — How to Issue License Keys.docx` on your Desktop. Short version:
+
+1. `python3 tools/generate_license_key.py` to get a fresh code
+2. Add it to `app/license.py`'s `VALID_KEYS` set
+3. Add it to the Cloudflare Worker's `VALID_CODES` set (dashboard → Workers & Pages → coldbore-download → Edit code)
+4. Record the tester's name + code in `beta-keys.txt`
+5. Ship a small app release so the new key is included
+6. Email the tester (template below)
+
+The same code unlocks the website download AND the app on first launch.
 
 ---
 
 ## Copy-paste message to send
 
-Pick whichever one fits the friend.
+Pick whichever one fits the friend. Replace `CBORE-XXXX-XXXX-XXXX-XXXX` with their actual code.
 
 ### Short version (text message):
 
-> Sending you Cold Bore — Mac app I built for tracking rifle load development. Download the zip, drag the app to Applications, then **right-click → Open** the very first time (Mac will warn — it's normal). Quick Start docx is in the zip and explains everything else. https://github.com/chadheidt/coldbore/releases/latest
+> Sending you Cold Bore — Mac app I built for tracking rifle load development. It's in private beta so you'll need this access code: `CBORE-XXXX-XXXX-XXXX-XXXX`. Click Download at https://chadheidt.github.io/coldbore/ and paste the code. After installing, open Cold Bore and paste the same code in the license dialog. The Quick Start docx is on the disk image. Don't share the code please — it's tied to you so I can follow up.
 
 ### Longer version (email):
 
@@ -33,14 +45,22 @@ Pick whichever one fits the friend.
 >
 > Want to send you something I've been working on. Cold Bore is a Mac app I built that takes Garmin Xero and BallisticX CSV files and auto-fills my load development workbook — so I don't have to type velocity / SD / group size / etc. by hand after every range trip.
 >
-> Download here:
-> https://github.com/chadheidt/coldbore/releases/latest
+> Cold Bore is in private beta. To install it, you'll need your personal access code:
 >
-> Click **Cold Bore.zip** under "Assets". The zip contains both the app and a one-page Quick Start guide.
+> `CBORE-XXXX-XXXX-XXXX-XXXX`
 >
-> Important first-time-only step: when you double-click the .app, macOS will throw a scary warning that "Apple cannot check it for malicious software." That's just because I'm not a paid Apple developer ($99/yr — overkill for sharing with friends). To get past it: **right-click the app → Open**. You'll get an "Open anyway" button. After that first launch, double-click works normally.
+> Steps:
+> 1. Visit https://chadheidt.github.io/coldbore/
+> 2. Click **Download Cold Bore** at the top of the page. A small window will pop up asking for your access code — paste the one above.
+> 3. The Cold Bore disk image will download. Double-click it, drag **Cold Bore** to the **Applications** shortcut in the same window.
+> 4. Open Cold Bore from your Applications folder. A license dialog will appear — paste the same access code again to unlock the app.
+> 5. The Quick Start guide is on the disk image (and a copy stays with the .dmg in your Downloads folder if you ever need it).
 >
-> Holler if anything's weird. Built for me but I think it'll be useful for you.
+> Cold Bore is signed and notarized by Apple — no "unidentified developer" warning, no right-click trick.
+>
+> One ask: please don't share the access code with anyone else. Each tester has a unique code so I can follow up individually on what you find. If something goes weird and you want a friend to try it, just send them my way (coldboreapp@gmail.com) and I'll set them up properly.
+>
+> Holler if anything's broken or confusing. Built for me but I think it'll be useful for you.
 >
 > — Chad
 
@@ -58,7 +78,13 @@ Rename each BallisticX CSV to match the load label, e.g. `P1 45.5 H4350.csv`. Th
 Make sure Excel is closed before running the import — Cold Bore can't write to a workbook that's already open. Also make sure they're using their working .xlsx file (not the .xltx template).
 
 **"How do I get a new version when you ship one?"**
-The app checks automatically on launch. When a new version is out, a yellow banner appears at the top of the window. They click **Install Update** (the app downloads in the background), then **Quit and Install** when ready. Cold Bore quits, swaps itself, and reopens at the new version — no manual zip-download or drag-to-Applications needed. (As of v0.8.6.)
+The app checks automatically on launch. When a new version is out, a yellow banner appears at the top of the window. They click **Install Update** (the app downloads in the background using their license key for authentication), then **Quit and Install** when ready. Cold Bore quits, swaps itself, and reopens at the new version — no manual download or drag-to-Applications needed.
+
+**"I lost my access code, can I get it back?"**
+They email you. Their code is in `beta-keys.txt`.
+
+**"Can I install Cold Bore on my second Mac?"**
+Currently yes — the same code works on multiple Macs (no per-machine binding yet). When sales-mode launches, that becomes 1-2 activations per code.
 
 ---
 
@@ -68,9 +94,13 @@ The app checks automatically on launch. When a new version is out, a yellow bann
 |---|---|---|
 | v0.6.0 | May 7, 2026 | First public release. Drop zone, auto-import, first-run wizard, update check, py2app bundle, custom theme. |
 | v0.7.0 | May 8, 2026 | UX polish round. Bigger window with saved geometry, Tools menu (Run Import / Restore From Backup / Start New Cycle), macOS notifications, CSV preflight, confirm-on-quit, first-launch tutorial. Plus a 14-issue audit pass. |
-| v0.7.1 | May 8, 2026 | Quick Start guide bundled into the release zip — friends now get app + install instructions in a single download. No app changes since 0.7.0. |
-| v0.8.0 | May 9, 2026 | **In-app self-installer (Phase 12).** Yellow update banner now has Install Update + Quit and Install buttons — friends never have to manually download a zip and drag-to-Applications again. |
-| v0.8.5 | May 10, 2026 | Build fixed for Intel Macs (back to macos-13 CI runner; universal2 was producing arm64-only PyQt5). Single Intel binary works on every Mac (native on Intel, via Rosetta 2 on Apple Silicon). |
-| v0.8.6 | May 10, 2026 | First successful in-app auto-update test. Trivial bump from v0.8.5 to verify the v0.8.0 self-installer end-to-end. **This is the first release safe to send to friends.** |
+| v0.7.1 | May 8, 2026 | Quick Start guide bundled into the release zip. |
+| v0.8.0 | May 9, 2026 | **In-app self-installer (Phase 12).** Yellow update banner now has Install Update + Quit and Install buttons. |
+| v0.8.5 | May 10, 2026 | Build fixed for Intel Macs. |
+| v0.8.6 | May 10, 2026 | First successful in-app auto-update test. |
+| v0.9.0 | May 10, 2026 | **First Apple-signed + notarized release.** No more Gatekeeper warning on first launch. .dmg installer with drag-to-Applications layout. |
+| v0.10.0 | May 10, 2026 | **License-key gate for beta lockdown.** App refuses to open without a valid CBORE code. |
+| v0.10.1 | May 10, 2026 | License dialog UI polish + auto-updater `ditto` fix. |
+| v0.11.0 | May 10, 2026 | **Private downloads via Cloudflare Worker + R2.** No public binary URL anywhere; both the website download AND the in-app updater authenticate via license key. This is the first release safe to send to non-tester friends, since random visitors to the website can't even download without a code. |
 
 When you ship a new version, ask Claude to add a row here.

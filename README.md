@@ -12,10 +12,17 @@ A Mac app for precision rifle handloaders. Drag your Garmin Xero (chronograph) a
 
 ## Install
 
-1. Download the latest `Cold Bore.zip` from the [Releases](../../releases) page
-2. Unzip → drag `Cold Bore.app` to your Applications folder
-3. Right-click → **Open** the first time (one-time Gatekeeper bypass)
-4. Follow the first-launch wizard to set up your Cold Bore folder
+Cold Bore is in **private beta**. Each tester gets a unique access code that unlocks both the download and the app itself.
+
+1. Visit [https://chadheidt.github.io/coldbore/](https://chadheidt.github.io/coldbore/)
+2. Click **Download Cold Bore**, paste the access code you were emailed
+3. Open the downloaded `Cold.Bore.dmg`, drag **Cold Bore** to Applications
+4. Open Cold Bore from Applications, paste the same access code in the license dialog
+5. Follow the first-launch wizard to set up your Cold Bore folder
+
+Cold Bore is signed and notarized by Apple — no "unidentified developer" warning on first launch.
+
+To request an access code, email `coldboreapp@gmail.com`.
 
 ## Develop
 
@@ -23,16 +30,16 @@ Source code is laid out as:
 
 | Folder | What's inside |
 |---|---|
-| `app/` | PyQt5 GUI code, parsers, theme, settings, load card, load sharing |
+| `app/` | PyQt5 GUI code, parsers, theme, settings, load card, load sharing, license gate |
 | `app/parsers/` | Pluggable parser registry — drop a new module to add a chronograph |
-| `tests/` | Pytest suite covering parsers, validation, helpers |
+| `tests/` | Pytest suite covering parsers, validation, helpers, license validator |
 | `setup.py` | py2app build config |
-| `.github/workflows/` | CI/CD — runs tests on push, builds .app on release |
+| `tools/` | Build helpers and license-key generator |
 
 To build locally on macOS:
 
 ```sh
-./Build\ App.command
+./Build\ Signed\ App.command
 ```
 
 To run tests:
@@ -40,6 +47,12 @@ To run tests:
 ```sh
 ./Run\ Tests.command
 ```
+
+## Distribution architecture
+
+For privacy and access control, Cold Bore's binaries are not hosted on GitHub. The `.dmg` and auto-update `.zip` live in **Cloudflare R2** and are served through a **Cloudflare Worker** that validates the user's access code server-side and returns a 5-minute signed URL. The website Download button and the in-app auto-updater both authenticate through the same Worker.
+
+See `Build progress.md` and `Notes for next session.md` for the full architecture details.
 
 ## Disclaimer
 
