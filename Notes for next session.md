@@ -6,6 +6,80 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## ✅ v0.11.0 SHIPPED — May 10, 2026 (evening — private downloads via Cloudflare Worker)
+
+**Beginning with v0.11.0, Cold Bore binaries are not available on GitHub.** Both the marketing `.dmg` and the auto-update `.zip` are served by a Cloudflare Worker (`coldbore-download.cheidt182.workers.dev`) that validates an access code server-side and returns a 5-minute signed URL pointing at Cloudflare R2 storage. Without a valid code there is no path to the binary, period.
+
+### What was built tonight (after v0.10.1)
+
+1. **Cloudflare R2 bucket `coldbore-releases`** holds the .dmg and .zip. R2 free tier: 10 GB storage + free egress. Current cost: $0/mo.
+
+2. **Cloudflare Worker `coldbore-download`** at `https://coldbore-download.cheidt182.workers.dev`:
+   - `POST /authorize { code, file }` — validates code, returns 5-min HMAC-signed URL
+   - `GET /get/<file>?exp=&sig=` — verifies signature, streams file from R2 binding
+   - VALID_CODES list lives in the Worker source (same key set as `app/license.py`'s `VALID_KEYS`)
+   - HMAC_SECRET environment variable (encrypted) signs the URLs
+   - R2 binding name: `BUCKET` → `coldbore-releases`
+   - Source code: in Cloudflare dashboard's web editor (not in git — it lives in Cloudflare). If we ever want it in version control, copy/paste into a `worker/` folder and use `wrangler` to deploy.
+
+3. **Website Download button (`docs/index.html`)** now opens a modal asking for the access code. Modal POSTs to the Worker; on success it redirects to the signed URL (browser downloads from R2). Old direct GitHub-release links are gone from the website.
+
+4. **In-app updater (`app/updater.py` + `app/main.py`)** now uses `resolve_download_url(manifest)`:
+   - For gated manifests (with `app_download_endpoint` + `app_download_file`): POSTs the user's saved `license_key` to the Worker, gets back a signed URL, downloads from there.
+   - For legacy manifests (with `app_download_url`): falls through to the direct URL — kept for backward compatibility but no v0.11.0+ manifest uses it.
+
+5. **Manifest schema v0.11.0+:**
+   ```json
+   {
+     "app_version": "0.11.0",
+     "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
+     "app_download_file": "Cold.Bore.zip",
+     "app_website_url": "https://chadheidt.github.io/coldbore/",
+     "app_release_notes": "...",
+     "template_version": "1.0",
+     "template_download_url": "",
+     "template_release_notes": ""
+   }
+   ```
+   The `app_website_url` is the "Or download manually" fallback link shown in the update banner — it points users at the website (so they hit the same gated flow), not at any direct download URL.
+
+6. **Cleaned up GitHub release artifacts.** Deleted all `.dmg` and `.zip` attachments from v0.6.0 through v0.10.1 — the release records remain (for version-history continuity) but the binaries are gone. v0.11.0 release record exists with no binaries (just notes pointing at the website).
+
+### Final state on Chad's machine
+
+- `/Applications/Cold Bore.app` runs **v0.11.0** (Tools → About confirms)
+- License key `CBORE-DDCX-AEGK-J2FR-2SIB` saved in config (Chad's local-testing key)
+- `main` HEAD: `a261316` ("v0.11.0 - private downloads via Cloudflare Worker")
+- v0.11.0 GitHub release record exists with **no binaries attached** — just version history + notes
+- R2 bucket `coldbore-releases` holds the current `Cold.Bore.dmg` (55 MB) and `Cold.Bore.zip` (58 MB)
+- Worker is live and verified end-to-end (valid code returns signed URL → file downloads correctly)
+- Old downloads (v0.10.x copies) deleted from Chad's `~/Downloads` folder
+
+### How to issue keys to a new beta tester (the steady-state workflow)
+
+Chad's Desktop has `Cold Bore — How to Issue License Keys.docx` with click-by-click instructions, but the high-level shape is:
+
+1. `python3 tools/generate_license_key.py` to generate a fresh CBORE-XXXX-XXXX-XXXX-XXXX
+2. Add the key to TWO places: `app/license.py`'s `VALID_KEYS` AND the **Worker's `VALID_CODES`** set in the Cloudflare dashboard. **The Worker copy was the one we forgot to mention in the Desktop doc — needs updating.** TODO: update the doc to call this out.
+3. Record the recipient in `beta-keys.txt` at the project root (gitignored)
+4. Ship a new app release (so the app accepts the new key on first launch)
+5. Email the tester the key + the website link
+
+The same key unlocks the website Download button AND the app's license dialog.
+
+### Two things to verify in a future session
+
+1. **End-to-end auto-update.** v0.11.0 → vX.Y.Z transitions are now the first real test of the in-app installer's `ditto`-based flow PLUS the new Worker-gated URL fetching. We haven't shipped a vX.Y.Z higher than v0.11.0 yet, so this hasn't been proven. Next time we bump version, watch the auto-update succeed (or diagnose if it fails).
+
+2. **Update the License Keys Word doc on Desktop** to call out that NEW keys need to be added in TWO places: `app/license.py` AND the Worker's `VALID_CODES` set in the Cloudflare dashboard. Without the Worker update, a new tester would have a key that unlocks the app (after rebuild) but can't download it from the website.
+
+### What's pending after v0.11.0 (the actual "send to friends" milestone)
+
+- **Email beta keys to the first round of testers.** Generate keys, add to license.py AND Worker, ship a small bump release (or just edit Worker for download-only; new app release only needed if you want them to be able to actually USE the app).
+- **Phase 9 commercialization** (when ready): LLC, EULA, USPTO trademark for "Cold Bore", `coldbore.app` domain, Gumroad/Stripe checkout integration, public launch via YouTube demo + forum outreach.
+
+---
+
 ## ✅ v0.10.1 SHIPPED — May 10, 2026 (late afternoon, same day)
 
 **License dialog polished + auto-updater fixed.** The two follow-ups flagged after v0.10.0 are both done. Chad ran the new dialog locally and confirmed it looks right.
