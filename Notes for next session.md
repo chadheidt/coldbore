@@ -78,6 +78,31 @@ The same key unlocks the website Download button AND the app's license dialog.
 - **Email beta keys to the first round of testers.** Generate keys, add to license.py AND Worker, ship a small bump release (or just edit Worker for download-only; new app release only needed if you want them to be able to actually USE the app).
 - **Phase 9 commercialization** (when ready): LLC, EULA, USPTO trademark for "Cold Bore", `coldbore.app` domain, Gumroad/Stripe checkout integration, public launch via YouTube demo + forum outreach.
 
+### Notes for future-us — infrastructure reality
+
+**Worker source code lives in Cloudflare's web editor, NOT in this git repo.** If we ever want it version-controlled, run `wrangler init` in a `worker/` subfolder, paste the current Worker source from the dashboard, and use `wrangler deploy` going forward. Today the source-of-truth is the live deployed version at https://dash.cloudflare.com → Workers & Pages → coldbore-download → Edit code.
+
+**Where every secret/binding lives:**
+- `HMAC_SECRET` — encrypted env var in the Worker (dashboard → coldbore-download → Settings → Variables and secrets). Used to sign download URLs. If you rotate it, all currently-active signed URLs immediately break (max impact = 5 minutes of disruption since URLs are 5-min lifetime).
+- `BUCKET` binding → R2 bucket `coldbore-releases`. Configured under Worker → Bindings tab.
+- License keys — in TWO places: `app/license.py`'s `VALID_KEYS` AND the Worker's `VALID_CODES` set. Adding/revoking requires updating both.
+
+**Cloudflare free-tier thresholds (when this starts costing money):**
+- R2 storage: 10 GB free, $0.015/GB after
+- R2 Class A operations (uploads): 1M/month free
+- R2 Class B operations (reads): 10M/month free
+- **R2 egress: free, always** (this is the killer feature — AWS S3 charges $0.09/GB egress)
+- Workers: 100k requests/day free, $0.30/M after
+- Realistic Cold Bore beta scale: ~$0/mo. Even at 1000 downloads/day we'd stay free.
+
+**Commerce transition (later) is small.** The website button changes from "Download Cold Bore" to "Buy Cold Bore — $XX" + small "Sign in to download" secondary. Buy button opens Stripe Checkout or Gumroad. Payment-success webhook hits the Worker, which generates a fresh CBORE-XXXX code, adds it to VALID_CODES (or KV store), emails it to the customer. Customer comes back to the website and uses the secondary link with their code. The R2 + Worker + in-app license flow built tonight stays exactly the same. Estimated 1-2 sessions to wire up Stripe webhook + migrate VALID_CODES from hardcoded set to Cloudflare KV.
+
+**Edge case (no current impact but worth knowing):** v0.10.1's auto-updater reads `app_download_url` from the manifest. The v0.11.0 manifest doesn't have that field (intentionally — we removed the public URL). So a hypothetical v0.10.1 user would see "v0.11.0 available" but couldn't auto-update. **No real users besides Chad were on v0.10.1, and Chad installed v0.11.0 fresh.** If we ever change manifest schema again in a way that breaks old clients, include BOTH old + new fields for the transition release.
+
+**To redeploy the Worker:** dashboard → Workers & Pages → coldbore-download → Edit code → make change → Deploy. Changes are live within seconds.
+
+**To check usage / costs:** dashboard → Analytics or Workers → coldbore-download → Metrics.
+
 ---
 
 ## ✅ v0.10.1 SHIPPED — May 10, 2026 (late afternoon, same day)
