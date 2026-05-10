@@ -40,7 +40,8 @@ nav {
   padding: 16px 0;
 }
 nav .container { display: flex; justify-content: space-between; align-items: center; }
-.logo { font-size: 20px; font-weight: 700; color: var(--orange); letter-spacing: -0.5px; }
+.logo { font-size: 20px; font-weight: 700; color: var(--orange); letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
+.logo img { width: 32px; height: 32px; }
 .nav-links { display: flex; gap: 28px; align-items: center; }
 .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 15px; transition: color 0.15s; }
 .nav-links a:hover { color: var(--text); }
@@ -243,7 +244,10 @@ footer p { margin-bottom: 8px; }
 
 <nav>
   <div class="container">
-    <div class="logo">COLD BORE</div>
+    <div class="logo">
+      <img src="assets/icon.png" alt="Cold Bore Icon">
+      COLD BORE
+    </div>
     <div class="nav-links">
       <a href="#features">Features</a>
       <a href="#install">Install</a>
@@ -390,8 +394,8 @@ footer p { margin-bottom: 8px; }
 
 <footer>
   <div class="container">
-    <p><strong>Cold Bore</strong> &middot; <a href="https://github.com/chadheidt/coldbore">View on GitHub</a> &middot; <a href="mailto:coldboreapp@gmail.com">coldboreapp@gmail.com</a></p>
-    <p>&copy; 2026 Chad Heidt. All rights reserved.</p>
+    <p><strong>Cold Bore</strong> &middot; <a href="mailto:coldboreapp@gmail.com">coldboreapp@gmail.com</a></p>
+    <p>&copy; 2026 Cold Bore. All rights reserved.</p>
     <div class="disclaimer">
       <strong>Reloading safety disclaimer:</strong> Cold Bore is a tool for organizing data you collect during precision rifle load development. It is NOT a source of load data and does not recommend specific charge weights, bullet types, or seating depths for your firearm. Always cross-reference loads against published reloading manuals from powder, bullet, and cartridge manufacturers. Watch for pressure signs. Start below maximum loads and work up. The developer is not liable for any damage, injury, or loss resulting from use of this app.
     </div>
