@@ -40,8 +40,13 @@ nav {
   padding: 16px 0;
 }
 nav .container { display: flex; justify-content: space-between; align-items: center; }
-.logo { font-size: 20px; font-weight: 700; color: var(--orange); letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
-.logo img { width: 32px; height: 32px; }
+.logo { font-size: 20px; font-weight: 700; color: var(--orange); letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; }
+.logo img { width: 44px; height: 44px; }
+.hero-logo { margin: 0 auto 28px; width: fit-content; }
+.hero-logo img { width: 96px; height: 96px; }
+@media (max-width: 720px) {
+  .hero-logo img { width: 72px; height: 72px; }
+}
 .nav-links { display: flex; gap: 28px; align-items: center; }
 .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 15px; transition: color 0.15s; }
 .nav-links a:hover { color: var(--text); }
@@ -259,6 +264,9 @@ footer p { margin-bottom: 8px; }
 
 <header class="hero">
   <div class="container">
+    <div class="hero-logo">
+      <img src="assets/icon.png" alt="Cold Bore logo">
+    </div>
     <h1>Precision rifle load development<br>for <span class="accent">Mac</span>.</h1>
     <p class="tagline">
       Drop your Garmin Xero and BallisticX CSV exports onto Cold Bore. It auto-imports velocity, SD, group size, mean radius, and more — straight into a structured load development workbook with built-in scoring. Find your node faster.
