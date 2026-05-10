@@ -715,8 +715,11 @@ class MainWindow(QMainWindow):
                             f"a {parser.NAME} CSV — will be skipped."
                         )
                         continue
-                except Exception:
-                    pass
+                except Exception as e:
+                    warnings.append(
+                        f"  {parser.IMPORT_FOLDER}/{fn}: couldn't read this CSV "
+                        f"({type(e).__name__}: {e}). Will try to import anyway."
+                    )
 
                 # For BallisticX, the filename is the label source. Check that
                 # the filename parses to something usable.
