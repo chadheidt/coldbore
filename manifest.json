@@ -1,7 +1,7 @@
 {
-  "app_version": "0.9.0",
-  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.9.0/Cold.Bore.zip",
-  "app_release_notes": "First Apple-signed and notarized build. New installs from the website now ship as a proper .dmg installer. No more 'Apple cannot check this for malicious software' warning on first launch.",
+  "app_version": "0.10.0",
+  "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.10.0/Cold.Bore.zip",
+  "app_release_notes": "Beta lockdown: Cold Bore now requires a license key on first launch. Each tester has a unique key issued by the developer. The app re-validates on every launch, so a key can be revoked in a future release if needed.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

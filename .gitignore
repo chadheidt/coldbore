@@ -56,3 +56,7 @@ htmlcov/
 
 # --- Claude / Cowork internal state ---
 .claude/
+
+# --- License-key recipient log — Chad's private notes mapping each
+#     beta key to the tester it was issued to. Never commit. ---
+beta-keys.txt

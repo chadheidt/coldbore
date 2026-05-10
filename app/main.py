@@ -63,6 +63,8 @@ from updater import UpdateChecker, UpdateDownloader, DEFAULT_MANIFEST_URL
 import installer
 from version import APP_NAME, APP_VERSION
 from disclaimer import needs_disclaimer, show_disclaimer, view_disclaimer
+import license as app_license
+from license_dialog import show_license_dialog
 from settings_dialog import show_settings
 from help_dialog import show_help
 from new_cycle_dialog import show_new_cycle
@@ -1724,6 +1726,16 @@ def main():
         crash_reporter.install()
     except ImportError:
         pass  # safe to skip if module isn't available for some reason
+
+    # License gate — beta lockdown. Each tester has a unique key; without
+    # a valid stored key the app refuses to proceed past this point.
+    # Re-validates the stored key on every launch so revocations land
+    # automatically via the auto-updater.
+    state = app_license.license_state()
+    if state != "valid":
+        if not show_license_dialog(revoked=(state == "invalid")):
+            # User clicked Quit — don't proceed
+            return 0
 
     # First-launch disclaimer — must be accepted before the user can use the app.
     # Tracked in config; user only sees it once unless DISCLAIMER_VERSION bumps.

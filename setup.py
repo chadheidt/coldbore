@@ -11,11 +11,56 @@ bundled inside.
 For a friend-shippable build, zip the .app afterward and AirDrop or email it.
 """
 
+import os
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 from setuptools import setup
 
 HERE = Path(__file__).resolve().parent
+
+# ---------------------------------------------------------------------------
+# Workaround for macOS provenance xattr blocking py2app builds.
+#
+# On recent macOS versions, the OS attaches `com.apple.provenance` to files
+# copied by certain process contexts (Terminal-launched .command, Finder
+# double-clicks). That xattr later blocks py2app/macholib from modifying the
+# same files (Python3 framework binary, .dylibs) — manifesting as
+# `[Errno 1] Operation not permitted` during the changefunc/load-command
+# rewrite phase.
+#
+# We can't prevent the xattr from being added, but we can strip it as soon
+# as a file is copied. Wrap shutil.copy / copy2 / copyfile so every copy
+# inside py2app's run is followed by a best-effort xattr removal.
+# ---------------------------------------------------------------------------
+
+def _strip_provenance(path):
+    try:
+        subprocess.run(
+            ["/usr/bin/xattr", "-d", "com.apple.provenance", str(path)],
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+    except Exception:
+        pass
+
+def _wrap_copy(orig):
+    def wrapped(src, dst, *args, **kwargs):
+        result = orig(src, dst, *args, **kwargs)
+        try:
+            target = dst
+            if os.path.isdir(target):
+                target = os.path.join(target, os.path.basename(src))
+            _strip_provenance(target)
+        except Exception:
+            pass
+        return result
+    return wrapped
+
+shutil.copy2 = _wrap_copy(shutil.copy2)
+shutil.copy = _wrap_copy(shutil.copy)
+shutil.copyfile = _wrap_copy(shutil.copyfile)
 
 # Make app/ importable so py2app's static analysis can discover all the
 # submodules referenced from main.py.
@@ -24,7 +69,7 @@ sys.path.insert(0, str(HERE / "app"))
 
 APP_DISPLAY_NAME = "Cold Bore"
 APP_BUNDLE_ID = "com.chadheidt.coldbore"
-APP_VERSION = "0.9.0"  # keep in sync with app/version.py
+APP_VERSION = "0.10.0"  # keep in sync with app/version.py
 
 # The main entry script
 ENTRY = ["app/main.py"]
@@ -97,6 +142,8 @@ OPTIONS = {
         "theme",
         "import_data",
         "disclaimer",
+        "license",
+        "license_dialog",
         "settings_dialog",
         "load_card",
         "load_sharing",
@@ -110,6 +157,11 @@ OPTIONS = {
         "tkinter",
         "matplotlib",
         "numpy.tests",
+        # Pillow is only used by tools/render_*.py for marketing-site hero images,
+        # not by the runtime app. openpyxl's optional `from PIL import Image` makes
+        # py2app pull it in by default, which both bloats the bundle and (on some
+        # macOS versions) trips an EPERM on the bundled libtiff/libjpeg dylibs.
+        "PIL",
     ],
 }
 

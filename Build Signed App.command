@@ -33,6 +33,13 @@ set -e
 PROJECT="$HOME/Projects/Rifle Load Data"
 cd "$PROJECT"
 
+# Mirror all output to a log file so failures are diagnosable later.
+# Use direct redirection (no `tee` subshell) — the subshell wrapper has been
+# observed to interact poorly with py2app's flipwritable step.
+LOG_FILE="/tmp/coldbore-build.log"
+exec >"$LOG_FILE" 2>&1
+echo "Build log: $LOG_FILE"
+
 # ----- Configuration (edit these once your Dev ID is issued) -----------------
 # After enrolling in Apple Developer, fill these in:
 SIGNING_IDENTITY="Developer ID Application: Chad Heidt (NY3D844C6W)"
@@ -111,15 +118,16 @@ echo "[2/8] Code-signing the .app and all embedded binaries…"
 find "$APP_PATH/Contents/Frameworks" "$APP_PATH/Contents/Resources" \
     -type f \( -name "*.dylib" -o -name "*.so" -o -perm -u+x \) 2>/dev/null | while read -r f; do
     if file "$f" | grep -qE 'Mach-O|executable'; then
-        codesign --force --options runtime \
-            --entitlements "$ENTITLEMENTS" \
+        # --timestamp is REQUIRED for notarization; --deep alone reuses the
+        # existing adhoc signature on each binary, which Apple rejects.
+        codesign --force --options runtime --timestamp \
             --sign "$SIGNING_IDENTITY" \
             "$f" 2>&1 | grep -v "replacing existing signature" || true
     fi
 done
 
-# Sign the bundle itself (with --deep as safety net)
-codesign --force --deep --options runtime \
+# Sign the bundle itself (entitlements only apply to the outer bundle's main exe).
+codesign --force --options runtime --timestamp \
     --entitlements "$ENTITLEMENTS" \
     --sign "$SIGNING_IDENTITY" \
     "$APP_PATH"
