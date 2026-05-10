@@ -6,6 +6,66 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## ✅ v0.10.0 SHIPPED — May 10, 2026 (afternoon, same day as v0.9.0)
+
+**Beta lockdown is live.** Cold Bore now refuses to open past a license-key dialog on first launch (and re-validates the stored key on every launch). v0.10.0 is signed + notarized and on Chad's `/Applications`; his test key `CBORE-DDCX-AEGK-J2FR-2SIB` unlocks it.
+
+### What's in the lockdown
+
+- `app/license.py` — VALID_KEYS frozenset, `normalize_key`, `is_valid_key`, `license_state` (returns `valid` / `invalid` / `missing`), `save_license`. Re-validates the stored key on every launch so revocations propagate via auto-update.
+- `app/license_dialog.py` — Qt modal with key entry, Quit/Unlock buttons, REVOKED vs first-time prompt copy.
+- `app/main.py` hooks the license check **before** the disclaimer.
+- `tools/generate_license_key.py` — random base32 key generator. `python3 tools/generate_license_key.py [count]` prints CBORE-XXXX-XXXX-XXXX-XXXX keys.
+- `beta-keys.txt` (gitignored) — Chad's private log mapping each key to its recipient.
+- `tests/test_license.py` — 15 tests covering normalize, well-formed, validity, and the missing/valid/invalid state transitions. All passing.
+
+### Operating manual
+
+`~/Desktop/Cold Bore — How to Issue License Keys.docx` is the click-by-click guide for issuing a new key, recording the recipient, shipping a release, and revoking. Chad uses this when onboarding each beta tester.
+
+### Two known follow-ups (TOMORROW'S WORK)
+
+#### 1. CRITICAL — In-app auto-updater is broken on current macOS
+
+When Chad triggered the v0.9.0 → v0.10.0 update via the yellow banner, the installer swap completed and the app reopened, but macOS immediately showed *"Cold Bore.app is damaged and can't be opened. You should move it to the Trash."* — same as the v0.8.6 → v0.9.0 attempt earlier in the day.
+
+Hypothesis: `installer.py`'s helper script uses `unzip` to extract the new zip and `mv` to swap. Recent macOS versions are pickier — they treat the resulting bundle as having a tampered signature (the bundle hashes no longer match the original notarization metadata, OR the extraction strips a critical xattr like `com.apple.cs.codeRequirement`). 
+
+**Likely fix**: change the helper script to use `ditto -x -k <zip> <dest>` instead of `unzip` for extraction. `ditto` is macOS-native and preserves the bundle structure faithfully (it's what we use to BUILD the zip on the dev side). `unzip` is BSD-style and doesn't know about HFS+/APFS resource forks or signature-relevant xattrs.
+
+Until this is fixed, **every release will require beta testers to do the manual "fresh download from website + drag to Applications" dance**. That's a regression from the v0.8.5 → v0.8.6 success earlier today, and it defeats one of Cold Bore's core UX features.
+
+Investigation notes for next session:
+- Read `installer.py`'s `_build_helper_script()` — that's the bash that runs after the app quits to swap the new bundle in.
+- Test with `ditto -x -k` swap on a local zip → install → confirm macOS doesn't flag damaged.
+- May also need to re-strip quarantine via `xattr -dr com.apple.quarantine` after the swap.
+- If `ditto` alone doesn't work, the alternative is to make the in-app banner just `open` the downloaded .dmg in Finder and let macOS handle the install dance natively (user drags new app to Applications). That loses one-click convenience but is bulletproof.
+
+#### 2. POLISH — v0.10.1: show UI preview behind the license dialog
+
+Chad's explicit request: testers should see what Cold Bore looks like (icon, screenshot, description) while locked out, not just a bare dialog. Plan:
+
+- Replace `LicenseDialog`'s blank background with: app icon on top, a screenshot of the main window (the existing `docs/assets/screenshot.png` from the marketing site is perfect), a one-paragraph description of what Cold Bore does, then the existing key field + Quit/Unlock buttons.
+- Re-render `docs/assets/screenshot.png` via `tools/render_coldbore.py` first if the marketing render is stale — but the May-10 evening version should be current.
+- Keep the dialog modal — input is still blocked behind it, just visual presentation is richer.
+
+### Files committed today (since the start of session)
+
+- `7c3d383` — v0.10.0 license gate (added today afternoon)
+- `c68fd64` — Phase 9.0 lockdown plan in Build progress.md
+- `4307144` — v0.9.0 lessons-learned breadcrumb
+- `a4c09f9` — landing page updates for .dmg / drop right-click step
+- `0b2c5a1` — v0.9.0 version bump
+- `728b37a` — Phase 8 iOS Share-Sheet integration must-have note
+
+### What's pending after the auto-update fix
+
+- Issue keys to the two friends Chad already gave the website link to (he chose option 2 — wait until they ping rather than push proactively)
+- Send the v0.10.0 link to the wider pro-shooter beta cohort once auto-update is fixed
+- Phase 9 commercialization (LLC, EULA, USPTO trademark, domain, Gumroad, public launch)
+
+---
+
 ## ✅ v0.9.0 SHIPPED — May 10, 2026 (evening — first signed + notarized release)
 
 **Cold Bore is now signed by Apple's Developer ID and notarized.** macOS opens it without any "unidentified developer" / "damaged" / right-click-Open warnings. This is the threshold for real distribution.
