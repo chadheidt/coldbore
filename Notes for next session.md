@@ -103,6 +103,29 @@ The same key unlocks the website Download button AND the app's license dialog.
 
 **To check usage / costs:** dashboard → Analytics or Workers → coldbore-download → Metrics.
 
+### Backups — what's covered and where
+
+Time Machine was set up on 2026-05-10 onto an external 1 TB USB drive named **Cold Bore Backup** (encrypted, hourly automatic). Combined with git and the Cloudflare-hosted infrastructure, here's where each piece of the project lives:
+
+| What | Where | How |
+|---|---|---|
+| Project source code, docs, breadcrumbs | git (origin: chadheidt/coldbore) + Time Machine | automatic on every commit + hourly Time Machine |
+| `beta-keys.txt` (key → tester map) | **Time Machine only** | gitignored; lives at project root |
+| Workbook templates + .xltx | git + Time Machine | committed |
+| User's range data (`Documents/Cold Bore Loads/`) | Time Machine only | data folders are gitignored |
+| Cold Bore app config (`~/Library/Application Support/Cold Bore/`) | Time Machine only | local app state |
+| Apple Developer cert + private key | Time Machine only (Keychain backed up as part of `~/Library/Keychains/`) | imported into Keychain on 2026-05-10 |
+| `coldbore-notary` keychain profile (notarytool credentials) | Time Machine only (Keychain) | created via `xcrun notarytool store-credentials` |
+| Cloudflare Worker source | git (`worker/coldbore-download.js`) + Time Machine + Cloudflare dashboard | live source-of-truth is dashboard; backup copy in repo as of commit 4177931 |
+| Cloudflare R2 binary contents (.dmg, .zip) | Cloudflare R2 + Time Machine (project's `dist/`) | rebuilt from source any time |
+| `HMAC_SECRET` env var (Worker) | **NOT backed up** (intentional) | rotatable in 30 sec if lost — generate new secret with `python3 -c "import secrets; print(secrets.token_hex(32))"`, paste into Worker → Settings |
+| Desktop reference docs (How to Issue License Keys, etc.) | Time Machine only | local .docx files |
+
+**Backup gotchas to watch for:**
+- The external drive must stay plugged in for Time Machine to actually run backups. Hourly = "every hour the drive is plugged in." When unplugged, backups pause.
+- If the encryption password is lost, the backups can't be restored. Keep that password somewhere outside the backup itself.
+- The Cloudflare Worker source is the one thing where the live version is NOT in git — the dashboard is. When changes are made there (e.g., adding a new key to VALID_CODES), remember to also paste the updated source into `worker/coldbore-download.js` and commit, so the backup copy stays current.
+
 ---
 
 ## ✅ v0.10.1 SHIPPED — May 10, 2026 (late afternoon, same day)
