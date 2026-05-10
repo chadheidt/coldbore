@@ -69,7 +69,7 @@ sys.path.insert(0, str(HERE / "app"))
 
 APP_DISPLAY_NAME = "Cold Bore"
 APP_BUNDLE_ID = "com.chadheidt.coldbore"
-APP_VERSION = "0.10.0"  # keep in sync with app/version.py
+APP_VERSION = "0.10.1"  # keep in sync with app/version.py
 
 # The main entry script
 ENTRY = ["app/main.py"]
@@ -81,6 +81,15 @@ if TEMPLATE_PATH.exists():
     DATA_FILES.append(str(TEMPLATE_PATH))
 else:
     print(f"WARNING: template not found at {TEMPLATE_PATH} — the bundle will ship without it.")
+
+# Bundle the marketing icon + screenshot so the license dialog can show them
+# while the app is locked. license_dialog.py looks for them in
+# Contents/Resources/ at runtime.
+ICON_PNG = HERE / "docs" / "assets" / "icon.png"
+SCREENSHOT_PNG = HERE / "docs" / "assets" / "screenshot.png"
+for p in (ICON_PNG, SCREENSHOT_PNG):
+    if p.exists():
+        DATA_FILES.append(str(p))
 
 # Also bundle import_data.py so the app can call into it
 IMPORT_DATA_PATH = HERE / "import_data.py"

@@ -10,8 +10,10 @@ We use a shell script (not Python) on purpose:
   - macOS keeps the running .app bundle's executable held open while Python
     is alive. The swap MUST happen after Python exits.
   - bash is ubiquitous on macOS; no risk that a friend's Python is missing
-    a module. The helper has zero dependencies beyond /usr/bin/unzip,
+    a module. The helper has zero dependencies beyond /usr/bin/ditto,
     /bin/mv, /usr/bin/xattr, /usr/bin/open — all preinstalled on macOS.
+    (We use ditto, not unzip — unzip drops macOS metadata that codesign
+    relies on, and the result trips Gatekeeper's "App is damaged" check.)
 
 What the helper script does, in order:
   1. Wait 3 seconds for the parent app to finish quitting
@@ -116,9 +118,14 @@ APP_DIR="$(dirname "$APP")"
 STAGING="$(mktemp -d "$APP_DIR/.coldbore-update.XXXXXX")" \\
     || log_fail "Couldn't create staging dir in $APP_DIR (permission denied?)"
 
-# 3. Unzip the downloaded zip into staging
-/usr/bin/unzip -q "$ZIP" -d "$STAGING" \\
-    || log_fail "Unzip failed - zip may be corrupt"
+# 3. Extract the downloaded zip into staging.
+#    NOTE: must be `ditto -x -k`, not `unzip`. unzip is BSD-style and doesn't
+#    preserve macOS metadata that codesign relies on; the resulting bundle
+#    looks tampered to Gatekeeper and triggers "App is damaged" on relaunch.
+#    ditto is macOS-native and the inverse of how we BUILT the zip
+#    (ditto -c -k --keepParent), so contents round-trip exactly.
+/usr/bin/ditto -x -k "$ZIP" "$STAGING" \\
+    || log_fail "Extract failed - zip may be corrupt"
 
 # 4. Find the new .app inside staging (it's typically at the root)
 NEW_APP="$(find "$STAGING" -maxdepth 2 -type d -name "*.app" -print -quit)"
