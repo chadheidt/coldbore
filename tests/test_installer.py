@@ -40,7 +40,7 @@ def test_running_app_bundle_path_returns_none_in_dev_mode():
 
 def test_build_helper_script_contains_required_steps():
     """The generated bash script should reference all the path arguments
-    and key macOS commands (unzip, mv, xattr, open). We're not running it
+    and key macOS commands (ditto, mv, xattr, open). We're not running it
     in tests — just smoke-checking the structure."""
     script = installer._build_helper_script(
         zip_path="/tmp/Cold.Bore.zip",
@@ -58,7 +58,7 @@ def test_build_helper_script_contains_required_steps():
     assert "last_install_error.log" in script
 
     # Critical operations are present
-    assert "/usr/bin/unzip" in script
+    assert "/usr/bin/ditto" in script
     assert "xattr" in script
     assert "/usr/bin/open" in script
     assert "mv " in script

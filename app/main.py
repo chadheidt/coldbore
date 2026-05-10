@@ -391,6 +391,8 @@ class MainWindow(QMainWindow):
         #     consumed by installer.launch_install_swap on Quit-and-Install
         self._pending_app_update_url = None
         self._pending_app_update_version = None
+        self._pending_app_update_manifest = None  # full manifest for resolve_download_url
+        self._pending_app_update_website = None   # fallback link to send users to
         self._update_downloader = None
         self._downloaded_zip_path = None
 
@@ -1003,12 +1005,20 @@ class MainWindow(QMainWindow):
                 )
             return
 
-        # Stash app update URL for the install flow's use. Template updates
+        # Stash app update state for the install flow's use. Template updates
         # still go through the browser (template files aren't bundled into a
         # .app, so there's nothing to swap — user picks them up via the
         # workbook the next time they Save As from a fresh template).
-        self._pending_app_update_url = manifest.get("app_download_url") if result["app_update"] else None
-        self._pending_app_update_version = manifest.get("app_version") if result["app_update"] else None
+        if result["app_update"]:
+            self._pending_app_update_manifest = manifest
+            self._pending_app_update_url = manifest.get("app_download_url")  # legacy fallback
+            self._pending_app_update_version = manifest.get("app_version")
+            self._pending_app_update_website = manifest.get("app_website_url") or "https://chadheidt.github.io/coldbore/"
+        else:
+            self._pending_app_update_manifest = None
+            self._pending_app_update_url = None
+            self._pending_app_update_version = None
+            self._pending_app_update_website = None
 
         # Render the initial "ready to install" banner state.
         self._render_update_banner(state="ready", manifest=manifest, result=result)
@@ -1030,7 +1040,7 @@ class MainWindow(QMainWindow):
             # Synthesize a minimal result if we're being called from a
             # progress/install path that doesn't have one handy.
             result = {
-                "app_update": bool(self._pending_app_update_url),
+                "app_update": bool(self._pending_app_update_url or self._pending_app_update_manifest),
                 "template_update": False,
             }
 
@@ -1044,18 +1054,24 @@ class MainWindow(QMainWindow):
                     f"<b>App update:</b> v{new_v} is available "
                     f"(you have v{APP_VERSION})."
                 )
-                # Primary action: in-app install. Fallback: browser download.
-                if installer.can_self_install() and self._pending_app_update_url:
+                # For new-style (gated) manifests we have either an endpoint
+                # or a direct URL; either way we can attempt the in-app install.
+                has_app_update = bool(
+                    (self._pending_app_update_manifest and self._pending_app_update_manifest.get("app_download_endpoint"))
+                    or self._pending_app_update_url
+                )
+                website = self._pending_app_update_website or "https://chadheidt.github.io/coldbore/"
+                if installer.can_self_install() and has_app_update:
                     parts.append(
                         '<a href="install:start"><b>Install Update</b></a>'
                         ' &nbsp;·&nbsp; '
-                        f'<a href="app:{self._pending_app_update_url}" '
-                        'style="color:#aaa;">Or download manually</a>'
+                        f'<a href="app:{website}" '
+                        'style="color:#aaa;">Or download from the website</a>'
                     )
-                elif self._pending_app_update_url:
+                else:
                     # Dev mode or read-only filesystem — no self-install path.
                     parts.append(
-                        f'<a href="app:{self._pending_app_update_url}">Download new version</a>'
+                        f'<a href="app:{website}">Download new version from the website</a>'
                     )
 
             elif state == "downloading":
@@ -1081,11 +1097,10 @@ class MainWindow(QMainWindow):
                 )
                 if error:
                     parts.append(f"<i>{error}</i>")
-                if self._pending_app_update_url:
-                    parts.append(
-                        f'<a href="app:{self._pending_app_update_url}">'
-                        'Download manually instead</a>'
-                    )
+                website = self._pending_app_update_website or "https://chadheidt.github.io/coldbore/"
+                parts.append(
+                    f'<a href="app:{website}">Download manually from the website</a>'
+                )
 
         if result.get("template_update") and state == "ready":
             new_t = manifest.get("template_version", "?")
@@ -1136,12 +1151,31 @@ class MainWindow(QMainWindow):
         QDesktopServices.openUrl(QUrl(url))
 
     def _begin_update_download(self):
-        """Start downloading the update zip in the background."""
-        url = self._pending_app_update_url
-        if not url:
+        """Start downloading the update zip in the background.
+
+        For gated (v0.11.0+) manifests, this first POSTs the user's saved
+        license key to the Cloudflare Worker and gets back a short-lived
+        signed URL. For legacy manifests, it uses the direct app_download_url.
+        """
+        if self._update_downloader and self._update_downloader.isRunning():
             return
 
-        if self._update_downloader and self._update_downloader.isRunning():
+        manifest = self._pending_app_update_manifest
+        if manifest is not None:
+            # Resolves either via the gated Worker (new) or returns the direct
+            # URL (legacy). Returns None if the license-gated lookup fails.
+            url = updater.resolve_download_url(manifest)
+        else:
+            url = self._pending_app_update_url
+
+        if not url:
+            self._render_update_banner(
+                state="error",
+                error=(
+                    "Couldn't authorize the update download. Your license key may "
+                    "have been revoked. Download the latest version manually from the website."
+                ),
+            )
             return
 
         self._render_update_banner(state="downloading", progress_pct=0)

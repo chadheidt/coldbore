@@ -49,6 +49,59 @@ DEFAULT_MANIFEST_URL = (
 )
 
 
+def resolve_download_url(manifest):
+    """Given a parsed manifest dict, return the URL to download the update zip from.
+
+    Two manifest formats are supported:
+
+    1. **Gated (v0.11.0+):** the manifest contains `app_download_endpoint` and
+       `app_download_file`. We POST the user's saved license key to the endpoint
+       and the server (a Cloudflare Worker) returns a short-lived signed URL
+       pointing at the file in R2.
+
+    2. **Direct (legacy):** the manifest contains `app_download_url` — a plain
+       public URL we download from directly.
+
+    Returns the URL on success, or None on failure (no key stored, network error,
+    server rejected the key).
+    """
+    endpoint = manifest.get("app_download_endpoint")
+    if endpoint:
+        file_name = manifest.get("app_download_file") or "Cold.Bore.zip"
+        try:
+            # Imported lazily so updater.py stays usable in environments where
+            # config / file system access might not be set up yet.
+            import config as app_config
+            cfg = app_config.load_config()
+        except Exception:
+            return None
+
+        license_key = cfg.get("license_key", "")
+        if not license_key:
+            return None
+
+        try:
+            payload = json.dumps({"code": license_key, "file": file_name}).encode("utf-8")
+            req = urllib.request.Request(
+                endpoint,
+                data=payload,
+                headers={
+                    "Content-Type": "application/json",
+                    "User-Agent": f"ColdBore/{APP_VERSION}",
+                },
+                method="POST",
+            )
+            with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT_SECONDS) as resp:
+                body = json.loads(resp.read().decode("utf-8"))
+            url = body.get("url")
+            return url or None
+        except Exception:
+            return None
+
+    # Legacy direct-URL manifest
+    return manifest.get("app_download_url")
+
+
 class UpdateChecker(QThread):
     """Background thread that fetches the manifest and signals the result.
 
