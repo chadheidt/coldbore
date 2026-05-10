@@ -38,6 +38,11 @@ Both hero images are **rendered programmatically via Pillow** (see `tools/render
   - `Cold Bore - Sending to friends.docx`
 - ✅ **macOS housekeeping**: Re-enabled disabled screenshot keyboard shortcuts (28-31 in `defaults read com.apple.symbolichotkeys` were `enabled = 0`); upgraded pip 21.2.4 → 26.0.1; added `~/Library/Python/3.9/bin` to PATH in `~/.bash_profile` so user-installed CLI tools (pip/pytest/etc.) are typeable directly.
 
+### What's done today (evening — landing-page polish)
+
+- ✅ **Website logo treatment (`docs/index.html`)** — commit `282d158`. Added a 96px Cold Bore icon centered above the hero headline (72px on mobile via media query). Bumped the nav-corner icon from 32px → 44px so it reads better. Live at https://chadheidt.github.io/coldbore/.
+- ✅ **Cache-Control meta tag (`docs/index.html`)** — commit `4df9c74`. Added `<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">` so returning visitors always see fresh content. Previously GitHub Pages' default `max-age=600` could serve a stale copy for up to 10 min after a push — now resolved. Useful as we keep iterating on marketing copy / imagery.
+
 ### What's pending (the actual blocker: Apple's email)
 
 When Chad's Dev ID is approved (24-48 hr from his enrollment, signaled by an email from `developer@apple.com` titled something like "Welcome to the Apple Developer Program"):
