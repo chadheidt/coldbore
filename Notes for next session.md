@@ -6,6 +6,63 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## ✅ v0.9.0 SHIPPED — May 10, 2026 (evening — first signed + notarized release)
+
+**Cold Bore is now signed by Apple's Developer ID and notarized.** macOS opens it without any "unidentified developer" / "damaged" / right-click-Open warnings. This is the threshold for real distribution.
+
+### Final state on Chad's machine
+
+- `/Applications/Cold Bore.app` runs **v0.9.0** (Tools → About confirms). Installed fresh from the v0.9.0 .dmg, opens silently, no Gatekeeper friction.
+- `main` HEAD: `a4c09f9` ("Landing page: point download at .dmg; drop right-click step")
+- v0.9.0 GitHub release published: https://github.com/chadheidt/coldbore/releases/tag/v0.9.0 — both `Cold.Bore.dmg` (55 MB, signed + notarized + stapled) and `Cold.Bore.zip` (58 MB, signed, for the auto-update path) attached
+- Landing page (https://chadheidt.github.io/coldbore/) updated: download button points at the .dmg directly, install steps walk through .dmg flow, Gatekeeper-warning copy removed
+
+### How v0.9.0 was built
+
+1. Apple Dev cert generated via openssl CSR → uploaded to developer.apple.com → downloaded `developerID_application.cer` → imported as a .p12 (with `-legacy` flag, otherwise `security import` rejects with MAC verification failed).
+2. App-specific password from appleid.apple.com → stored in keychain via `xcrun notarytool store-credentials "coldbore-notary"`.
+3. `create-dmg` installed via `brew install create-dmg`.
+4. **Build sequence** (the working path — see lessons below):
+   - py2app to `/tmp/coldbore-build/dist/` (NOT the project's `dist/` — see lesson 1)
+   - `codesign --force --options runtime --timestamp --sign "Developer ID Application: Chad Heidt (NY3D844C6W)"` on every Mach-O inside the bundle individually (`--deep` is NOT enough — see lesson 2). Then sign the outer bundle with `--entitlements`.
+   - `create-dmg` from a stage dir containing the signed .app + Quick Start docx
+   - `codesign --timestamp` the .dmg
+   - `xcrun notarytool submit ... --keychain-profile coldbore-notary --wait` (took ~25 min that evening; queue was busy)
+   - `xcrun stapler staple` the .dmg
+   - `ditto -c -k --keepParent` to also build Cold.Bore.zip from the same signed .app, plus add Quick Start docx
+   - Copy both artifacts from `/tmp/coldbore-build/dist/` back into the project's `dist/`
+
+### Lessons learned today (READ BEFORE NEXT SIGNED BUILD)
+
+1. **Build outside the project directory.** macOS attaches `com.apple.provenance` (and `com.apple.macl`) xattrs to files copied within the project tree. Those xattrs then block py2app/macholib from modifying its own copies of `Python3.framework/Versions/3.9/Python3` and other Mach-O files — the build dies with `[Errno 1] Operation not permitted` during the changefunc/load-command rewrite. **Workaround: `python3 setup.py py2app --dist-dir /tmp/coldbore-build/dist --bdist-base /tmp/coldbore-build/build`.** Then continue codesign + DMG + notarization in `/tmp/`, copy final `.dmg` and `.zip` back into `dist/` only at the very end. This bug was NEW today (worked this morning, broke this evening — likely a silent macOS security policy update). Even Finder double-click on Build Signed App.command hits it. The setup.py monkey-patch attempting to strip `com.apple.provenance` after each shutil.copy didn't help (macOS silently re-applies the xattr).
+
+2. **`codesign --deep` is NOT enough for notarization.** Apple's notary service rejected the first submission with "binary is not signed with a valid Developer ID certificate" + "signature does not include a secure timestamp" errors on every `.so` and `.dylib` inside the bundle. The `--deep` flag re-uses pre-existing signatures from those binaries (which are Apple's adhoc ones), it doesn't re-sign them with our identity. **Fix: explicitly sign every Mach-O inside `Cold Bore.app` with `--options runtime --timestamp --sign "Developer ID Application: ..."`.** Use a `find` loop over `Frameworks/` and `Resources/` for files where `file <path>` matches `Mach-O`. 248 files in our case. After that, sign the outer bundle with the same flags plus `--entitlements`. Then submit. Notarization passed on the second try.
+
+3. **Pillow has to be excluded in setup.py.** `tools/render_*.py` use Pillow for the marketing-site hero images, but the runtime app doesn't need it. `openpyxl` has an optional `from PIL import Image` that pulls Pillow in by default during py2app's static analysis. Pillow's bundled `libtiff.6.dylib` then trips the same provenance-EPERM during the build. `setup.py` now lists `"PIL"` under `excludes`. Keep it there.
+
+4. **`security import` of a .p12 needs `-legacy` openssl flag.** Without it, `openssl pkcs12 -export` writes a modern PKCS12 format that macOS's Keychain rejects with `MAC verification failed during PKCS12 import (wrong password?)` — misleading error, the password was correct. With `openssl pkcs12 -export -legacy ...`, import works.
+
+5. **Right after Apple approves the Developer Program**, the cert is NOT auto-installed. Chad has to generate a CSR (Certificate Signing Request) — programmatically via `openssl req -new -newkey rsa:2048 -nodes -keyout coldbore.key -out CertificateSigningRequest.certSigningRequest -subj "/emailAddress=.../CN=..."` is fine — upload it to developer.apple.com, download the .cer, then bundle .cer + .key into a .p12 and `security import` with `-T /usr/bin/codesign -T /usr/bin/productsign` flags so codesign can use it without prompts.
+
+6. **Sensitive artifacts left at `~/Desktop/cold-bore-signing/`:** `coldbore.key` (unencrypted private key), `coldbore.p12` (encrypted with password "coldbore"), `developerID_application.cer` (public cert), `CertificateSigningRequest.certSigningRequest` (CSR). Cert + key are now safely in Keychain. Chad can delete the whole folder anytime.
+
+### What's pending (commerce phase, later)
+
+- Send the live website link to pro-shooter beta candidates. The .dmg is signed/notarized; first-launch is silent; install instructions on the page are accurate.
+- Auto-update test from v0.9.0 → v0.9.1 will be the next chance to verify the in-app updater still works — Chad's existing v0.8.6 went "damaged" before we could test the v0.8.6 → v0.9.0 path (macOS got stricter on adhoc signatures during this session). v0.9.0 → next is the path forward.
+- LLC formation, USPTO trademark for "Cold Bore", lawyer for EULA + privacy + refund policy
+- Domain `coldbore.app` (~$15/yr)
+- Gumroad or Stripe Checkout embed on the landing page
+- Public launch via YouTube demo + forum outreach
+
+See `Build progress.md` Phase 9 for the full commercialization plan.
+
+### Stale GitHub release records that could be cleaned up later (not blocking)
+
+v0.8.1, v0.8.2, v0.8.3, v0.8.4 (broken Apple-Silicon-only or em-dash-crash builds) and possibly v0.7.x records may still exist on GitHub. None point at working binaries that anyone has. Could be deleted with `gh release delete vX.Y.Z --repo chadheidt/coldbore --cleanup-tag` if the releases page should be tidy.
+
+---
+
 ## 🚧 BETA PREP IN FLIGHT — May 10, 2026 (afternoon session — pivoting to pro-shooter beta + commercialization)
 
 **Big picture shift today:** Chad is moving Cold Bore from "friends-and-family" to "pro-shooter beta with commercialization in sight." He's signed up for the **Apple Developer Program ($99/yr)** and is waiting on Apple's 24-48 hour approval. Once approved, we ship v0.9.0 as the first signed + notarized + DMG-packaged release. After beta validation, we layer in commerce (Gumroad/Stripe, LLC, EULA).
