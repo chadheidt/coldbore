@@ -23,11 +23,13 @@ from pathlib import Path
 try:
     from PyQt5.QtCore import QEvent, Qt, QTimer, QUrl, QPointF
     from PyQt5.QtGui import (
+        QBrush,
         QColor,
         QDesktopServices,
         QFont,
         QPainter,
         QPen,
+        QRadialGradient,
     )
     from PyQt5.QtWidgets import (
         QAction,
@@ -137,37 +139,60 @@ class CarbonBackground(QWidget):
 
 
 class DropZone(QLabel):
-    """Drop zone with a faded target reticle painted behind the text."""
+    """Drop zone with a faded precision-rifle reticle painted behind the text."""
 
-    # Reticle ring radii (in pixels) and crosshair half-lengths
+    # Reticle geometry — concentric rings + crosshair + mil-dot subtensions
     RETICLE_RINGS = (28, 56, 88)
-    CROSSHAIR_H_HALF = 110   # half-width of the horizontal crosshair line
-    CROSSHAIR_V_HALF = 64    # half-height of the vertical crosshair line
-    RETICLE_ALPHA_IDLE = 28  # 0-255; very subtle when idle
-    RETICLE_ALPHA_HOVER = 70 # more visible on drag-over
+    CROSSHAIR_H_HALF = 110     # half-width of the horizontal crosshair line
+    CROSSHAIR_V_HALF = 70      # half-height of the vertical crosshair line
+    MIL_DOT_RADIUS = 1.6       # subtension dot size
+    MIL_DOT_SPACINGS = (16, 32, 48, 64, 80)  # distances from center for each dot
+    HASH_MARK_DISTANCES = (48, 80)           # distances where we draw a perpendicular hash
+    HASH_MARK_LENGTH = 6                     # perpendicular tick length (each side)
+    RETICLE_ALPHA_IDLE = 50    # 0-255; subtle but readable behind text
+    RETICLE_ALPHA_HOVER = 110  # more visible on drag-over
+    RING_ALPHA_FACTOR = 0.45   # rings are softer than the rest of the reticle
+
+    # MOA-style grid + spotlight (Option 3 polish layer)
+    GRID_SPACING = 24                        # px between grid lines
+    GRID_ALPHA_FACTOR = 0.22                 # how prominent grid is vs reticle alpha
+    SPOTLIGHT_CENTER_ALPHA_IDLE = 16         # subtle highlight brightening the center
+    SPOTLIGHT_CENTER_ALPHA_HOVER = 32        # stronger spotlight on drag-over
 
     def __init__(self, on_drop):
         super().__init__()
         self.on_drop = on_drop
-        self.setText("Drop your Garmin & BallisticX CSVs here")
+        self.setTextFormat(Qt.RichText)
         self.setAlignment(Qt.AlignCenter)
         self.setAcceptDrops(True)
-        self.setMinimumHeight(190)
+        self.setMinimumHeight(210)
         self._hovering = False
         self._set_idle_style()
-        f = QFont()
-        f.setPointSize(theme.FONT_SIZE_DROPZONE)
-        f.setWeight(QFont.DemiBold)
-        self.setFont(f)
+
+    def _content_html(self, hover):
+        title_color = theme.ACCENT if hover else theme.TEXT_PRIMARY
+        sub_color = "#e3a35e" if hover else theme.TEXT_SECONDARY
+        return (
+            f'<div style="text-align:center; line-height:1.3;">'
+            f'<span style="font-size:{theme.FONT_SIZE_DROPZONE}pt; font-weight:600; color:{title_color};">'
+            f'Drop your Garmin &amp; BallisticX CSVs here'
+            f'</span><br>'
+            f'<span style="font-size:{theme.FONT_SIZE_BODY - 1}pt; color:{sub_color}; letter-spacing:0.4px;">'
+            f'Auto-detects format &middot; drop multiple at once'
+            f'</span>'
+            f'</div>'
+        )
 
     def _set_idle_style(self):
         self._hovering = False
         self.setStyleSheet(theme.dropzone_idle_stylesheet())
+        self.setText(self._content_html(hover=False))
         self.update()
 
     def _set_hover_style(self):
         self._hovering = True
         self.setStyleSheet(theme.dropzone_hover_stylesheet())
+        self.setText(self._content_html(hover=True))
         self.update()
 
     def dragEnterEvent(self, e):
@@ -182,29 +207,84 @@ class DropZone(QLabel):
         # Let QLabel draw the background, dashed border, and text first.
         super().paintEvent(event)
 
-        # Then overlay the faded reticle. Alpha is low enough that the text
-        # stays readable; the reticle reads as a watermark behind the words.
+        # Then overlay the grid + spotlight + reticle. All at low alpha so
+        # the text stays readable; together they read as a precision-rifle
+        # mental model behind the words.
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
 
         alpha = self.RETICLE_ALPHA_HOVER if self._hovering else self.RETICLE_ALPHA_IDLE
-        ink = QColor(theme.ACCENT)
-        ink.setAlpha(alpha)
-        pen = QPen(ink)
-        pen.setWidth(1)
-        painter.setPen(pen)
+        ring_alpha = max(1, int(alpha * self.RING_ALPHA_FACTOR))
+        grid_alpha = max(1, int(alpha * self.GRID_ALPHA_FACTOR))
+        spotlight_alpha = (
+            self.SPOTLIGHT_CENTER_ALPHA_HOVER if self._hovering
+            else self.SPOTLIGHT_CENTER_ALPHA_IDLE
+        )
+
+        w = self.width()
+        h = self.height()
+        cx = w / 2.0
+        cy = h / 2.0
+
+        # --- MOA-style grid (bottom layer, very faint) ---------------------
+        # Vertical and horizontal lines on a fixed pixel pitch, anchored to
+        # center so the crosshair always sits on a major grid intersection.
+        # Inset by 4px so we don't overpaint the dashed border.
+        grid_ink = QColor(theme.ACCENT)
+        grid_ink.setAlpha(grid_alpha)
+        grid_pen = QPen(grid_ink)
+        grid_pen.setWidth(1)
+        painter.setPen(grid_pen)
+        margin = 4
+        # Vertical grid lines (right of center, then left)
+        x = cx
+        while x < w - margin:
+            painter.drawLine(int(x), margin, int(x), h - margin)
+            x += self.GRID_SPACING
+        x = cx - self.GRID_SPACING
+        while x > margin:
+            painter.drawLine(int(x), margin, int(x), h - margin)
+            x -= self.GRID_SPACING
+        # Horizontal grid lines (below center, then above)
+        y = cy
+        while y < h - margin:
+            painter.drawLine(margin, int(y), w - margin, int(y))
+            y += self.GRID_SPACING
+        y = cy - self.GRID_SPACING
+        while y > margin:
+            painter.drawLine(margin, int(y), w - margin, int(y))
+            y -= self.GRID_SPACING
+
+        # --- Spotlight (subtle radial highlight at center) -----------------
+        # Brighter at center, fading out — pulls the eye toward the reticle.
+        # Painted as additive-feeling white-ish overlay at low alpha.
+        spotlight = QRadialGradient(cx, cy, max(w, h) * 0.45)
+        spotlight.setColorAt(0.0, QColor(255, 255, 255, spotlight_alpha))
+        spotlight.setColorAt(0.6, QColor(255, 255, 255, 0))
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(QBrush(spotlight))
+        painter.drawRect(0, 0, w, h)
+
+        # --- Concentric rings (softer — set the "target" feel) -------------
+        ring_ink = QColor(theme.ACCENT)
+        ring_ink.setAlpha(ring_alpha)
+        ring_pen = QPen(ring_ink)
+        ring_pen.setWidth(1)
+        painter.setPen(ring_pen)
         painter.setBrush(Qt.NoBrush)
-
-        cx = self.width() / 2.0
-        cy = self.height() / 2.0
-
-        # Concentric rings — feel of a target reticle without being literal
         for r in self.RETICLE_RINGS:
             painter.drawEllipse(QPointF(cx, cy), r, r)
 
-        # Crosshair lines — drawn in two pieces each so they don't run
-        # behind the center dot. Gap of 6px on either side of center.
-        gap = 6
+        # --- Crosshair (firmer line — set the "precision" feel) ------------
+        line_ink = QColor(theme.ACCENT)
+        line_ink.setAlpha(alpha)
+        line_pen = QPen(line_ink)
+        line_pen.setWidth(1)
+        painter.setPen(line_pen)
+        painter.setBrush(Qt.NoBrush)
+
+        # Gap of 8px on either side of center so dot/text stays clean.
+        gap = 8
         # horizontal
         painter.drawLine(
             int(cx - self.CROSSHAIR_H_HALF), int(cy),
@@ -224,7 +304,40 @@ class DropZone(QLabel):
             int(cx), int(cy + self.CROSSHAIR_V_HALF),
         )
 
-        # Center dot — always at full accent (small, so it doesn't fight)
+        # --- Mil-dot subtensions on each axis ------------------------------
+        # Small filled dots at fixed distances from center along the crosshair
+        # arms. Reads as a precision-rifle reticle without overwhelming the text.
+        dot_ink = QColor(theme.ACCENT)
+        dot_ink.setAlpha(alpha)
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(dot_ink)
+        for d in self.MIL_DOT_SPACINGS:
+            # horizontal axis: only draw if within crosshair length
+            if d <= self.CROSSHAIR_H_HALF - 2:
+                painter.drawEllipse(QPointF(cx - d, cy), self.MIL_DOT_RADIUS, self.MIL_DOT_RADIUS)
+                painter.drawEllipse(QPointF(cx + d, cy), self.MIL_DOT_RADIUS, self.MIL_DOT_RADIUS)
+            # vertical axis: only draw if within crosshair length
+            if d <= self.CROSSHAIR_V_HALF - 2:
+                painter.drawEllipse(QPointF(cx, cy - d), self.MIL_DOT_RADIUS, self.MIL_DOT_RADIUS)
+                painter.drawEllipse(QPointF(cx, cy + d), self.MIL_DOT_RADIUS, self.MIL_DOT_RADIUS)
+
+        # --- Major hash marks at HASH_MARK_DISTANCES -----------------------
+        # Perpendicular ticks across the crosshair at the major mil intervals,
+        # giving the reticle the layered look of a real precision optic.
+        painter.setPen(line_pen)
+        painter.setBrush(Qt.NoBrush)
+        h = self.HASH_MARK_LENGTH
+        for d in self.HASH_MARK_DISTANCES:
+            # horizontal axis: vertical tick (perpendicular to horizontal line)
+            if d <= self.CROSSHAIR_H_HALF - 2:
+                painter.drawLine(int(cx - d), int(cy - h), int(cx - d), int(cy + h))
+                painter.drawLine(int(cx + d), int(cy - h), int(cx + d), int(cy + h))
+            # vertical axis: horizontal tick (perpendicular to vertical line)
+            if d <= self.CROSSHAIR_V_HALF - 2:
+                painter.drawLine(int(cx - h), int(cy - d), int(cx + h), int(cy - d))
+                painter.drawLine(int(cx - h), int(cy + d), int(cx + h), int(cy + d))
+
+        # --- Center dot — always at full accent ----------------------------
         center_ink = QColor(theme.ACCENT)
         center_ink.setAlpha(min(255, alpha * 4))
         painter.setBrush(center_ink)
