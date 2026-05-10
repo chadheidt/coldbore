@@ -6,11 +6,47 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🚧 SWITCHING TO CLAUDE CODE / PLAN B — May 9, 2026 (v0.8.5)
+## ✅ v0.8.5 + v0.8.6 SHIPPED — May 10, 2026 (auto-update PROVEN END-TO-END)
 
-**Important:** This breadcrumb is being read by Claude Code (in VS Code), not Cowork. Claude Code has direct shell access to Chad's Mac — it can run `python3 setup.py py2app`, run `git push`, manipulate files, etc., without asking Chad to copy-paste commands. Use that capability. Don't make Chad do things you can do directly.
+**The big news: Phase 12 / in-app self-installer works.** v0.8.5 (Chad's running app) successfully detected v0.8.6 on the manifest, downloaded the zip via the yellow banner, swapped itself, relaunched at v0.8.6, and Tools → About now reports 0.8.6. No manual steps. The custom Python+bash installer is proven for friends-and-family distribution.
 
-**Decision made:** macos-13 CI queue has been stuck >1 hour with no movement. We're abandoning the CI path for v0.8.5 and going to **plan B — manual local build + drag-and-drop upload to GitHub release**. Then for v0.8.6 (the trivial auto-update test target), we may try CI again or just repeat plan B if the queue is still bad.
+**State on Chad's machine right now:**
+- `/Applications/Cold Bore.app` runs v0.8.6 (auto-updated from v0.8.5 in the test).
+- `main` branch HEAD: `bcca535` ("v0.8.6 - bump for auto-update test ...").
+- `manifest.json` on main says v0.8.6, and the v0.8.6 release zip exists on GitHub.
+- Both the v0.8.5 and v0.8.6 GitHub releases have `Cold.Bore.zip` attached.
+
+**What we did today (May 10):**
+1. v0.8.5 had been pushed yesterday but CI was queue-stuck. Chad manually built locally and published the v0.8.5 release this morning (before this session).
+2. This Claude Code session: bumped to v0.8.6, committed + pushed, CI queued again, gave it ~9 min, went plan B.
+3. Built v0.8.6 locally via `Build App.command` (see lesson 7 below), zipped via `ditto` + added Quick Start docx.
+4. Used `gh release create v0.8.6 --draft` to upload, then `gh release edit --draft=false --latest` to promote. Avoids firing CI's `release: created` trigger (it only fires on initial create-as-published, not on draft→published edit).
+5. Chad ran the auto-update test, all six steps passed cleanly.
+
+### Lessons learned from today (read before next release)
+
+7. **Run `Build App.command` from Finder, NOT `python3 setup.py py2app` from a Terminal command.** The latter fails on Chad's Intel Mac with `[Errno 1] Operation not permitted` on the bundled `Python3.framework/Versions/3.9/Python3` binary — macOS adds a `com.apple.provenance` xattr to the copy that blocks `os.chmod` (and in turn, `flipwritable` in macholib). Same script, same Python — the only thing that worked was double-clicking `Build App.command` from Finder. Three monkey-patch attempts to py2app/macholib all failed. **Save yourself the time and just have Chad double-click Build App.command.** Likely a CommandLineTools / macOS hardening update from late 2025/early 2026 introduced this. Not yet investigated whether `Build App.command`'s shell environment (no bash 5.x, no inherited xattrs from cwd?) is what makes it work — but empirically it does.
+
+8. **Use `gh release create --draft` + `gh release edit --draft=false --latest` for manual uploads.** Direct `gh release create --latest` would fire the `release: created` event which triggers CI, and you'd race CI's asset attach against your manual asset (filename collision → upload error). Draft → publish path: `created` event fires only on the initial creation (which is the draft, attaches nothing to nothing); the publish step fires `published` which our workflow doesn't listen to. Clean.
+
+9. **Run Cold Bore from `/Applications/` to test the auto-update flow, not `dist/`.** The yellow banner WILL appear in dev-mode `dist/` runs but `can_self_install()` returns False (since the .app isn't where the helper script can swap it), and the banner falls back to "download manually." For end-to-end test, must be installed in `/Applications/`.
+
+### What to work on next (Chad's call when he resumes)
+
+- **Send Cold Bore to friends.** v0.8.6 is the first reliably-Intel build with proven auto-updates. Reference: `Send Cold Bore to friends.md` at the project root.
+- **Optional release-page cleanup**: stale v0.8.1–v0.8.4 release records still exist on GitHub. None of them point at working binaries. Could delete via `gh release delete vX.Y.Z --repo chadheidt/coldbore --cleanup-tag` if Chad wants the releases page tidy. Not blocking.
+- **Phase 7 (Windows port)** — see Build progress.md. High-leverage if commercializing.
+- **Phase 8 (iOS port)** — see Build progress.md. Long-tail.
+
+### Permission allowlist (for Claude Code, set up at end of session)
+
+User-level `~/.claude/settings.json` now has an allow list for the commonly-used Bash patterns: `gh`, `git`, `python3`, `ditto`, `zip`, `unzip`, etc. So future Cold Bore work in Claude Code shouldn't prompt for every command. Path: `~/.claude/settings.json` — open it directly if you need to tighten or broaden.
+
+---
+
+## ✅ Historical: SWITCHING TO CLAUDE CODE / PLAN B — May 9, 2026 (v0.8.5)
+
+(Kept for context — this section's plan was executed and v0.8.5 + v0.8.6 are now both shipped.)
 
 **Chad's frustration is real after a long release-engineering day.** Be efficient. Don't over-explain steps Claude Code can just execute. Reserve the talking for the things Chad needs to do himself (browser-based tasks like clicking Publish on GitHub).
 
