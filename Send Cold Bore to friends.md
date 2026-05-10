@@ -58,7 +58,7 @@ Rename each BallisticX CSV to match the load label, e.g. `P1 45.5 H4350.csv`. Th
 Make sure Excel is closed before running the import — Cold Bore can't write to a workbook that's already open. Also make sure they're using their working .xlsx file (not the .xltx template).
 
 **"How do I get a new version when you ship one?"**
-The app checks automatically on launch. When a new version is out, a yellow banner appears at the top of the window with a download link. They click it, get the new zip, replace the .app in Applications. Done.
+The app checks automatically on launch. When a new version is out, a yellow banner appears at the top of the window. They click **Install Update** (the app downloads in the background), then **Quit and Install** when ready. Cold Bore quits, swaps itself, and reopens at the new version — no manual zip-download or drag-to-Applications needed. (As of v0.8.6.)
 
 ---
 
@@ -69,5 +69,8 @@ The app checks automatically on launch. When a new version is out, a yellow bann
 | v0.6.0 | May 7, 2026 | First public release. Drop zone, auto-import, first-run wizard, update check, py2app bundle, custom theme. |
 | v0.7.0 | May 8, 2026 | UX polish round. Bigger window with saved geometry, Tools menu (Run Import / Restore From Backup / Start New Cycle), macOS notifications, CSV preflight, confirm-on-quit, first-launch tutorial. Plus a 14-issue audit pass. |
 | v0.7.1 | May 8, 2026 | Quick Start guide bundled into the release zip — friends now get app + install instructions in a single download. No app changes since 0.7.0. |
+| v0.8.0 | May 9, 2026 | **In-app self-installer (Phase 12).** Yellow update banner now has Install Update + Quit and Install buttons — friends never have to manually download a zip and drag-to-Applications again. |
+| v0.8.5 | May 10, 2026 | Build fixed for Intel Macs (back to macos-13 CI runner; universal2 was producing arm64-only PyQt5). Single Intel binary works on every Mac (native on Intel, via Rosetta 2 on Apple Silicon). |
+| v0.8.6 | May 10, 2026 | First successful in-app auto-update test. Trivial bump from v0.8.5 to verify the v0.8.0 self-installer end-to-end. **This is the first release safe to send to friends.** |
 
 When you ship a new version, ask Claude to add a row here.
