@@ -448,6 +448,27 @@ Chad asked "how would it look if you and I built the iOS app together." Captured
 
 **Total: ~10-12 weeks part-time.** Faster if Chad gets into it, slower if part-time is closer to "one hour a week."
 
+### Critical UX requirement: native Share-Sheet integration (must ship in iOS v1)
+
+**ShotView (Garmin) and BallisticX are iOS-only apps.** That's the precise friction the iOS port has to eliminate, and it's the single biggest reason iOS is more compelling than just "Cold Bore on a smaller screen."
+
+The desired workflow:
+1. Shooter finishes a string. ShotView is already open on their iPhone.
+2. They tap **Share** in ShotView on the chronograph CSV.
+3. iOS Share Sheet appears with **Cold Bore** in the list (alongside Mail, Messages, AirDrop, etc.).
+4. They tap **Cold Bore** → ShotView hands the CSV directly to Cold Bore → Load Log updates.
+
+**Garmin and BallisticX don't have to do anything.** This is iOS's standard Share Sheet plumbing — any app that registers itself as a CSV/.txt receiver in `Info.plist` (`UTImportedTypeDeclarations` + `CFBundleDocumentTypes` + `LSItemContentTypes`) is offered automatically by every other app's Share button.
+
+For the iOS build to take advantage of this, two pieces are needed:
+
+1. **Document-type registration** in the iOS app's `Info.plist` — declare that Cold Bore receives `public.comma-separated-values-text` and `public.text`. Same concept as the Mac `setup.py` `CFBundleDocumentTypes`. One-time, ~15 minutes.
+2. **Share Extension target** (alongside the main app target) — a tiny secondary bundle whose only job is to accept files from the Share Sheet and pass them to the main app. Apple requires this as a separate target; it's standard scaffolding, not custom logic.
+
+This is non-negotiable for iOS v1. Without Share Sheet, iOS users still have to "save CSV → switch to Cold Bore → tap Files picker → navigate" — which is more steps than AirDrop-to-Mac, defeating the whole point of the port.
+
+(Step 4 of the build table above lists "Share Extension hook" as part of file import. This callout exists to flag it as a feature requirement, not just an implementation detail.)
+
 **Architectural decisions to make at the start (before week 1):**
 
 1. **Excel-or-not.** Recommendation: **drop xlsx as the storage**, present data natively in SwiftUI, add an "Export to Excel" button for users who want a workbook. Most iOS users don't have Excel. Alternative is to keep xlsx as storage and ship a viewer, but that's clunky on iPhone.
