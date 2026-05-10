@@ -9,6 +9,12 @@ You're working on **Cold Bore**, Chad Heidt's PyQt5 Mac desktop app for precisio
 
 These two files are the source of truth. They override anything that conflicts in this CLAUDE.md.
 
+## Live marketing site
+
+**https://chadheidt.github.io/coldbore/** (also `Cold Bore Website.webloc` at project root for one-click open from Finder).
+
+GitHub Pages serves from `docs/` on `main`. Hero images are rendered programmatically via `tools/render_workbook.py` and `tools/render_coldbore.py` — re-run those when the in-app drop zone or workbook layout changes so the marketing imagery stays accurate.
+
 ## How Chad and Claude work together
 
 Chad is a precision rifle shooter, **not** a software developer. The collaboration pattern:

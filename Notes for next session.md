@@ -6,6 +6,73 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## 🚧 BETA PREP IN FLIGHT — May 10, 2026 (afternoon session — pivoting to pro-shooter beta + commercialization)
+
+**Big picture shift today:** Chad is moving Cold Bore from "friends-and-family" to "pro-shooter beta with commercialization in sight." He's signed up for the **Apple Developer Program ($99/yr)** and is waiting on Apple's 24-48 hour approval. Once approved, we ship v0.9.0 as the first signed + notarized + DMG-packaged release. After beta validation, we layer in commerce (Gumroad/Stripe, LLC, EULA).
+
+### Live marketing site
+
+**The landing page is live at: https://chadheidt.github.io/coldbore/**
+
+A `.webloc` shortcut at the project root (`Cold Bore Website.webloc`) opens it in Chad's default browser on double-click. GitHub Pages serves from `docs/` on `main` — every push to that path redeploys within ~30 sec.
+
+The site has:
+1. Hero image — Load Log render with red SUGGESTED CHARGE bar, rifle/components/test session info, and the 6-load 7 SAUM ladder showing P3 winning at composite 0.283
+2. "Drag. Click. Done." section — Cold Bore window mockup with the polished drop zone (reticle + MOA grid + spotlight + subtitle), workbook picker, Run Import button, and activity log
+3. Features grid, 3-step install, FAQ, reloading-safety disclaimer
+
+Both hero images are **rendered programmatically via Pillow** (see `tools/render_workbook.py` and `tools/render_coldbore.py`) — not screen-captured. Reasoning: the screen-capture path hit a 90-min wall of macOS hurdles (cross-Space windows, Screen Recording permission for the calling process, focus bouncing back). The PIL renderers produce deterministic, version-controlled, regenerable images. Re-run them whenever the in-app drop zone or workbook layout changes.
+
+### What's done today (afternoon)
+
+- ✅ **Drop zone polish (`app/main.py`, `app/theme.py`)** — precision-rifle reticle (mil-dot subtensions on crosshair arms, hash marks at major mil intervals), MOA-style grid background (24px pitch, anchored to crosshair), center spotlight (subtle radial highlight), subtitle ("Auto-detects format · drop multiple at once") via QLabel rich-text. Hover state intensifies all of it.
+- ✅ **Template scoring fix (`Rifle Loads Template (do not edit).xltx`)** — `Charts!L18:L25` composite-score formulas now wrap in `IF(A##="","" , ...)`. Previously, partial powder ladders (fewer than 8 loads) scored empty rows as composite=0 = "best", so MIN() always picked an empty row and the SUGGESTED CHARGE bar showed blank. Patch makes empty rows return blank, MIN correctly picks the populated winner.
+- ✅ **Beta-prep scaffolding committed:**
+  - `entitlements.plist` — hardened-runtime entitlements for notarization (allow-unsigned-executable-memory + allow-dyld-environment-variables + disable-library-validation, the minimum for a py2app + bundled-PyQt5 setup)
+  - `Build Signed App.command` — full pipeline scaffold (clean → py2app → codesign per-binary → DMG via create-dmg → notarytool submit + wait → stapler staple → spctl verify). Errors with a helpful message until Chad fills in `SIGNING_IDENTITY` and `APPLE_TEAM_ID` after his Dev ID is issued.
+- ✅ **Marketing site (`docs/`)** — see above.
+- ✅ **Render scripts (`tools/`)** — committed for reproducibility.
+- ✅ **Word reference docs on Chad's Desktop** (NOT committed — they live on his Desktop as quick-reference printouts):
+  - `Cold Bore - Starting a session in VS Code.docx`
+  - `Cold Bore - GitHub access for friends.docx`
+  - `Cold Bore - Sending to friends.docx`
+- ✅ **macOS housekeeping**: Re-enabled disabled screenshot keyboard shortcuts (28-31 in `defaults read com.apple.symbolichotkeys` were `enabled = 0`); upgraded pip 21.2.4 → 26.0.1; added `~/Library/Python/3.9/bin` to PATH in `~/.bash_profile` so user-installed CLI tools (pip/pytest/etc.) are typeable directly.
+
+### What's pending (the actual blocker: Apple's email)
+
+When Chad's Dev ID is approved (24-48 hr from his enrollment, signaled by an email from `developer@apple.com` titled something like "Welcome to the Apple Developer Program"):
+
+1. **In Keychain Access on Chad's Mac**: Apple should auto-install the certificate when he visits developer.apple.com/account and accepts. If not: Certificates, Identifiers & Profiles → Certificates → Add → "Developer ID Application" → walk through the CSR.
+2. **Verify the cert**: `security find-identity -v -p codesigning` should show `"Developer ID Application: Chad Heidt (XXXXXXXXXX)"`.
+3. **Edit `Build Signed App.command`** to fill in `SIGNING_IDENTITY` (the full quoted string from step 2) and `APPLE_TEAM_ID` (the 10-char code in parentheses).
+4. **Install create-dmg**: `brew install create-dmg`.
+5. **Set up notarytool credentials**: Have Chad generate an app-specific password at appleid.apple.com, then `xcrun notarytool store-credentials "coldbore-notary" --apple-id <his email> --team-id XXXXXXXXXX --password <app-specific>`.
+6. **Bump versions to v0.9.0** (`app/version.py`, `setup.py`, `manifest.json`).
+7. **Run `Build Signed App.command` from Finder**. It produces `dist/Cold.Bore.dmg` — signed + notarized + ready to ship.
+8. **Create v0.9.0 release on GitHub** (gh release create + edit to publish, same as v0.8.6). Attach the .dmg.
+9. **Update the landing page download button** to point at the .dmg (not the .zip).
+10. **Test the auto-update from v0.8.6 → v0.9.0** on Chad's `/Applications/Cold Bore.app`. Should be smoother than v0.8.6 (no Gatekeeper warning post-swap because of code signing).
+
+### What's pending after v0.9.0 ships (commerce phase, later)
+
+- LLC formation in Chad's state (~$50-500 depending on state)
+- Trademark "Cold Bore" with USPTO ($250-350)
+- Lawyer consultation (~$300-600) for EULA + privacy + refund policy
+- Domain `coldbore.app` (~$15/yr)
+- Gumroad or Stripe Checkout embed on the landing page
+- Public launch via YouTube demo + forum outreach
+
+See `Build progress.md` Phase 9 for the full commercialization plan.
+
+### Lessons learned today (read before next release)
+
+1. **Don't try to screen-capture another Mac app from a Bash subprocess.** TCC permission gates, Spaces visibility, and focus-bouncing all conspire. Render programmatically with PIL or have Chad use Cmd+Shift+5 himself. We burned ~90 min learning this.
+2. **Helvetica.ttc on macOS lacks unicode arrows and check marks.** Stick to ASCII-safe glyphs in PIL renders or boxes appear in place of `→` `✓` etc.
+3. **Excel for Mac 2016 AppleScript is fragile.** `close w saving no` errors with -50; simpler `quit saving no` and re-open works. Don't try to do too much in one AppleScript call.
+4. **The composite scoring bug in the template** would silently break the SUGGESTED CHARGE bar for any ladder with fewer than 8 loads. Now patched. If you ever see SUGGESTED CHARGE blank with populated data, the L18:L25 formulas are the first thing to check.
+
+---
+
 ## ✅ v0.8.5 + v0.8.6 SHIPPED — May 10, 2026 (auto-update PROVEN END-TO-END)
 
 **The big news: Phase 12 / in-app self-installer works.** v0.8.5 (Chad's running app) successfully detected v0.8.6 on the manifest, downloaded the zip via the yellow banner, swapped itself, relaunched at v0.8.6, and Tools → About now reports 0.8.6. No manual steps. The custom Python+bash installer is proven for friends-and-family distribution.
