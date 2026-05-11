@@ -580,6 +580,18 @@ class MainWindow(QMainWindow):
 
         menu.addSeparator()
 
+        visit_website_action = QAction(f"Visit {APP_NAME} Website…", self)
+        visit_website_action.setMenuRole(QAction.NoRole)
+        visit_website_action.triggered.connect(self._visit_website)
+        menu.addAction(visit_website_action)
+
+        send_feedback_action = QAction("Send Feedback…", self)
+        send_feedback_action.setMenuRole(QAction.NoRole)
+        send_feedback_action.triggered.connect(self._send_feedback)
+        menu.addAction(send_feedback_action)
+
+        menu.addSeparator()
+
         about_action = QAction(f"About {APP_NAME}", self)
         about_action.setMenuRole(QAction.NoRole)
         about_action.triggered.connect(self._show_about)
@@ -1686,6 +1698,35 @@ class MainWindow(QMainWindow):
                 )
                 return
         subprocess.run(["open", path])
+
+    def _visit_website(self):
+        """Tools → Visit True Zero Website — opens the marketing site in the
+        user's default browser. Useful for sharing the app, checking for
+        documentation, or pointing friends at the access-code request form."""
+        from PyQt5.QtCore import QUrl
+        from PyQt5.QtGui import QDesktopServices
+        QDesktopServices.openUrl(QUrl("https://truezero.co/"))
+
+    def _send_feedback(self):
+        """Tools → Send Feedback — opens the user's default email client with
+        a pre-filled message to support@truezero.co. Same mailto used inside
+        the About dialog, just promoted to a top-level menu for discoverability."""
+        from PyQt5.QtCore import QUrl
+        from PyQt5.QtGui import QDesktopServices
+        subject = f"{APP_NAME} v{APP_VERSION} feedback"
+        body = (
+            "Hi,%0A%0A"
+            "(your message here — bug reports, feature requests, "
+            "device support requests, anything is welcome)%0A%0A"
+            "Thanks!"
+        )
+        display_name = f"{APP_NAME} Support"
+        recipient = "support@truezero.co"
+        encoded_recipient = (
+            f"%22{display_name.replace(' ', '%20')}%22%20%3C{recipient}%3E"
+        )
+        mailto = f"mailto:{encoded_recipient}?subject={subject.replace(' ', '%20')}&body={body}"
+        QDesktopServices.openUrl(QUrl(mailto))
 
     def _show_about(self):
         # Pull supported-device lists live from the parser registry so this
