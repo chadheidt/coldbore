@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run the Cold Bore GUI in dev mode for testing.
+# Run the True Zero GUI in dev mode for testing.
 # Auto-installs PyQt5 the first time it runs.
 
 set -e
@@ -8,7 +8,7 @@ PROJECT="$HOME/Projects/Rifle Load Data"
 cd "$PROJECT"
 
 echo "============================================================"
-echo "Cold Bore — dev test run"
+echo "True Zero — dev test run"
 echo "============================================================"
 
 # Check PyQt5

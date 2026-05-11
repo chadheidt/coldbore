@@ -13,7 +13,7 @@ def isolated_config(tmp_path, monkeypatch):
     """Point the config module at a per-test temp dir so save_license() doesn't
     overwrite the developer's real config under ~/Library/Application Support."""
     import config as app_config
-    cfg_dir = tmp_path / "Cold Bore"
+    cfg_dir = tmp_path / "True Zero"
     cfg_dir.mkdir()
     monkeypatch.setattr(app_config, "CONFIG_DIR", cfg_dir)
     monkeypatch.setattr(app_config, "CONFIG_PATH", cfg_dir / "config.json")

@@ -101,7 +101,7 @@ def _show_crash_dialog(report_text, parent=None):
 
     def on_send():
         subject = f"{APP_NAME} v{APP_VERSION} — crash report"
-        body = "Hi,%0A%0AHere's a crash report from Cold Bore.%0A%0A"
+        body = "Hi,%0A%0AHere's a crash report from True Zero.%0A%0A"
         body += urllib.parse.quote(report_text)
         mailto = f"mailto:{SUPPORT_EMAIL}?subject={urllib.parse.quote(subject)}&body={body}"
         QDesktopServices.openUrl(QUrl(mailto))

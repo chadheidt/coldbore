@@ -1,5 +1,5 @@
 """
-Cold Bore — in-app installer.
+True Zero — in-app installer.
 
 The "Quit and Install" path: the running app calls launch_install_swap(),
 which writes a small bash helper script to /tmp, spawns it as a detached
@@ -26,11 +26,11 @@ What the helper script does, in order:
   7. Clean up the staging folder + the downloaded zip + the helper script
 
 Failure handling: if any step fails, the helper writes a marker file at
-~/Library/Application Support/Cold Bore/last_install_error.log. Python
+~/Library/Application Support/True Zero/last_install_error.log. Python
 checks for this on next launch and surfaces a "previous update failed"
 message via the existing crash-reporter UI pattern.
 
-If the install location is read-only (rare — would mean Cold Bore was
+If the install location is read-only (rare — would mean True Zero was
 launched from a read-only DMG or similar), launch_install_swap() returns
 False and the caller should fall back to the manual download flow.
 """
@@ -48,11 +48,11 @@ ERROR_LOG_NAME = "last_install_error.log"
 
 
 def _config_support_dir() -> Path:
-    """Return the same ~/Library/Application Support/Cold Bore path used by
+    """Return the same ~/Library/Application Support/True Zero path used by
     config.py. Duplicated here (instead of imported) to keep installer.py
     free of cross-module imports — it's safer if the helper-spawn flow
     can't pull in PyQt or other heavy modules."""
-    return Path.home() / "Library" / "Application Support" / "Cold Bore"
+    return Path.home() / "Library" / "Application Support" / "True Zero"
 
 
 def _running_app_bundle_path():
@@ -82,16 +82,16 @@ def can_self_install() -> bool:
 
 def _build_helper_script(zip_path: str, app_bundle_path: str, error_log_path: str) -> str:
     """Build the bash script body that performs the swap. Path arguments
-    are inserted via shell-quoted strings so spaces in 'Cold Bore.app'
+    are inserted via shell-quoted strings so spaces in 'True Zero.app'
     don't break things."""
     # Use shlex.quote-equivalent: wrap each path in single quotes after
-    # escaping any embedded single quotes. Cold Bore paths shouldn't
+    # escaping any embedded single quotes. True Zero paths shouldn't
     # contain single quotes but we belt-and-suspenders.
     def q(s: str) -> str:
         return "'" + s.replace("'", "'\\''") + "'"
 
     script = f"""#!/bin/bash
-# Cold Bore self-install helper. Generated and spawned by installer.py.
+# True Zero self-install helper. Generated and spawned by installer.py.
 # Logs to {q(error_log_path)} on failure so the next app launch can surface it.
 
 set -u  # treat unset vars as error
@@ -102,14 +102,14 @@ ERR_LOG={q(error_log_path)}
 log_fail() {{
     echo "[$(date)] $1" >> "$ERR_LOG"
     # Give the user a heads-up via osascript - non-blocking, dismissable.
-    osascript -e "display notification \\"Cold Bore update install failed: $1\\" with title \\"Cold Bore\\"" 2>/dev/null
+    osascript -e "display notification \\"True Zero update install failed: $1\\" with title \\"True Zero\\"" 2>/dev/null
     exit 1
 }}
 
 # Ensure the error log directory exists so log_fail can write
 mkdir -p "$(dirname "$ERR_LOG")" 2>/dev/null
 
-# 1. Wait for the parent Cold Bore process to finish quitting
+# 1. Wait for the parent True Zero process to finish quitting
 sleep 3
 
 # 2. Stage the new .app to a temp directory next to the existing one,

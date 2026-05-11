@@ -56,7 +56,7 @@ class DisclaimerDialog(QDialog):
             title.setStyleSheet(f"color: {self._t.TEXT_PRIMARY};")
         layout.addWidget(title)
 
-        intro = QLabel("Please read carefully before using Cold Bore.")
+        intro = QLabel("Please read carefully before using True Zero.")
         if self._t:
             intro.setStyleSheet(f"color: {self._t.TEXT_SECONDARY};")
         layout.addWidget(intro)

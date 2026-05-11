@@ -4,10 +4,10 @@
   Hardened runtime entitlements for notarization.
 
   Apple requires the hardened runtime + notarization for distribution outside
-  the App Store. These entitlements grant the minimum permissions Cold Bore
+  the App Store. These entitlements grant the minimum permissions True Zero
   needs:
 
-    - allow-jit                      → not needed for Cold Bore (no JIT)
+    - allow-jit                      → not needed for True Zero (no JIT)
     - allow-unsigned-executable-memory → required because py2app's bundled
                                           Python interprets bytecode at runtime
     - allow-dyld-environment-variables → required because py2app sets

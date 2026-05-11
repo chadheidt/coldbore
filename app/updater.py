@@ -178,7 +178,7 @@ class UpdateChecker(QThread):
 
 
 # Maximum size we'll download for an "update zip" before bailing out.
-# A normal Cold Bore.zip is ~80 MB; 500 MB is a generous ceiling that catches
+# A normal True Zero.zip is ~80 MB; 500 MB is a generous ceiling that catches
 # misconfigured manifests pointing at runaway downloads (e.g. a directory listing
 # served as a stream).
 MAX_DOWNLOAD_BYTES = 500 * 1024 * 1024

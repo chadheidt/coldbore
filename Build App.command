@@ -1,8 +1,8 @@
 #!/bin/bash
-# Builds Cold Bore.app via py2app.
+# Builds True Zero.app via py2app.
 # First run installs py2app + dependencies (~1 minute). Subsequent runs are faster.
 #
-# Output: dist/Cold Bore.app  (fully self-contained .app you can drag to Applications)
+# Output: dist/True Zero.app  (fully self-contained .app you can drag to Applications)
 
 set -e
 
@@ -10,11 +10,11 @@ PROJECT="$HOME/Projects/Rifle Load Data"
 cd "$PROJECT"
 
 echo "============================================================"
-echo "Cold Bore — building .app bundle"
+echo "True Zero — building .app bundle"
 echo "============================================================"
 echo ""
 echo "This will take a few minutes. The .app will end up in:"
-echo "    $PROJECT/dist/Cold Bore.app"
+echo "    $PROJECT/dist/True Zero.app"
 echo ""
 
 # --- Dependency install --------------------------------------------------
@@ -92,7 +92,7 @@ echo ""
 # --- Done ----------------------------------------------------------------
 echo ""
 echo "============================================================"
-APP_PATH="$PROJECT/dist/Cold Bore.app"
+APP_PATH="$PROJECT/dist/True Zero.app"
 if [ -d "$APP_PATH" ]; then
     APP_SIZE=$(du -sh "$APP_PATH" | awk '{print $1}')
     echo "BUILD SUCCEEDED."

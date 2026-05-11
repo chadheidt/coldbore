@@ -1,4 +1,4 @@
-# Cold Bore landing page
+# True Zero landing page
 
 This is the public marketing/install site, served by GitHub Pages from the `docs/` folder of this repo.
 

@@ -9,9 +9,9 @@ from the app itself (e.g., a workbook tweak doesn't require rebuilding the .app)
 """
 
 # App branding — one source of truth for display name + version
-APP_NAME = "Cold Bore"
-LEGACY_APP_NAMES = ("Rifle Load Importer",)  # for config migration on first launch
-APP_VERSION = "0.11.3"
+APP_NAME = "True Zero"
+LEGACY_APP_NAMES = ("True Zero", "Rifle Load Importer")  # for config migration on first launch
+APP_VERSION = "0.12.0"
 TEMPLATE_VERSION = "1.0"
 
 # Disclaimer version — bump this if the disclaimer text changes substantively.
@@ -21,7 +21,7 @@ DISCLAIMER_VERSION = 1
 
 
 DISCLAIMER_TEXT = """\
-Cold Bore is a tool for organizing and analyzing data you collect during \
+True Zero is a tool for organizing and analyzing data you collect during \
 precision rifle load development. It is NOT a source of load data and does \
 not recommend specific charge weights, bullet types, or seating depths to \
 use in your firearm.
@@ -32,12 +32,12 @@ By using this app, you acknowledge that:
 gunpowder, primers, and components can result in severe injury, death, \
 and property damage.
 
-2. Cold Bore analyzes data you provide, but is not a substitute for safe \
+2. True Zero analyzes data you provide, but is not a substitute for safe \
 handloading practice. Always cross-reference loads against published \
 reloading manuals from powder, bullet, and cartridge manufacturers. Watch \
 for pressure signs. Start below maximum loads and work up.
 
-3. No warranty is provided. Cold Bore is provided "as is" without any \
+3. No warranty is provided. True Zero is provided "as is" without any \
 warranty of accuracy, fitness for a particular purpose, or freedom from \
 defects. Computed scores and rankings are statistical analyses of your \
 inputs, not load recommendations.

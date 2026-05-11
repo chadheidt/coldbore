@@ -1,6 +1,6 @@
 # Cloudflare Worker — `coldbore-download`
 
-The Cold Bore download proxy. Validates beta access codes and serves the `.dmg`/`.zip` from Cloudflare R2 via short-lived HMAC-signed URLs.
+The True Zero download proxy. Validates beta access codes and serves the `.dmg`/`.zip` from Cloudflare R2 via short-lived HMAC-signed URLs.
 
 **This folder is a BACKUP copy** of what's deployed at:
 https://coldbore-download.cheidt182.workers.dev

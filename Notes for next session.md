@@ -8,19 +8,19 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ## ✅ v0.11.3 SHIPPED + AUTO-UPDATE PROVEN — May 11, 2026 (afternoon — beta-ready closeout)
 
-**Cold Bore is genuinely ready for beta distribution.** Every loose thread we identified is closed:
+**True Zero is genuinely ready for beta distribution.** Every loose thread we identified is closed:
 
 - Auto-update path verified end-to-end on Chad's machine (v0.11.2 → v0.11.3 via the yellow banner; Worker-gated download, ditto-based swap, signed/notarized relaunch, Tools → About now reports 0.11.3)
 - 10 beta-key slots pre-generated and registered in BOTH `app/license.py`'s `VALID_KEYS` AND the Cloudflare Worker's `VALID_CODES`. Issuing a key to a new tester no longer requires an app rebuild — just pick the next unassigned slot from `beta-keys.txt`, record the recipient, email them
 - Pyflakes smoke test added (`tests/test_main_smoke.py`) — would have caught yesterday's NameError in 0.5 seconds. `Run Tests.command` auto-installs pyflakes alongside pytest
-- `Cold Bore — How to Issue License Keys.docx` on Chad's Desktop (`~/Desktop/Cold Bore app/cold bore notes/`) rewritten to reflect the simpler "pick a pre-generated key" workflow. Original backed up at `/tmp/Cold Bore - License Keys doc - BEFORE 2026-05-11 update.docx` (will vanish on reboot)
+- `True Zero — How to Issue License Keys.docx` on Chad's Desktop (`~/Desktop/True Zero app/cold bore notes/`) rewritten to reflect the simpler "pick a pre-generated key" workflow. Original backed up at `/tmp/True Zero - License Keys doc - BEFORE 2026-05-11 update.docx` (will vanish on reboot)
 - Worker source in the Cloudflare dashboard has one batch of duplicate key entries from the manual-paste step (Set dedupes them at runtime so functionally fine). Backup at `worker/coldbore-download.js` is the clean version — if Chad ever wants to tidy the live source, copy that file into the dashboard editor and redeploy
 
 ### State on Chad's machine right now
 
-- `/Applications/Cold Bore.app` runs **v0.11.3** (auto-updated from v0.11.2, no manual intervention needed beyond the click)
+- `/Applications/True Zero.app` runs **v0.11.3** (auto-updated from v0.11.2, no manual intervention needed beyond the click)
 - `main` HEAD: `8d9c9c8` ("v0.11.3 - five more beta-key slots; the auto-update closeout build")
-- Working tree clean except untracked `Cold Bore.app alias` (gitignored)
+- Working tree clean except untracked `True Zero.app alias` (gitignored)
 - R2 holds v0.11.3 `Cold.Bore.dmg` (55M) and `Cold.Bore.zip` (58M)
 - 11 keys total in `app/license.py` + Worker `VALID_CODES`: Chad's local testing key + 10 unassigned beta slots
 - `beta-keys.txt` mirrors the 11 keys; top of the file calls out the "key must live in BOTH license.py AND the Worker" rule
@@ -45,8 +45,8 @@ A handoff note so any future Claude session can pick up where we left off withou
 Do the following BEFORE assuming the release is good:
 
 1. Run `Run Tests.command` to confirm `tests/test_main_smoke.py` (the pyflakes check) passes — catches the NameError class of bug.
-2. After the release ships to R2 and the manifest points at the new version, click Install Update on Chad's `/Applications/Cold Bore.app` and watch the full swap-and-relaunch happen. Confirm Tools → About reports the new version.
-3. If anything fails at step 2, the helper script writes its error to `~/Library/Application Support/Cold Bore/last_install_error.log`, and the next launch of Cold Bore surfaces that via a popup. Paste the error here and we debug.
+2. After the release ships to R2 and the manifest points at the new version, click Install Update on Chad's `/Applications/True Zero.app` and watch the full swap-and-relaunch happen. Confirm Tools → About reports the new version.
+3. If anything fails at step 2, the helper script writes its error to `~/Library/Application Support/True Zero/last_install_error.log`, and the next launch of True Zero surfaces that via a popup. Paste the error here and we debug.
 
 If you're tempted to skip this loop for "trivial" changes — don't. The v0.11.0 NameError was a two-character import bug and it still cost us four hours today.
 
@@ -54,7 +54,7 @@ If you're tempted to skip this loop for "trivial" changes — don't. The v0.11.0
 
 ## ✅ v0.11.2 SHIPPED — May 11, 2026 (morning — auto-update fix)
 
-**v0.11.2 is on Chad's `/Applications/Cold Bore.app` right now.** Manually installed via the website .dmg flow (which means the same flow a real beta tester would use was just verified end-to-end). Tools → About reports 0.11.2.
+**v0.11.2 is on Chad's `/Applications/True Zero.app` right now.** Manually installed via the website .dmg flow (which means the same flow a real beta tester would use was just verified end-to-end). Tools → About reports 0.11.2.
 
 ### What happened (the short version)
 
@@ -74,9 +74,9 @@ v0.11.1 the binary is doomed — same bug as v0.11.0, just a version-string bump
 
 ### State on Chad's machine right now
 
-- `/Applications/Cold Bore.app` runs **v0.11.2** (manually installed via .dmg from website, license key `CBORE-DDCX-AEGK-J2FR-2SIB` re-validated silently on launch)
+- `/Applications/True Zero.app` runs **v0.11.2** (manually installed via .dmg from website, license key `CBORE-DDCX-AEGK-J2FR-2SIB` re-validated silently on launch)
 - `main` HEAD: `4afd571` ("v0.11.2 - fix NameError in v0.11.0 auto-updater")
-- Working tree clean except the untracked `Cold Bore.app alias` (already gitignored — see `ee1cc0a`)
+- Working tree clean except the untracked `True Zero.app alias` (already gitignored — see `ee1cc0a`)
 - Cloudflare R2 holds `Cold.Bore.dmg` and `Cold.Bore.zip` for v0.11.2 (both replaced today; the broken v0.11.1 binaries that briefly existed there have been overwritten)
 - Manifest on `main` says v0.11.2 with the fix release notes
 
@@ -84,14 +84,14 @@ v0.11.1 the binary is doomed — same bug as v0.11.0, just a version-string bump
 
 - **Verify auto-update v0.11.2 → vX.Y.Z works.** First chance is the next real release. Build it, ship it, watch Chad's v0.11.2 banner show up, click Install Update, confirm clean swap. If it fails, we'll have a real crash log this time (not a NameError) and we'll know what next layer of the stack is broken.
 - **Add a smoke test for `app.main`'s import surface.** A test that does nothing but `import app.main` and walks the module's globals would have caught today's NameError in 0.5 seconds. Cost: ~20 lines in `tests/`. Worth doing in a quiet moment.
-- **Issue keys + send the website link to beta testers.** v0.11.2 is the version that goes out. Use `~/Desktop/Cold Bore — How to Issue License Keys.docx`. **Remember the doc still needs updating** to mention that new keys go in TWO places: `app/license.py` AND the Cloudflare Worker's `VALID_CODES` set in the dashboard. Without the Worker update, a new tester would have a key that unlocks the app but can't download from the website.
+- **Issue keys + send the website link to beta testers.** v0.11.2 is the version that goes out. Use `~/Desktop/True Zero — How to Issue License Keys.docx`. **Remember the doc still needs updating** to mention that new keys go in TWO places: `app/license.py` AND the Cloudflare Worker's `VALID_CODES` set in the dashboard. Without the Worker update, a new tester would have a key that unlocks the app but can't download from the website.
 - **Phase 9 commercialization** (when ready): LLC, EULA, USPTO trademark, `coldbore.app` domain, Gumroad/Stripe, public launch.
 
 ---
 
 ## ✅ v0.11.0 SHIPPED — May 10, 2026 (evening — private downloads via Cloudflare Worker)
 
-**Beginning with v0.11.0, Cold Bore binaries are not available on GitHub.** Both the marketing `.dmg` and the auto-update `.zip` are served by a Cloudflare Worker (`coldbore-download.cheidt182.workers.dev`) that validates an access code server-side and returns a 5-minute signed URL pointing at Cloudflare R2 storage. Without a valid code there is no path to the binary, period.
+**Beginning with v0.11.0, True Zero binaries are not available on GitHub.** Both the marketing `.dmg` and the auto-update `.zip` are served by a Cloudflare Worker (`coldbore-download.cheidt182.workers.dev`) that validates an access code server-side and returns a 5-minute signed URL pointing at Cloudflare R2 storage. Without a valid code there is no path to the binary, period.
 
 ### What was built tonight (after v0.10.1)
 
@@ -130,7 +130,7 @@ v0.11.1 the binary is doomed — same bug as v0.11.0, just a version-string bump
 
 ### Final state on Chad's machine
 
-- `/Applications/Cold Bore.app` runs **v0.11.0** (Tools → About confirms)
+- `/Applications/True Zero.app` runs **v0.11.0** (Tools → About confirms)
 - License key `CBORE-DDCX-AEGK-J2FR-2SIB` saved in config (Chad's local-testing key)
 - `main` HEAD: `a261316` ("v0.11.0 - private downloads via Cloudflare Worker")
 - v0.11.0 GitHub release record exists with **no binaries attached** — just version history + notes
@@ -140,7 +140,7 @@ v0.11.1 the binary is doomed — same bug as v0.11.0, just a version-string bump
 
 ### How to issue keys to a new beta tester (the steady-state workflow)
 
-Chad's Desktop has `Cold Bore — How to Issue License Keys.docx` with click-by-click instructions, but the high-level shape is:
+Chad's Desktop has `True Zero — How to Issue License Keys.docx` with click-by-click instructions, but the high-level shape is:
 
 1. `python3 tools/generate_license_key.py` to generate a fresh CBORE-XXXX-XXXX-XXXX-XXXX
 2. Add the key to TWO places: `app/license.py`'s `VALID_KEYS` AND the **Worker's `VALID_CODES`** set in the Cloudflare dashboard. **The Worker copy was the one we forgot to mention in the Desktop doc — needs updating.** TODO: update the doc to call this out.
@@ -159,7 +159,7 @@ The same key unlocks the website Download button AND the app's license dialog.
 ### What's pending after v0.11.0 (the actual "send to friends" milestone)
 
 - **Email beta keys to the first round of testers.** Generate keys, add to license.py AND Worker, ship a small bump release (or just edit Worker for download-only; new app release only needed if you want them to be able to actually USE the app).
-- **Phase 9 commercialization** (when ready): LLC, EULA, USPTO trademark for "Cold Bore", `coldbore.app` domain, Gumroad/Stripe checkout integration, public launch via YouTube demo + forum outreach.
+- **Phase 9 commercialization** (when ready): LLC, EULA, USPTO trademark for "True Zero", `coldbore.app` domain, Gumroad/Stripe checkout integration, public launch via YouTube demo + forum outreach.
 
 ### Notes for future-us — infrastructure reality
 
@@ -176,9 +176,9 @@ The same key unlocks the website Download button AND the app's license dialog.
 - R2 Class B operations (reads): 10M/month free
 - **R2 egress: free, always** (this is the killer feature — AWS S3 charges $0.09/GB egress)
 - Workers: 100k requests/day free, $0.30/M after
-- Realistic Cold Bore beta scale: ~$0/mo. Even at 1000 downloads/day we'd stay free.
+- Realistic True Zero beta scale: ~$0/mo. Even at 1000 downloads/day we'd stay free.
 
-**Commerce transition (later) is small.** The website button changes from "Download Cold Bore" to "Buy Cold Bore — $XX" + small "Sign in to download" secondary. Buy button opens Stripe Checkout or Gumroad. Payment-success webhook hits the Worker, which generates a fresh CBORE-XXXX code, adds it to VALID_CODES (or KV store), emails it to the customer. Customer comes back to the website and uses the secondary link with their code. The R2 + Worker + in-app license flow built tonight stays exactly the same. Estimated 1-2 sessions to wire up Stripe webhook + migrate VALID_CODES from hardcoded set to Cloudflare KV.
+**Commerce transition (later) is small.** The website button changes from "Download True Zero" to "Buy True Zero — $XX" + small "Sign in to download" secondary. Buy button opens Stripe Checkout or Gumroad. Payment-success webhook hits the Worker, which generates a fresh CBORE-XXXX code, adds it to VALID_CODES (or KV store), emails it to the customer. Customer comes back to the website and uses the secondary link with their code. The R2 + Worker + in-app license flow built tonight stays exactly the same. Estimated 1-2 sessions to wire up Stripe webhook + migrate VALID_CODES from hardcoded set to Cloudflare KV.
 
 **Edge case (no current impact but worth knowing):** v0.10.1's auto-updater reads `app_download_url` from the manifest. The v0.11.0 manifest doesn't have that field (intentionally — we removed the public URL). So a hypothetical v0.10.1 user would see "v0.11.0 available" but couldn't auto-update. **No real users besides Chad were on v0.10.1, and Chad installed v0.11.0 fresh.** If we ever change manifest schema again in a way that breaks old clients, include BOTH old + new fields for the transition release.
 
@@ -188,15 +188,15 @@ The same key unlocks the website Download button AND the app's license dialog.
 
 ### Backups — what's covered and where
 
-Time Machine was set up on 2026-05-10 onto an external 1 TB USB drive named **Cold Bore Backup** (encrypted, hourly automatic). Combined with git and the Cloudflare-hosted infrastructure, here's where each piece of the project lives:
+Time Machine was set up on 2026-05-10 onto an external 1 TB USB drive named **True Zero Backup** (encrypted, hourly automatic). Combined with git and the Cloudflare-hosted infrastructure, here's where each piece of the project lives:
 
 | What | Where | How |
 |---|---|---|
 | Project source code, docs, breadcrumbs | git (origin: chadheidt/coldbore) + Time Machine | automatic on every commit + hourly Time Machine |
 | `beta-keys.txt` (key → tester map) | **Time Machine only** | gitignored; lives at project root |
 | Workbook templates + .xltx | git + Time Machine | committed |
-| User's range data (`Documents/Cold Bore Loads/`) | Time Machine only | data folders are gitignored |
-| Cold Bore app config (`~/Library/Application Support/Cold Bore/`) | Time Machine only | local app state |
+| User's range data (`Documents/True Zero Loads/`) | Time Machine only | data folders are gitignored |
+| True Zero app config (`~/Library/Application Support/True Zero/`) | Time Machine only | local app state |
 | Apple Developer cert + private key | Time Machine only (Keychain backed up as part of `~/Library/Keychains/`) | imported into Keychain on 2026-05-10 |
 | `coldbore-notary` keychain profile (notarytool credentials) | Time Machine only (Keychain) | created via `xcrun notarytool store-credentials` |
 | Cloudflare Worker source | git (`worker/coldbore-download.js`) + Time Machine + Cloudflare dashboard | live source-of-truth is dashboard; backup copy in repo as of commit 4177931 |
@@ -218,10 +218,10 @@ Time Machine was set up on 2026-05-10 onto an external 1 TB USB drive named **Co
 ### What's new in v0.10.1
 
 1. **License dialog UI redesign.** The locked-out screen now shows:
-   - Cold Bore icon at the top (from `docs/assets/icon.png`, bundled by setup.py)
+   - True Zero icon at the top (from `docs/assets/icon.png`, bundled by setup.py)
    - Wordmark + version line
    - Screenshot of the main window (`docs/assets/screenshot.png`)
-   - One-paragraph description of what Cold Bore does
+   - One-paragraph description of what True Zero does
    - License key entry field at the bottom
    - Quit / Unlock buttons
 
@@ -234,13 +234,13 @@ Time Machine was set up on 2026-05-10 onto an external 1 TB USB drive named **Co
 ### Other improvements made this same evening
 
 - **Permission-prompt sound** — `~/.claude/settings.json` now has hooks for both `Notification` and `PermissionRequest` events, both running `afplay /System/Library/Sounds/Glass.aiff`. Chad confirms permission-prompt sound works. The Notification event also fires on idle waits but is harder to trigger on demand.
-- **Project-level Cold Bore allowlist** — `.claude/settings.json` (gitignored, local only) auto-allows the project's signing/notarization tools: `xcrun *`, `codesign *`, `security find-identity *`, `security import *`, `spctl *`, `create-dmg *`. These came up repeatedly during today's release work.
-- **Cleaned up project folder** (~120 MB → 4.9 MB) by deleting the local `dist/`, `/tmp/coldbore-build/`, the Desktop signing folder, and accumulated old Cold Bore copies in Downloads.
-- **`Cold Bore — How to Issue License Keys.docx`** lives on Chad's Desktop — click-by-click guide for issuing keys, recording recipients, shipping releases with new keys, and revoking.
+- **Project-level True Zero allowlist** — `.claude/settings.json` (gitignored, local only) auto-allows the project's signing/notarization tools: `xcrun *`, `codesign *`, `security find-identity *`, `security import *`, `spctl *`, `create-dmg *`. These came up repeatedly during today's release work.
+- **Cleaned up project folder** (~120 MB → 4.9 MB) by deleting the local `dist/`, `/tmp/coldbore-build/`, the Desktop signing folder, and accumulated old True Zero copies in Downloads.
+- **`True Zero — How to Issue License Keys.docx`** lives on Chad's Desktop — click-by-click guide for issuing keys, recording recipients, shipping releases with new keys, and revoking.
 
 ### Final state on Chad's machine
 
-- `/Applications/Cold Bore.app` runs **v0.10.1** (Tools → About confirms)
+- `/Applications/True Zero.app` runs **v0.10.1** (Tools → About confirms)
 - License key: `CBORE-DDCX-AEGK-J2FR-2SIB` saved in config (Chad's local-testing key)
 - `main` HEAD: `74df94e` ("v0.10.1 - dialog UI polish + installer ditto fix")
 - v0.10.0 + v0.10.1 GitHub releases both published with .dmg + .zip
@@ -248,8 +248,8 @@ Time Machine was set up on 2026-05-10 onto an external 1 TB USB drive named **Co
 
 ### What's pending — TODO when ready
 
-- **Issue keys to specific testers.** The two friends Chad already gave the website link to will eventually ping him asking for a key (per his decision today: option 2, wait for the ping). Refer to `~/Desktop/Cold Bore — How to Issue License Keys.docx`.
-- **Send the v0.10.1 link to the wider pro-shooter beta cohort.** Each tester gets a unique key + the website link. Cold Bore is now ready for real beta distribution.
+- **Issue keys to specific testers.** The two friends Chad already gave the website link to will eventually ping him asking for a key (per his decision today: option 2, wait for the ping). Refer to `~/Desktop/True Zero — How to Issue License Keys.docx`.
+- **Send the v0.10.1 link to the wider pro-shooter beta cohort.** Each tester gets a unique key + the website link. True Zero is now ready for real beta distribution.
 - **First v0.10.1 → vX.Y.Z auto-update.** Whenever Chad ships the next minor bump, this will be the first proof that the `ditto` fix actually works. If it doesn't, the next investigation is whether the helper script needs additional xattr hygiene (e.g., re-strip `com.apple.quarantine` AFTER the swap, not just before).
 - **Phase 9 commercialization** (when ready): LLC, EULA, USPTO trademark, `coldbore.app` domain, Gumroad/Stripe, public launch.
 
@@ -257,7 +257,7 @@ Time Machine was set up on 2026-05-10 onto an external 1 TB USB drive named **Co
 
 ## ✅ v0.10.0 SHIPPED — May 10, 2026 (afternoon, same day as v0.9.0)
 
-**Beta lockdown is live.** Cold Bore now refuses to open past a license-key dialog on first launch (and re-validates the stored key on every launch). v0.10.0 is signed + notarized and on Chad's `/Applications`; his test key `CBORE-DDCX-AEGK-J2FR-2SIB` unlocks it.
+**Beta lockdown is live.** True Zero now refuses to open past a license-key dialog on first launch (and re-validates the stored key on every launch). v0.10.0 is signed + notarized and on Chad's `/Applications`; his test key `CBORE-DDCX-AEGK-J2FR-2SIB` unlocks it.
 
 ### What's in the lockdown
 
@@ -270,19 +270,19 @@ Time Machine was set up on 2026-05-10 onto an external 1 TB USB drive named **Co
 
 ### Operating manual
 
-`~/Desktop/Cold Bore — How to Issue License Keys.docx` is the click-by-click guide for issuing a new key, recording the recipient, shipping a release, and revoking. Chad uses this when onboarding each beta tester.
+`~/Desktop/True Zero — How to Issue License Keys.docx` is the click-by-click guide for issuing a new key, recording the recipient, shipping a release, and revoking. Chad uses this when onboarding each beta tester.
 
 ### Two known follow-ups (TOMORROW'S WORK)
 
 #### 1. CRITICAL — In-app auto-updater is broken on current macOS
 
-When Chad triggered the v0.9.0 → v0.10.0 update via the yellow banner, the installer swap completed and the app reopened, but macOS immediately showed *"Cold Bore.app is damaged and can't be opened. You should move it to the Trash."* — same as the v0.8.6 → v0.9.0 attempt earlier in the day.
+When Chad triggered the v0.9.0 → v0.10.0 update via the yellow banner, the installer swap completed and the app reopened, but macOS immediately showed *"True Zero.app is damaged and can't be opened. You should move it to the Trash."* — same as the v0.8.6 → v0.9.0 attempt earlier in the day.
 
 Hypothesis: `installer.py`'s helper script uses `unzip` to extract the new zip and `mv` to swap. Recent macOS versions are pickier — they treat the resulting bundle as having a tampered signature (the bundle hashes no longer match the original notarization metadata, OR the extraction strips a critical xattr like `com.apple.cs.codeRequirement`). 
 
 **Likely fix**: change the helper script to use `ditto -x -k <zip> <dest>` instead of `unzip` for extraction. `ditto` is macOS-native and preserves the bundle structure faithfully (it's what we use to BUILD the zip on the dev side). `unzip` is BSD-style and doesn't know about HFS+/APFS resource forks or signature-relevant xattrs.
 
-Until this is fixed, **every release will require beta testers to do the manual "fresh download from website + drag to Applications" dance**. That's a regression from the v0.8.5 → v0.8.6 success earlier today, and it defeats one of Cold Bore's core UX features.
+Until this is fixed, **every release will require beta testers to do the manual "fresh download from website + drag to Applications" dance**. That's a regression from the v0.8.5 → v0.8.6 success earlier today, and it defeats one of True Zero's core UX features.
 
 Investigation notes for next session:
 - Read `installer.py`'s `_build_helper_script()` — that's the bash that runs after the app quits to swap the new bundle in.
@@ -292,9 +292,9 @@ Investigation notes for next session:
 
 #### 2. POLISH — v0.10.1: show UI preview behind the license dialog
 
-Chad's explicit request: testers should see what Cold Bore looks like (icon, screenshot, description) while locked out, not just a bare dialog. Plan:
+Chad's explicit request: testers should see what True Zero looks like (icon, screenshot, description) while locked out, not just a bare dialog. Plan:
 
-- Replace `LicenseDialog`'s blank background with: app icon on top, a screenshot of the main window (the existing `docs/assets/screenshot.png` from the marketing site is perfect), a one-paragraph description of what Cold Bore does, then the existing key field + Quit/Unlock buttons.
+- Replace `LicenseDialog`'s blank background with: app icon on top, a screenshot of the main window (the existing `docs/assets/screenshot.png` from the marketing site is perfect), a one-paragraph description of what True Zero does, then the existing key field + Quit/Unlock buttons.
 - Re-render `docs/assets/screenshot.png` via `tools/render_coldbore.py` first if the marketing render is stale — but the May-10 evening version should be current.
 - Keep the dialog modal — input is still blocked behind it, just visual presentation is richer.
 
@@ -317,11 +317,11 @@ Chad's explicit request: testers should see what Cold Bore looks like (icon, scr
 
 ## ✅ v0.9.0 SHIPPED — May 10, 2026 (evening — first signed + notarized release)
 
-**Cold Bore is now signed by Apple's Developer ID and notarized.** macOS opens it without any "unidentified developer" / "damaged" / right-click-Open warnings. This is the threshold for real distribution.
+**True Zero is now signed by Apple's Developer ID and notarized.** macOS opens it without any "unidentified developer" / "damaged" / right-click-Open warnings. This is the threshold for real distribution.
 
 ### Final state on Chad's machine
 
-- `/Applications/Cold Bore.app` runs **v0.9.0** (Tools → About confirms). Installed fresh from the v0.9.0 .dmg, opens silently, no Gatekeeper friction.
+- `/Applications/True Zero.app` runs **v0.9.0** (Tools → About confirms). Installed fresh from the v0.9.0 .dmg, opens silently, no Gatekeeper friction.
 - `main` HEAD: `a4c09f9` ("Landing page: point download at .dmg; drop right-click step")
 - v0.9.0 GitHub release published: https://github.com/chadheidt/coldbore/releases/tag/v0.9.0 — both `Cold.Bore.dmg` (55 MB, signed + notarized + stapled) and `Cold.Bore.zip` (58 MB, signed, for the auto-update path) attached
 - Landing page (https://chadheidt.github.io/coldbore/) updated: download button points at the .dmg directly, install steps walk through .dmg flow, Gatekeeper-warning copy removed
@@ -345,7 +345,7 @@ Chad's explicit request: testers should see what Cold Bore looks like (icon, scr
 
 1. **Build outside the project directory.** macOS attaches `com.apple.provenance` (and `com.apple.macl`) xattrs to files copied within the project tree. Those xattrs then block py2app/macholib from modifying its own copies of `Python3.framework/Versions/3.9/Python3` and other Mach-O files — the build dies with `[Errno 1] Operation not permitted` during the changefunc/load-command rewrite. **Workaround: `python3 setup.py py2app --dist-dir /tmp/coldbore-build/dist --bdist-base /tmp/coldbore-build/build`.** Then continue codesign + DMG + notarization in `/tmp/`, copy final `.dmg` and `.zip` back into `dist/` only at the very end. This bug was NEW today (worked this morning, broke this evening — likely a silent macOS security policy update). Even Finder double-click on Build Signed App.command hits it. The setup.py monkey-patch attempting to strip `com.apple.provenance` after each shutil.copy didn't help (macOS silently re-applies the xattr).
 
-2. **`codesign --deep` is NOT enough for notarization.** Apple's notary service rejected the first submission with "binary is not signed with a valid Developer ID certificate" + "signature does not include a secure timestamp" errors on every `.so` and `.dylib` inside the bundle. The `--deep` flag re-uses pre-existing signatures from those binaries (which are Apple's adhoc ones), it doesn't re-sign them with our identity. **Fix: explicitly sign every Mach-O inside `Cold Bore.app` with `--options runtime --timestamp --sign "Developer ID Application: ..."`.** Use a `find` loop over `Frameworks/` and `Resources/` for files where `file <path>` matches `Mach-O`. 248 files in our case. After that, sign the outer bundle with the same flags plus `--entitlements`. Then submit. Notarization passed on the second try.
+2. **`codesign --deep` is NOT enough for notarization.** Apple's notary service rejected the first submission with "binary is not signed with a valid Developer ID certificate" + "signature does not include a secure timestamp" errors on every `.so` and `.dylib` inside the bundle. The `--deep` flag re-uses pre-existing signatures from those binaries (which are Apple's adhoc ones), it doesn't re-sign them with our identity. **Fix: explicitly sign every Mach-O inside `True Zero.app` with `--options runtime --timestamp --sign "Developer ID Application: ..."`.** Use a `find` loop over `Frameworks/` and `Resources/` for files where `file <path>` matches `Mach-O`. 248 files in our case. After that, sign the outer bundle with the same flags plus `--entitlements`. Then submit. Notarization passed on the second try.
 
 3. **Pillow has to be excluded in setup.py.** `tools/render_*.py` use Pillow for the marketing-site hero images, but the runtime app doesn't need it. `openpyxl` has an optional `from PIL import Image` that pulls Pillow in by default during py2app's static analysis. Pillow's bundled `libtiff.6.dylib` then trips the same provenance-EPERM during the build. `setup.py` now lists `"PIL"` under `excludes`. Keep it there.
 
@@ -359,7 +359,7 @@ Chad's explicit request: testers should see what Cold Bore looks like (icon, scr
 
 - Send the live website link to pro-shooter beta candidates. The .dmg is signed/notarized; first-launch is silent; install instructions on the page are accurate.
 - Auto-update test from v0.9.0 → v0.9.1 will be the next chance to verify the in-app updater still works — Chad's existing v0.8.6 went "damaged" before we could test the v0.8.6 → v0.9.0 path (macOS got stricter on adhoc signatures during this session). v0.9.0 → next is the path forward.
-- LLC formation, USPTO trademark for "Cold Bore", lawyer for EULA + privacy + refund policy
+- LLC formation, USPTO trademark for "True Zero", lawyer for EULA + privacy + refund policy
 - Domain `coldbore.app` (~$15/yr)
 - Gumroad or Stripe Checkout embed on the landing page
 - Public launch via YouTube demo + forum outreach
@@ -374,17 +374,17 @@ v0.8.1, v0.8.2, v0.8.3, v0.8.4 (broken Apple-Silicon-only or em-dash-crash build
 
 ## 🚧 BETA PREP IN FLIGHT — May 10, 2026 (afternoon session — pivoting to pro-shooter beta + commercialization)
 
-**Big picture shift today:** Chad is moving Cold Bore from "friends-and-family" to "pro-shooter beta with commercialization in sight." He's signed up for the **Apple Developer Program ($99/yr)** and is waiting on Apple's 24-48 hour approval. Once approved, we ship v0.9.0 as the first signed + notarized + DMG-packaged release. After beta validation, we layer in commerce (Gumroad/Stripe, LLC, EULA).
+**Big picture shift today:** Chad is moving True Zero from "friends-and-family" to "pro-shooter beta with commercialization in sight." He's signed up for the **Apple Developer Program ($99/yr)** and is waiting on Apple's 24-48 hour approval. Once approved, we ship v0.9.0 as the first signed + notarized + DMG-packaged release. After beta validation, we layer in commerce (Gumroad/Stripe, LLC, EULA).
 
 ### Live marketing site
 
 **The landing page is live at: https://chadheidt.github.io/coldbore/**
 
-A `.webloc` shortcut at the project root (`Cold Bore Website.webloc`) opens it in Chad's default browser on double-click. GitHub Pages serves from `docs/` on `main` — every push to that path redeploys within ~30 sec.
+A `.webloc` shortcut at the project root (`True Zero Website.webloc`) opens it in Chad's default browser on double-click. GitHub Pages serves from `docs/` on `main` — every push to that path redeploys within ~30 sec.
 
 The site has:
 1. Hero image — Load Log render with red SUGGESTED CHARGE bar, rifle/components/test session info, and the 6-load 7 SAUM ladder showing P3 winning at composite 0.283
-2. "Drag. Click. Done." section — Cold Bore window mockup with the polished drop zone (reticle + MOA grid + spotlight + subtitle), workbook picker, Run Import button, and activity log
+2. "Drag. Click. Done." section — True Zero window mockup with the polished drop zone (reticle + MOA grid + spotlight + subtitle), workbook picker, Run Import button, and activity log
 3. Features grid, 3-step install, FAQ, reloading-safety disclaimer
 
 Both hero images are **rendered programmatically via Pillow** (see `tools/render_workbook.py` and `tools/render_coldbore.py`) — not screen-captured. Reasoning: the screen-capture path hit a 90-min wall of macOS hurdles (cross-Space windows, Screen Recording permission for the calling process, focus bouncing back). The PIL renderers produce deterministic, version-controlled, regenerable images. Re-run them whenever the in-app drop zone or workbook layout changes.
@@ -399,14 +399,14 @@ Both hero images are **rendered programmatically via Pillow** (see `tools/render
 - ✅ **Marketing site (`docs/`)** — see above.
 - ✅ **Render scripts (`tools/`)** — committed for reproducibility.
 - ✅ **Word reference docs on Chad's Desktop** (NOT committed — they live on his Desktop as quick-reference printouts):
-  - `Cold Bore - Starting a session in VS Code.docx`
-  - `Cold Bore - GitHub access for friends.docx`
-  - `Cold Bore - Sending to friends.docx`
+  - `True Zero - Starting a session in VS Code.docx`
+  - `True Zero - GitHub access for friends.docx`
+  - `True Zero - Sending to friends.docx`
 - ✅ **macOS housekeeping**: Re-enabled disabled screenshot keyboard shortcuts (28-31 in `defaults read com.apple.symbolichotkeys` were `enabled = 0`); upgraded pip 21.2.4 → 26.0.1; added `~/Library/Python/3.9/bin` to PATH in `~/.bash_profile` so user-installed CLI tools (pip/pytest/etc.) are typeable directly.
 
 ### What's done today (evening — landing-page polish)
 
-- ✅ **Website logo treatment (`docs/index.html`)** — commit `282d158`. Added a 96px Cold Bore icon centered above the hero headline (72px on mobile via media query). Bumped the nav-corner icon from 32px → 44px so it reads better. Live at https://chadheidt.github.io/coldbore/.
+- ✅ **Website logo treatment (`docs/index.html`)** — commit `282d158`. Added a 96px True Zero icon centered above the hero headline (72px on mobile via media query). Bumped the nav-corner icon from 32px → 44px so it reads better. Live at https://chadheidt.github.io/coldbore/.
 - ✅ **Cache-Control meta tag (`docs/index.html`)** — commit `4df9c74`. Added `<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">` so returning visitors always see fresh content. Previously GitHub Pages' default `max-age=600` could serve a stale copy for up to 10 min after a push — now resolved. Useful as we keep iterating on marketing copy / imagery.
 
 ### What's pending (the actual blocker: Apple's email)
@@ -422,12 +422,12 @@ When Chad's Dev ID is approved (24-48 hr from his enrollment, signaled by an ema
 7. **Run `Build Signed App.command` from Finder**. It produces `dist/Cold.Bore.dmg` — signed + notarized + ready to ship.
 8. **Create v0.9.0 release on GitHub** (gh release create + edit to publish, same as v0.8.6). Attach the .dmg.
 9. **Update the landing page download button** to point at the .dmg (not the .zip).
-10. **Test the auto-update from v0.8.6 → v0.9.0** on Chad's `/Applications/Cold Bore.app`. Should be smoother than v0.8.6 (no Gatekeeper warning post-swap because of code signing).
+10. **Test the auto-update from v0.8.6 → v0.9.0** on Chad's `/Applications/True Zero.app`. Should be smoother than v0.8.6 (no Gatekeeper warning post-swap because of code signing).
 
 ### What's pending after v0.9.0 ships (commerce phase, later)
 
 - LLC formation in Chad's state (~$50-500 depending on state)
-- Trademark "Cold Bore" with USPTO ($250-350)
+- Trademark "True Zero" with USPTO ($250-350)
 - Lawyer consultation (~$300-600) for EULA + privacy + refund policy
 - Domain `coldbore.app` (~$15/yr)
 - Gumroad or Stripe Checkout embed on the landing page
@@ -449,7 +449,7 @@ See `Build progress.md` Phase 9 for the full commercialization plan.
 **The big news: Phase 12 / in-app self-installer works.** v0.8.5 (Chad's running app) successfully detected v0.8.6 on the manifest, downloaded the zip via the yellow banner, swapped itself, relaunched at v0.8.6, and Tools → About now reports 0.8.6. No manual steps. The custom Python+bash installer is proven for friends-and-family distribution.
 
 **State on Chad's machine right now:**
-- `/Applications/Cold Bore.app` runs v0.8.6 (auto-updated from v0.8.5 in the test).
+- `/Applications/True Zero.app` runs v0.8.6 (auto-updated from v0.8.5 in the test).
 - `main` branch HEAD: `bcca535` ("v0.8.6 - bump for auto-update test ...").
 - `manifest.json` on main says v0.8.6, and the v0.8.6 release zip exists on GitHub.
 - Both the v0.8.5 and v0.8.6 GitHub releases have `Cold.Bore.zip` attached.
@@ -467,18 +467,18 @@ See `Build progress.md` Phase 9 for the full commercialization plan.
 
 8. **Use `gh release create --draft` + `gh release edit --draft=false --latest` for manual uploads.** Direct `gh release create --latest` would fire the `release: created` event which triggers CI, and you'd race CI's asset attach against your manual asset (filename collision → upload error). Draft → publish path: `created` event fires only on the initial creation (which is the draft, attaches nothing to nothing); the publish step fires `published` which our workflow doesn't listen to. Clean.
 
-9. **Run Cold Bore from `/Applications/` to test the auto-update flow, not `dist/`.** The yellow banner WILL appear in dev-mode `dist/` runs but `can_self_install()` returns False (since the .app isn't where the helper script can swap it), and the banner falls back to "download manually." For end-to-end test, must be installed in `/Applications/`.
+9. **Run True Zero from `/Applications/` to test the auto-update flow, not `dist/`.** The yellow banner WILL appear in dev-mode `dist/` runs but `can_self_install()` returns False (since the .app isn't where the helper script can swap it), and the banner falls back to "download manually." For end-to-end test, must be installed in `/Applications/`.
 
 ### What to work on next (Chad's call when he resumes)
 
-- **Send Cold Bore to friends.** v0.8.6 is the first reliably-Intel build with proven auto-updates. Reference: `Send Cold Bore to friends.md` at the project root.
+- **Send True Zero to friends.** v0.8.6 is the first reliably-Intel build with proven auto-updates. Reference: `Send True Zero to friends.md` at the project root.
 - **Optional release-page cleanup**: stale v0.8.1–v0.8.4 release records still exist on GitHub. None of them point at working binaries. Could delete via `gh release delete vX.Y.Z --repo chadheidt/coldbore --cleanup-tag` if Chad wants the releases page tidy. Not blocking.
 - **Phase 7 (Windows port)** — see Build progress.md. High-leverage if commercializing.
 - **Phase 8 (iOS port)** — see Build progress.md. Long-tail.
 
 ### Permission allowlist (for Claude Code, set up at end of session)
 
-User-level `~/.claude/settings.json` now has an allow list for the commonly-used Bash patterns: `gh`, `git`, `python3`, `ditto`, `zip`, `unzip`, etc. So future Cold Bore work in Claude Code shouldn't prompt for every command. Path: `~/.claude/settings.json` — open it directly if you need to tighten or broaden.
+User-level `~/.claude/settings.json` now has an allow list for the commonly-used Bash patterns: `gh`, `git`, `python3`, `ditto`, `zip`, `unzip`, etc. So future True Zero work in Claude Code shouldn't prompt for every command. Path: `~/.claude/settings.json` — open it directly if you need to tighten or broaden.
 
 ---
 
@@ -498,15 +498,15 @@ User-level `~/.claude/settings.json` now has an allow list for the commonly-used
    rm -rf dist build
    python3 setup.py py2app
    cd dist
-   ditto -c -k --keepParent "Cold Bore.app" "Cold.Bore.zip"
-   cp "../Cold Bore — Quick Start.docx" .
-   zip "Cold.Bore.zip" "Cold Bore — Quick Start.docx"
+   ditto -c -k --keepParent "True Zero.app" "Cold.Bore.zip"
+   cp "../True Zero — Quick Start.docx" .
+   zip "Cold.Bore.zip" "True Zero — Quick Start.docx"
    ```
-   Watch for build errors. py2app on Chad's Intel Mac uses his system Python 3.9 — should produce a working Intel bundle. Verify with `file dist/Cold.Bore.zip` and `unzip -l dist/Cold.Bore.zip` afterward to confirm both `Cold Bore.app` and `Cold Bore — Quick Start.docx` are inside.
+   Watch for build errors. py2app on Chad's Intel Mac uses his system Python 3.9 — should produce a working Intel bundle. Verify with `file dist/Cold.Bore.zip` and `unzip -l dist/Cold.Bore.zip` afterward to confirm both `True Zero.app` and `True Zero — Quick Start.docx` are inside.
 
 3. **Hand the zip off to Chad for the GitHub release.** Tell him:
    - Open https://github.com/chadheidt/coldbore/releases/new
-   - Tag: `v0.8.5`, Title: `Cold Bore 0.8.5`
+   - Tag: `v0.8.5`, Title: `True Zero 0.8.5`
    - Description: "Build fixed for Intel Macs. Uses macos-13 CI runner so PyQt5 ships as Intel binary - works natively on Intel and via Rosetta 2 on Apple Silicon."
    - ☑ Set as the latest release
    - Drag `dist/Cold.Bore.zip` into the "Attach binaries" area at the bottom
@@ -523,16 +523,16 @@ User-level `~/.claude/settings.json` now has an allow list for the commonly-used
    - Try CI first; if it queues again, repeat plan B for v0.8.6 too.
 
 5. **The actual auto-update test.** Once v0.8.6 release is published with `Cold.Bore.zip` attached:
-   - Have Chad open Cold Bore on his Mac
+   - Have Chad open True Zero on his Mac
    - Yellow banner should appear: "App update: v0.8.6 is available."
    - Click **Install Update** → progress bar → click **Quit and Install** → app quits → ~3 sec → app reopens at v0.8.6
    - Verify Tools → About reports 0.8.6
-   - If anything fails, check `~/Library/Application Support/Cold Bore/last_install_error.log` for the helper script's error.
+   - If anything fails, check `~/Library/Application Support/True Zero/last_install_error.log` for the helper script's error.
 
 ### State on Chad's machine right now
 
 - v0.8.5 is committed and pushed to main (commit `0d66b5c`)
-- `/Applications/Cold Bore.app` runs v0.8.5 (Chad locally rebuilt earlier)
+- `/Applications/True Zero.app` runs v0.8.5 (Chad locally rebuilt earlier)
 - Manifest on `main` says v0.8.5; download URL points at v0.8.5 release zip that doesn't exist yet
 - Working tree has uncommitted: `Build progress.md` (SaaS analysis), `Notes for next session.md` (this breadcrumb), and `Rifle Load Data.code-workspace` (untracked, ignore-worthy)
 - Chad is on Intel Mac (macos 14 Sonoma, x86_64). Python 3.9 system Python, with PyQt5 Intel installed.
@@ -545,7 +545,7 @@ User-level `~/.claude/settings.json` now has an allow list for the commonly-used
 - **No v0.8.5 release exists on GitHub yet.** Won't until either CI completes or we go to plan B (manual upload).
 - **GitHub releases that exist:** Chad cleaned up the stale v0.8.0–v0.8.4 release records earlier. So the visible releases on GitHub are now **v0.6.0, v0.7.0, v0.7.1** — and v0.7.1 is currently flagged as Latest (since v0.8.x are all gone). NOTE: those are all GitHub-CI-built and were Apple Silicon-only, so they're broken on Intel Macs. Chad has NOT sent any zip to friends yet, so this hasn't reached anyone.
 - **Manifest on GitHub `main` (raw URL):** says v0.8.5 is available with download URL pointing at v0.8.5 release zip. Friend's app would 404 if it tried to update right now (release doesn't exist). Chad's own app is on v0.8.5 too so no update banner appears for him locally.
-- **Chad's `/Applications/Cold Bore.app`:** **WORKING.** Currently runs v0.8.5 — he locally rebuilt via Build App.command earlier, replaced /Applications/, and stripped quarantine. Tools → About reports 0.8.5.
+- **Chad's `/Applications/True Zero.app`:** **WORKING.** Currently runs v0.8.5 — he locally rebuilt via Build App.command earlier, replaced /Applications/, and stripped quarantine. Tools → About reports 0.8.5.
 - **Local working tree:** ONE uncommitted change — `Build progress.md` has a new section "Architecture decision: desktop app vs SaaS (web app)" added during the wait. Chad asked to capture his developer friend's SaaS suggestion and the analysis. Push this whenever he commits next; it doesn't gate anything.
 - **Project folder cleanup happened:** Chad deleted `build/`, `__pycache__/`, `dist/`, `test.xlsx`, all `.DS_Store` files. Project size went from ~12 MB to ~3.8 MB.
 
@@ -556,7 +556,7 @@ Chad set up **VS Code + Claude Code (CLI + extension)** during the CI wait. From
 How he'd resume in VS Code:
 1. Open VS Code (it should auto-reopen with the `~/Projects/Rifle Load Data` folder)
 2. Click the Claude icon in the left sidebar (or run `claude` in VS Code's integrated Terminal panel — Ctrl+\` to open it)
-3. Tell Claude: *"Continue Cold Bore. Read Notes for next session.md to catch up — we're paused waiting on CI for v0.8.5."*
+3. Tell Claude: *"Continue True Zero. Read Notes for next session.md to catch up — we're paused waiting on CI for v0.8.5."*
 
 How he'd resume in Cowork:
 - Same as before: open Cowork, point at `~/Projects/Rifle Load Data`, type the same resume prompt.
@@ -577,12 +577,12 @@ Either works. Chad indicated VS Code will be his primary going forward but is co
         rm -rf dist build
         python3 setup.py py2app
         cd dist
-        ditto -c -k --keepParent "Cold Bore.app" "Cold.Bore.zip"
-        cp "../Cold Bore — Quick Start.docx" .
-        zip "Cold.Bore.zip" "Cold Bore — Quick Start.docx"
+        ditto -c -k --keepParent "True Zero.app" "Cold.Bore.zip"
+        cp "../True Zero — Quick Start.docx" .
+        zip "Cold.Bore.zip" "True Zero — Quick Start.docx"
         ```
      c. Open https://github.com/chadheidt/coldbore/releases/new
-     d. Tag: `v0.8.5`, Title: `Cold Bore 0.8.5`, Description: "Build fixed for Intel Macs. Uses macos-13 CI runner so PyQt5 ships as Intel binary - works natively on Intel and via Rosetta 2 on Apple Silicon."
+     d. Tag: `v0.8.5`, Title: `True Zero 0.8.5`, Description: "Build fixed for Intel Macs. Uses macos-13 CI runner so PyQt5 ships as Intel binary - works natively on Intel and via Rosetta 2 on Apple Silicon."
      e. ☑ Set as latest. Drag `dist/Cold.Bore.zip` into the "Attach binaries" area at the bottom. Wait for upload (~30-60 sec).
      f. Click green Publish release.
 
@@ -594,9 +594,9 @@ Either works. Chad indicated VS Code will be his primary going forward but is co
    - Wait for CI on v0.8.6 (or if queue is still bad, repeat plan B).
    - Create v0.8.6 release.
 
-5. **Then test the auto-update for real.** Open Cold Bore on Chad's Mac. Yellow banner should appear: "App update: v0.8.6 is available." Click **Install Update** → progress bar → click **Quit and Install** → app quits → ~3 seconds → app reopens at v0.8.6. Tools → About reports 0.8.6.
+5. **Then test the auto-update for real.** Open True Zero on Chad's Mac. Yellow banner should appear: "App update: v0.8.6 is available." Click **Install Update** → progress bar → click **Quit and Install** → app quits → ~3 seconds → app reopens at v0.8.6. Tools → About reports 0.8.6.
 
-6. **If that all works**: Cold Bore is shipped with working in-app auto-updates. Chad can send the link to friends. The link is in `Send Cold Bore to friends.md` at the project root.
+6. **If that all works**: True Zero is shipped with working in-app auto-updates. Chad can send the link to friends. The link is in `Send True Zero to friends.md` at the project root.
 
 ### Why we're at v0.8.5
 
@@ -612,10 +612,10 @@ Long version-bump saga today, summarized:
 
 When Chad comes back, walk him through these steps:
 
-1. **First: get Cold Bore working again on Chad's Mac.** Open Finder → `~/Projects/Rifle Load Data` → double-click `Build App.command`. This locally rebuilds Cold Bore at v0.8.5 using Chad's Intel Mac's Python and Intel PyQt5 (so the resulting bundle is Intel-only and works fine on his Intel Mac).
-2. After ~3 minutes, the Finder should auto-open dist/. Drag `dist/Cold Bore.app` → `/Applications`. Click **Replace** when prompted.
-3. In Terminal: `xattr -dr com.apple.quarantine "/Applications/Cold Bore.app"`
-4. In Terminal: `open "/Applications/Cold Bore.app"` — should open. Verify Tools → About says **0.8.5**.
+1. **First: get True Zero working again on Chad's Mac.** Open Finder → `~/Projects/Rifle Load Data` → double-click `Build App.command`. This locally rebuilds True Zero at v0.8.5 using Chad's Intel Mac's Python and Intel PyQt5 (so the resulting bundle is Intel-only and works fine on his Intel Mac).
+2. After ~3 minutes, the Finder should auto-open dist/. Drag `dist/True Zero.app` → `/Applications`. Click **Replace** when prompted.
+3. In Terminal: `xattr -dr com.apple.quarantine "/Applications/True Zero.app"`
+4. In Terminal: `open "/Applications/True Zero.app"` — should open. Verify Tools → About says **0.8.5**.
 5. **Now push v0.8.5.** GitHub Desktop should still show the 4 changed files. Commit message:
    > `v0.8.5 - back to macos-13 (Intel) for CI; universal2 was producing arm64-only PyQt5`
    Commit to main → Push origin.
@@ -623,7 +623,7 @@ When Chad comes back, walk him through these steps:
 7. **Create the v0.8.5 release directly (NOT draft):**
    https://github.com/chadheidt/coldbore/releases/new
    - Tag: `v0.8.5`
-   - Title: `Cold Bore 0.8.5`
+   - Title: `True Zero 0.8.5`
    - Description: "Build fixed for Intel Macs. Uses macos-13 CI runner so PyQt5 ships as Intel binary - works natively on Intel and via Rosetta 2 on Apple Silicon."
    - ☑ Set as latest → green Publish release
 8. **Wait ~5 min for `Cold.Bore.zip` to attach** to the v0.8.5 release. Verify via the page or with web_fetch.
@@ -690,16 +690,16 @@ v0.8.1 fixes this by switching CI from `macos-latest` to `macos-13` (Intel runne
 
 **The big test: in-app auto-update.** Once the v0.8.1 release is live with its zip attached:
 
-1. Chad opens his locally-built v0.8.0 Cold Bore (currently in /Applications)
+1. Chad opens his locally-built v0.8.0 True Zero (currently in /Applications)
 2. Manifest reports v0.8.1 available → yellow banner appears with **Install Update** button
 3. Chad clicks **Install Update** → banner shows download progress
 4. When download done → banner shows **Quit and Install** button
-5. Chad clicks → Cold Bore quits, helper script swaps in v0.8.1, Cold Bore reopens on v0.8.1
+5. Chad clicks → True Zero quits, helper script swaps in v0.8.1, True Zero reopens on v0.8.1
 6. Tools → About reports v0.8.1, banner is gone
 
 **Why this is the moment of truth:** v0.8.0 had the new in-app updater code but Chad was still running v0.7.0 when we tried to test it, so we got the OLD banner ("Download new version" → browser). Now Chad's running v0.8.0 locally, and v0.8.1 will be the first time his own machine sees the new "Install Update" button on a real update event.
 
-**If the swap fails for some reason:** ~/Library/Application Support/Cold Bore/last_install_error.log will have the helper script's exit message. Next launch, Cold Bore reads that log and surfaces it via QMessageBox. Have Chad paste whatever it says.
+**If the swap fails for some reason:** ~/Library/Application Support/True Zero/last_install_error.log will have the helper script's exit message. Next launch, True Zero reads that log and surfaces it via QMessageBox. Have Chad paste whatever it says.
 
 **Friend distribution status:** Chad has NOT sent any zips to friends yet. So the broken v0.7.0/v0.7.1/v0.8.0 GitHub zips never reached anyone. Once v0.8.1 is live and verified, the zip on `releases/latest` will be Intel-binary (works on every Mac) and friend distribution can begin in earnest.
 
@@ -707,7 +707,7 @@ v0.8.1 fixes this by switching CI from `macos-latest` to `macos-13` (Intel runne
 
 ## ✅ v0.8.0 SHIPPED (locally) — May 9, 2026 (auto-update feature)
 
-**Where we left off:** Chad and Claude built **Phase 12: in-app self-installer** in this session. Code is complete locally but **not yet committed/pushed/released**. v0.8.0 will be Cold Bore's first version with one-click in-app updates (Level 2 — see Build progress.md Phase 12 for full design and Phase 9 for the Sparkle/Level 3 plan when commercializing).
+**Where we left off:** Chad and Claude built **Phase 12: in-app self-installer** in this session. Code is complete locally but **not yet committed/pushed/released**. v0.8.0 will be True Zero's first version with one-click in-app updates (Level 2 — see Build progress.md Phase 12 for full design and Phase 9 for the Sparkle/Level 3 plan when commercializing).
 
 **What's done:**
 - ✅ `app/updater.py` — added `UpdateDownloader(QThread)` (streams the .zip with progress signals, 500MB cap, 256KB-throttled progress emits)
@@ -727,28 +727,28 @@ v0.8.1 fixes this by switching CI from `macos-latest` to `macos-13` (Intel runne
 4. Wait ~5 min for CI green at https://github.com/chadheidt/coldbore/actions
 5. Create the v0.8.0 release at https://github.com/chadheidt/coldbore/releases/new — **DO NOT save as draft**, use the green Publish release button directly so the `release: created` event fires for CI's asset-attach step. (See lessons-learned in this file.)
 6. After ~5 min, verify `Cold.Bore.zip` is attached to the v0.8.0 release.
-7. **Test the auto-update flow on Chad's Mac.** He's still running v0.7.0, so opening Cold Bore will show the new banner. Click **Install Update**, watch the download progress, click **Quit and Install** when ready. Cold Bore should close, the helper script should swap in v0.8.0, and Cold Bore should reopen on v0.8.0. The Tools → About dialog should now report v0.8.0.
+7. **Test the auto-update flow on Chad's Mac.** He's still running v0.7.0, so opening True Zero will show the new banner. Click **Install Update**, watch the download progress, click **Quit and Install** when ready. True Zero should close, the helper script should swap in v0.8.0, and True Zero should reopen on v0.8.0. The Tools → About dialog should now report v0.8.0.
 8. **Acceptance criteria for v0.8.0**: a clean install-update-relaunch cycle with no Gatekeeper warnings on the relaunch (because the helper strips the quarantine xattr).
 
 **Edge cases to watch for during the v0.8.0 test:**
-- Helper script's `sleep 3` should be enough for parent quit. If the swap fails because Cold Bore is still alive, we'd see a "Couldn't move old app aside" error — bump the sleep.
-- If Chad's Cold Bore is in `/Applications/` and that's not writable for some reason (rare), `can_self_install()` returns False and the banner falls back to "Or download manually" — still works, just no one-click.
-- The helper script writes errors to `~/Library/Application Support/Cold Bore/last_install_error.log`. Next launch surfaces them via QMessageBox. If anything goes wrong, that's the place to look.
-- If something REALLY goes wrong and Cold Bore can't relaunch after the swap, Chad can manually re-install: download `Cold.Bore.zip` from https://github.com/chadheidt/coldbore/releases/latest, drag into Applications.
+- Helper script's `sleep 3` should be enough for parent quit. If the swap fails because True Zero is still alive, we'd see a "Couldn't move old app aside" error — bump the sleep.
+- If Chad's True Zero is in `/Applications/` and that's not writable for some reason (rare), `can_self_install()` returns False and the banner falls back to "Or download manually" — still works, just no one-click.
+- The helper script writes errors to `~/Library/Application Support/True Zero/last_install_error.log`. Next launch surfaces them via QMessageBox. If anything goes wrong, that's the place to look.
+- If something REALLY goes wrong and True Zero can't relaunch after the swap, Chad can manually re-install: download `Cold.Bore.zip` from https://github.com/chadheidt/coldbore/releases/latest, drag into Applications.
 
 ---
 
 ## ✅ v0.7.1 SHIPPED — May 9, 2026
 
-**Status: pre-beta complete. Chad is cleared to share Cold Bore with friends.**
+**Status: pre-beta complete. Chad is cleared to share True Zero with friends.**
 
 **What's live:**
 - v0.7.0 and v0.7.1 both published at https://github.com/chadheidt/coldbore/releases
-- v0.7.1 is set as **Latest**, has the workflow change that bundles `Cold Bore — Quick Start.docx` into `Cold Bore.zip` alongside the .app
+- v0.7.1 is set as **Latest**, has the workflow change that bundles `True Zero — Quick Start.docx` into `True Zero.zip` alongside the .app
 - Verified by Chad: downloading the zip from the release page yields both the .app AND the Quick Start docx
 - The shareable link friends should use: **https://github.com/chadheidt/coldbore/releases/latest** (always points at newest release)
 
-**The friend-sharing reference doc** lives at the project root: `Send Cold Bore to friends.md`. It has the link, copy-paste-ready text/email messages, common questions, and a running version history. **When Chad asks "where's the link to send to friends," point him there.**
+**The friend-sharing reference doc** lives at the project root: `Send True Zero to friends.md`. It has the link, copy-paste-ready text/email messages, common questions, and a running version history. **When Chad asks "where's the link to send to friends," point him there.**
 
 ### gh CLI (still deferred)
 
@@ -762,7 +762,7 @@ The v0.7.1 release got messy because Chad and the previous Claude weren't on the
 2. **A v0.7.1 release was created as a Draft early in the session (before the breadcrumb was written), and a v0.7.1 git tag had been pushed.** The next session's "create release" form rejected v0.7.1 as a duplicate tag, then offered to "edit existing notes" — which led Chad to a pre-existing release record. Confusing.
 3. **GitHub's `/releases` page is cached for ~1-2 minutes** after a release is published. The direct tag URL (`/releases/tag/v0.7.1`) refreshes immediately. When verifying a fresh publish, prefer the tag URL.
 4. **Chad got confused about CI vs releases.** He saw a green check on the Actions page after pushing and assumed that meant the release was published. It wasn't — CI runs on every push, not just releases. Be explicit about this distinction in walkthroughs.
-5. **GitHub renames release assets with spaces.** Cold Bore's CI uploads `Cold Bore.zip`, but GitHub stores it as `Cold.Bore.zip` (spaces → periods). The first manifest had `Cold%20Bore.zip` (URL-encoded space) and 404'd in the in-app banner. Fix was changing manifest URL to `Cold.Bore.zip`. **Going forward, either the workflow's zip step should produce a no-spaces name (`ColdBore.zip` or `Cold.Bore.zip`) directly so the rename never happens, OR future manifest URLs should always use the period form. Pick one and document it.** The breadcrumb actually mentioned this gotcha from v0.6.0 days but it didn't get applied to the manifest. Next time we ship a new release: either fix the workflow filename, or bake "use periods, not spaces, in the manifest URL" into the release procedure.
+5. **GitHub renames release assets with spaces.** True Zero's CI uploads `True Zero.zip`, but GitHub stores it as `Cold.Bore.zip` (spaces → periods). The first manifest had `Cold%20Bore.zip` (URL-encoded space) and 404'd in the in-app banner. Fix was changing manifest URL to `Cold.Bore.zip`. **Going forward, either the workflow's zip step should produce a no-spaces name (`ColdBore.zip` or `Cold.Bore.zip`) directly so the rename never happens, OR future manifest URLs should always use the period form. Pick one and document it.** The breadcrumb actually mentioned this gotcha from v0.6.0 days but it didn't get applied to the manifest. Next time we ship a new release: either fix the workflow filename, or bake "use periods, not spaces, in the manifest URL" into the release procedure.
 
 **Future-Claude checklist before walking Chad through a release:**
 - [ ] Run `git log --oneline -10` and `git tag -l` locally to see what commits and tags actually exist
@@ -778,7 +778,7 @@ The v0.7.1 release got messy because Chad and the previous Claude weren't on the
 
 ## 🟧 When you come back (note to Chad, not Claude)
 
-If it's been weeks or months since you worked on Cold Bore and you're not sure how to pick up — read this section first. It's written for you, not for Claude.
+If it's been weeks or months since you worked on True Zero and you're not sure how to pick up — read this section first. It's written for you, not for Claude.
 
 ### How to resume
 
@@ -786,7 +786,7 @@ If it's been weeks or months since you worked on Cold Bore and you're not sure h
 2. Make sure it's pointed at your project folder: `~/Projects/Rifle Load Data`.
 3. Type or paste this exact phrase to start:
 
-> **"Continue building Cold Bore. Read Notes for next session.md and Build progress.md to catch up."**
+> **"Continue building True Zero. Read Notes for next session.md and Build progress.md to catch up."**
 
 Claude will read both files (about 30 seconds) and have full context of where the project stands. From there, ask whatever you need — "I want to add a LabRadar parser," "let's fix this bug," "let's start the iOS app," whatever.
 
@@ -794,9 +794,9 @@ Claude will read both files (about 30 seconds) and have full context of where th
 
 Run through these to make sure nothing rotted while you were away:
 
-1. **Cold Bore.app still launches** — open from Applications → does the window appear?
+1. **True Zero.app still launches** — open from Applications → does the window appear?
 2. **Update check works** — Tools → Check for Updates… → should say "you're up to date" (or show an available update if you've shipped a newer version since)
-3. **Build still works** — double-click `Build App.command` → should succeed and produce a fresh `dist/Cold Bore.app`
+3. **Build still works** — double-click `Build App.command` → should succeed and produce a fresh `dist/True Zero.app`
 4. **Tests still pass** — double-click `Run Tests.command` → should be all green
 5. **GitHub still has your repo** — visit `https://github.com/chadheidt/coldbore` → code is there
 
@@ -815,7 +815,7 @@ If any of those fail, that's the first thing to fix. Tell Claude: "this step is 
 ### Where things live (refresher)
 
 - **Your project folder**: `~/Projects/Rifle Load Data` — code, workbooks, breadcrumbs
-- **Your config**: `~/Library/Application Support/Cold Bore/config.json` — auto-update preferences, project folder pointer
+- **Your config**: `~/Library/Application Support/True Zero/config.json` — auto-update preferences, project folder pointer
 - **GitHub repo**: `https://github.com/chadheidt/coldbore` — public, releases, manifest
 - **Support email**: `coldboreapp@gmail.com` (forwards to your personal Gmail)
 
@@ -838,7 +838,7 @@ The config auto-migrates on first launch after the move because the old path no 
 
 ### Things to avoid
 
-- **Don't delete the project folder** even if you stop using Cold Bore. Coming back from "I have the .app and GitHub but not the source" is much harder than starting cold.
+- **Don't delete the project folder** even if you stop using True Zero. Coming back from "I have the .app and GitHub but not the source" is much harder than starting cold.
 - **Don't move the project folder** without telling Claude. The config has the path baked in. (If you do move it, just tell Claude — easy to update.)
 - **Don't lose the GitHub login** — if you forget your GitHub password, recovery is annoying. Save it in your password manager now if you haven't.
 
@@ -848,7 +848,7 @@ Even if you have no changes to ship, run `Build App.command` once a year. If it 
 
 ### Tool choice: Cowork vs Claude Code
 
-Cold Bore was built using **Claude Cowork** (the desktop app) and that's what you should keep using. The other option — **Claude Code** (terminal-based CLI) — would be faster for pure coding work but loses Cowork's friendly UX, drag-and-drop file picker, plugin system, and the ability to mix code work with productivity tasks (Word docs, Excel, etc.).
+True Zero was built using **Claude Cowork** (the desktop app) and that's what you should keep using. The other option — **Claude Code** (terminal-based CLI) — would be faster for pure coding work but loses Cowork's friendly UX, drag-and-drop file picker, plugin system, and the ability to mix code work with productivity tasks (Word docs, Excel, etc.).
 
 You're not a developer. You value friendly explanations and clear next steps. Cowork fits that perfectly. The pace we've been working at — shipping releases monthly or so — doesn't need Claude Code's speed.
 
@@ -857,13 +857,13 @@ You're not a developer. You value friendly explanations and clear next steps. Co
 - You want to run dev servers locally and watch them in real time
 - Cowork stops working on a platform you need (e.g., if Cowork-for-Windows ever has issues during the Phase 7 port)
 
-If any of those happens, Claude Code is the upgrade path — same Anthropic backend, just a more developer-focused interface. The project's breadcrumbs and conventions are tool-agnostic; both would understand Cold Bore the same way.
+If any of those happens, Claude Code is the upgrade path — same Anthropic backend, just a more developer-focused interface. The project's breadcrumbs and conventions are tool-agnostic; both would understand True Zero the same way.
 
 ### To ship a new version
 
 **Easiest path: come back here and ask Claude to walk you through it.** The release procedure has a few finicky steps (version bumps in two files, manifest URL update, GitHub release creation) and Claude can do most of the file editing for you. Sequence:
 
-1. Tell Claude: "I want to ship Cold Bore v0.X.0 with [list of changes]"
+1. Tell Claude: "I want to ship True Zero v0.X.0 with [list of changes]"
 2. Claude bumps version in `app/version.py` and `setup.py`, asks you to commit + push
 3. Claude walks you through creating the GitHub release in the browser
 4. CI auto-builds and attaches the zip (~3-5 min)
@@ -872,7 +872,7 @@ If any of those happens, Claude Code is the upgrade path — same Anthropic back
 
 Each step where Claude does file editing replaces a manual step you'd otherwise have to do. Total time: 10-15 minutes including chat back-and-forth. Roughly half what it'd take solo, with no risk of forgetting to bump one of the two version files.
 
-**Backup path if Claude isn't available**: see **`Cold Bore — How to Send Out Updates.docx`** in the project folder. Step-by-step in 5th-grade English.
+**Backup path if Claude isn't available**: see **`True Zero — How to Send Out Updates.docx`** in the project folder. Step-by-step in 5th-grade English.
 
 ---
 
@@ -918,14 +918,14 @@ Two main test types per load development cycle:
 | `My Load Dev Data.xlsx`, `7 Saum hunter load dev.xlsx`, etc. | Chad's working file(s). |
 | `import_data.py` | CLI Python script that reads CSVs and writes to the workbook. Used by Desktop `.command`. |
 | `Import Rifle Data.command` | Lives on Chad's **Desktop**. Bash wrapper that runs `import_data.py`. Auto-installs `openpyxl` on first run. |
-| `Test Cold Bore.command` | Dev launcher for the GUI app — runs `app/main.py`. |
+| `Test True Zero.command` | Dev launcher for the GUI app — runs `app/main.py`. |
 | `app/` | The new GUI app code (PyQt5). See "GUI app architecture" below. |
 | `Build progress.md` | Tracks the GUI app build (phase status). |
 | `Setup Instructions.docx` / `.md` | Full one-time setup walkthrough for the CLI flow. |
 | `Garmin Imports/` | Drop Garmin CSVs here. |
 | `BallisticX Imports/` | Drop BallisticX CSVs here. |
 
-`import_data.py`'s `PROJECT = ...` constant near the top points at this folder for the CLI flow. The GUI app uses a config file at `~/Library/Application Support/Cold Bore/config.json` instead, with auto-detection of legacy folder locations on first run.
+`import_data.py`'s `PROJECT = ...` constant near the top points at this folder for the CLI flow. The GUI app uses a config file at `~/Library/Application Support/True Zero/config.json` instead, with auto-detection of legacy folder locations on first run.
 
 ## GUI app architecture (`app/` folder)
 
@@ -933,14 +933,14 @@ Two main test types per load development cycle:
 |---|---|
 | `csv_router.py` | Thin wrapper around `parsers.detect_parser()` that returns the legacy KEY string |
 | `main.py` | The PyQt5 window: drop zone, workbook picker, status counter, Run Import button, log area, update banner, Tools menu. Drops auto-route via the parser registry. Crash reporter wired in. |
-| `config.py` | Load/save JSON config; `get_project_folder()` checks config + auto-detects legacy folder locations; legacy migration from "Rifle Load Importer" to "Cold Bore" |
+| `config.py` | Load/save JSON config; `get_project_folder()` checks config + auto-detects legacy folder locations; legacy migration from "Rifle Load Importer" to "True Zero" |
 | `setup_wizard.py` | `SetupWizard` QDialog for first-run; creates project folder, subfolders, copies bundled .xltx template |
 | `updater.py` | `UpdateChecker(QThread)` — fetches JSON manifest, compares versions, emits result signal (non-blocking). `DEFAULT_MANIFEST_URL` baked in. |
 | `version.py` | `APP_NAME`, `APP_VERSION`, `TEMPLATE_VERSION`, `DISCLAIMER_VERSION`, `DISCLAIMER_TEXT` |
 | `theme.py` | Color palette, QSS, drop-zone & banner stylesheets, carbon-fiber tile generator |
 | `disclaimer.py` | First-launch modal disclaimer dialog + acceptance tracking |
 | `settings_dialog.py` | Tools → Settings… UI (auto-update toggle, manifest URL override, backup retention) |
-| `help_dialog.py` | Tools → How to Use Cold Bore… UI (label format, workflow, workbook-tab guide, 3-load minimum, safety reminder). Non-modal so users can keep it open while they work. First menu item in Tools for discoverability. |
+| `help_dialog.py` | Tools → How to Use True Zero… UI (label format, workflow, workbook-tab guide, 3-load minimum, safety reminder). Non-modal so users can keep it open while they work. First menu item in Tools for discoverability. |
 | `new_cycle_dialog.py` | Tools → Start New Cycle… — checkbox wizard for archiving current workbook + CSVs and starting fresh. |
 | `welcome_tutorial.py` | First-launch multi-step welcome tour. 6 cards covering basics. Tracked via `tutorial_seen_version` config; bump `TUTORIAL_VERSION` to re-prompt returning users. |
 | `load_card.py` | Tools → Generate Load Card… — reads workbook, writes printable HTML to `Load Cards/` |
@@ -953,9 +953,9 @@ Two main test types per load development cycle:
 
 | File | Purpose |
 |---|---|
-| `Build App.command` | Runs `setup.py py2app` — produces `dist/Cold Bore.app` |
+| `Build App.command` | Runs `setup.py py2app` — produces `dist/True Zero.app` |
 | `Generate Icon.command` | Runs `app/resources/generate_icon.py` — produces `AppIcon.icns` |
-| `Test Cold Bore.command` | Dev launcher — runs `app/main.py` directly |
+| `Test True Zero.command` | Dev launcher — runs `app/main.py` directly |
 | `Run Tests.command` | Auto-installs pytest, runs `tests/` suite |
 | `Clean Up Old App.command` | One-time migration cleanup — removes old "Rifle Load Importer" artifacts |
 | `Test Update URL.command` | Diagnostic — fetches the manifest URL and prints the response |
@@ -1056,7 +1056,7 @@ The first space-separated word is the Tag (uppercased). First numeric token = Ch
 - Phase 3 ✅ — First-run wizard + persistent config; auto-detects existing project folders
 - Phase 4 ✅ — Background update check + manual "Check for Updates" menu + yellow banner notification + GitHub Actions CI/CD live
 - Phase 5 ✅ — Visual styling pass (dark/orange theme; carbon-fiber background still deferred)
-- Phase 6 ✅ — py2app bundle shipping (Cold Bore.app at v0.6.0)
+- Phase 6 ✅ — py2app bundle shipping (True Zero.app at v0.6.0)
 - Phase 6.5 ✅ — Pluggable parser registry (Garmin Xero + BallisticX, more pluggable in)
 - Phase 6.7 ✅ — Drag-on-Dock-icon support
 - Phase 10 ✅ — Polish round (workbook lockdown, validation, backups, settings panel, load card, load sharing, crash reporter, multi-workbook switcher, tests)
@@ -1069,7 +1069,7 @@ The first space-separated word is the Tag (uppercased). First numeric token = Ch
 ## Likely future requests / open ideas
 
 - **iOS port (Phase 8)** — Chad wants to build this with Claude eventually. Full collaboration plan is in `Build progress.md` under "Future: iOS app (Phase 8)". Has timeline, division of labor, architectural decisions, and recommended first move (4-6 hour prototype). When Chad says "let's start the iOS app", read that section.
-- **Sales / commercialization (Phase 9)** — Chad is interested in eventually selling Cold Bore. Full commercialization plan in `Build progress.md` under "Future: Sales readiness (Phase 9)" — Path A (low-effort tip jar / wait for signal) and Path B (full commercialization with LLC, trademark, lawyer, App Store, etc.). Year-1 revenue range: $0–60k depending on path and luck. When Chad says "let's commercialize" or "let's start selling", read that section.
+- **Sales / commercialization (Phase 9)** — Chad is interested in eventually selling True Zero. Full commercialization plan in `Build progress.md` under "Future: Sales readiness (Phase 9)" — Path A (low-effort tip jar / wait for signal) and Path B (full commercialization with LLC, trademark, lawyer, App Store, etc.). Year-1 revenue range: $0–60k depending on path and luck. When Chad says "let's commercialize" or "let's start selling", read that section.
 - If Chad ever upgrades Excel to 365, we could rebuild on Power Query for a cleaner one-click-from-Excel UX.
 - Charts on the Charts tab could be expanded once Chad has run more cycles.
 - The Ballistics tab DOPE entry is still manual — could potentially auto-fill from confirmed loads if he wants.

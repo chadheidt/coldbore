@@ -44,8 +44,8 @@ def test_build_helper_script_contains_required_steps():
     in tests — just smoke-checking the structure."""
     script = installer._build_helper_script(
         zip_path="/tmp/Cold.Bore.zip",
-        app_bundle_path="/Applications/Cold Bore.app",
-        error_log_path="/Users/x/Library/Application Support/Cold Bore/last_install_error.log",
+        app_bundle_path="/Applications/True Zero.app",
+        error_log_path="/Users/x/Library/Application Support/True Zero/last_install_error.log",
     )
 
     # Sanity: bash shebang and exit on undef vars
@@ -54,7 +54,7 @@ def test_build_helper_script_contains_required_steps():
 
     # Each path got embedded in the script (via single-quote shell escaping)
     assert "/tmp/Cold.Bore.zip" in script
-    assert "Cold Bore.app" in script
+    assert "True Zero.app" in script
     assert "last_install_error.log" in script
 
     # Critical operations are present
@@ -66,18 +66,18 @@ def test_build_helper_script_contains_required_steps():
 
 
 def test_build_helper_script_handles_paths_with_spaces():
-    """The breadcrumb format 'Cold Bore.app' contains a space — verify
+    """The breadcrumb format 'True Zero.app' contains a space — verify
     our shell quoting wraps each path in single quotes so bash treats it
     as a single argument."""
     script = installer._build_helper_script(
         zip_path="/tmp/foo bar.zip",
-        app_bundle_path="/Applications/Cold Bore.app",
+        app_bundle_path="/Applications/True Zero.app",
         error_log_path="/tmp/error.log",
     )
     # If quoting failed, 'foo bar.zip' would split into 'foo' and 'bar.zip'.
     # Verify the literal "'/tmp/foo bar.zip'" appears in the script.
     assert "'/tmp/foo bar.zip'" in script
-    assert "'/Applications/Cold Bore.app'" in script
+    assert "'/Applications/True Zero.app'" in script
 
 
 def test_consume_last_install_error_reads_and_deletes(tmp_path, monkeypatch):

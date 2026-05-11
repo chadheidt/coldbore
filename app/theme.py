@@ -1,5 +1,5 @@
 """
-Visual theme for Cold Bore.
+Visual theme for True Zero.
 
 Hunter-orange-on-charcoal palette (Direction 1) with the spacing and
 typography of a clean modern app (Direction 2). All colors and font sizes

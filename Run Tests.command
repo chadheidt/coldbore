@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run the Cold Bore test suite. Auto-installs pytest the first time.
+# Run the True Zero test suite. Auto-installs pytest the first time.
 # Use this before shipping a new version to catch regressions.
 
 set -e
@@ -8,7 +8,7 @@ PROJECT="$HOME/Projects/Rifle Load Data"
 cd "$PROJECT"
 
 echo "============================================================"
-echo "Cold Bore — running tests"
+echo "True Zero — running tests"
 echo "============================================================"
 
 # Make sure pytest is installed

@@ -1,12 +1,12 @@
 """
-Persistent config for the Cold Bore app.
+Persistent config for the True Zero app.
 
 Stores a small JSON file at:
-    ~/Library/Application Support/Cold Bore/config.json
+    ~/Library/Application Support/True Zero/config.json
 
 Format:
     {
-        "project_folder": "/Users/<name>/Documents/Cold Bore Loads",
+        "project_folder": "/Users/<name>/Documents/True Zero Loads",
         "version_seen": "0.6.0"
     }
 
@@ -74,6 +74,11 @@ def save_config(cfg):
 # silently auto-adopt on a beta tester's machine if they happen to have a
 # matching folder for unrelated reasons.
 CANDIDATE_LEGACY_LOCATIONS = (
+    "~/Documents/True Zero Loads",
+    "~/Documents/True Zero",
+    # Legacy paths from the Cold Bore -> True Zero rename in v0.12.0.
+    # Returning users whose project folder lived under the old brand name
+    # auto-adopt their existing data instead of being sent through the wizard.
     "~/Documents/Cold Bore Loads",
     "~/Documents/Cold Bore",
     "~/Documents/Rifle Loads",

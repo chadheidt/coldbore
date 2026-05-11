@@ -1,5 +1,5 @@
 #!/bin/bash
-# Build, code-sign, notarize, and DMG-package Cold Bore for distribution.
+# Build, code-sign, notarize, and DMG-package True Zero for distribution.
 #
 # Prerequisites (one-time setup):
 #   1. Apple Developer Program membership ($99/yr).
@@ -15,7 +15,7 @@
 #   4. create-dmg installed via Homebrew: brew install create-dmg
 #
 # What this script does:
-#   1. Runs Build App.command logic to produce dist/Cold Bore.app
+#   1. Runs Build App.command logic to produce dist/True Zero.app
 #   2. Code-signs the .app + every embedded binary with hardened runtime
 #   3. Verifies the signature
 #   4. Builds a DMG with a drag-to-Applications layout
@@ -47,13 +47,13 @@ NOTARY_PROFILE="coldbore-notary" # name of stored credentials in keychain (see p
 APPLE_TEAM_ID="NY3D844C6W"
 
 ENTITLEMENTS="$PROJECT/entitlements.plist"
-APP_NAME="Cold Bore"
+APP_NAME="True Zero"
 DMG_NAME="Cold.Bore.dmg"
-QUICKSTART="$PROJECT/Cold Bore — Quick Start.docx"
+QUICKSTART="$PROJECT/True Zero — Quick Start.docx"
 
 # ----- Sanity checks ---------------------------------------------------------
 echo "============================================================"
-echo "Cold Bore — building SIGNED + NOTARIZED .app + .dmg"
+echo "True Zero — building SIGNED + NOTARIZED .app + .dmg"
 echo "============================================================"
 echo ""
 
@@ -166,7 +166,7 @@ cp -R "$APP_PATH" "$DMG_STAGE/"
 [ -f "$QUICKSTART" ] && cp "$QUICKSTART" "$DMG_STAGE/"
 
 create-dmg \
-    --volname "Cold Bore" \
+    --volname "True Zero" \
     --window-pos 200 120 \
     --window-size 720 460 \
     --icon-size 110 \
@@ -209,7 +209,7 @@ echo "[8/8] Building Cold.Bore.zip for v0.8.x auto-update path…"
 ZIP_PATH="$BUILD_DIR/dist/Cold.Bore.zip"
 rm -f "$ZIP_PATH"
 cd "$BUILD_DIR/dist"
-ditto -c -k --keepParent "Cold Bore.app" "Cold.Bore.zip"
+ditto -c -k --keepParent "True Zero.app" "Cold.Bore.zip"
 if [ -f "$QUICKSTART" ]; then
     cp "$QUICKSTART" .
     QS_BASENAME=$(basename "$QUICKSTART")

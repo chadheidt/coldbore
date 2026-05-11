@@ -135,7 +135,7 @@ def import_load(file_path):
     fmt = data.get("format")
     if fmt != COLDBORE_FORMAT:
         raise LoadFileError(
-            f"This file isn't a Cold Bore shared load "
+            f"This file isn't a True Zero shared load "
             f"(format={fmt!r}, expected {COLDBORE_FORMAT!r})."
         )
 

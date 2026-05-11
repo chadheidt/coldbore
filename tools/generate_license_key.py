@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate one or more random Cold Bore license keys.
+"""Generate one or more random True Zero license keys.
 
 Usage:
     python3 tools/generate_license_key.py            # one key
