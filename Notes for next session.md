@@ -6,6 +6,35 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## 🚧 v0.12.0 IN FLIGHT — May 11, 2026 (evening — request-access automation + branding)
+
+**Branch: `v0.12-request-access`** (commit `1ece18f` and beyond). Main is still at proven v0.11.3.
+
+The work in flight is a Cold Bore → True Zero brand rename PLUS a full request-access automation
+pipeline: website form → Cloudflare Worker → Chad's gmail with Approve/Deny buttons → Resend emails
+the tester their assigned beta-key. Domain `truezero.co` was bought through Cloudflare's registrar
+during this session.
+
+**STATE FILE LIVES AT `~/Documents/True Zero - v0.12 setup state.md`** (outside the project tree,
+not in git, contains API tokens + IDs + step-by-step where we left off). If VS Code crashes
+mid-flight, that file is the source of truth for resuming.
+
+Quick status snapshot:
+- ✅ `truezero.co` active in Cloudflare
+- ✅ `BETA_REQUESTS` KV namespace created (`a0362498a5c74b1eb124decdb011f41c`)
+- ✅ ADMIN_TOKEN generated
+- ✅ All file changes committed to `v0.12-request-access` branch
+- ⏳ Cloudflare Turnstile widget (token lacks Turnstile:Edit scope)
+- ⏳ Resend domain verification (API key restricted to sending only)
+- ⏳ Worker env vars (6 needed) not yet set
+- ⏳ New Worker source not yet deployed
+- ⏳ App version 0.12.0 committed but not yet built/signed/shipped
+
+The `dcd344f` "v0.11.3 SHIPPED" notes below remain the authoritative breadcrumb for what's
+actually in production right now.
+
+---
+
 ## ✅ v0.11.3 SHIPPED + AUTO-UPDATE PROVEN — May 11, 2026 (afternoon — beta-ready closeout)
 
 **True Zero is genuinely ready for beta distribution.** Every loose thread we identified is closed:
