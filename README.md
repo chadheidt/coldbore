@@ -1,6 +1,6 @@
-# Cold Bore
+# True Zero
 
-A Mac app for precision rifle handloaders. Drag your Garmin Xero (chronograph) and BallisticX (target group) CSVs into the window, and Cold Bore organizes the data into a structured Excel workbook that scores each load and points to the best one.
+A Mac app for precision rifle handloaders. Drag your Garmin Xero (chronograph) and BallisticX (target group) CSVs into the window, and True Zero organizes the data into a structured Excel workbook that scores each load and points to the best one.
 
 ## What it does
 
@@ -12,17 +12,17 @@ A Mac app for precision rifle handloaders. Drag your Garmin Xero (chronograph) a
 
 ## Install
 
-Cold Bore is in **private beta**. Each tester gets a unique access code that unlocks both the download and the app itself.
+True Zero is in **private beta**. Each tester gets a unique access code that unlocks both the download and the app itself.
 
 1. Visit [https://chadheidt.github.io/coldbore/](https://chadheidt.github.io/coldbore/)
-2. Click **Download Cold Bore**, paste the access code you were emailed
-3. Open the downloaded `Cold.Bore.dmg`, drag **Cold Bore** to Applications
-4. Open Cold Bore from Applications, paste the same access code in the license dialog
-5. Follow the first-launch wizard to set up your Cold Bore folder
+2. Click **Download True Zero**, paste the access code you were emailed
+3. Open the downloaded `True.Zero.dmg`, drag **True Zero** to Applications
+4. Open True Zero from Applications, paste the same access code in the license dialog
+5. Follow the first-launch wizard to set up your True Zero folder
 
-Cold Bore is signed and notarized by Apple — no "unidentified developer" warning on first launch.
+True Zero is signed and notarized by Apple — no "unidentified developer" warning on first launch.
 
-To request an access code, email `coldboreapp@gmail.com`.
+To request an access code, email `support@truezero.co`.
 
 ## Develop
 
@@ -50,10 +50,10 @@ To run tests:
 
 ## Distribution architecture
 
-For privacy and access control, Cold Bore's binaries are not hosted on GitHub. The `.dmg` and auto-update `.zip` live in **Cloudflare R2** and are served through a **Cloudflare Worker** that validates the user's access code server-side and returns a 5-minute signed URL. The website Download button and the in-app auto-updater both authenticate through the same Worker.
+For privacy and access control, True Zero's binaries are not hosted on GitHub. The `.dmg` and auto-update `.zip` live in **Cloudflare R2** and are served through a **Cloudflare Worker** that validates the user's access code server-side and returns a 5-minute signed URL. The website Download button and the in-app auto-updater both authenticate through the same Worker.
 
 See `Build progress.md` and `Notes for next session.md` for the full architecture details.
 
 ## Disclaimer
 
-Cold Bore is a data-analysis tool. It is **not** a source of load data and does not recommend specific charge weights for use in any firearm. Reloading is inherently dangerous; always cross-reference loads against published reloading manuals from powder, bullet, and cartridge manufacturers, watch for pressure signs, and start below maximum loads. The developer is not liable for any damage, injury, or loss resulting from use of this app.
+True Zero is a data-analysis tool. It is **not** a source of load data and does not recommend specific charge weights for use in any firearm. Reloading is inherently dangerous; always cross-reference loads against published reloading manuals from powder, bullet, and cartridge manufacturers, watch for pressure signs, and start below maximum loads. The developer is not liable for any damage, injury, or loss resulting from use of this app.

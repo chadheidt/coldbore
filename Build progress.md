@@ -1,4 +1,4 @@
-# Cold Bore App — Build Progress
+# True Zero App — Build Progress
 
 Tracking the build of a self-contained .app bundle that Chad can ship to 3-4 friends.
 
@@ -17,7 +17,7 @@ Rifle Load Data/
 │   └── main.py                   # PyQt window with drop zone
 ├── import_data.py                # existing CLI script (Chad's personal flow, untouched)
 ├── Import Rifle Data.command     # existing Chad-only desktop launcher (untouched)
-├── Test Cold Bore.command     # NEW — temporary test launcher for the GUI
+├── Test True Zero.command     # NEW — temporary test launcher for the GUI
 └── (template, workbook, import folders, etc.)
 ```
 
@@ -32,9 +32,9 @@ The GUI app eventually replaces both of Chad's `.command` files for friend distr
       Garmin marker: line 2 contains "SPEED (FPS)" or "POWER FACTOR" or "KE (FT-LB)".
       BallisticX marker: line 1 contains "GroupSizeDisplay" or other display field names.
 - [x] `app/main.py` — PyQt5 window, big drop zone with hover effect, terminal-style log area.
-- [x] `Test Cold Bore.command` — double-clickable launcher that installs PyQt5 if needed, then runs the GUI.
+- [x] `Test True Zero.command` — double-clickable launcher that installs PyQt5 if needed, then runs the GUI.
 
-**End-of-phase test:** Chad runs `Test Cold Bore.command`, sees the window, drops mixed CSVs, watches the log correctly classify each as Garmin / BallisticX / unknown.
+**End-of-phase test:** Chad runs `Test True Zero.command`, sees the window, drops mixed CSVs, watches the log correctly classify each as Garmin / BallisticX / unknown.
 
 ### Phase 2 — Wire up the actual import  ✅ COMPLETE & TESTED
 
@@ -55,7 +55,7 @@ The GUI app eventually replaces both of Chad's `.command` files for friend distr
 
 ### Phase 3 — First-run wizard  ✅ CODE COMPLETE (needs end-user test)
 
-- [x] `app/config.py` — load/save config at `~/Library/Application Support/Cold Bore/config.json`.
+- [x] `app/config.py` — load/save config at `~/Library/Application Support/True Zero/config.json`.
       `get_project_folder()` returns saved path, OR auto-detects an existing valid folder at known legacy locations
       (`~/Documents/Claude/Projects/Rifle Load Data`, `~/Documents/Rifle Loads`, `~/Documents/Rifle Load Data`).
       `is_setup_valid(path)` checks for the import subfolders + at least one workbook/template.
@@ -67,20 +67,20 @@ The GUI app eventually replaces both of Chad's `.command` files for friend distr
 - [x] `app/main.py` refactor: dropped the global `PROJECT` variable; `MainWindow` now accepts a
       `project_folder` arg. `main()` resolves the folder via config (or wizard) before opening the window.
 
-**End-of-phase test:** Chad runs `Test Cold Bore.command`. Because his existing folder at
+**End-of-phase test:** Chad runs `Test True Zero.command`. Because his existing folder at
 `~/Documents/Claude/Projects/Rifle Load Data` is a valid project folder, the auto-detect catches it,
 saves it to config, and skips the wizard. The app opens normally with his existing data.
 
 To force-test the wizard itself: temporarily delete or rename
-`~/Library/Application Support/Cold Bore/config.json` AND move/rename the auto-detected
+`~/Library/Application Support/True Zero/config.json` AND move/rename the auto-detected
 project folder; relaunch and the wizard should appear.
 
 ### Phase 4 — Update check  ✅ COMPLETE & TESTED END-TO-END WITH CI/CD LIVE
 
 **GitHub repo:** `https://github.com/chadheidt/coldbore` (public)
 **Manifest URL (baked into `app/updater.py:DEFAULT_MANIFEST_URL`):** `https://raw.githubusercontent.com/chadheidt/coldbore/main/manifest.json`
-**Support email:** `coldboreapp@gmail.com` (forwards to Chad's personal Gmail; appears as "Cold Bore Support" in the recipient field via display-name in mailto)
-**CI/CD:** GitHub Actions runs `pytest` on every push, builds `Cold Bore.app` on every release tag, auto-attaches `Cold Bore.zip` to the release. See `.github/workflows/build-mac.yml`.
+**Support email:** `coldboreapp@gmail.com` (forwards to Chad's personal Gmail; appears as "True Zero Support" in the recipient field via display-name in mailto)
+**CI/CD:** GitHub Actions runs `pytest` on every push, builds `True Zero.app` on every release tag, auto-attaches `True Zero.zip` to the release. See `.github/workflows/build-mac.yml`.
 
 **v0.6.0 release notes:** the v0.6.0 release on GitHub had `Cold.Bore.2.app.zip` as the asset filename (got the `.2` suffix because of a re-upload). The manifest.json points at that exact name. For v0.7.0+, delete prior uploads on the release page before re-uploading, OR rename the local zip first, to avoid the suffix. Or just let CI auto-attach (no name collisions there).
 
@@ -88,13 +88,13 @@ project folder; relaunch and the wizard should appear.
 1. Bump `APP_VERSION` in `app/version.py` AND `setup.py` to (e.g.) `0.7.0`
 2. Commit + push (CI runs tests on push)
 3. On GitHub: **Releases → Draft new release → tag v0.7.0 → Publish**
-4. CI auto-builds the .app, zips it, attaches `Cold Bore.zip` to the release (~3-5 min)
+4. CI auto-builds the .app, zips it, attaches `True Zero.zip` to the release (~3-5 min)
 5. Edit `manifest.json` in the repo (raw URL or via local commit + push) to bump `app_version` and update `app_download_url`
 6. Friends' apps see the new version on next launch and show the yellow update banner
 
 **Shipping a new version (the procedure):**
 1. Bump `APP_VERSION` in `app/version.py` AND in `setup.py`
-2. `Build App.command` → produces new `dist/Cold Bore.app`
+2. `Build App.command` → produces new `dist/True Zero.app`
 3. Right-click the .app → Compress → upload zip to a new GitHub Release with tag `v0.X.0`
 4. Edit `manifest.json` in the repo: bump `app_version`, update `app_download_url` to point to the new release asset
 5. Friends' apps detect the change automatically — yellow update banner appears with click-through download link
@@ -168,7 +168,7 @@ User experience now:
 
 **Batch-drop guidance for users:** The icon-drop debounce is **2 seconds** (`RifleLoadApp.BATCH_DEBOUNCE_MS = 2000`). Tell friends in the Quick Start: "Grab ALL the CSVs you want from this range trip in a single Finder selection, then drag the whole batch onto the icon at once." If they drop in multiple sessions with > 2s between drops, each batch becomes a separate import (Excel will open multiple times). Considered a "show countdown banner" UX (option C) but Chad chose simplicity over more UI.
 
-End-to-end test: needs a fresh `.app` build via `Build App.command`. The drag-on-icon path won't work in dev mode (`Test Cold Bore.command`) because there's no .app bundle for macOS to register with — only the bundled .app gets the CFBundleDocumentTypes treatment.
+End-to-end test: needs a fresh `.app` build via `Build App.command`. The drag-on-icon path won't work in dev mode (`Test True Zero.command`) because there's no .app bundle for macOS to register with — only the bundled .app gets the CFBundleDocumentTypes treatment.
 
 ### Phase 6.5 — Pluggable parser registry (added day 2 — broaden iOS-future audience)  ✅ CODE COMPLETE
 
@@ -218,7 +218,7 @@ Each record dict includes a `"Source"` field carrying the parser's KEY so we kno
 The `.app` builds, opens, and runs the import flow correctly. Chad has it installed in his Applications folder.
 
 - [x] `app/__init__.py` — turned `app/` into a proper Python package so py2app can bundle the submodules cleanly.
-- [x] `setup.py` — py2app config. App name: "Cold Bore". Bundle id: `com.chadheidt.coldbore`. Version 0.4.0. Bundles PyQt5 + openpyxl as packages. Includes csv_router/config/setup_wizard/updater/version/theme/import_data as individual modules. Adds the `.xltx` template to DATA_FILES so it lands in `<App.app>/Contents/Resources/`. NSHighResolutionCapable + LSMinimumSystemVersion 10.13.
+- [x] `setup.py` — py2app config. App name: "True Zero". Bundle id: `com.chadheidt.coldbore`. Version 0.4.0. Bundles PyQt5 + openpyxl as packages. Includes csv_router/config/setup_wizard/updater/version/theme/import_data as individual modules. Adds the `.xltx` template to DATA_FILES so it lands in `<App.app>/Contents/Resources/`. NSHighResolutionCapable + LSMinimumSystemVersion 10.13.
 - [x] `app/setup_wizard.py find_bundled_template()` — fixed to look at `Path(sys.executable).parent.parent / "Resources"` for the actual py2app bundle layout (the prior code used PyInstaller's `_MEIPASS` which py2app doesn't use).
 - [x] `Build App.command` — one-click builder. Auto-installs PyQt5 + openpyxl + py2app + setuptools (with fallback for older pip without `--break-system-packages`). Cleans previous build/dist folders. Runs setup.py. Reports size + opens dist/ on success.
 - [x] **Smoke test on Chad's Mac.** ✅ done. App installed in Applications.
@@ -228,7 +228,7 @@ The `.app` builds, opens, and runs the import flow correctly. Chad has it instal
 - [ ] Note: setup.py has `CFBundleDevelopmentRegion: "en"` and `CFBundleLocalizations: ["en"]` queued (added during the Claude-language confusion). Will take effect on next rebuild — defensive, not strictly needed.
 
 **Friends-of-Chad install path (for reference):**
-1. Friend gets a zip via email/AirDrop containing one file: `Cold Bore.app`.
+1. Friend gets a zip via email/AirDrop containing one file: `True Zero.app`.
 2. Unzip, drag the .app to Applications.
 3. Right-click → Open the first time to bypass Gatekeeper (we're not paying $99/yr to code-sign).
 4. App opens. First-run wizard creates a `Rifle Loads/` folder in their Documents and copies the bundled template in. Done.
@@ -357,7 +357,7 @@ recovery, and first-launch experience. APP_VERSION bumped 0.6.0 → 0.7.0.
 
 10. **First-launch tutorial** — new module `app/welcome_tutorial.py`. Multi-step
     modal dialog with 6 cards: Welcome, Label Format, Export CSVs (with the
-    BallisticX-rename trip-up), Drop on Cold Bore, Things to Know (3-load
+    BallisticX-rename trip-up), Drop on True Zero, Things to Know (3-load
     minimum, close Excel first, backups, new cycle), and "You're all set"
     pointing at the Tools menu help. `Skip / Back / Next / Got it` controls.
     Acceptance tracked via `tutorial_seen_version` config field; bump
@@ -383,7 +383,7 @@ apps see the update banner on next launch.
 
 ## Phase 10 — Polish, safety, and quality (added day 4)  ✅ CODE COMPLETE
 
-A round of quality and feature improvements after Cold Bore was bundled and shipping internally.
+A round of quality and feature improvements after True Zero was bundled and shipping internally.
 
 **What was added:**
 
@@ -412,7 +412,7 @@ A round of quality and feature improvements after Cold Bore was bundled and ship
 ### Software quality
 - **Pytest suite** (`tests/`) — `conftest.py`, `test_common_helpers.py` (parse_label, extract_inches, extract_signed), `test_parsers.py` (registry shape, garmin/ballisticx detection and parsing, filename-fallback for BallisticX), `test_validation.py` (sanity ranges, duplicate-tag detection). 50+ test cases. Run via `Run Tests.command` which auto-installs pytest.
 - **Crash reporter** (`app/crash_reporter.py`) — replaces default Python excepthook with a friendly dialog showing the full traceback, Copy-to-Clipboard button, and Send-via-Email button. Privacy-conscious: nothing sent automatically; user reviews before clicking. Wired into main() at startup.
-- **GitHub Actions CI/CD** (`.github/workflows/build-mac.yml`) — runs pytest on every push, builds the .app on every release tag, auto-attaches `Cold Bore.zip` to the release. Will work once Chad pushes the repo to GitHub.
+- **GitHub Actions CI/CD** (`.github/workflows/build-mac.yml`) — runs pytest on every push, builds the .app on every release tag, auto-attaches `True Zero.zip` to the release. Will work once Chad pushes the repo to GitHub.
 
 ### Cell-map fix
 - `LOAD_LOG_FIELDS` in `load_card.py` had three cells pointing at LABEL cells (`K10` = "Dist (yd):", `F10` = "Off Lands:") instead of value anchors. Corrected to `L10` (distance), `G10` (off lands). `bullet_wt` removed entirely — extracted heuristically from the bullet description string.
@@ -441,7 +441,7 @@ Chad asked "how would it look if you and I built the iOS app together." Captured
 | 1. Setup | Xcode install, create iOS project, "Hello World" runs in simulator | week 1 |
 | 2. Port parsers | Swift versions of `garmin_xero.py`, `ballisticx.py`, `_common.py`, registry | week 1-2 |
 | 3. Data model | Swift structs for chronograph/group records, persistence (Core Data or SQLite) | week 2-3 |
-| 4. File import | iOS file picker, Share Extension hook (so CSVs from any app can be sent to Cold Bore), iPad drag-and-drop | week 3-4 |
+| 4. File import | iOS file picker, Share Extension hook (so CSVs from any app can be sent to True Zero), iPad drag-and-drop | week 3-4 |
 | 5. Data presentation | Rebuild Load Log / Seating Depth / Charts / Ballistics as native SwiftUI views — biggest chunk | weeks 5-7 |
 | 6. Polish | App icon at iOS sizes, dark mode, accessibility, settings | week 8 |
 | 7. Test + ship | TestFlight beta, App Store submission, review process | weeks 9-12 |
@@ -450,22 +450,22 @@ Chad asked "how would it look if you and I built the iOS app together." Captured
 
 ### Critical UX requirement: native Share-Sheet integration (must ship in iOS v1)
 
-**ShotView (Garmin) and BallisticX are iOS-only apps.** That's the precise friction the iOS port has to eliminate, and it's the single biggest reason iOS is more compelling than just "Cold Bore on a smaller screen."
+**ShotView (Garmin) and BallisticX are iOS-only apps.** That's the precise friction the iOS port has to eliminate, and it's the single biggest reason iOS is more compelling than just "True Zero on a smaller screen."
 
 The desired workflow:
 1. Shooter finishes a string. ShotView is already open on their iPhone.
 2. They tap **Share** in ShotView on the chronograph CSV.
-3. iOS Share Sheet appears with **Cold Bore** in the list (alongside Mail, Messages, AirDrop, etc.).
-4. They tap **Cold Bore** → ShotView hands the CSV directly to Cold Bore → Load Log updates.
+3. iOS Share Sheet appears with **True Zero** in the list (alongside Mail, Messages, AirDrop, etc.).
+4. They tap **True Zero** → ShotView hands the CSV directly to True Zero → Load Log updates.
 
 **Garmin and BallisticX don't have to do anything.** This is iOS's standard Share Sheet plumbing — any app that registers itself as a CSV/.txt receiver in `Info.plist` (`UTImportedTypeDeclarations` + `CFBundleDocumentTypes` + `LSItemContentTypes`) is offered automatically by every other app's Share button.
 
 For the iOS build to take advantage of this, two pieces are needed:
 
-1. **Document-type registration** in the iOS app's `Info.plist` — declare that Cold Bore receives `public.comma-separated-values-text` and `public.text`. Same concept as the Mac `setup.py` `CFBundleDocumentTypes`. One-time, ~15 minutes.
+1. **Document-type registration** in the iOS app's `Info.plist` — declare that True Zero receives `public.comma-separated-values-text` and `public.text`. Same concept as the Mac `setup.py` `CFBundleDocumentTypes`. One-time, ~15 minutes.
 2. **Share Extension target** (alongside the main app target) — a tiny secondary bundle whose only job is to accept files from the Share Sheet and pass them to the main app. Apple requires this as a separate target; it's standard scaffolding, not custom logic.
 
-This is non-negotiable for iOS v1. Without Share Sheet, iOS users still have to "save CSV → switch to Cold Bore → tap Files picker → navigate" — which is more steps than AirDrop-to-Mac, defeating the whole point of the port.
+This is non-negotiable for iOS v1. Without Share Sheet, iOS users still have to "save CSV → switch to True Zero → tap Files picker → navigate" — which is more steps than AirDrop-to-Mac, defeating the whole point of the port.
 
 (Step 4 of the build table above lists "Share Extension hook" as part of file import. This callout exists to flag it as a feature requirement, not just an implementation detail.)
 
@@ -514,7 +514,7 @@ When ready: say "let's start the iOS app" and I'll write the step-by-step Xcode 
 
 **Triggered by Chad on 2026-05-10:** he wants a license-key gate even for friends-and-family beta. *"Whether I ship it to them or they buy it, I want it locked down."*
 
-The .dmg is signed and notarized but currently has no licensing layer — anyone with a copy can install and use it. We need a key system before sending Cold Bore to the first beta tester.
+The .dmg is signed and notarized but currently has no licensing layer — anyone with a copy can install and use it. We need a key system before sending True Zero to the first beta tester.
 
 ### Phased approach
 
@@ -523,10 +523,10 @@ The .dmg is signed and notarized but currently has no licensing layer — anyone
 A **locally-validated license key** with a **revocable key list bundled in each app release**. Minimum viable, no server required.
 
 **User flow:**
-1. Friend opens Cold Bore for the first time.
+1. Friend opens True Zero for the first time.
 2. License entry dialog appears (similar architecture to the existing disclaimer screen — a modal that blocks the main UI until satisfied).
 3. Friend pastes the key Chad emailed them, e.g. `CBORE-LAGE-7N3X-PWQQ`.
-4. Cold Bore validates against a list of allowed keys, saves the validated key in `~/Library/Application Support/Cold Bore/config.json`, never asks again on this Mac.
+4. True Zero validates against a list of allowed keys, saves the validated key in `~/Library/Application Support/True Zero/config.json`, never asks again on this Mac.
 5. Without a valid stored key, the app shows the license-entry dialog and refuses imports.
 
 **Implementation pieces:**
@@ -542,8 +542,8 @@ A **locally-validated license key** with a **revocable key list bundled in each 
 **Revocation:** if Chad sees a key being shared (or wants to cut someone off), remove the key from `VALID_KEYS` in the next app release. Auto-update path delivers the new build; on next launch, the revoked key fails validation and the app reverts to the license-entry dialog. The tester is locked out until Chad gives them a new key.
 
 **Honest limitations of Phase 9.0a:**
-- A friend can give their `.app` AND key to someone else, who can paste the same key on their own Mac and use Cold Bore. There's no machine-binding without a server. **For beta, this is fine** — Chad knows who he gave each key to, and revocation is one app update away.
-- Determined pirates can patch the binary to skip the check. Not worth defending against for a niche app — the same person could just rewrite Cold Bore from scratch if they were that motivated.
+- A friend can give their `.app` AND key to someone else, who can paste the same key on their own Mac and use True Zero. There's no machine-binding without a server. **For beta, this is fine** — Chad knows who he gave each key to, and revocation is one app update away.
+- Determined pirates can patch the binary to skip the check. Not worth defending against for a niche app — the same person could just rewrite True Zero from scratch if they were that motivated.
 
 #### Phase 9.0b — Online activation (add later, when shifting to paid sales)
 
@@ -573,7 +573,7 @@ This is what Gumroad/Paddle/Lemon Squeezy do under the hood. Adds about a day of
 
 ## Future: Sales readiness (Phase 9) — commercialization plan
 
-Chad asked "how marketable is Cold Bore?" and indicated interest in selling it. Captured the realistic path here.
+Chad asked "how marketable is True Zero?" and indicated interest in selling it. Captured the realistic path here.
 
 **Honest market assessment recap:**
 - Niche audience: ~50-200k precision rifle reloaders in the US, of whom maybe 30% own Garmin Xero (today, growing). Real addressable: ~15-60k people.
@@ -581,7 +581,7 @@ Chad asked "how marketable is Cold Bore?" and indicated interest in selling it. 
 - Free competitors exist (GRT, shared Excel templates, OnTarget software).
 - Reloading is safety-adjacent → trust takes years for a solo developer.
 - Realistic year-1 revenue: $2k–15k if commercialized well, $20-60k if a viral moment hits, $0-500 if it flops.
-- Cold Bore is unlikely to be a full-time business but could be a meaningful side project that funds shooting + earns community recognition.
+- True Zero is unlikely to be a full-time business but could be a meaningful side project that funds shooting + earns community recognition.
 
 **Two paths to choose from:**
 
@@ -596,7 +596,7 @@ Chad asked "how marketable is Cold Bore?" and indicated interest in selling it. 
 
 **Foundation (weeks 1-4, ~$500-1500):**
 - [ ] Form an LLC in Chad's state (~$50-500). Critical for safety-adjacent software — limits personal liability if a user blows up a rifle and tries to blame the app.
-- [ ] Trademark "Cold Bore" with USPTO (~$250-350 filing fee + maybe lawyer for ~$500). Check existing trademarks first.
+- [ ] Trademark "True Zero" with USPTO (~$250-350 filing fee + maybe lawyer for ~$500). Check existing trademarks first.
 - [ ] Hire a software/firearms-adjacent attorney for 2 hours of consultation (~$300-600). Reviews:
   - Disclaimer / EULA (current one is informal boilerplate; commercial needs proper EULA)
   - Privacy policy (App Store + most jurisdictions require this if you collect any data)
@@ -650,11 +650,11 @@ Chad asked "how marketable is Cold Bore?" and indicated interest in selling it. 
 
 ## Architecture decision: desktop app vs SaaS (web app)
 
-Captured during the v0.8.5 release saga (May 9, 2026). One of Chad's developer friends suggested he commercialize Cold Bore as a SaaS instead of a desktop app — "it won't differentiate between operating systems and be an app users can get there." Friend's point is real and worth preserving alongside the desktop-app commercialization plan above.
+Captured during the v0.8.5 release saga (May 9, 2026). One of Chad's developer friends suggested he commercialize True Zero as a SaaS instead of a desktop app — "it won't differentiate between operating systems and be an app users can get there." Friend's point is real and worth preserving alongside the desktop-app commercialization plan above.
 
 ### What "SaaS" would mean here
 
-Users go to a website (e.g., `coldbore.app`), sign up, log in, use Cold Bore in their browser. No installation. Works on every device with a browser — Mac, Windows, iOS, Android, even office computers without admin rights. All the architecture pain we hit in the v0.8.x release saga (universal2, Gatekeeper, code-signing, Apple Developer Program, Windows port) just goes away.
+Users go to a website (e.g., `coldbore.app`), sign up, log in, use True Zero in their browser. No installation. Works on every device with a browser — Mac, Windows, iOS, Android, even office computers without admin rights. All the architecture pain we hit in the v0.8.x release saga (universal2, Gatekeeper, code-signing, Apple Developer Program, Windows port) just goes away.
 
 ### Tradeoffs honestly
 
@@ -665,11 +665,11 @@ Users go to a website (e.g., `coldbore.app`), sign up, log in, use Cold Bore in 
 - Easy onboarding: sign up with email, start using
 - Sync across devices: same data accessible from phone + Mac + tablet
 
-**SaaS loses for Cold Bore specifically:**
+**SaaS loses for True Zero specifically:**
 1. **Range trips happen where cell signal is spotty.** Outdoor rifle ranges are often rural. A web app needs internet. The current desktop app works offline. If a user is at the range entering shot data and the website won't load, they're stuck.
 2. **Reloaders are weirdly privacy-conscious about their data.** Custom load recipes feel proprietary to people. Some users will refuse to put their loads in the cloud no matter how secure the storage is.
-3. **Excel integration is harder.** The current Cold Bore writes directly to a local .xlsx workbook. Browsers can't write to local disk directly; they can only download files. So a SaaS Cold Bore either replaces the workbook with its own database (and gives up Excel entirely) or does a download-upload dance every time, which is friction.
-4. **Building a SaaS is a fundamentally different skill set.** Current Cold Bore: Python + PyQt5 desktop. A SaaS: Python backend (Django/Flask/FastAPI) + JavaScript frontend (React/Vue/Next.js) + database (Postgres/SQLite) + deployment (Render/Fly.io/Vercel) + authentication + file upload handling. It's essentially a from-scratch rewrite in a new stack. Months of work.
+3. **Excel integration is harder.** The current True Zero writes directly to a local .xlsx workbook. Browsers can't write to local disk directly; they can only download files. So a SaaS True Zero either replaces the workbook with its own database (and gives up Excel entirely) or does a download-upload dance every time, which is friction.
+4. **Building a SaaS is a fundamentally different skill set.** Current True Zero: Python + PyQt5 desktop. A SaaS: Python backend (Django/Flask/FastAPI) + JavaScript frontend (React/Vue/Next.js) + database (Postgres/SQLite) + deployment (Render/Fly.io/Vercel) + authentication + file upload handling. It's essentially a from-scratch rewrite in a new stack. Months of work.
 5. **Hosting costs ongoing money.** Free tiers exist for low traffic, but with even modest growth you'd pay $20-100/month for servers, database, file storage. Desktop app costs $0 to operate.
 6. **Uptime obligations.** When SaaS is down, every user is affected. When a friend's desktop app crashes, only they are. Solo dev SaaS = you're on call.
 
@@ -684,10 +684,10 @@ This is what many polished indie apps do (Things, Bear, Day One, Drafts): strong
 ### Decision for now (May 2026)
 
 **Stay on desktop.** Reasoning:
-- Cold Bore's audience is small (3-4 friends → maybe 50-100 enthusiasts later). The pain of today's release saga is one-time setup pain, not ongoing pain.
-- The two SaaS-killer features (offline range use + local Excel ownership) are exactly what Cold Bore's target users care about most.
+- True Zero's audience is small (3-4 friends → maybe 50-100 enthusiasts later). The pain of today's release saga is one-time setup pain, not ongoing pain.
+- The two SaaS-killer features (offline range use + local Excel ownership) are exactly what True Zero's target users care about most.
 - Pivoting to SaaS = restarting the project. Two months of work just to get back to feature parity. Hard to justify before there's commercial signal.
-- Phase 7 + Phase 8 (Windows + iOS ports) are doable and progressive — each one brings Cold Bore to a new audience without giving up the desktop strengths.
+- Phase 7 + Phase 8 (Windows + iOS ports) are doable and progressive — each one brings True Zero to a new audience without giving up the desktop strengths.
 
 **When to revisit:**
 - If feedback from friends/early users is consistently "I wish I could check my loads from my phone" or "I want to share my load library with so-and-so" → consider adding the web companion (hybrid path).
@@ -727,7 +727,7 @@ Replaces the old "click link → browser → manual drag-to-Applications" flow w
 - `app/updater.py` — added `UpdateDownloader(QThread)` next to `UpdateChecker`. Streams the .zip with progress signals, throttled at 256 KB increments to avoid flooding the event loop on fast networks. Caps downloads at 500 MB to catch misconfigured manifests.
 
 **Helper-script flow** (the bash that does the actual swap):
-1. `sleep 3` — wait for parent Cold Bore to fully quit (macOS holds bundle open while Python is alive)
+1. `sleep 3` — wait for parent True Zero to fully quit (macOS holds bundle open while Python is alive)
 2. Create staging dir next to current .app (same filesystem → atomic rename later)
 3. `unzip` the downloaded `Cold.Bore.zip` into staging
 4. `find` the new .app inside staging (handles whatever directory structure the zip has)
@@ -736,7 +736,7 @@ Replaces the old "click link → browser → manual drag-to-Applications" flow w
 7. `mv` new .app into the old's place
 8. `rm` staging + zip + helper script (self-delete)
 9. `open` the new .app
-- On any failure, `log_fail` writes the error to `~/Library/Application Support/Cold Bore/last_install_error.log` and surfaces a non-blocking macOS notification, then exits non-zero. Next app launch reads + deletes the log so user sees "previous update failed" once.
+- On any failure, `log_fail` writes the error to `~/Library/Application Support/True Zero/last_install_error.log` and surfaces a non-blocking macOS notification, then exits non-zero. Next app launch reads + deletes the log so user sees "previous update failed" once.
 
 **Banner state machine** (in `MainWindow._render_update_banner`):
 - `ready` — "App update: vX.Y.Z is available. **Install Update** · Or download manually"
@@ -763,7 +763,7 @@ State transitions: ready→downloading on Install Update click; downloading→re
 
 ## Where I am, in case I have to resume
 
-**Latest state (May 9, 2026 evening):** Mid-saga around the v0.8.x auto-update / build-architecture work. v0.8.5 is **code-complete locally, not yet pushed**. Chad's `/Applications/Cold Bore.app` is currently broken (it's the v0.8.4 build whose universal2 launcher couldn't carry PyQt5's arm64-only C extensions to Intel). Chad on a break — see the **PAUSED MID-RELEASE-LOOP** section at the top of `Notes for next session.md` for the full state snapshot, the resume checklist, and the lessons learned. **Don't follow the standard release procedure here — read the breadcrumb first.** Friends have NOT received any zips yet, so the broken intermediate releases never reached anyone.
+**Latest state (May 9, 2026 evening):** Mid-saga around the v0.8.x auto-update / build-architecture work. v0.8.5 is **code-complete locally, not yet pushed**. Chad's `/Applications/True Zero.app` is currently broken (it's the v0.8.4 build whose universal2 launcher couldn't carry PyQt5's arm64-only C extensions to Intel). Chad on a break — see the **PAUSED MID-RELEASE-LOOP** section at the top of `Notes for next session.md` for the full state snapshot, the resume checklist, and the lessons learned. **Don't follow the standard release procedure here — read the breadcrumb first.** Friends have NOT received any zips yet, so the broken intermediate releases never reached anyone.
 
 ---
 
@@ -777,6 +777,6 @@ Current `app/` layout:
 - `updater.py` — background update check
 - `version.py` — APP_VERSION + TEMPLATE_VERSION constants
 
-`Test Cold Bore.command` is the dev launcher — installs PyQt5 if needed and runs `app/main.py`. Will keep working through Phase 5; gets replaced by a proper `.app` bundle in Phase 6.
+`Test True Zero.command` is the dev launcher — installs PyQt5 if needed and runs `app/main.py`. Will keep working through Phase 5; gets replaced by a proper `.app` bundle in Phase 6.
 
 `import_data.py` was refactored: `run_import(workbook_path, project_dir, open_excel)` and `list_workbooks(project_dir)` are now public, while `main()` keeps the CLI flow working unchanged for Chad's existing Desktop `.command`.

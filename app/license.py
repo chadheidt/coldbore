@@ -1,4 +1,4 @@
-"""License-key validation for Cold Bore.
+"""License-key validation for True Zero.
 
 Each tester gets a unique key (e.g. CBORE-A2BC-DEFG-H3JK-LMNP). The app
 validates the key on first launch via license_dialog and stores it in

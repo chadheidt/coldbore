@@ -1,13 +1,13 @@
 """
-Load sharing — export and import individual loads as .coldbore files.
+Load sharing — export and import individual loads as .truezero files.
 
-A .coldbore file is a small JSON document containing the suggested winning
+A .truezero file is a small JSON document containing the suggested winning
 load from a workbook (cartridge, components, charge, jump, performance stats).
 Friends can email/AirDrop these to each other.
 
 Tools menu in the app:
-  - Export Suggested Load…  → writes a .coldbore file next to the workbook
-  - Import Shared Load…     → opens a .coldbore file and shows its contents
+  - Export Suggested Load…  → writes a .truezero file next to the workbook
+  - Import Shared Load…     → opens a .truezero file and shows its contents
                               in a read-only dialog the user can copy from
 
 This v1 keeps it simple — imports SHOW the load rather than writing into the
@@ -28,9 +28,12 @@ from version import APP_NAME, APP_VERSION
 from load_card import LOAD_LOG_FIELDS, _extract_bullet_weight  # reuse
 
 
-COLDBORE_FORMAT = "coldbore.load"
-COLDBORE_VERSION = 1
-FILE_EXT = ".coldbore"
+TRUEZERO_FORMAT = "truezero.load"
+TRUEZERO_VERSION = 1
+FILE_EXT = ".truezero"
+# Backwards-compatibility aliases for old constant names used elsewhere.
+COLDBORE_FORMAT = TRUEZERO_FORMAT
+COLDBORE_VERSION = TRUEZERO_VERSION
 
 
 # ============================================================
@@ -39,7 +42,7 @@ FILE_EXT = ".coldbore"
 
 def export_load(workbook_path):
     """Read the suggested winning load from the workbook and write it to a
-    .coldbore file next to the workbook. Returns the path to the written file."""
+    .truezero file next to the workbook. Returns the path to the written file."""
     wb = load_workbook(workbook_path, data_only=True, keep_vba=False)
 
     def cell(sheet, coord):
@@ -77,8 +80,8 @@ def export_load(workbook_path):
     }
 
     payload = {
-        "format": COLDBORE_FORMAT,
-        "format_version": COLDBORE_VERSION,
+        "format": TRUEZERO_FORMAT,
+        "format_version": TRUEZERO_VERSION,
         "exported_at": datetime.now().isoformat(timespec="seconds"),
         "exported_by": f"{APP_NAME} v{APP_VERSION}",
         "rifle": rifle,
@@ -88,7 +91,7 @@ def export_load(workbook_path):
         "notes": "",
     }
 
-    # Filename: "<Cartridge> <Bullet wt><Powder> <charge>gr.coldbore"
+    # Filename: "<Cartridge> <Bullet wt><Powder> <charge>gr.truezero"
     parts = []
     if rifle["cartridge"]:
         parts.append(str(rifle["cartridge"]))
@@ -117,11 +120,11 @@ def export_load(workbook_path):
 # ============================================================
 
 class LoadFileError(Exception):
-    """Raised when a file isn't a valid .coldbore load."""
+    """Raised when a file isn't a valid .truezero load."""
 
 
 def import_load(file_path):
-    """Read and validate a .coldbore file. Returns the parsed dict.
+    """Read and validate a .truezero file. Returns the parsed dict.
     Raises LoadFileError if the file isn't valid."""
     try:
         with open(file_path, encoding="utf-8") as f:
@@ -133,14 +136,14 @@ def import_load(file_path):
         raise LoadFileError("File doesn't contain a load object.")
 
     fmt = data.get("format")
-    if fmt != COLDBORE_FORMAT:
+    if fmt != TRUEZERO_FORMAT:
         raise LoadFileError(
-            f"This file isn't a Cold Bore shared load "
-            f"(format={fmt!r}, expected {COLDBORE_FORMAT!r})."
+            f"This file isn't a True Zero shared load "
+            f"(format={fmt!r}, expected {TRUEZERO_FORMAT!r})."
         )
 
     fmt_v = data.get("format_version")
-    if isinstance(fmt_v, int) and fmt_v > COLDBORE_VERSION:
+    if isinstance(fmt_v, int) and fmt_v > TRUEZERO_VERSION:
         # Newer format version — try to read it anyway, but warn
         # (intentionally not raising; forward-compat best effort)
         pass

@@ -1,5 +1,5 @@
 """
-Parser registry for Cold Bore.
+Parser registry for True Zero.
 
 Each parser is a Python module in this folder that exports:
     KIND          : "chronograph" or "group"

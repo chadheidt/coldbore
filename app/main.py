@@ -1,5 +1,5 @@
 """
-Cold Bore — GUI app.
+True Zero — GUI app.
 
 A small window with a drop zone. When CSVs are dropped:
     1. Each file is auto-classified (Garmin vs BallisticX) by sniffing its first lines.
@@ -593,7 +593,7 @@ class MainWindow(QMainWindow):
         self.drop = DropZone(self.handle_drops)
         self.drop.setToolTip(
             "Drag your Garmin and BallisticX CSVs here. "
-            "Cold Bore detects the format automatically and routes each file "
+            "True Zero detects the format automatically and routes each file "
             "to the right import folder. Click Run Import when you've dropped everything."
         )
         layout.addWidget(self.drop)
@@ -660,7 +660,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.log, stretch=1)
 
         self._log("Ready. Drop CSV files into the box above.", color=theme.LOG_INFO)
-        self._log("New here? Tools → How to Use Cold Bore… walks you through "
+        self._log("New here? Tools → How to Use True Zero… walks you through "
                   "labels, workflow, and tips.", color=theme.LOG_DIM)
 
         # Show a snapshot of what's already in the workbook so the user knows
@@ -1085,7 +1085,7 @@ class MainWindow(QMainWindow):
             elif state == "installing":
                 parts.append(
                     f"<b>Update v{new_v} ready.</b> "
-                    'Cold Bore will close, install the update, and reopen.'
+                    'True Zero will close, install the update, and reopen.'
                 )
                 parts.append(
                     '<a href="install:swap"><b>Quit and Install</b></a>'
@@ -1229,7 +1229,7 @@ class MainWindow(QMainWindow):
             self._render_update_banner(
                 state="error",
                 error=(
-                    "Cold Bore couldn't swap in the new version automatically. "
+                    "True Zero couldn't swap in the new version automatically. "
                     "Use the download link to install manually."
                 ),
             )
@@ -1445,11 +1445,11 @@ class MainWindow(QMainWindow):
                       color=theme.LOG_SUCCESS)
         elif n_powder < 3 or n_seating < 3:
             self._log("  (Need at least 3 loads in either ladder before "
-                      "Cold Bore picks a suggested winner.)",
+                      "True Zero picks a suggested winner.)",
                       color=theme.LOG_DIM)
 
     def _show_help(self):
-        """Tools → How to Use Cold Bore…"""
+        """Tools → How to Use True Zero…"""
         show_help(parent=self)
 
     def _show_settings(self):
@@ -1490,7 +1490,7 @@ class MainWindow(QMainWindow):
             QMessageBox.information(
                 self,
                 "No backups yet",
-                "Cold Bore hasn't created any backups yet. Backups are saved "
+                "True Zero hasn't created any backups yet. Backups are saved "
                 "to the .backups/ folder before each import.",
             )
             return
@@ -1607,7 +1607,7 @@ class MainWindow(QMainWindow):
 
     def _export_load(self):
         """Tools → Export Suggested Load… — write the current workbook's
-        suggested load to a .coldbore file in the Shared Loads/ subfolder."""
+        suggested load to a .truezero file in the Shared Loads/ subfolder."""
         try:
             from load_sharing import export_load
         except ImportError as e:
@@ -1634,7 +1634,7 @@ class MainWindow(QMainWindow):
         subprocess.run(["open", "-R", out_path])
 
     def _import_load(self):
-        """Tools → Import Shared Load… — open a .coldbore file in a file picker
+        """Tools → Import Shared Load… — open a .truezero file in a file picker
         and show its contents in a read-only dialog. Doesn't write to the user's
         workbook (intentional — user must consciously decide to try the load)."""
         try:
@@ -1648,7 +1648,7 @@ class MainWindow(QMainWindow):
             self,
             "Open Shared Load",
             os.path.join(self.project, "Shared Loads"),
-            "Cold Bore loads (*.coldbore);;All files (*)",
+            "True Zero loads (*.truezero);;All files (*)",
         )
         if not path:
             return
@@ -1664,7 +1664,7 @@ class MainWindow(QMainWindow):
         msg = QMessageBox(self)
         msg.setWindowTitle(f"Shared Load — {os.path.basename(path)}")
         msg.setIcon(QMessageBox.Information)
-        msg.setText("A load shared by another Cold Bore user:")
+        msg.setText("A load shared by another True Zero user:")
         msg.setInformativeText(text)
         # Force monospace by setting the detailed-text font
         font = msg.font()
@@ -1698,8 +1698,8 @@ class MainWindow(QMainWindow):
         # text; users see "click here" and only a hover-tooltip reveals the URL.
         # NOTE on display name: macOS Mail.app substitutes the recipient's
         # contact-card name if the email is in the user's address book. The
-        # support address (coldboreapp@gmail.com) shouldn't be in anyone's
-        # contacts by default, so the "Cold Bore Support" display name we
+        # support address (support@truezero.co) shouldn't be in anyone's
+        # contacts by default, so the "True Zero Support" display name we
         # provide here will show through cleanly for both Chad and friends.
         contact_subject = f"{APP_NAME} v{APP_VERSION} — feedback"
         contact_body = (
@@ -1714,7 +1714,7 @@ class MainWindow(QMainWindow):
         # The %22 are URL-encoded double quotes around the display name; %20 is
         # space; %3C and %3E are < and >.
         display_name = f"{APP_NAME} Support"
-        recipient = "coldboreapp@gmail.com"
+        recipient = "support@truezero.co"
         encoded_recipient = (
             f"%22{display_name.replace(' ', '%20')}%22%20%3C{recipient}%3E"
         )
@@ -1739,7 +1739,7 @@ class MainWindow(QMainWindow):
             f"not listed, "
             f'<a href="{mailto}">click here to contact the developers</a> '
             f"and send a sample CSV from your device.</i><br><br>"
-            f"<b>Disclaimer:</b> Cold Bore is a data-analysis tool. It does "
+            f"<b>Disclaimer:</b> True Zero is a data-analysis tool. It does "
             f"not provide load data and is not a substitute for safe "
             f"handloading practice. See Tools → View Disclaimer for the full text."
         )
@@ -1805,7 +1805,7 @@ def main():
             lambda: QMessageBox.warning(
                 win,
                 "Last update didn't install",
-                "Cold Bore tried to install an update but couldn't finish:\n\n"
+                "True Zero tried to install an update but couldn't finish:\n\n"
                 f"{last_install_err}\n\n"
                 "You're still on the previous version. Use the update banner "
                 "to try again, or download the new version manually from GitHub."

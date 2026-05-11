@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
-<title>Cold Bore — precision rifle load development for Mac</title>
-<meta name="description" content="Cold Bore turns Garmin Xero and BallisticX CSV exports into a structured load development workbook. No more typing velocities by hand.">
-<meta property="og:title" content="Cold Bore">
+<title>True Zero — precision rifle load development for Mac</title>
+<meta name="description" content="True Zero turns Garmin Xero and BallisticX CSV exports into a structured load development workbook. No more typing velocities by hand.">
+<meta property="og:title" content="True Zero">
 <meta property="og:description" content="Precision rifle load development for Mac. Auto-import your chronograph and target data. Find your node faster.">
 <meta property="og:type" content="website">
 <style>
@@ -302,15 +302,68 @@ footer p { margin-bottom: 8px; }
 }
 .download-modal .actions .btn { padding: 10px 20px; font-size: 14.5px; }
 .download-modal .actions .btn[disabled] { opacity: 0.6; cursor: not-allowed; }
+.modal-tabs {
+  display: flex;
+  gap: 0;
+  margin: -8px -28px 22px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-tab {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--text-dim);
+  padding: 12px 16px;
+  font-size: 14.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.modal-tab:hover { color: var(--text); }
+.modal-tab.active {
+  color: var(--orange);
+  border-bottom-color: var(--orange);
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+.download-modal label {
+  display: block;
+  color: var(--text-dim);
+  font-size: 13px;
+  margin-bottom: 6px;
+  margin-top: 12px;
+}
+.download-modal label:first-of-type { margin-top: 0; }
+.download-modal textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: -apple-system, sans-serif;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 64px;
+  margin-bottom: 8px;
+}
+.download-modal textarea:focus { outline: none; border-color: var(--orange); }
+.download-modal .name-email-input {
+  font-family: -apple-system, sans-serif !important;
+  letter-spacing: normal !important;
+}
+.turnstile-wrap { margin: 12px 0 10px; min-height: 65px; }
 </style>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
 <body>
 
 <nav>
   <div class="container">
     <div class="logo">
-      <img src="assets/icon.png" alt="Cold Bore Icon">
-      COLD BORE
+      <img src="assets/icon.png" alt="True Zero Icon">
+      TRUE ZERO
     </div>
     <div class="nav-links">
       <a href="#features">Features</a>
@@ -324,20 +377,20 @@ footer p { margin-bottom: 8px; }
 <header class="hero">
   <div class="container">
     <div class="hero-logo">
-      <img src="assets/icon.png" alt="Cold Bore logo">
+      <img src="assets/icon.png" alt="True Zero logo">
     </div>
     <h1>Precision rifle load development<br>for <span class="accent">Mac</span>.</h1>
     <p class="tagline">
-      Drop your Garmin Xero and BallisticX CSV exports onto Cold Bore. It auto-imports velocity, SD, group size, mean radius, and more — straight into a structured load development workbook with built-in scoring. Find your node faster.
+      Drop your Garmin Xero and BallisticX CSV exports onto True Zero. It auto-imports velocity, SD, group size, mean radius, and more — straight into a structured load development workbook with built-in scoring. Find your node faster.
     </p>
     <div class="cta-row">
-      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Download Cold Bore</a>
+      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Download True Zero</a>
       <a href="#install" class="btn btn-large btn-outline">How to Install</a>
     </div>
     <div class="platform-note">macOS 10.13+ &middot; Intel and Apple Silicon &middot; Free during beta</div>
 
     <div class="screenshot-wrap">
-      <img src="assets/workbook.png" alt="Cold Bore Load Log showing a 7 SAUM powder ladder with the SUGGESTED CHARGE bar populated">
+      <img src="assets/workbook.png" alt="True Zero Load Log showing a 7 SAUM powder ladder with the SUGGESTED CHARGE bar populated">
     </div>
   </div>
 </header>
@@ -345,16 +398,16 @@ footer p { margin-bottom: 8px; }
 <section style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
   <div class="container">
     <h2>The output speaks for itself.</h2>
-    <p class="section-sub">Cold Bore turns your CSV exports into a structured load development workbook with composite scoring across SD, mean radius, and vertical dispersion. The suggested winner shows up at the top of the Load Log automatically.</p>
+    <p class="section-sub">True Zero turns your CSV exports into a structured load development workbook with composite scoring across SD, mean radius, and vertical dispersion. The suggested winner shows up at the top of the Load Log automatically.</p>
   </div>
 </section>
 
 <section>
   <div class="container">
     <h2>Drag. Click. <span class="accent">Done.</span></h2>
-    <p class="section-sub">Drop your range-trip CSVs onto the window. Cold Bore figures out which ones are Garmin Xero (chronograph) and which are BallisticX (target groups), routes them automatically, and writes everything into your workbook. Excel opens with the data ready to read.</p>
+    <p class="section-sub">Drop your range-trip CSVs onto the window. True Zero figures out which ones are Garmin Xero (chronograph) and which are BallisticX (target groups), routes them automatically, and writes everything into your workbook. Excel opens with the data ready to read.</p>
     <div class="screenshot-wrap" style="margin-top: 32px;">
-      <img src="assets/screenshot.png" alt="Cold Bore application window showing the precision-rifle reticle drop zone, workbook picker, Run Import button, and activity log with successful Garmin and BallisticX import messages">
+      <img src="assets/screenshot.png" alt="True Zero application window showing the precision-rifle reticle drop zone, workbook picker, Run Import button, and activity log with successful Garmin and BallisticX import messages">
     </div>
   </div>
 </section>
@@ -362,12 +415,12 @@ footer p { margin-bottom: 8px; }
 <section id="features">
   <div class="container">
     <h2>Built by a <span class="accent">precision shooter</span>, for precision shooters.</h2>
-    <p class="section-sub">No more retyping shot velocities into Excel after every range trip. Cold Bore does the data entry; you focus on finding the node.</p>
+    <p class="section-sub">No more retyping shot velocities into Excel after every range trip. True Zero does the data entry; you focus on finding the node.</p>
     <div class="features">
       <div class="feature">
         <div class="icon">→</div>
         <h3>Drag-and-drop import</h3>
-        <p>Drop CSVs from Garmin Xero (chronograph) and BallisticX (target groups) onto the window or the Dock icon. Cold Bore figures out which is which and routes them to the right place.</p>
+        <p>Drop CSVs from Garmin Xero (chronograph) and BallisticX (target groups) onto the window or the Dock icon. True Zero figures out which is which and routes them to the right place.</p>
       </div>
       <div class="feature">
         <div class="icon">📊</div>
@@ -382,7 +435,7 @@ footer p { margin-bottom: 8px; }
       <div class="feature">
         <div class="icon">🎯</div>
         <h3>Label-driven workflow</h3>
-        <p>Use a simple label format (<code>P1 45.5 H4350</code>) on your CSVs and Cold Bore routes everything correctly. Works with the test types you already run: powder ladder, seating depth, confirmation.</p>
+        <p>Use a simple label format (<code>P1 45.5 H4350</code>) on your CSVs and True Zero routes everything correctly. Works with the test types you already run: powder ladder, seating depth, confirmation.</p>
       </div>
       <div class="feature">
         <div class="icon">↻</div>
@@ -392,7 +445,7 @@ footer p { margin-bottom: 8px; }
       <div class="feature">
         <div class="icon">🛡</div>
         <h3>Your data, your machine</h3>
-        <p>Cold Bore writes to a regular Excel file on your Mac. No cloud, no account, no subscription. Workbooks are yours; uninstall whenever, your data stays.</p>
+        <p>True Zero writes to a regular Excel file on your Mac. No cloud, no account, no subscription. Workbooks are yours; uninstall whenever, your data stays.</p>
       </div>
     </div>
   </div>
@@ -406,17 +459,17 @@ footer p { margin-bottom: 8px; }
       <div class="step">
         <div class="num">1</div>
         <h3>Download</h3>
-        <p>Click <strong>Download</strong> at the top of the page and paste the access code that was emailed to you. The Cold Bore disk image (about 55 MB) will start downloading.</p>
+        <p>Click <strong>Download</strong> at the top of the page and paste the access code that was emailed to you. The True Zero disk image (about 55 MB) will start downloading.</p>
       </div>
       <div class="step">
         <div class="num">2</div>
         <h3>Open the disk image</h3>
-        <p>Double-click <strong>Cold.Bore.dmg</strong> in your Downloads folder. A window opens with the Cold Bore icon and an Applications shortcut.</p>
+        <p>Double-click <strong>True.Zero.dmg</strong> in your Downloads folder. A window opens with the True Zero icon and an Applications shortcut.</p>
       </div>
       <div class="step">
         <div class="num">3</div>
         <h3>Drag to Applications</h3>
-        <p>Drag <strong>Cold Bore</strong> onto the <strong>Applications</strong> shortcut in the same window. Eject the disk image. Open Cold Bore from your Applications folder. The Quick Start guide is also on the disk image.</p>
+        <p>Drag <strong>True Zero</strong> onto the <strong>Applications</strong> shortcut in the same window. Eject the disk image. Open True Zero from your Applications folder. The Quick Start guide is also on the disk image.</p>
       </div>
     </div>
 
@@ -429,31 +482,31 @@ footer p { margin-bottom: 8px; }
 <section id="faq">
   <div class="container">
     <h2>Common <span class="accent">questions</span>.</h2>
-    <p class="section-sub">If you don't see your question here, email <a href="mailto:coldboreapp@gmail.com" style="color: var(--orange);">coldboreapp@gmail.com</a>.</p>
+    <p class="section-sub">If you don't see your question here, email <a href="mailto:support@truezero.co" style="color: var(--orange);">support@truezero.co</a>.</p>
     <div class="faq-grid">
       <div class="faq-item">
         <h3>How do I get an access code?</h3>
-        <p>Cold Bore is in private beta. Email <a href="mailto:coldboreapp@gmail.com" style="color: var(--orange);">coldboreapp@gmail.com</a> to request access. You'll receive a unique code that unlocks both the download and the app itself.</p>
+        <p>True Zero is in private beta. Email <a href="mailto:support@truezero.co" style="color: var(--orange);">support@truezero.co</a> to request access. You'll receive a unique code that unlocks both the download and the app itself.</p>
       </div>
       <div class="faq-item">
         <h3>What's the workflow look like in practice?</h3>
-        <p>Range trip → CSV from your Xero, CSV from BallisticX → drop both onto Cold Bore → workbook opens in Excel with all the velocity, SD, ES, group size, mean radius numbers filled in. You add notes, save, done.</p>
+        <p>Range trip → CSV from your Xero, CSV from BallisticX → drop both onto True Zero → workbook opens in Excel with all the velocity, SD, ES, group size, mean radius numbers filled in. You add notes, save, done.</p>
       </div>
       <div class="faq-item">
         <h3>Does it work with [other chronograph]?</h3>
-        <p>Currently supports Garmin Xero (ShotView CSVs) and BallisticX. The architecture is pluggable — adding LabRadar, MagnetoSpeed, Athlon Rangecraft, etc. is straightforward. If you'd like one added, send a sample CSV to coldboreapp@gmail.com.</p>
+        <p>Currently supports Garmin Xero (ShotView CSVs) and BallisticX. The architecture is pluggable — adding LabRadar, MagnetoSpeed, Athlon Rangecraft, etc. is straightforward. If you'd like one added, send a sample CSV to support@truezero.co.</p>
       </div>
       <div class="faq-item">
         <h3>Is my data going to the cloud?</h3>
-        <p>No. Cold Bore writes to a regular .xlsx file on your Mac. No account, no sync, no telemetry. Your loads stay on your machine.</p>
+        <p>No. True Zero writes to a regular .xlsx file on your Mac. No account, no sync, no telemetry. Your loads stay on your machine.</p>
       </div>
       <div class="faq-item">
-        <h3>Is Cold Bore code-signed by Apple?</h3>
-        <p>Yes. Cold Bore is signed with a Developer ID Application certificate and notarized by Apple. macOS will open it without security warnings on the first launch — the same as any commercial Mac app.</p>
+        <h3>Is True Zero code-signed by Apple?</h3>
+        <p>Yes. True Zero is signed with a Developer ID Application certificate and notarized by Apple. macOS will open it without security warnings on the first launch — the same as any commercial Mac app.</p>
       </div>
       <div class="faq-item">
         <h3>Does it work on Apple Silicon?</h3>
-        <p>Yes — runs natively on Intel Macs and via Rosetta 2 on M-series. Performance is fine; Cold Bore is a small app.</p>
+        <p>Yes — runs natively on Intel Macs and via Rosetta 2 on M-series. Performance is fine; True Zero is a small app.</p>
       </div>
       <div class="faq-item">
         <h3>What about Windows / iOS?</h3>
@@ -465,34 +518,65 @@ footer p { margin-bottom: 8px; }
 
 <footer>
   <div class="container">
-    <p><strong>Cold Bore</strong> &middot; <a href="mailto:coldboreapp@gmail.com">coldboreapp@gmail.com</a></p>
-    <p>&copy; 2026 Cold Bore. All rights reserved.</p>
+    <p><strong>True Zero</strong> &middot; <a href="mailto:support@truezero.co">support@truezero.co</a></p>
+    <p>&copy; 2026 True Zero. All rights reserved.</p>
     <div class="disclaimer">
-      <strong>Reloading safety disclaimer:</strong> Cold Bore is a tool for organizing data you collect during precision rifle load development. It is NOT a source of load data and does not recommend specific charge weights, bullet types, or seating depths for your firearm. Always cross-reference loads against published reloading manuals from powder, bullet, and cartridge manufacturers. Watch for pressure signs. Start below maximum loads and work up. The developer is not liable for any damage, injury, or loss resulting from use of this app.
+      <strong>Reloading safety disclaimer:</strong> True Zero is a tool for organizing data you collect during precision rifle load development. It is NOT a source of load data and does not recommend specific charge weights, bullet types, or seating depths for your firearm. Always cross-reference loads against published reloading manuals from powder, bullet, and cartridge manufacturers. Watch for pressure signs. Start below maximum loads and work up. The developer is not liable for any damage, injury, or loss resulting from use of this app.
     </div>
   </div>
 </footer>
 
 <div class="download-modal" id="downloadModal" onclick="if(event.target===this) closeDownloadModal()">
   <div class="box">
-    <h3>Enter your beta access code</h3>
-    <p>Cold Bore is in private beta. Paste the access code that was emailed to you to start the download.</p>
-    <input type="text" id="accessCodeInput" placeholder="CBORE-XXXX-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
-    <div class="feedback" id="accessCodeFeedback"></div>
-    <div class="actions">
-      <button class="btn btn-outline" onclick="closeDownloadModal()">Cancel</button>
-      <button class="btn" id="downloadModalSubmit" onclick="submitAccessCode()">Download</button>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tabHaveCode" onclick="switchTab('have-code')">I have a code</button>
+      <button class="modal-tab" id="tabRequestAccess" onclick="switchTab('request-access')">Request access</button>
+    </div>
+
+    <!-- Tab 1: enter existing access code -->
+    <div class="tab-panel active" id="panelHaveCode">
+      <h3>Enter your beta access code</h3>
+      <p>Paste the access code that was emailed to you to start the download.</p>
+      <input type="text" id="accessCodeInput" placeholder="CBORE-XXXX-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <div class="feedback" id="accessCodeFeedback"></div>
+      <div class="actions">
+        <button class="btn btn-outline" onclick="closeDownloadModal()">Cancel</button>
+        <button class="btn" id="downloadModalSubmit" onclick="submitAccessCode()">Download</button>
+      </div>
+    </div>
+
+    <!-- Tab 2: request beta access -->
+    <div class="tab-panel" id="panelRequestAccess">
+      <h3>Request beta access</h3>
+      <p>Tell me who you are. I'll review and email your access code within 24 hours. True Zero is in private beta with a small group of precision rifle shooters.</p>
+      <label for="reqName">Your name</label>
+      <input type="text" id="reqName" class="name-email-input" placeholder="John Smith" autocomplete="name" maxlength="120">
+      <label for="reqEmail">Email</label>
+      <input type="email" id="reqEmail" class="name-email-input" placeholder="you@example.com" autocomplete="email" maxlength="200">
+      <label for="reqProjectInfo">What you're working on <span style="color: var(--text-muted); font-size: 12px;">(optional)</span></label>
+      <textarea id="reqProjectInfo" placeholder="e.g. 7 SAUM hunter, 168gr Berger Hybrid, H1000, building load workup for the season" maxlength="1000"></textarea>
+      <div class="turnstile-wrap">
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAADNX_3J_xCND3c-H" data-theme="dark"></div>
+      </div>
+      <div class="feedback" id="requestAccessFeedback"></div>
+      <div class="actions">
+        <button class="btn btn-outline" onclick="closeDownloadModal()">Cancel</button>
+        <button class="btn" id="requestAccessSubmit" onclick="submitRequestAccess()">Send request</button>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
 const WORKER_AUTHORIZE_URL = "https://coldbore-download.cheidt182.workers.dev/authorize";
+const WORKER_REQUEST_URL = "https://coldbore-download.cheidt182.workers.dev/request-access";
 
 function openDownloadModal(ev) {
   if (ev) ev.preventDefault();
   document.getElementById("downloadModal").classList.add("open");
   document.getElementById("accessCodeFeedback").textContent = "";
+  document.getElementById("requestAccessFeedback").textContent = "";
+  switchTab("have-code"); // default to the existing-code path
   const inp = document.getElementById("accessCodeInput");
   inp.value = "";
   setTimeout(() => inp.focus(), 50);
@@ -500,6 +584,24 @@ function openDownloadModal(ev) {
 
 function closeDownloadModal() {
   document.getElementById("downloadModal").classList.remove("open");
+}
+
+function switchTab(which) {
+  const haveCode = which === "have-code";
+  document.getElementById("tabHaveCode").classList.toggle("active", haveCode);
+  document.getElementById("tabRequestAccess").classList.toggle("active", !haveCode);
+  document.getElementById("panelHaveCode").classList.toggle("active", haveCode);
+  document.getElementById("panelRequestAccess").classList.toggle("active", !haveCode);
+  // Reset feedbacks so users don't see stale errors after a switch
+  document.getElementById("accessCodeFeedback").textContent = "";
+  document.getElementById("requestAccessFeedback").textContent = "";
+  // Focus the first input of whichever tab is now active
+  setTimeout(() => {
+    const target = haveCode
+      ? document.getElementById("accessCodeInput")
+      : document.getElementById("reqName");
+    if (target) target.focus();
+  }, 50);
 }
 
 async function submitAccessCode() {
@@ -520,7 +622,7 @@ async function submitAccessCode() {
     const r = await fetch(WORKER_AUTHORIZE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: code, file: "Cold.Bore.dmg" })
+      body: JSON.stringify({ code: code, file: "True.Zero.dmg" })
     });
     const data = await r.json();
     if (!r.ok) {
@@ -530,9 +632,7 @@ async function submitAccessCode() {
       return;
     }
     submitBtn.textContent = "Downloading...";
-    // Trigger the actual download
     window.location.href = data.url;
-    // Close the modal after a short delay so the browser kicks off the download first
     setTimeout(() => {
       closeDownloadModal();
       submitBtn.disabled = false;
@@ -542,6 +642,68 @@ async function submitAccessCode() {
     feedback.textContent = "Couldn't reach the server. Check your internet and try again.";
     submitBtn.disabled = false;
     submitBtn.textContent = "Download";
+  }
+}
+
+async function submitRequestAccess() {
+  const name = document.getElementById("reqName").value.trim();
+  const email = document.getElementById("reqEmail").value.trim();
+  const projectInfo = document.getElementById("reqProjectInfo").value.trim();
+  const feedback = document.getElementById("requestAccessFeedback");
+  const submitBtn = document.getElementById("requestAccessSubmit");
+
+  if (name.length < 2) {
+    feedback.textContent = "Please enter your name.";
+    return;
+  }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    feedback.textContent = "Please enter a valid email address.";
+    return;
+  }
+
+  // Cloudflare Turnstile token -- read from the rendered widget.
+  const turnstileToken = (typeof turnstile !== "undefined" && turnstile.getResponse)
+    ? turnstile.getResponse()
+    : "";
+  if (!turnstileToken) {
+    feedback.textContent = "Please complete the anti-bot check above.";
+    return;
+  }
+
+  feedback.textContent = "";
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Sending...";
+
+  try {
+    const r = await fetch(WORKER_REQUEST_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        project_info: projectInfo,
+        turnstile_token: turnstileToken,
+      }),
+    });
+    const data = await r.json();
+    if (!r.ok) {
+      feedback.textContent = data.error || "Something went wrong. Please try again.";
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Send request";
+      return;
+    }
+    // Success state: replace the form panel with a thank-you message.
+    document.getElementById("panelRequestAccess").innerHTML = `
+      <h3>Request received</h3>
+      <p>${data.message || "Thanks. You'll get an email with your access code once approved."}</p>
+      <div class="actions">
+        <button class="btn" onclick="closeDownloadModal()">Done</button>
+      </div>
+    `;
+  } catch (err) {
+    feedback.textContent = "Couldn't reach the server. Check your internet and try again.";
+    submitBtn.disabled = false;
+    submitBtn.textContent = "Send request";
   }
 }
 

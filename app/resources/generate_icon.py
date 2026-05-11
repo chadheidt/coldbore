@@ -1,5 +1,5 @@
 """
-Generate the Cold Bore app icon.
+Generate the True Zero app icon.
 
 Design: a brass rifle cartridge angled diagonally in front of a classic ring
 target, contained in a dark rounded-square macOS-style backdrop.

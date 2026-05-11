@@ -1,6 +1,6 @@
-# Cold Bore — context for Claude
+# True Zero — context for Claude
 
-You're working on **Cold Bore**, Chad Heidt's PyQt5 Mac desktop app for precision rifle load development. CSV imports from Garmin Xero (chronograph) and BallisticX (target groups) feed an Excel workbook with scoring formulas. Distributed as a single .app bundle to a small group of friends. In-app auto-updates via custom Python+bash installer.
+You're working on **True Zero**, Chad Heidt's PyQt5 Mac desktop app for precision rifle load development. CSV imports from Garmin Xero (chronograph) and BallisticX (target groups) feed an Excel workbook with scoring formulas. Distributed as a single .app bundle to a small group of friends. In-app auto-updates via custom Python+bash installer.
 
 ## Read these first (every session)
 
@@ -11,9 +11,9 @@ These two files are the source of truth. They override anything that conflicts i
 
 ## Live marketing site
 
-**https://chadheidt.github.io/coldbore/** (also `Cold Bore Website.webloc` at project root for one-click open from Finder).
+**https://chadheidt.github.io/coldbore/** (also `True Zero Website.webloc` at project root for one-click open from Finder).
 
-GitHub Pages serves from `docs/` on `main`. Hero images are rendered programmatically via `tools/render_workbook.py` and `tools/render_coldbore.py` — re-run those when the in-app drop zone or workbook layout changes so the marketing imagery stays accurate.
+GitHub Pages serves from `docs/` on `main`. Hero images are rendered programmatically via `tools/render_workbook.py` and `tools/render_truezero.py` — re-run those when the in-app drop zone or workbook layout changes so the marketing imagery stays accurate.
 
 ## How Chad and Claude work together
 
@@ -29,24 +29,24 @@ Chad is a precision rifle shooter, **not** a software developer. The collaborati
 1. Edit `app/version.py`, `setup.py`, `manifest.json` to the new version.
 2. Commit + push to `main`.
 3. Have Chad **double-click `Build App.command` from Finder** (NOT `python3 setup.py py2app` from a Bash tool — that path fails with EPERM on the bundled Python framework due to a `com.apple.provenance` xattr; only Build App.command from Finder works).
-4. Once `dist/Cold Bore.app` exists, zip via `ditto -c -k --keepParent "Cold Bore.app" "Cold.Bore.zip"`, then add the Quick Start docx via `zip -j "Cold.Bore.zip" "../Cold Bore — Quick Start.docx"`.
-5. `gh release create vX.Y.Z --repo chadheidt/coldbore --title "Cold Bore X.Y.Z" --notes-file <notes> --draft "dist/Cold.Bore.zip"`.
+4. Once `dist/True Zero.app` exists, zip via `ditto -c -k --keepParent "True Zero.app" "True.Zero.zip"`, then add the Quick Start docx via `zip -j "True.Zero.zip" "../True Zero — Quick Start.docx"`.
+5. `gh release create vX.Y.Z --repo chadheidt/coldbore --title "True Zero X.Y.Z" --notes-file <notes> --draft "dist/True.Zero.zip"`.
 6. `gh release edit vX.Y.Z --repo chadheidt/coldbore --draft=false --latest` to publish. The `published` event doesn't fire CI's `release: created` listener, so there's no race against manual asset attach.
-7. Chad opens Cold Bore from `/Applications` → yellow banner → Install Update → Quit and Install → app reopens at new version. Tools → About reports new version.
+7. Chad opens True Zero from `/Applications` → yellow banner → Install Update → Quit and Install → app reopens at new version. Tools → About reports new version.
 
 ## Things that have bitten us before (read once)
 
 - **Don't put non-ASCII (em-dashes, curly quotes, etc.) in commit messages, the helper bash script in `installer._build_helper_script`, or asset filenames.** Python 3.9 default ASCII encoding on file writes has crashed builds.
-- **GitHub renames release-asset filenames** — `Cold Bore.zip` → `Cold.Bore.zip` (spaces → periods). Manifest URLs must use the period form.
+- **GitHub renames release-asset filenames** — `True Zero.zip` → `True.Zero.zip` (spaces → periods). Manifest URLs must use the period form.
 - **Stick with `macos-13` Intel CI runner** (or local Build App.command). `arch = 'universal2'` produces broken bundles because PyQt5 wheels go arm64-only.
 - **Auto-update test must run from `/Applications`**, not `dist/`. `can_self_install()` returns False in dev mode.
 
 ## Common requests Chad makes
 
-- "Ship Cold Bore vX.Y.Z with [list of changes]" → run the procedure above.
+- "Ship True Zero vX.Y.Z with [list of changes]" → run the procedure above.
 - "I got a bug report from a friend" / "here's a crash log" → read traceback, fix in the right module, write or update a test in `tests/`, bump patch version, ship. Reference: `Handling Bug Reports.md`, `Handling Crash Reports.md`.
 - "Let's start the iOS port / Windows port" → Build progress.md has full plans for Phase 8 (iOS) and Phase 7 (Windows).
-- "Where's the link for friends?" → `Send Cold Bore to friends.md` at project root.
+- "Where's the link for friends?" → `Send True Zero to friends.md` at project root.
 
 ## What NOT to do without asking
 

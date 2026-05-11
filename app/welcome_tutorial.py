@@ -3,8 +3,8 @@ First-launch welcome tutorial.
 
 Multi-step modal dialog that shows once on the user's first launch (after
 they've accepted the disclaimer and finished the setup wizard). Walks new
-users through what Cold Bore does, how to label range sessions, and how to
-import. Final step points them at the Tools → How to Use Cold Bore… menu
+users through what True Zero does, how to label range sessions, and how to
+import. Final step points them at the Tools → How to Use True Zero… menu
 item for deeper details.
 
 Acceptance is tracked in config (`tutorial_seen_version`) so users only see
@@ -40,7 +40,7 @@ STEPS = [
         f"{APP_NAME} turns your range data into a recommended load — "
         "automatically.\n\n"
         "Drop in CSVs from your Garmin Xero chronograph and your "
-        "BallisticX target groups. Cold Bore organizes everything into "
+        "BallisticX target groups. True Zero organizes everything into "
         "your workbook, scores each load, and tells you which charge "
         "weight and seating depth shot best.\n\n"
         "This tour takes about 60 seconds. Click Next to start."
@@ -68,27 +68,27 @@ STEPS = [
         "    Then RENAME the file to your label\n"
         "    (e.g., 'P1 45.5 H4350.csv').\n\n"
         "BallisticX's in-app label field is unreliable, so the FILENAME is "
-        "what Cold Bore reads. This is the most common new-user trip-up — "
+        "what True Zero reads. This is the most common new-user trip-up — "
         "remember to rename!"
     ),
     (
-        "Step 3 — Drop CSVs onto Cold Bore",
+        "Step 3 — Drop CSVs onto True Zero",
         "Two ways:\n\n"
-        "Drag onto the Cold Bore icon (in the Dock or Applications)\n"
-        "    Cold Bore launches if it isn't running, auto-imports the files, "
+        "Drag onto the True Zero icon (in the Dock or Applications)\n"
+        "    True Zero launches if it isn't running, auto-imports the files, "
         "and opens your workbook in Excel. One step.\n\n"
-        "Drag into the Cold Bore window\n"
+        "Drag into the True Zero window\n"
         "    Files stage. The status bar updates as you drop. Click "
         "Run Import when you've added everything from this range trip."
     ),
     (
         "Step 4 — A few things to know",
         "• You need at least 3 different charges (or jumps) before "
-        "Cold Bore picks a suggested winner. Plan for 5–8 loads in a "
+        "True Zero picks a suggested winner. Plan for 5–8 loads in a "
         "powder ladder for cleaner results.\n\n"
         "• Close Excel BEFORE clicking Run Import. The script can't write "
         "to a workbook that Excel has open.\n\n"
-        "• Cold Bore creates a backup of your workbook before each import. "
+        "• True Zero creates a backup of your workbook before each import. "
         "You can restore via Tools → Restore From Backup.\n\n"
         "• When you finish a cycle, use Tools → Start New Cycle to wrap up "
         "and start fresh."
@@ -101,7 +101,7 @@ STEPS = [
         "the safety reminder — open Tools → How to Use "
         f"{APP_NAME}… in the menu bar above this window. You can come back "
         "to that guide anytime.\n\n"
-        "Happy load development. Click Got it to start using Cold Bore."
+        "Happy load development. Click Got it to start using True Zero."
     ),
 ]
 

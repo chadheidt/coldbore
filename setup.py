@@ -1,10 +1,10 @@
 """
-py2app build script for Cold Bore.
+py2app build script for True Zero.
 
 Run from the project folder:
     /usr/bin/python3 setup.py py2app
 
-The output goes to dist/Cold Bore.app. That .app is fully self-contained —
+The output goes to dist/True Zero.app. That .app is fully self-contained —
 Python interpreter, PyQt5, openpyxl, and the workbook template are all
 bundled inside.
 
@@ -67,9 +67,9 @@ shutil.copyfile = _wrap_copy(shutil.copyfile)
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE / "app"))
 
-APP_DISPLAY_NAME = "Cold Bore"
-APP_BUNDLE_ID = "com.chadheidt.coldbore"
-APP_VERSION = "0.11.3"  # keep in sync with app/version.py
+APP_DISPLAY_NAME = "True Zero"
+APP_BUNDLE_ID = "com.chadheidt.truezero"
+APP_VERSION = "0.12.0"  # keep in sync with app/version.py
 
 # The main entry script
 ENTRY = ["app/main.py"]

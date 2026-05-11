@@ -1,28 +1,28 @@
 # Handling Crash Reports
 
-A reference for what to do when a user emails you a crash report from Cold Bore.
+A reference for what to do when a user emails you a crash report from True Zero.
 
 ---
 
 ## What a crash report looks like
 
-Cold Bore has an opt-in crash reporter (built into the app — `app/crash_reporter.py`). When something inside the app throws an unhandled exception, the user sees a dialog with the full traceback and a **"Send via Email"** button. If they click Send, it opens their default mail app with this pre-filled:
+True Zero has an opt-in crash reporter (built into the app — `app/crash_reporter.py`). When something inside the app throws an unhandled exception, the user sees a dialog with the full traceback and a **"Send via Email"** button. If they click Send, it opens their default mail app with this pre-filled:
 
-- **To:** `coldboreapp@gmail.com` (which forwards to your personal Gmail)
-- **Subject:** `Cold Bore v0.X.Y — crash report`
-- **Body:** structured text starting with `Cold Bore vX.Y.Z — crash report`, including app version, Python version, macOS version, and the full Python traceback
+- **To:** `support@truezero.co` (which forwards to your personal Gmail)
+- **Subject:** `True Zero v0.X.Y — crash report`
+- **Body:** structured text starting with `True Zero vX.Y.Z — crash report`, including app version, Python version, macOS version, and the full Python traceback
 
 You'll get something like:
 
 ```
-Cold Bore v0.6.0 — crash report
+True Zero v0.6.0 — crash report
 Date: 2026-05-15T14:32:08
 Python: 3.11.5
 Platform: macOS-14.5-arm64-arm-64bit
 
 Traceback:
 Traceback (most recent call last):
-  File "/Applications/Cold Bore.app/Contents/Resources/main.py", line 123, in handle_drops
+  File "/Applications/True Zero.app/Contents/Resources/main.py", line 123, in handle_drops
     parser = detect_parser(p)
   File "...", line 45, in detect_parser
     ...
@@ -76,7 +76,7 @@ Before you panic:
 If the traceback is empty or doesn't make sense, ask the user to reply with:
 
 1. **Steps to reproduce.** "What did you click / drag right before the crash?"
-2. **A screenshot of the activity log** (the dark log area at the bottom of the Cold Bore window). They can copy/paste text from it too.
+2. **A screenshot of the activity log** (the dark log area at the bottom of the True Zero window). They can copy/paste text from it too.
 3. **A sample of the CSV that triggered it** (if it's an import problem). Make sure to ask them to anonymize anything sensitive — though for chronograph data there's not much to anonymize.
 
 If you got a crash report email but not the user's name, you can reply to the email to ask follow-up questions. Email replies thread to the support inbox.
@@ -86,7 +86,7 @@ If you got a crash report email but not the user's name, you can reply to the em
 ## After shipping the fix
 
 - The user gets the fix automatically via the in-app update banner (within hours of you publishing the new release and updating manifest.json)
-- **Reply to the original report** when the fix is live: *"Fixed in v0.6.1, just released. Open Cold Bore → Tools → Check for Updates to grab it."*
+- **Reply to the original report** when the fix is live: *"Fixed in v0.6.1, just released. Open True Zero → Tools → Check for Updates to grab it."*
 - **Add a line to the release notes** mentioning the fix, ideally crediting the user if they're OK with it ("Thanks Bob for finding this")
 
 ---

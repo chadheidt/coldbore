@@ -13,7 +13,7 @@ cd "$PROJECT"
 URL="https://raw.githubusercontent.com/chadheidt/coldbore/main/manifest.json"
 
 echo "============================================================"
-echo "Cold Bore — manifest URL diagnostic"
+echo "True Zero — manifest URL diagnostic"
 echo "============================================================"
 echo ""
 echo "Fetching: $URL"
@@ -28,7 +28,7 @@ url = "$URL"
 
 print("Step 1: Opening connection…")
 try:
-    req = urllib.request.Request(url, headers={"User-Agent": "ColdBore/0.6.0"})
+    req = urllib.request.Request(url, headers={"User-Agent": "TrueZero/0.6.0"})
     with urllib.request.urlopen(req, timeout=8) as resp:
         status = resp.getcode()
         ctype = resp.headers.get("Content-Type")
@@ -75,7 +75,7 @@ print()
 print("============================================================")
 print("All steps succeeded. The manifest URL is fine.")
 print("If the app still fails, you may be running an old .app build.")
-print("Make sure you dragged dist/Cold Bore.app to Applications,")
+print("Make sure you dragged dist/True Zero.app to Applications,")
 print("replacing the old one.")
 print("============================================================")
 PYEOF

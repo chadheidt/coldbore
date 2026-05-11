@@ -1,6 +1,6 @@
 # tools/
 
-Helper scripts that aren't part of the shipped Cold Bore app, but are useful
+Helper scripts that aren't part of the shipped True Zero app, but are useful
 for the project (regenerating landing-page images, etc.).
 
 ## Files
@@ -20,15 +20,15 @@ cp ~/Desktop/workbook.png docs/assets/workbook.png
 To update what's shown (different cartridge, different ladder, etc.), edit the
 `rows` list inside `render_workbook.py` and re-run.
 
-### `render_coldbore.py`
+### `render_truezero.py`
 
-Generates `docs/assets/screenshot.png` — the Cold Bore window mockup on the
+Generates `docs/assets/screenshot.png` — the True Zero window mockup on the
 landing page. Hand-painted reticle + MOA grid + center spotlight + title/
 subtitle in the drop zone, plus workbook picker and activity log. Matches the
 production drop zone's visual design (see `app/main.py:DropZone.paintEvent`).
 
 ```
-python3 tools/render_coldbore.py
+python3 tools/render_truezero.py
 cp ~/Desktop/screenshot.png docs/assets/screenshot.png
 ```
 
@@ -44,7 +44,7 @@ python3 -m pip install --user Pillow
 
 ## Why programmatic rendering instead of real screenshots?
 
-The 2026-05-10 attempt to screencapture Excel and the Cold Bore app from a
+The 2026-05-10 attempt to screencapture Excel and the True Zero app from a
 Bash tool subprocess hit three macOS hurdles in sequence: cross-Space windows
 not visible to the capture, Screen Recording TCC permission for the calling
 process, and focus bouncing back to the parent app between activate-and-capture
