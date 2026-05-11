@@ -1,9 +1,9 @@
 {
-  "app_version": "0.13.0",
+  "app_version": "0.13.1",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "Rebrand from True Zero to Loadscope. Same app, same workflows, same workbook format -- just a new name to clear trademark space ahead of commercial launch. Existing license keys carry across automatically; this update is silent.",
+  "app_release_notes": "New app icon: realistic modern long-range cartridge with a bottlenecked brass case, sweeping copper-jacket ogive, and a red polymer tip. No functional changes.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
