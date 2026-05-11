@@ -6,6 +6,52 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## ✅ v0.11.3 SHIPPED + AUTO-UPDATE PROVEN — May 11, 2026 (afternoon — beta-ready closeout)
+
+**Cold Bore is genuinely ready for beta distribution.** Every loose thread we identified is closed:
+
+- Auto-update path verified end-to-end on Chad's machine (v0.11.2 → v0.11.3 via the yellow banner; Worker-gated download, ditto-based swap, signed/notarized relaunch, Tools → About now reports 0.11.3)
+- 10 beta-key slots pre-generated and registered in BOTH `app/license.py`'s `VALID_KEYS` AND the Cloudflare Worker's `VALID_CODES`. Issuing a key to a new tester no longer requires an app rebuild — just pick the next unassigned slot from `beta-keys.txt`, record the recipient, email them
+- Pyflakes smoke test added (`tests/test_main_smoke.py`) — would have caught yesterday's NameError in 0.5 seconds. `Run Tests.command` auto-installs pyflakes alongside pytest
+- `Cold Bore — How to Issue License Keys.docx` on Chad's Desktop (`~/Desktop/Cold Bore app/cold bore notes/`) rewritten to reflect the simpler "pick a pre-generated key" workflow. Original backed up at `/tmp/Cold Bore - License Keys doc - BEFORE 2026-05-11 update.docx` (will vanish on reboot)
+- Worker source in the Cloudflare dashboard has one batch of duplicate key entries from the manual-paste step (Set dedupes them at runtime so functionally fine). Backup at `worker/coldbore-download.js` is the clean version — if Chad ever wants to tidy the live source, copy that file into the dashboard editor and redeploy
+
+### State on Chad's machine right now
+
+- `/Applications/Cold Bore.app` runs **v0.11.3** (auto-updated from v0.11.2, no manual intervention needed beyond the click)
+- `main` HEAD: `8d9c9c8` ("v0.11.3 - five more beta-key slots; the auto-update closeout build")
+- Working tree clean except untracked `Cold Bore.app alias` (gitignored)
+- R2 holds v0.11.3 `Cold.Bore.dmg` (55M) and `Cold.Bore.zip` (58M)
+- 11 keys total in `app/license.py` + Worker `VALID_CODES`: Chad's local testing key + 10 unassigned beta slots
+- `beta-keys.txt` mirrors the 11 keys; top of the file calls out the "key must live in BOTH license.py AND the Worker" rule
+
+### Lessons that got baked in during the afternoon
+
+- **`Build Signed App.command` had two long-standing bugs** that bit us on the FIRST build of the day, both already documented in the v0.9.0 lessons but never patched into the script. Both fixed now (commit `9e4b9fd`):
+  - Build out-of-tree in `/tmp/coldbore-build/`. macOS attaches `com.apple.provenance` xattrs to files copied inside the project tree, blocking py2app from rewriting the bundled Python3 framework. Final `.dmg` + `.zip` copied back to `dist/` at the end.
+  - Codesign EVERY Mach-O in the bundle, not just `.dylib`/`.so`. Old filter missed `Contents/MacOS/python` and `Contents/Frameworks/Python3.framework/Versions/3.9/Python3`. Apple's notary service rejected the whole submission citing them as adhoc-signed.
+- **The auto-update path is the regression hotspot.** v0.11.0 shipped with a NameError caught only by today's controlled test bump (v0.11.1) on Chad's own machine. The pattern: anytime `app/updater.py` or `app/installer.py` changes, ship a test-bump release BEFORE assuming the change works. Cost: one ~15-min build+notarize cycle. Value: bug found on dev machine, not on five strangers'.
+- **Settings change today: project-level `Bash(*)` + `Edit(*)` + `Write(*)` + `Read(*)`** in `.claude/settings.local.json` (gitignored). Chad asked mid-session because prompts were stacking up. User-level `~/.claude/settings.json` now also has a `Stop` hook playing Glass.aiff (same sound as the Notification + PermissionRequest hooks) so Chad hears a tone any time the agent finishes a turn and is waiting on him.
+
+### What's pending after v0.11.3
+
+- **Send the website link + a key to the first wave of pro-shooter beta testers.** This is the actual milestone. The two friends Chad already gave the public website link to may eventually ping for a key; per his earlier call, wait for the ping rather than proactively pushing.
+- **Issue keys one at a time as people sign on.** Per the rewritten Desktop doc, the workflow is: pick next slot in `beta-keys.txt`, record recipient name + date, email them the key + website link. No code touched.
+- **Once anyone hits v0.11.3 → vX.Y.Z auto-update on a non-Chad machine**, that's a real signal the system works in the wild. Until then, we have proof from Chad's machine but not from someone else's.
+- **Phase 9 commercialization** (when ready): LLC, EULA, USPTO trademark, `coldbore.app` domain, Gumroad/Stripe, public launch.
+
+### Next time we change `app/updater.py` or `app/installer.py`
+
+Do the following BEFORE assuming the release is good:
+
+1. Run `Run Tests.command` to confirm `tests/test_main_smoke.py` (the pyflakes check) passes — catches the NameError class of bug.
+2. After the release ships to R2 and the manifest points at the new version, click Install Update on Chad's `/Applications/Cold Bore.app` and watch the full swap-and-relaunch happen. Confirm Tools → About reports the new version.
+3. If anything fails at step 2, the helper script writes its error to `~/Library/Application Support/Cold Bore/last_install_error.log`, and the next launch of Cold Bore surfaces that via a popup. Paste the error here and we debug.
+
+If you're tempted to skip this loop for "trivial" changes — don't. The v0.11.0 NameError was a two-character import bug and it still cost us four hours today.
+
+---
+
 ## ✅ v0.11.2 SHIPPED — May 11, 2026 (morning — auto-update fix)
 
 **v0.11.2 is on Chad's `/Applications/Cold Bore.app` right now.** Manually installed via the website .dmg flow (which means the same flow a real beta tester would use was just verified end-to-end). Tools → About reports 0.11.2.
