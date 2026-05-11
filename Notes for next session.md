@@ -6,32 +6,75 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🚧 v0.12.0 IN FLIGHT — May 11, 2026 (evening — request-access automation + branding)
+## 🚧 v0.12.0 IN FLIGHT — May 11, 2026 (evening — request-access automation + full rebrand)
 
-**Branch: `v0.12-request-access`** (commit `1ece18f` and beyond). Main is still at proven v0.11.3.
+**Branch: `v0.12-request-access`** (commit `2741f75` and beyond — pushed to origin). Main is still at proven v0.11.3. v0.12.0 is NOT in production yet; only the infrastructure that supports it is live.
 
-The work in flight is a Cold Bore → True Zero brand rename PLUS a full request-access automation
-pipeline: website form → Cloudflare Worker → Chad's gmail with Approve/Deny buttons → Resend emails
-the tester their assigned beta-key. Domain `truezero.co` was bought through Cloudflare's registrar
-during this session.
+**STATE FILE LIVES AT `~/Documents/True Zero - v0.12 setup state.md`** (also copied to `~/Desktop/In case of VS Code crash.md`). Contains API tokens, IDs, step-by-step where we are. If VS Code crashes mid-flight, open that file, paste it into a fresh Claude session, and we pick up in 30 seconds with zero loss.
 
-**STATE FILE LIVES AT `~/Documents/True Zero - v0.12 setup state.md`** (outside the project tree,
-not in git, contains API tokens + IDs + step-by-step where we left off). If VS Code crashes
-mid-flight, that file is the source of truth for resuming.
+### What v0.12.0 is
 
-Quick status snapshot:
-- ✅ `truezero.co` active in Cloudflare
-- ✅ `BETA_REQUESTS` KV namespace created (`a0362498a5c74b1eb124decdb011f41c`)
-- ✅ ADMIN_TOKEN generated
-- ✅ All file changes committed to `v0.12-request-access` branch
-- ⏳ Cloudflare Turnstile widget (token lacks Turnstile:Edit scope)
-- ⏳ Resend domain verification (API key restricted to sending only)
-- ⏳ Worker env vars (6 needed) not yet set
-- ⏳ New Worker source not yet deployed
-- ⏳ App version 0.12.0 committed but not yet built/signed/shipped
+Two big changes from v0.11.3:
 
-The `dcd344f` "v0.11.3 SHIPPED" notes below remain the authoritative breadcrumb for what's
-actually in production right now.
+1. **Complete rebrand: Cold Bore → True Zero.** Display name, dialog text, marketing site, `.dmg`/`.zip` filenames (`True.Zero.dmg`, `True.Zero.zip`), support email (`support@truezero.co`), `.coldbore` shared-load file extension renamed to `.truezero`, Quick Start docx contents, paragraph spacing tightened. Domain `truezero.co` was bought through Cloudflare's registrar this session.
+
+2. **Beta-access request automation.** Website (`docs/index.html`) gains a tabbed download modal: "I have a code" (existing flow) PLUS "Request access" (new — name/email/notes form with Cloudflare Turnstile anti-bot). On submit, the Cloudflare Worker stores the request in KV, emails Chad with green Approve / red Deny buttons. Click Approve → Worker picks next unassigned key from `VALID_CODES`, records the assignment in KV, emails the tester via Resend with their key + download instructions. `tools/sync_beta_keys.py` pulls KV assignments back into local `beta-keys.txt`.
+
+### Infrastructure that's LIVE as of now
+
+| Thing | Status |
+|---|---|
+| Cloudflare zone `truezero.co` | Active |
+| Cloudflare KV namespace `BETA_REQUESTS` | Created + bound to Worker (id `a0362498a5c74b1eb124decdb011f41c`) |
+| Cloudflare Turnstile widget "True Zero request-access" | Live for `truezero.co`, `www.truezero.co`, `chadheidt.github.io` |
+| Resend domain `truezero.co` | Verified (DKIM + SPF + DMARC DNS records in Cloudflare) |
+| Cloudflare Email Routing | Active; `support@truezero.co` → `cheidt182@gmail.com` |
+| Cloudflare Worker `coldbore-download` new source | Deployed (latest deployment id `de933440692940c4bbb6089c379020d2`). ALLOWED_FILES contains both `True.Zero.*` AND `Cold.Bore.*` for backward-compat during the v0.11.3 → v0.12.0 transition. |
+| Worker env vars + secrets | All 9 set: BUCKET (R2), HMAC_SECRET, BETA_REQUESTS (KV), RESEND_API_KEY, TURNSTILE_SECRET, ADMIN_TOKEN, FROM_EMAIL=`True Zero <noreply@truezero.co>`, ADMIN_EMAIL=`cheidt182@gmail.com`, PUBLIC_SITE=`https://chadheidt.github.io/coldbore/` |
+| End-to-end email pipeline (Resend out + Cloudflare Email Routing in) | Smoke-tested; test email arrived in Chad's gmail |
+| Manifest.json on `v0.12-request-access` branch | Bumped to v0.12.0, `app_download_file: True.Zero.zip`. NOT yet pushed to main (pushing would trigger update-available banner on v0.11.3 users before binaries are on R2). |
+
+### Real bugs caught and fixed in the pre-build audit
+
+- `LEGACY_APP_NAMES` had `"True Zero"` (same as the new `APP_NAME`) instead of `"Cold Bore"`. Would have broken config migration for existing v0.11.3 users on upgrade — they would have lost license key + project folder + disclaimer state.
+- Three docx files (`Quick Start`, `App Overview`, `How to Send Out Updates`) were renamed at the filename level but still said "Cold Bore" inside. Critical for `Quick Start` since it ships in the .dmg. Fixed via Python zipfile + XML text-replace. Paragraph spacing also tightened in the same pass.
+- `tests/test_license.py::test_state_missing_when_no_config` was failing because the `isolated_config` fixture didn't stub `LEGACY_APP_NAMES`, so `_migrate_legacy_config()` would pull the developer's real `~/Library/Application Support/Cold Bore/config.json` into the test sandbox.
+- `app/updater.py` User-Agent header sent `ColdBore/<version>`; temp download prefix was `ColdBoreUpdate_`. Both now `TrueZero*`.
+- `app/load_sharing.py` call sites referenced old `COLDBORE_FORMAT` / `COLDBORE_VERSION` constant names; renamed to `TRUEZERO_*`. Old names kept as defensive aliases.
+
+### What's still PENDING
+
+| Step | Owner | Notes |
+|---|---|---|
+| Build signed + notarized v0.12.0 (`Build Signed App.command`) | Chad (must double-click from Finder — py2app fails when launched via shell due to `com.apple.provenance` xattrs) | ~30 min including notarization wait |
+| Upload `True.Zero.dmg` + `True.Zero.zip` to R2 (overwrites no existing files — old `Cold.Bore.*` stay on R2 as the v0.11.x fallback) | Claude (Cloudflare R2 API) | Filenames now distinct from old |
+| Merge `v0.12-request-access` → `main` + push | Claude | Triggers (a) GitHub Pages rebuild with new request-access form on `chadheidt.github.io/coldbore`, (b) update-available banner on Chad's `/Applications/True Zero.app` |
+| End-to-end test: submit request form on website → Chad gets admin email → click Approve → tester gets welcome email with key + download link | Claude + Chad | The only piece that hasn't been tested with a real browser-generated Turnstile token yet |
+| Test auto-update v0.11.3 → v0.12.0 on Chad's `/Applications/True Zero.app` | Chad | Yellow banner → Install Update → Quit and Install → relaunch → Tools → About reports 0.12.0 |
+| Rotate the two API tokens (Cloudflare + Resend) that have been visible in the chat | Chad + Claude | ~30 sec per token via dashboards |
+
+### Tokens that are LIVE and visible in chat history — to be rotated after ship
+
+- **Cloudflare User API Token** `cfut_REDACTED` — has been expanded with Zone DNS:Edit, used to drive almost everything Cloudflare-side
+- **Resend API key** `re_REDACTED` — sending-only, used as the Worker's `RESEND_API_KEY` secret. Stays live in production after ship; rotate it AND update the Worker secret.
+- **`ADMIN_TOKEN`** `REDACTED_ADMIN_TOKEN` — generated locally, used as the Worker's `ADMIN_TOKEN` secret. Not currently saved anywhere on Chad's machine outside the state file. Should also live in `~/.config/truezero/admin_token` after first run of `tools/sync_beta_keys.py`.
+
+### Decisions made this session (capture so next session understands the "why")
+
+- **Worker name stays `coldbore-download`** even though brand changed. Renaming the Worker would change the URL baked into every v0.11.x app, breaking auto-update for any existing user (currently just Chad, but the principle holds for future). Documented inline in the Worker source.
+- **`.dmg`/`.zip` filenames DO rename** to `True.Zero.*`. Worker ALLOWED_FILES accepts both old + new during transition. Chad chose the full professional rename when offered a "leave them alone vs rename them properly" choice; gave durable feedback "I want it done right the first time, don't offer quick-fix alternatives going forward" (saved as user memory).
+- **GitHub repo stays `chadheidt/coldbore`.** Renaming a repo breaks every clone, CI workflow, and external link; auto-redirect is ugly. Worth doing only as part of a future commercial-launch-grade cleanup.
+- **PUBLIC_SITE stays `https://chadheidt.github.io/coldbore/` for v0.12.** Decided against moving to `https://truezero.co/` this session because it'd require setting up Cloudflare Pages (~15 min extra). Punt to a future minor version.
+- **Support email is `support@truezero.co`** (Cloudflare Email Routing → Chad's gmail). Old `coldboreapp@gmail.com` still works because Chad's gmail forwards both, but every user-facing surface now shows the new address.
+- **Pillow excluded in setup.py** so `tools/render_*.py` Pillow dep doesn't trip py2app/provenance EPERM on the bundled libtiff. Documented inline.
+
+### Pre-build artifacts that need to be deleted/cleaned up someday
+
+- `Cold Bore.app alias` at project root (untracked, gitignored). Junk Finder alias to the v0.11.3 .app. Safe to delete.
+- `dist/Cold.Bore.dmg`, `dist/Cold.Bore.zip` from the v0.11.3 build (local only, gitignored). The next signed build will produce `dist/True.Zero.*`; the old files will remain in `dist/` until cleaned.
+- `Shared Loads/shared load.coldbore` (Chad's test load from prior development). Functions fine but the extension is now `.truezero`; the file can be deleted or re-exported.
+
+The `dcd344f` "v0.11.3 SHIPPED" notes below remain the authoritative breadcrumb for what's actually in production right now — everything in this section is in-flight on a feature branch until the build+upload+merge sequence completes.
 
 ---
 
