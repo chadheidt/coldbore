@@ -2,8 +2,8 @@
   "app_version": "0.12.0",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "True.Zero.zip",
-  "app_website_url": "https://chadheidt.github.io/coldbore/",
-  "app_release_notes": "Rebrand from Cold Bore to True Zero. Same app, same workflows, same workbook format — just a new name. New testers can now request access through a form on the website (no email-Chad round-trip required). Existing license keys continue to work; this update is automatic.",
+  "app_website_url": "https://truezero.co/",
+  "app_release_notes": "Rebrand from Cold Bore to True Zero. Same app, same workflows, same workbook format \u2014 just a new name. New testers can now request access through a form on the website (no email-Chad round-trip required). Existing license keys continue to work; this update is automatic.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

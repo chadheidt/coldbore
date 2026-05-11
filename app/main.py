@@ -1013,7 +1013,7 @@ class MainWindow(QMainWindow):
             self._pending_app_update_manifest = manifest
             self._pending_app_update_url = manifest.get("app_download_url")  # legacy fallback
             self._pending_app_update_version = manifest.get("app_version")
-            self._pending_app_update_website = manifest.get("app_website_url") or "https://chadheidt.github.io/coldbore/"
+            self._pending_app_update_website = manifest.get("app_website_url") or "https://truezero.co/"
         else:
             self._pending_app_update_manifest = None
             self._pending_app_update_url = None
@@ -1060,7 +1060,7 @@ class MainWindow(QMainWindow):
                     (self._pending_app_update_manifest and self._pending_app_update_manifest.get("app_download_endpoint"))
                     or self._pending_app_update_url
                 )
-                website = self._pending_app_update_website or "https://chadheidt.github.io/coldbore/"
+                website = self._pending_app_update_website or "https://truezero.co/"
                 if installer.can_self_install() and has_app_update:
                     parts.append(
                         '<a href="install:start"><b>Install Update</b></a>'
@@ -1097,7 +1097,7 @@ class MainWindow(QMainWindow):
                 )
                 if error:
                     parts.append(f"<i>{error}</i>")
-                website = self._pending_app_update_website or "https://chadheidt.github.io/coldbore/"
+                website = self._pending_app_update_website or "https://truezero.co/"
                 parts.append(
                     f'<a href="app:{website}">Download manually from the website</a>'
                 )
