@@ -1,5 +1,5 @@
 #!/bin/bash
-# Run the True Zero GUI in dev mode for testing.
+# Run the Loadscope GUI in dev mode for testing.
 # Auto-installs PyQt5 the first time it runs.
 
 set -e
@@ -8,7 +8,7 @@ PROJECT="$HOME/Projects/Rifle Load Data"
 cd "$PROJECT"
 
 echo "============================================================"
-echo "True Zero — dev test run"
+echo "Loadscope — dev test run"
 echo "============================================================"
 
 # Check PyQt5

@@ -1,5 +1,5 @@
 """
-Tools → How to Use True Zero…
+Tools → How to Use Loadscope…
 
 A friendly in-app help dialog that covers the basics: label format, workflow,
 workbook tabs, and the minimum-data requirement for scoring. Designed for new
@@ -36,20 +36,20 @@ QUICK START
    • Garmin Xero: label the session inside the ShotView app before exporting.
    • BallisticX: rename the exported CSV file itself to your label
      (e.g. "P1 45.5 H4350.csv") — BallisticX's in-app label field is
-     unreliable, so the FILENAME is what True Zero reads.
+     unreliable, so the FILENAME is what Loadscope reads.
 
-2. Drag your CSVs onto True Zero.
+2. Drag your CSVs onto Loadscope.
    Two ways:
-       • Drag onto the True Zero icon (Dock or Applications) — auto-imports.
-       • Drag into the True Zero window — you click Run Import when ready.
+       • Drag onto the Loadscope icon (Dock or Applications) — auto-imports.
+       • Drag into the Loadscope window — you click Run Import when ready.
 
-3. True Zero opens your workbook with everything filled in.
+3. Loadscope opens your workbook with everything filled in.
    Update the green Test Session bar (date / temperature / notes), save (Cmd+S).
 
 
 HOW THE LABELS WORK
 
-True Zero reads the FIRST word of your label as the row tag, the FIRST
+Loadscope reads the FIRST word of your label as the row tag, the FIRST
 number as the charge weight or jump distance, and the next word as the
 powder name.
 
@@ -84,7 +84,7 @@ WHAT'S IN THE WORKBOOK
    Load Library     A list of confirmed loads you've kept after testing.
 
    Garmin Xero      Auto-populated from your Garmin CSV imports — shows
-   Import           what True Zero actually parsed (handy for debugging).
+   Import           what Loadscope actually parsed (handy for debugging).
 
    BallisticX       Same idea for BallisticX CSV imports.
    Import
@@ -95,11 +95,11 @@ WHAT'S IN THE WORKBOOK
 
 MINIMUM DATA REQUIREMENT
 
-True Zero's scoring uses a sliding window of 3 consecutive charges to find
+Loadscope's scoring uses a sliding window of 3 consecutive charges to find
 a velocity node, so you need to test AT LEAST 3 loads (different charge
 weights) before the SUGGESTED CHARGE bar will pick a winner.
 
-   • 1–2 loads:  True Zero shows the data but no suggested winner.
+   • 1–2 loads:  Loadscope shows the data but no suggested winner.
    • 3 loads:    Suggested winner picks the middle charge of the three.
    • 4+ loads:   Multiple sliding windows are evaluated; cleaner result.
 
@@ -117,15 +117,15 @@ TIPS THAT WILL SAVE YOU TIME
 
 • To import a whole range trip's worth of files at once, select all the
   CSVs in Finder (Cmd-click each) and drag the WHOLE batch onto the Cold
-  Bore icon. True Zero waits 2 seconds after the last file lands, then
+  Bore icon. Loadscope waits 2 seconds after the last file lands, then
   imports them all together.
 
-• If you change your mind about an import, just close True Zero — the
+• If you change your mind about an import, just close Loadscope — the
   files in the import folders won't be re-processed until you click
   Run Import again.
 
 • If something goes wrong, look at .backups/ in your project folder.
-  True Zero saves recent versions of your workbook before each import
+  Loadscope saves recent versions of your workbook before each import
   (count is configurable in Tools → Settings…). Or use Tools → Restore
   From Backup… to roll back from inside the app.
 
@@ -136,7 +136,7 @@ TIPS THAT WILL SAVE YOU TIME
 
 SAFETY REMINDER
 
-True Zero is an analysis tool. It does NOT provide load data. Always
+Loadscope is an analysis tool. It does NOT provide load data. Always
 cross-reference loads against published reloading manuals from powder,
 bullet, and cartridge manufacturers. Watch for pressure signs. Start
 below maximum loads and work up. See Tools → View Disclaimer for the

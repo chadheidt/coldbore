@@ -3,7 +3,7 @@ First-run setup wizard.
 
 Shows a small dialog when the app launches and finds no valid project folder.
 Walks the user through:
-    1. Picking a location for their True Zero project folder.
+    1. Picking a location for their Loadscope project folder.
     2. Creating the folder + subfolders (Garmin Imports/, BallisticX Imports/, Completed Loads/).
     3. Copying the bundled .xltx template into the project folder.
 
@@ -102,7 +102,7 @@ class SetupWizard(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.chosen_folder = None
-        self.setWindowTitle("True Zero — First-Time Setup")
+        self.setWindowTitle("Loadscope — First-Time Setup")
         self.setMinimumWidth(540)
 
         layout = QVBoxLayout(self)
@@ -117,7 +117,7 @@ class SetupWizard(QDialog):
             self._t = None
 
         # Title
-        title = QLabel("Welcome — let's set up your True Zero folder")
+        title = QLabel("Welcome — let's set up your Loadscope folder")
         f = QFont()
         f.setPointSize(17)
         f.setWeight(QFont.DemiBold)
@@ -128,7 +128,7 @@ class SetupWizard(QDialog):
 
         # Description
         body = QLabel(
-            "This is a one-time setup. We'll create a 'True Zero Loads' folder for "
+            "This is a one-time setup. We'll create a 'Loadscope Loads' folder for "
             "your workbooks and CSV imports. By default it goes in your Documents "
             "folder, but you can pick anywhere."
         )
@@ -142,7 +142,7 @@ class SetupWizard(QDialog):
         # Path picker row
         path_row = QHBoxLayout()
         self.path_field = QLineEdit()
-        default_path = str(Path.home() / "Documents" / "True Zero Loads")
+        default_path = str(Path.home() / "Documents" / "Loadscope Loads")
         self.path_field.setText(default_path)
         path_row.addWidget(self.path_field, stretch=1)
 
@@ -190,9 +190,9 @@ class SetupWizard(QDialog):
             self, "Pick a parent folder", start_parent
         )
         if folder:
-            # Append "True Zero Loads" to whatever the user picked, so they don't have
+            # Append "Loadscope Loads" to whatever the user picked, so they don't have
             # to manually create-then-pick. They can edit if they want a different name.
-            picked = Path(folder) / "True Zero Loads"
+            picked = Path(folder) / "Loadscope Loads"
             self.path_field.setText(str(picked))
 
     def _create(self):

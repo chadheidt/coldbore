@@ -17,7 +17,7 @@ def isolated_config(tmp_path, monkeypatch):
     into the test sandbox (which was making test_state_missing_when_no_config
     see a valid license key)."""
     import config as app_config
-    cfg_dir = tmp_path / "True Zero"
+    cfg_dir = tmp_path / "Loadscope"
     cfg_dir.mkdir()
     monkeypatch.setattr(app_config, "CONFIG_DIR", cfg_dir)
     monkeypatch.setattr(app_config, "CONFIG_PATH", cfg_dir / "config.json")

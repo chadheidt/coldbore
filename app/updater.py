@@ -20,7 +20,7 @@ Manifest format (host this anywhere — GitHub Releases, Dropbox, S3, etc.):
 
     {
         "app_version": "0.5.0",
-        "app_download_url": "https://github.com/.../releases/download/v0.6.0/True.Zero.zip",
+        "app_download_url": "https://github.com/.../releases/download/v0.6.0/Loadscope.zip",
         "app_release_notes": "Added charge weight scaling. Fixed bug X.",
         "template_version": "1.1",
         "template_download_url": "https://...",
@@ -67,7 +67,7 @@ def resolve_download_url(manifest):
     """
     endpoint = manifest.get("app_download_endpoint")
     if endpoint:
-        file_name = manifest.get("app_download_file") or "True.Zero.zip"
+        file_name = manifest.get("app_download_file") or "Loadscope.zip"
         try:
             # Imported lazily so updater.py stays usable in environments where
             # config / file system access might not be set up yet.
@@ -87,7 +87,7 @@ def resolve_download_url(manifest):
                 data=payload,
                 headers={
                     "Content-Type": "application/json",
-                    "User-Agent": f"TrueZero/{APP_VERSION}",
+                    "User-Agent": f"Loadscope/{APP_VERSION}",
                 },
                 method="POST",
             )
@@ -137,7 +137,7 @@ class UpdateChecker(QThread):
         try:
             req = urllib.request.Request(
                 self.manifest_url,
-                headers={"User-Agent": f"TrueZero/{APP_VERSION}"},
+                headers={"User-Agent": f"Loadscope/{APP_VERSION}"},
             )
             with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT_SECONDS) as resp:
                 raw_bytes = resp.read()
@@ -178,7 +178,7 @@ class UpdateChecker(QThread):
 
 
 # Maximum size we'll download for an "update zip" before bailing out.
-# A normal True Zero.zip is ~80 MB; 500 MB is a generous ceiling that catches
+# A normal Loadscope.zip is ~80 MB; 500 MB is a generous ceiling that catches
 # misconfigured manifests pointing at runaway downloads (e.g. a directory listing
 # served as a stream).
 MAX_DOWNLOAD_BYTES = 500 * 1024 * 1024
@@ -231,11 +231,11 @@ class UpdateDownloader(QThread):
 
         # Stream to a temp file we OWN — caller is responsible for moving
         # or deleting it once the install completes.
-        tmp_fd, tmp_path = tempfile.mkstemp(prefix="TrueZeroUpdate_", suffix=".zip")
+        tmp_fd, tmp_path = tempfile.mkstemp(prefix="LoadscopeUpdate_", suffix=".zip")
         try:
             req = urllib.request.Request(
                 self.url,
-                headers={"User-Agent": f"TrueZero/{APP_VERSION}"},
+                headers={"User-Agent": f"Loadscope/{APP_VERSION}"},
             )
             with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT_SECONDS) as resp:
                 total = int(resp.headers.get("Content-Length") or 0)

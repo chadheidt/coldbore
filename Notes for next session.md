@@ -66,7 +66,7 @@ Chad explicitly chose to NOT chase the `.com` squatter. The site lives at `https
 
 ---
 
-## ⚠️ TRUE ZERO BRAND IS BLOCKED — May 11, 2026 (evening — needs SECOND rebrand before beta)
+## ⚠️ LOADSCOPE BRAND IS BLOCKED — May 11, 2026 (evening — needs SECOND rebrand before beta)
 
 **Beta is PAUSED.** Chad is not shipping to testers under "True Zero." A trademark conflict was discovered RIGHT AFTER the v0.12.1 rebrand completed: `truezero.app` is a live tactical/military gear review service ("The Voice Operators Trust", partnered with the Special Forces Foundation). Different product, but same brand name in the firearms-adjacent industry. Likelihood-of-confusion risk is real enough that Chad won't ship commercially under True Zero — and he's not hiring a trademark attorney, so the bar for the next name is "no obvious conflicts anywhere we can check ourselves."
 

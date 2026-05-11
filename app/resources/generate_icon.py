@@ -1,5 +1,5 @@
 """
-Generate the True Zero app icon.
+Generate the Loadscope app icon.
 
 Design: a brass rifle cartridge angled diagonally in front of a classic ring
 target, contained in a dark rounded-square macOS-style backdrop.

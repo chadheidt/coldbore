@@ -1,5 +1,5 @@
 """
-Render a True Zero window mockup as a clean PNG, matching the style of the
+Render a Loadscope window mockup as a clean PNG, matching the style of the
 workbook hero image. Shows the new drop zone (reticle + MOA grid + center
 spotlight + title + subtitle), workbook picker row, Run Import button, and
 activity log with realistic import messages.
@@ -24,7 +24,7 @@ SCALE = 2
 RW = W * SCALE
 RH = H * SCALE
 
-# True Zero palette (mirrors app/theme.py)
+# Loadscope palette (mirrors app/theme.py)
 BG_BASE = (14, 15, 18)            # window background
 BG_SURFACE = (26, 28, 32)         # drop zone surface
 BG_ELEVATED = (36, 39, 44)        # log area / picker bg
@@ -85,7 +85,7 @@ def main():
         )
 
     # Window title (centered)
-    title = "True Zero"
+    title = "Loadscope"
     bbox = d.textbbox((0, 0), title, font=F_TITLE)
     tw = bbox[2] - bbox[0]
     d.text(((RW - tw) // 2, light_y - (bbox[3] - bbox[1]) // 2 - 2 * s),

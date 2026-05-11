@@ -1,5 +1,5 @@
 """
-Parser registry for True Zero.
+Parser registry for Loadscope.
 
 Each parser is a Python module in this folder that exports:
     KIND          : "chronograph" or "group"

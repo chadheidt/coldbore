@@ -70,7 +70,7 @@ class NewCycleDialog(QDialog):
         # Description
         intro = QLabel(
             "When you finish a load (different cartridge, bullet, or powder), "
-            "True Zero can wrap up the current cycle and start a clean one in "
+            "Loadscope can wrap up the current cycle and start a clean one in "
             "one step."
         )
         intro.setWordWrap(True)
@@ -219,7 +219,7 @@ class NewCycleDialog(QDialog):
             self, "New cycle ready",
             "Done.\n\n" + "\n".join(f"• {a}" for a in actions_done) +
             ("\n\nThe new workbook is now your active one — drop CSVs into "
-             "True Zero to start the cycle." if self.created_workbook_path else "")
+             "Loadscope to start the cycle." if self.created_workbook_path else "")
         )
         self.accept()
 

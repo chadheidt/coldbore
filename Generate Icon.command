@@ -1,5 +1,5 @@
 #!/bin/bash
-# Generate the True Zero app icon.
+# Generate the Loadscope app icon.
 # Produces app/resources/AppIcon.icns from a procedural Qt drawing.
 # After this finishes, rebuild the .app via Build App.command to bake the new icon in.
 
@@ -9,7 +9,7 @@ PROJECT="$HOME/Projects/Rifle Load Data"
 cd "$PROJECT"
 
 echo "============================================================"
-echo "Generating True Zero app icon"
+echo "Generating Loadscope app icon"
 echo "============================================================"
 echo ""
 

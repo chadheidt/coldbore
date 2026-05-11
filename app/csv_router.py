@@ -9,7 +9,7 @@ New code should import directly from app.parsers and use detect_parser().
 import os
 import sys
 
-# When called as a top-level module (e.g. via Test True Zero.command),
+# When called as a top-level module (e.g. via Test Loadscope.command),
 # make sure the parsers package is importable.
 HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:

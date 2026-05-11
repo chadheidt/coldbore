@@ -1,6 +1,6 @@
 # Handling Bug Reports
 
-A reference for what to do when a user reports something is "off" with True Zero — but it didn't crash.
+A reference for what to do when a user reports something is "off" with Loadscope — but it didn't crash.
 
 For actual crashes (with Python tracebacks emailed via the in-app reporter), see `Handling Crash Reports.md` instead.
 
@@ -34,10 +34,10 @@ These are harder than crashes because there's no traceback. You have to ask ques
 
 When a user reports a bug, ask for these in your reply:
 
-1. **What version of True Zero are they on?** Tools → About → version number. (Common — they're on an old version where the bug is already fixed.)
-2. **What were they trying to do?** "I was importing my P3 powder ladder data" is more useful than "True Zero is broken."
+1. **What version of Loadscope are they on?** Tools → About → version number. (Common — they're on an old version where the bug is already fixed.)
+2. **What were they trying to do?** "I was importing my P3 powder ladder data" is more useful than "Loadscope is broken."
 3. **What did they expect to happen vs. what actually happened?** "I expected the charge to show 45.5 grains. Instead it showed 0.45 grains." That kind of detail is gold.
-4. **The activity log.** The dark log area at the bottom of the True Zero window shows what happened during the import. Have them copy and paste that text into the email reply. (They can select text in the log area with the mouse.)
+4. **The activity log.** The dark log area at the bottom of the Loadscope window shows what happened during the import. Have them copy and paste that text into the email reply. (They can select text in the log area with the mouse.)
 5. **A sample of the CSV (if it's an import bug).** Have them email the offending CSV file as an attachment.
 6. **A screenshot of the workbook** if the issue is "the number on screen looks wrong."
 7. **macOS version** if they think it might be system-related. (Apple menu → About This Mac.)
@@ -51,7 +51,7 @@ If you ask for all 7, you'll usually get 3 or 4. That's normally enough.
 | Symptom | Likely cause | What to ask |
 |---|---|---|
 | "Numbers are wrong" | Column-mismatch (we read the wrong cell from the workbook), or a label-vs-value cell confusion | Get a screenshot of the Load Log + the activity log |
-| "Nothing happened when I dropped CSVs" | CSV file extension wrong (`.CSV` capital, or an extra `.txt`), OR True Zero wasn't running, OR the parser didn't recognize the format | Ask for the filename, the activity log, and have them try again with the app definitely open |
+| "Nothing happened when I dropped CSVs" | CSV file extension wrong (`.CSV` capital, or an extra `.txt`), OR Loadscope wasn't running, OR the parser didn't recognize the format | Ask for the filename, the activity log, and have them try again with the app definitely open |
 | "Suggested charge is wrong" | Could be a real scoring bug, or the user set their weights weirdly, or they shot a partial ladder so scoring is unstable | Ask: did they shoot all loads? What does the Charts tab show? Are the weights at default (30/20/20/30)? |
 | "Excel won't open the workbook" | Workbook got corrupted or a previous import wrote weird data | Ask them to look in `.backups/` folder for the most recent backup before things went bad. The lockdown + backup-before-import we built saves the day here. |
 | "My workbook disappeared" | They moved it, deleted it, or are looking in the wrong folder | Tools → Show Project Folder in Finder. Workbook should be there. If not, check Trash. |
@@ -76,7 +76,7 @@ If after digging you genuinely cannot reproduce or figure out the issue, it's OK
 
 Sometimes a "bug" is actually the user asking for a feature that doesn't exist:
 
-- *"True Zero should track my barrel round count"* — not a bug, a feature request. Add to the future-ideas list in `Build progress.md`.
+- *"Loadscope should track my barrel round count"* — not a bug, a feature request. Add to the future-ideas list in `Build progress.md`.
 - *"It should auto-fill my DOPE chart from confirmed loads"* — also a feature, not a bug. (Already in the deferred list.)
 - *"It should support LabRadar"* — feature request. We need a sample CSV, then it's ~30 min of work.
 
@@ -92,16 +92,16 @@ Here's a friendly reply skeleton when you're not sure yet what's going on:
 
 > Hey [Name],
 >
-> Thanks for reaching out — sorry True Zero is acting up. To figure out what's happening I need a few things from you:
+> Thanks for reaching out — sorry Loadscope is acting up. To figure out what's happening I need a few things from you:
 >
-> 1. The version shown in **Tools → About** in True Zero.
-> 2. A copy of the **activity log** — that's the dark text box at the bottom of the True Zero window. Click in it, Cmd+A to select all, Cmd+C to copy, and paste it into a reply email.
+> 1. The version shown in **Tools → About** in Loadscope.
+> 2. A copy of the **activity log** — that's the dark text box at the bottom of the Loadscope window. Click in it, Cmd+A to select all, Cmd+C to copy, and paste it into a reply email.
 > 3. If this happened during an import, please attach the CSV file that triggered it.
 > 4. Briefly walk me through what you were doing right before things went wrong.
 >
-> Once I have those I can usually diagnose it pretty quickly. Sorry for the hassle, and thanks for helping me make True Zero better.
+> Once I have those I can usually diagnose it pretty quickly. Sorry for the hassle, and thanks for helping me make Loadscope better.
 >
-> — True Zero Support
+> — Loadscope Support
 
 ---
 

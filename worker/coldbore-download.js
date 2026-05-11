@@ -1,4 +1,4 @@
-// True Zero download proxy + beta-access automation.
+// Loadscope download proxy + beta-access automation.
 //
 // **THIS IS A BACKUP COPY.** The live source-of-truth is the deployed version in
 // the Cloudflare dashboard at:
@@ -27,7 +27,7 @@
 //   HMAC_SECRET       -> encrypted env var (long random string)
 //   BETA_REQUESTS     -> KV namespace (stores request + assignment state)
 //   RESEND_API_KEY    -> encrypted env var (re_xxx from resend.com)
-//   FROM_EMAIL        -> e.g. "True Zero <noreply@truezero.co>"
+//   FROM_EMAIL        -> e.g. "Loadscope <noreply@loadscope.app>"
 //   ADMIN_EMAIL       -> Chad's gmail (where approve/deny links land)
 //   ADMIN_TOKEN       -> encrypted env var (random string for /admin/* auth)
 //   TURNSTILE_SECRET  -> encrypted env var (anti-bot)
@@ -47,7 +47,7 @@ const VALID_CODES = new Set([
   "CBORE-L5CI-RHZE-FGWP-WXL2",
 ]);
 
-const ALLOWED_FILES = new Set(["True.Zero.dmg", "True.Zero.zip", "Cold.Bore.dmg", "Cold.Bore.zip"]);
+const ALLOWED_FILES = new Set(["Loadscope.dmg", "Loadscope.zip", "Cold.Bore.dmg", "Cold.Bore.zip"]);
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -197,7 +197,7 @@ function adminNotificationEmail(env, baseUrl, request) {
   const denyUrl = `${baseUrl}/deny?id=${encodeURIComponent(request.id)}&token=${encodeURIComponent(request.token)}`;
   const html = `
     <div style="font-family: -apple-system, sans-serif; max-width: 560px; margin: 0 auto; color: #111;">
-      <h2 style="margin: 0 0 16px;">True Zero beta access request</h2>
+      <h2 style="margin: 0 0 16px;">Loadscope beta access request</h2>
       <table style="border-collapse: collapse; width: 100%; margin-bottom: 20px;">
         <tr><td style="padding: 6px 0; color: #555; width: 110px;">Name</td><td style="padding: 6px 0;"><strong>${escapeHtml(request.name)}</strong></td></tr>
         <tr><td style="padding: 6px 0; color: #555;">Email</td><td style="padding: 6px 0;">${escapeHtml(request.email)}</td></tr>
@@ -226,7 +226,7 @@ function adminNotificationEmail(env, baseUrl, request) {
 function testerWelcomeEmail(env, request, code) {
   const html = `
     <div style="font-family: -apple-system, sans-serif; max-width: 560px; margin: 0 auto; color: #111;">
-      <h2 style="margin: 0 0 16px;">Welcome to True Zero</h2>
+      <h2 style="margin: 0 0 16px;">Welcome to Loadscope</h2>
       <p>Hi ${escapeHtml(request.name.split(/\s+/)[0])},</p>
       <p>You're in. Your beta access code:</p>
       <p style="background: #f3f4f6; border: 1px solid #d1d5db; padding: 14px 18px; border-radius: 6px; font-family: Menlo, Consolas, monospace; font-size: 16px; letter-spacing: 0.5px; margin: 20px 0;">
@@ -237,8 +237,8 @@ function testerWelcomeEmail(env, request, code) {
         <li>Visit <a href="${escapeHtml(env.PUBLIC_SITE)}" style="color: #d97706;">${escapeHtml(env.PUBLIC_SITE)}</a></li>
         <li>Click <strong>Download</strong>.</li>
         <li>Paste the code above when prompted -- the .dmg downloads.</li>
-        <li>Open the .dmg, drag <strong>True Zero</strong> to your Applications folder.</li>
-        <li>Launch True Zero. Paste the same code into the license dialog on first run.</li>
+        <li>Open the .dmg, drag <strong>Loadscope</strong> to your Applications folder.</li>
+        <li>Launch Loadscope. Paste the same code into the license dialog on first run.</li>
       </ol>
       <p>You'll get auto-updates in-app from now on -- no need to re-download from the website.</p>
       <p style="color: #555; font-size: 14px; margin-top: 28px;">
@@ -249,7 +249,7 @@ function testerWelcomeEmail(env, request, code) {
   `;
   return {
     to: request.email,
-    subject: "Your True Zero beta access code",
+    subject: "Your Loadscope beta access code",
     html,
     replyTo: env.ADMIN_EMAIL,
   };
@@ -468,10 +468,10 @@ async function handleAuthorize(request, env, url) {
   catch { return jsonResponse({ error: "Bad request" }, 400); }
 
   const code = normalizeCode(body.code);
-  const file = body.file || "True.Zero.dmg";
+  const file = body.file || "Loadscope.dmg";
 
   if (!VALID_CODES.has(code)) {
-    return jsonResponse({ error: "Code not recognized. Please contact support@truezero.co." }, 403);
+    return jsonResponse({ error: "Code not recognized. Please contact support@loadscope.app." }, 403);
   }
   if (!ALLOWED_FILES.has(file)) {
     return jsonResponse({ error: "Invalid file" }, 400);

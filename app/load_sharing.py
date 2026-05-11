@@ -1,13 +1,13 @@
 """
-Load sharing — export and import individual loads as .truezero files.
+Load sharing — export and import individual loads as .loadscope files.
 
-A .truezero file is a small JSON document containing the suggested winning
+A .loadscope file is a small JSON document containing the suggested winning
 load from a workbook (cartridge, components, charge, jump, performance stats).
 Friends can email/AirDrop these to each other.
 
 Tools menu in the app:
-  - Export Suggested Load…  → writes a .truezero file next to the workbook
-  - Import Shared Load…     → opens a .truezero file and shows its contents
+  - Export Suggested Load…  → writes a .loadscope file next to the workbook
+  - Import Shared Load…     → opens a .loadscope file and shows its contents
                               in a read-only dialog the user can copy from
 
 This v1 keeps it simple — imports SHOW the load rather than writing into the
@@ -28,12 +28,12 @@ from version import APP_NAME, APP_VERSION
 from load_card import LOAD_LOG_FIELDS, _extract_bullet_weight  # reuse
 
 
-TRUEZERO_FORMAT = "truezero.load"
-TRUEZERO_VERSION = 1
-FILE_EXT = ".truezero"
+LOADSCOPE_FORMAT = "loadscope.load"
+LOADSCOPE_VERSION = 1
+FILE_EXT = ".loadscope"
 # Backwards-compatibility aliases for old constant names used elsewhere.
-COLDBORE_FORMAT = TRUEZERO_FORMAT
-COLDBORE_VERSION = TRUEZERO_VERSION
+COLDBORE_FORMAT = LOADSCOPE_FORMAT
+COLDBORE_VERSION = LOADSCOPE_VERSION
 
 
 # ============================================================
@@ -42,7 +42,7 @@ COLDBORE_VERSION = TRUEZERO_VERSION
 
 def export_load(workbook_path):
     """Read the suggested winning load from the workbook and write it to a
-    .truezero file next to the workbook. Returns the path to the written file."""
+    .loadscope file next to the workbook. Returns the path to the written file."""
     wb = load_workbook(workbook_path, data_only=True, keep_vba=False)
 
     def cell(sheet, coord):
@@ -80,8 +80,8 @@ def export_load(workbook_path):
     }
 
     payload = {
-        "format": TRUEZERO_FORMAT,
-        "format_version": TRUEZERO_VERSION,
+        "format": LOADSCOPE_FORMAT,
+        "format_version": LOADSCOPE_VERSION,
         "exported_at": datetime.now().isoformat(timespec="seconds"),
         "exported_by": f"{APP_NAME} v{APP_VERSION}",
         "rifle": rifle,
@@ -91,7 +91,7 @@ def export_load(workbook_path):
         "notes": "",
     }
 
-    # Filename: "<Cartridge> <Bullet wt><Powder> <charge>gr.truezero"
+    # Filename: "<Cartridge> <Bullet wt><Powder> <charge>gr.loadscope"
     parts = []
     if rifle["cartridge"]:
         parts.append(str(rifle["cartridge"]))
@@ -120,11 +120,11 @@ def export_load(workbook_path):
 # ============================================================
 
 class LoadFileError(Exception):
-    """Raised when a file isn't a valid .truezero load."""
+    """Raised when a file isn't a valid .loadscope load."""
 
 
 def import_load(file_path):
-    """Read and validate a .truezero file. Returns the parsed dict.
+    """Read and validate a .loadscope file. Returns the parsed dict.
     Raises LoadFileError if the file isn't valid."""
     try:
         with open(file_path, encoding="utf-8") as f:
@@ -136,14 +136,14 @@ def import_load(file_path):
         raise LoadFileError("File doesn't contain a load object.")
 
     fmt = data.get("format")
-    if fmt != TRUEZERO_FORMAT:
+    if fmt != LOADSCOPE_FORMAT:
         raise LoadFileError(
-            f"This file isn't a True Zero shared load "
-            f"(format={fmt!r}, expected {TRUEZERO_FORMAT!r})."
+            f"This file isn't a Loadscope shared load "
+            f"(format={fmt!r}, expected {LOADSCOPE_FORMAT!r})."
         )
 
     fmt_v = data.get("format_version")
-    if isinstance(fmt_v, int) and fmt_v > TRUEZERO_VERSION:
+    if isinstance(fmt_v, int) and fmt_v > LOADSCOPE_VERSION:
         # Newer format version — try to read it anyway, but warn
         # (intentionally not raising; forward-compat best effort)
         pass

@@ -1,5 +1,5 @@
 """
-True Zero — GUI app.
+Loadscope — GUI app.
 
 A small window with a drop zone. When CSVs are dropped:
     1. Each file is auto-classified (Garmin vs BallisticX) by sniffing its first lines.
@@ -605,7 +605,7 @@ class MainWindow(QMainWindow):
         self.drop = DropZone(self.handle_drops)
         self.drop.setToolTip(
             "Drag your Garmin and BallisticX CSVs here. "
-            "True Zero detects the format automatically and routes each file "
+            "Loadscope detects the format automatically and routes each file "
             "to the right import folder. Click Run Import when you've dropped everything."
         )
         layout.addWidget(self.drop)
@@ -672,7 +672,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.log, stretch=1)
 
         self._log("Ready. Drop CSV files into the box above.", color=theme.LOG_INFO)
-        self._log("New here? Tools → How to Use True Zero… walks you through "
+        self._log("New here? Tools → How to Use Loadscope… walks you through "
                   "labels, workflow, and tips.", color=theme.LOG_DIM)
 
         # Show a snapshot of what's already in the workbook so the user knows
@@ -1025,7 +1025,7 @@ class MainWindow(QMainWindow):
             self._pending_app_update_manifest = manifest
             self._pending_app_update_url = manifest.get("app_download_url")  # legacy fallback
             self._pending_app_update_version = manifest.get("app_version")
-            self._pending_app_update_website = manifest.get("app_website_url") or "https://truezero.co/"
+            self._pending_app_update_website = manifest.get("app_website_url") or "https://loadscope.app/"
         else:
             self._pending_app_update_manifest = None
             self._pending_app_update_url = None
@@ -1072,7 +1072,7 @@ class MainWindow(QMainWindow):
                     (self._pending_app_update_manifest and self._pending_app_update_manifest.get("app_download_endpoint"))
                     or self._pending_app_update_url
                 )
-                website = self._pending_app_update_website or "https://truezero.co/"
+                website = self._pending_app_update_website or "https://loadscope.app/"
                 if installer.can_self_install() and has_app_update:
                     parts.append(
                         '<a href="install:start"><b>Install Update</b></a>'
@@ -1097,7 +1097,7 @@ class MainWindow(QMainWindow):
             elif state == "installing":
                 parts.append(
                     f"<b>Update v{new_v} ready.</b> "
-                    'True Zero will close, install the update, and reopen.'
+                    'Loadscope will close, install the update, and reopen.'
                 )
                 parts.append(
                     '<a href="install:swap"><b>Quit and Install</b></a>'
@@ -1109,7 +1109,7 @@ class MainWindow(QMainWindow):
                 )
                 if error:
                     parts.append(f"<i>{error}</i>")
-                website = self._pending_app_update_website or "https://truezero.co/"
+                website = self._pending_app_update_website or "https://loadscope.app/"
                 parts.append(
                     f'<a href="app:{website}">Download manually from the website</a>'
                 )
@@ -1241,7 +1241,7 @@ class MainWindow(QMainWindow):
             self._render_update_banner(
                 state="error",
                 error=(
-                    "True Zero couldn't swap in the new version automatically. "
+                    "Loadscope couldn't swap in the new version automatically. "
                     "Use the download link to install manually."
                 ),
             )
@@ -1457,11 +1457,11 @@ class MainWindow(QMainWindow):
                       color=theme.LOG_SUCCESS)
         elif n_powder < 3 or n_seating < 3:
             self._log("  (Need at least 3 loads in either ladder before "
-                      "True Zero picks a suggested winner.)",
+                      "Loadscope picks a suggested winner.)",
                       color=theme.LOG_DIM)
 
     def _show_help(self):
-        """Tools → How to Use True Zero…"""
+        """Tools → How to Use Loadscope…"""
         show_help(parent=self)
 
     def _show_settings(self):
@@ -1502,7 +1502,7 @@ class MainWindow(QMainWindow):
             QMessageBox.information(
                 self,
                 "No backups yet",
-                "True Zero hasn't created any backups yet. Backups are saved "
+                "Loadscope hasn't created any backups yet. Backups are saved "
                 "to the .backups/ folder before each import.",
             )
             return
@@ -1619,7 +1619,7 @@ class MainWindow(QMainWindow):
 
     def _export_load(self):
         """Tools → Export Suggested Load… — write the current workbook's
-        suggested load to a .truezero file in the Shared Loads/ subfolder."""
+        suggested load to a .loadscope file in the Shared Loads/ subfolder."""
         try:
             from load_sharing import export_load
         except ImportError as e:
@@ -1646,7 +1646,7 @@ class MainWindow(QMainWindow):
         subprocess.run(["open", "-R", out_path])
 
     def _import_load(self):
-        """Tools → Import Shared Load… — open a .truezero file in a file picker
+        """Tools → Import Shared Load… — open a .loadscope file in a file picker
         and show its contents in a read-only dialog. Doesn't write to the user's
         workbook (intentional — user must consciously decide to try the load)."""
         try:
@@ -1660,7 +1660,7 @@ class MainWindow(QMainWindow):
             self,
             "Open Shared Load",
             os.path.join(self.project, "Shared Loads"),
-            "True Zero loads (*.truezero);;All files (*)",
+            "Loadscope loads (*.loadscope);;All files (*)",
         )
         if not path:
             return
@@ -1676,7 +1676,7 @@ class MainWindow(QMainWindow):
         msg = QMessageBox(self)
         msg.setWindowTitle(f"Shared Load — {os.path.basename(path)}")
         msg.setIcon(QMessageBox.Information)
-        msg.setText("A load shared by another True Zero user:")
+        msg.setText("A load shared by another Loadscope user:")
         msg.setInformativeText(text)
         # Force monospace by setting the detailed-text font
         font = msg.font()
@@ -1700,16 +1700,16 @@ class MainWindow(QMainWindow):
         subprocess.run(["open", path])
 
     def _visit_website(self):
-        """Tools → Visit True Zero Website — opens the marketing site in the
+        """Tools → Visit Loadscope Website — opens the marketing site in the
         user's default browser. Useful for sharing the app, checking for
         documentation, or pointing friends at the access-code request form."""
         from PyQt5.QtCore import QUrl
         from PyQt5.QtGui import QDesktopServices
-        QDesktopServices.openUrl(QUrl("https://truezero.co/"))
+        QDesktopServices.openUrl(QUrl("https://loadscope.app/"))
 
     def _send_feedback(self):
         """Tools → Send Feedback — opens the user's default email client with
-        a pre-filled message to support@truezero.co. Same mailto used inside
+        a pre-filled message to support@loadscope.app. Same mailto used inside
         the About dialog, just promoted to a top-level menu for discoverability."""
         from PyQt5.QtCore import QUrl
         from PyQt5.QtGui import QDesktopServices
@@ -1721,7 +1721,7 @@ class MainWindow(QMainWindow):
             "Thanks!"
         )
         display_name = f"{APP_NAME} Support"
-        recipient = "support@truezero.co"
+        recipient = "support@loadscope.app"
         encoded_recipient = (
             f"%22{display_name.replace(' ', '%20')}%22%20%3C{recipient}%3E"
         )
@@ -1739,8 +1739,8 @@ class MainWindow(QMainWindow):
         # text; users see "click here" and only a hover-tooltip reveals the URL.
         # NOTE on display name: macOS Mail.app substitutes the recipient's
         # contact-card name if the email is in the user's address book. The
-        # support address (support@truezero.co) shouldn't be in anyone's
-        # contacts by default, so the "True Zero Support" display name we
+        # support address (support@loadscope.app) shouldn't be in anyone's
+        # contacts by default, so the "Loadscope Support" display name we
         # provide here will show through cleanly for both Chad and friends.
         contact_subject = f"{APP_NAME} v{APP_VERSION} — feedback"
         contact_body = (
@@ -1755,7 +1755,7 @@ class MainWindow(QMainWindow):
         # The %22 are URL-encoded double quotes around the display name; %20 is
         # space; %3C and %3E are < and >.
         display_name = f"{APP_NAME} Support"
-        recipient = "support@truezero.co"
+        recipient = "support@loadscope.app"
         encoded_recipient = (
             f"%22{display_name.replace(' ', '%20')}%22%20%3C{recipient}%3E"
         )
@@ -1780,7 +1780,7 @@ class MainWindow(QMainWindow):
             f"not listed, "
             f'<a href="{mailto}">click here to contact the developers</a> '
             f"and send a sample CSV from your device.</i><br><br>"
-            f"<b>Disclaimer:</b> True Zero is a data-analysis tool. It does "
+            f"<b>Disclaimer:</b> Loadscope is a data-analysis tool. It does "
             f"not provide load data and is not a substitute for safe "
             f"handloading practice. See Tools → View Disclaimer for the full text."
         )
@@ -1846,7 +1846,7 @@ def main():
             lambda: QMessageBox.warning(
                 win,
                 "Last update didn't install",
-                "True Zero tried to install an update but couldn't finish:\n\n"
+                "Loadscope tried to install an update but couldn't finish:\n\n"
                 f"{last_install_err}\n\n"
                 "You're still on the previous version. Use the update banner "
                 "to try again, or download the new version manually from GitHub."

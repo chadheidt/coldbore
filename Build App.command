@@ -1,8 +1,8 @@
 #!/bin/bash
-# Builds True Zero.app via py2app.
+# Builds Loadscope.app via py2app.
 # First run installs py2app + dependencies (~1 minute). Subsequent runs are faster.
 #
-# Output: dist/True Zero.app  (fully self-contained .app you can drag to Applications)
+# Output: dist/Loadscope.app  (fully self-contained .app you can drag to Applications)
 
 set -e
 
@@ -10,11 +10,11 @@ PROJECT="$HOME/Projects/Rifle Load Data"
 cd "$PROJECT"
 
 echo "============================================================"
-echo "True Zero — building .app bundle"
+echo "Loadscope — building .app bundle"
 echo "============================================================"
 echo ""
 echo "This will take a few minutes. The .app will end up in:"
-echo "    $PROJECT/dist/True Zero.app"
+echo "    $PROJECT/dist/Loadscope.app"
 echo ""
 
 # --- Dependency install --------------------------------------------------
@@ -92,7 +92,7 @@ echo ""
 # --- Done ----------------------------------------------------------------
 echo ""
 echo "============================================================"
-APP_PATH="$PROJECT/dist/True Zero.app"
+APP_PATH="$PROJECT/dist/Loadscope.app"
 if [ -d "$APP_PATH" ]; then
     APP_SIZE=$(du -sh "$APP_PATH" | awk '{print $1}')
     echo "BUILD SUCCEEDED."

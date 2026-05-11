@@ -12,7 +12,7 @@ Usage:
     python3 tools/sync_beta_keys.py
 
 The script asks for the admin token on first run and saves it to:
-    ~/.config/truezero/admin_token
+    ~/.config/loadscope/admin_token
 Subsequent runs read the token from that file silently.
 
 To rotate the token: delete the file and re-run. (And update the
@@ -32,10 +32,10 @@ WORKER_BASE = "https://coldbore-download.cheidt182.workers.dev"
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 BETA_KEYS_FILE = PROJECT_ROOT / "beta-keys.txt"
 LICENSE_PY = PROJECT_ROOT / "app" / "license.py"
-TOKEN_PATH = Path.home() / ".config" / "truezero" / "admin_token"
+TOKEN_PATH = Path.home() / ".config" / "loadscope" / "admin_token"
 
 
-HEADER = """# True Zero beta-key recipient log. NEVER COMMIT (.gitignored).
+HEADER = """# Loadscope beta-key recipient log. NEVER COMMIT (.gitignored).
 #
 # Format: KEY  # Recipient name, date issued, notes
 # This file is rewritten by `python3 tools/sync_beta_keys.py` -- assignments

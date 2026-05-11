@@ -1,11 +1,11 @@
-# True Zero landing page
+# Loadscope landing page
 
 This is the public marketing/install site, served by GitHub Pages from the `docs/` folder of this repo.
 
 ## URLs
 
 - **Default**: `https://chadheidt.github.io/coldbore/`
-- **Custom domain (when set up)**: `https://truezero.co`
+- **Custom domain (when set up)**: `https://loadscope.app`
 
 ## How it's served
 
@@ -18,9 +18,9 @@ GitHub Pages is configured (in repo Settings → Pages) to publish from the `doc
 
 ## Custom domain setup (when ready)
 
-1. Buy `truezero.co` from a registrar (Namecheap, Porkbun, Cloudflare). The .app TLD requires HTTPS — GitHub Pages handles that automatically.
+1. Buy `loadscope.app` from a registrar (Namecheap, Porkbun, Cloudflare). The .app TLD requires HTTPS — GitHub Pages handles that automatically.
 2. In your DNS provider, add a CNAME record: `@` → `chadheidt.github.io` (and `www` → same).
-3. In GitHub repo Settings → Pages, enter `truezero.co` as the custom domain. Wait a few minutes for GitHub to verify.
+3. In GitHub repo Settings → Pages, enter `loadscope.app` as the custom domain. Wait a few minutes for GitHub to verify.
 4. Check **Enforce HTTPS** once verification completes.
 
 ## What's NOT here yet

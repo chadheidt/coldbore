@@ -1,8 +1,8 @@
 """License-entry dialog. Modal blocker on first launch (and after revocation).
 
 Visual layout (top to bottom):
-    1. True Zero icon
-    2. "True Zero" wordmark + version
+    1. Loadscope icon
+    2. "Loadscope" wordmark + version
     3. Screenshot of the main window — so testers see what the app looks like
        even while locked out
     4. Brief description paragraph
@@ -33,7 +33,7 @@ from version import APP_NAME, APP_VERSION
 
 
 PROMPT_TEXT = (
-    "True Zero is in private beta. Each tester has a unique license key. "
+    "Loadscope is in private beta. Each tester has a unique license key. "
     "Enter your key below to unlock the app — without a valid key the "
     "import workflow stays disabled."
 )
@@ -44,7 +44,7 @@ REVOKED_TEXT = (
 )
 
 DESCRIPTION_TEXT = (
-    "True Zero turns Garmin Xero (chronograph) and BallisticX (target group) "
+    "Loadscope turns Garmin Xero (chronograph) and BallisticX (target group) "
     "CSV exports into a structured load development workbook with composite "
     "scoring across SD, mean radius, and vertical dispersion. Drop the CSVs "
     "onto the app; Excel opens with the data ready to read."
@@ -192,7 +192,7 @@ class LicenseDialog(QDialog):
         quit_btn.clicked.connect(self.reject)
         button_row.addWidget(quit_btn)
 
-        unlock_btn = QPushButton("Unlock True Zero")
+        unlock_btn = QPushButton("Unlock Loadscope")
         unlock_btn.setObjectName("primary")
         unlock_btn.setDefault(True)
         unlock_btn.clicked.connect(self._submit)

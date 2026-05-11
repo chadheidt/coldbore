@@ -2,7 +2,7 @@
 # Clean Up Old App.command
 #
 # One-time migration cleanup after the rename from "Rifle Load Importer" to
-# "True Zero". Safe to run multiple times — every step checks first whether
+# "Loadscope". Safe to run multiple times — every step checks first whether
 # there's anything to do.
 #
 # Will NOT touch your project folder, workbooks, CSVs, templates, or
@@ -13,7 +13,7 @@ set -e
 PROJECT="$HOME/Projects/Rifle Load Data"
 OLD_APP="/Applications/Rifle Load Importer.app"
 OLD_CONFIG_DIR="$HOME/Library/Application Support/Rifle Load Importer"
-NEW_CONFIG_DIR="$HOME/Library/Application Support/True Zero"
+NEW_CONFIG_DIR="$HOME/Library/Application Support/Loadscope"
 DIST_DIR="$PROJECT/dist"
 BUILD_DIR="$PROJECT/build"
 
@@ -35,11 +35,11 @@ remove_path() {
 
 # ---- summary + confirmation ----
 echo "============================================================"
-echo "True Zero — cleanup of old Rifle Load Importer artifacts"
+echo "Loadscope — cleanup of old Rifle Load Importer artifacts"
 echo "============================================================"
 echo ""
 echo "This will:"
-echo "  1. Copy your old config to the new True Zero location (if needed)"
+echo "  1. Copy your old config to the new Loadscope location (if needed)"
 echo "  2. Remove the old 'Rifle Load Importer' Library folder"
 echo "  3. Remove the old 'Rifle Load Importer.app' from /Applications"
 echo "  4. Delete the build/ and dist/ folders so the next build is fresh"
@@ -101,7 +101,7 @@ echo "Cleanup complete."
 echo "============================================================"
 echo ""
 echo "Next steps:"
-echo "  1. Double-click 'Build App.command' to build the new True Zero.app"
-echo "  2. Drag the new True Zero.app from dist/ to Applications"
+echo "  1. Double-click 'Build App.command' to build the new Loadscope.app"
+echo "  2. Drag the new Loadscope.app from dist/ to Applications"
 echo "  3. Right-click → Open the first time (one-time Gatekeeper prompt)"
 echo ""
