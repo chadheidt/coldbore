@@ -20,7 +20,7 @@ cp ~/Desktop/workbook.png docs/assets/workbook.png
 To update what's shown (different cartridge, different ladder, etc.), edit the
 `rows` list inside `render_workbook.py` and re-run.
 
-### `render_coldbore.py`
+### `render_truezero.py`
 
 Generates `docs/assets/screenshot.png` — the True Zero window mockup on the
 landing page. Hand-painted reticle + MOA grid + center spotlight + title/
@@ -28,7 +28,7 @@ subtitle in the drop zone, plus workbook picker and activity log. Matches the
 production drop zone's visual design (see `app/main.py:DropZone.paintEvent`).
 
 ```
-python3 tools/render_coldbore.py
+python3 tools/render_truezero.py
 cp ~/Desktop/screenshot.png docs/assets/screenshot.png
 ```
 

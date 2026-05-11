@@ -461,7 +461,7 @@ async function handleAuthorize(request, env, url) {
   const file = body.file || "Cold.Bore.dmg";
 
   if (!VALID_CODES.has(code)) {
-    return jsonResponse({ error: "Code not recognized. Please contact coldboreapp@gmail.com." }, 403);
+    return jsonResponse({ error: "Code not recognized. Please contact support@truezero.co." }, 403);
   }
   if (!ALLOWED_FILES.has(file)) {
     return jsonResponse({ error: "Invalid file" }, 400);

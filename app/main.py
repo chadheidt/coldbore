@@ -1607,7 +1607,7 @@ class MainWindow(QMainWindow):
 
     def _export_load(self):
         """Tools → Export Suggested Load… — write the current workbook's
-        suggested load to a .coldbore file in the Shared Loads/ subfolder."""
+        suggested load to a .truezero file in the Shared Loads/ subfolder."""
         try:
             from load_sharing import export_load
         except ImportError as e:
@@ -1634,7 +1634,7 @@ class MainWindow(QMainWindow):
         subprocess.run(["open", "-R", out_path])
 
     def _import_load(self):
-        """Tools → Import Shared Load… — open a .coldbore file in a file picker
+        """Tools → Import Shared Load… — open a .truezero file in a file picker
         and show its contents in a read-only dialog. Doesn't write to the user's
         workbook (intentional — user must consciously decide to try the load)."""
         try:
@@ -1648,7 +1648,7 @@ class MainWindow(QMainWindow):
             self,
             "Open Shared Load",
             os.path.join(self.project, "Shared Loads"),
-            "True Zero loads (*.coldbore);;All files (*)",
+            "True Zero loads (*.truezero);;All files (*)",
         )
         if not path:
             return
@@ -1698,7 +1698,7 @@ class MainWindow(QMainWindow):
         # text; users see "click here" and only a hover-tooltip reveals the URL.
         # NOTE on display name: macOS Mail.app substitutes the recipient's
         # contact-card name if the email is in the user's address book. The
-        # support address (coldboreapp@gmail.com) shouldn't be in anyone's
+        # support address (support@truezero.co) shouldn't be in anyone's
         # contacts by default, so the "True Zero Support" display name we
         # provide here will show through cleanly for both Chad and friends.
         contact_subject = f"{APP_NAME} v{APP_VERSION} — feedback"
@@ -1714,7 +1714,7 @@ class MainWindow(QMainWindow):
         # The %22 are URL-encoded double quotes around the display name; %20 is
         # space; %3C and %3E are < and >.
         display_name = f"{APP_NAME} Support"
-        recipient = "coldboreapp@gmail.com"
+        recipient = "support@truezero.co"
         encoded_recipient = (
             f"%22{display_name.replace(' ', '%20')}%22%20%3C{recipient}%3E"
         )

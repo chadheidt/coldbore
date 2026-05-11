@@ -8,7 +8,7 @@ A reference for what to do when a user emails you a crash report from True Zero.
 
 True Zero has an opt-in crash reporter (built into the app — `app/crash_reporter.py`). When something inside the app throws an unhandled exception, the user sees a dialog with the full traceback and a **"Send via Email"** button. If they click Send, it opens their default mail app with this pre-filled:
 
-- **To:** `coldboreapp@gmail.com` (which forwards to your personal Gmail)
+- **To:** `support@truezero.co` (which forwards to your personal Gmail)
 - **Subject:** `True Zero v0.X.Y — crash report`
 - **Body:** structured text starting with `True Zero vX.Y.Z — crash report`, including app version, Python version, macOS version, and the full Python traceback
 

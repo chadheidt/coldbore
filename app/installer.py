@@ -115,7 +115,7 @@ sleep 3
 # 2. Stage the new .app to a temp directory next to the existing one,
 #    so the move is on the same filesystem (atomic rename).
 APP_DIR="$(dirname "$APP")"
-STAGING="$(mktemp -d "$APP_DIR/.coldbore-update.XXXXXX")" \\
+STAGING="$(mktemp -d "$APP_DIR/.truezero-update.XXXXXX")" \\
     || log_fail "Couldn't create staging dir in $APP_DIR (permission denied?)"
 
 # 3. Extract the downloaded zip into staging.
@@ -140,7 +140,7 @@ fi
 # 6. Atomically replace the old .app with the new one.
 #    We move the OLD app aside first (rather than removing) so a failed
 #    move-in doesn't leave the user with no app at all.
-TRASH="$APP_DIR/.coldbore-old.$$"
+TRASH="$APP_DIR/.truezero-old.$$"
 mv "$APP" "$TRASH" || log_fail "Couldn't move old app aside (need admin?)"
 if ! mv "$NEW_APP" "$APP"; then
     # Roll back: put the old one back so the user isn't left without an app
@@ -192,7 +192,7 @@ def launch_install_swap(zip_path: str) -> bool:
     # Write the helper script to /tmp. Using mktemp-style path so we don't
     # collide if two updates ever overlap.
     import tempfile
-    fd, helper_path = tempfile.mkstemp(prefix="coldbore-install-", suffix=".sh")
+    fd, helper_path = tempfile.mkstemp(prefix="truezero-install-", suffix=".sh")
     try:
         # Force UTF-8 encoding here. On older macOS Pythons (3.9 system Python)
         # the locale's preferred encoding can default to ASCII, which causes

@@ -58,7 +58,7 @@ Pick whichever one fits the friend. Replace `CBORE-XXXX-XXXX-XXXX-XXXX` with the
 >
 > True Zero is signed and notarized by Apple — no "unidentified developer" warning, no right-click trick.
 >
-> One ask: please don't share the access code with anyone else. Each tester has a unique code so I can follow up individually on what you find. If something goes weird and you want a friend to try it, just send them my way (coldboreapp@gmail.com) and I'll set them up properly.
+> One ask: please don't share the access code with anyone else. Each tester has a unique code so I can follow up individually on what you find. If something goes weird and you want a friend to try it, just send them my way (support@truezero.co) and I'll set them up properly.
 >
 > Holler if anything's broken or confusing. Built for me but I think it'll be useful for you.
 >

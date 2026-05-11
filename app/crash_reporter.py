@@ -38,7 +38,7 @@ from PyQt5.QtWidgets import (
 from version import APP_NAME, APP_VERSION
 
 
-SUPPORT_EMAIL = "coldboreapp@gmail.com"
+SUPPORT_EMAIL = "support@truezero.co"
 
 # Sentinel to avoid showing multiple stacked crash dialogs if exceptions
 # cascade — we report the first one and quietly log the rest to stderr.

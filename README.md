@@ -22,7 +22,7 @@ True Zero is in **private beta**. Each tester gets a unique access code that unl
 
 True Zero is signed and notarized by Apple — no "unidentified developer" warning on first launch.
 
-To request an access code, email `coldboreapp@gmail.com`.
+To request an access code, email `support@truezero.co`.
 
 ## Develop
 
