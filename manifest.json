@@ -1,9 +1,9 @@
 {
-  "app_version": "0.11.0",
+  "app_version": "0.11.1",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Cold.Bore.zip",
   "app_website_url": "https://chadheidt.github.io/coldbore/",
-  "app_release_notes": "Privacy: downloads (both the .dmg installer and the auto-update .zip) are now served via a license-key-gated Cloudflare Worker. Without a valid access code there is no public path to the binary. Existing users' apps now authenticate auto-updates with their stored license key.",
+  "app_release_notes": "Auto-update test release. First end-to-end exercise of the v0.11.0 stack: in-app installer uses ditto (not unzip) to extract the new bundle, and the updater fetches the zip via a license-key-gated Cloudflare Worker signed URL. No user-facing changes.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

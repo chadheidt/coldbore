@@ -69,7 +69,7 @@ sys.path.insert(0, str(HERE / "app"))
 
 APP_DISPLAY_NAME = "Cold Bore"
 APP_BUNDLE_ID = "com.chadheidt.coldbore"
-APP_VERSION = "0.11.0"  # keep in sync with app/version.py
+APP_VERSION = "0.11.1"  # keep in sync with app/version.py
 
 # The main entry script
 ENTRY = ["app/main.py"]
