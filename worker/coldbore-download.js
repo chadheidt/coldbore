@@ -47,7 +47,7 @@ const VALID_CODES = new Set([
   "CBORE-L5CI-RHZE-FGWP-WXL2",
 ]);
 
-const ALLOWED_FILES = new Set(["Cold.Bore.dmg", "Cold.Bore.zip"]);
+const ALLOWED_FILES = new Set(["True.Zero.dmg", "True.Zero.zip", "Cold.Bore.dmg", "Cold.Bore.zip"]);
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -458,7 +458,7 @@ async function handleAuthorize(request, env, url) {
   catch { return jsonResponse({ error: "Bad request" }, 400); }
 
   const code = normalizeCode(body.code);
-  const file = body.file || "Cold.Bore.dmg";
+  const file = body.file || "True.Zero.dmg";
 
   if (!VALID_CODES.has(code)) {
     return jsonResponse({ error: "Code not recognized. Please contact support@truezero.co." }, 403);

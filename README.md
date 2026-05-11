@@ -16,7 +16,7 @@ True Zero is in **private beta**. Each tester gets a unique access code that unl
 
 1. Visit [https://chadheidt.github.io/coldbore/](https://chadheidt.github.io/coldbore/)
 2. Click **Download True Zero**, paste the access code you were emailed
-3. Open the downloaded `Cold.Bore.dmg`, drag **True Zero** to Applications
+3. Open the downloaded `True.Zero.dmg`, drag **True Zero** to Applications
 4. Open True Zero from Applications, paste the same access code in the license dialog
 5. Follow the first-launch wizard to set up your True Zero folder
 

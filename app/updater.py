@@ -67,7 +67,7 @@ def resolve_download_url(manifest):
     """
     endpoint = manifest.get("app_download_endpoint")
     if endpoint:
-        file_name = manifest.get("app_download_file") or "Cold.Bore.zip"
+        file_name = manifest.get("app_download_file") or "True.Zero.zip"
         try:
             # Imported lazily so updater.py stays usable in environments where
             # config / file system access might not be set up yet.

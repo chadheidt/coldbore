@@ -23,7 +23,7 @@
 #   6. Staples the notarization ticket to the DMG
 #   7. Verifies the final result (spctl assessment)
 #
-# Output: dist/Cold.Bore.dmg  (signed, notarized, ready to ship)
+# Output: dist/True.Zero.dmg  (signed, notarized, ready to ship)
 #
 # Until the prerequisites are set up, this script will fail at the codesign step
 # and tell you what's missing.
@@ -48,7 +48,7 @@ APPLE_TEAM_ID="NY3D844C6W"
 
 ENTITLEMENTS="$PROJECT/entitlements.plist"
 APP_NAME="True Zero"
-DMG_NAME="Cold.Bore.dmg"
+DMG_NAME="True.Zero.dmg"
 QUICKSTART="$PROJECT/True Zero — Quick Start.docx"
 
 # ----- Sanity checks ---------------------------------------------------------
@@ -201,19 +201,19 @@ echo "[7/8] Final verification…"
 spctl -a -t install -v "$DMG_PATH"
 xcrun stapler validate "$DMG_PATH"
 
-# ----- Step 8: Also produce Cold.Bore.zip for auto-update compatibility ------
+# ----- Step 8: Also produce True.Zero.zip for auto-update compatibility ------
 # The in-app self-installer (v0.8.x and later) downloads a .zip and swaps the
 # .app inside. We keep producing that zip alongside the .dmg so existing users
 # can auto-update smoothly while new users from the website download the .dmg.
-echo "[8/8] Building Cold.Bore.zip for v0.8.x auto-update path…"
-ZIP_PATH="$BUILD_DIR/dist/Cold.Bore.zip"
+echo "[8/8] Building True.Zero.zip for v0.8.x auto-update path…"
+ZIP_PATH="$BUILD_DIR/dist/True.Zero.zip"
 rm -f "$ZIP_PATH"
 cd "$BUILD_DIR/dist"
-ditto -c -k --keepParent "True Zero.app" "Cold.Bore.zip"
+ditto -c -k --keepParent "True Zero.app" "True.Zero.zip"
 if [ -f "$QUICKSTART" ]; then
     cp "$QUICKSTART" .
     QS_BASENAME=$(basename "$QUICKSTART")
-    zip -j "Cold.Bore.zip" "$QS_BASENAME"
+    zip -j "True.Zero.zip" "$QS_BASENAME"
     rm -f "$QS_BASENAME"
 fi
 cd "$PROJECT"
@@ -223,7 +223,7 @@ cd "$PROJECT"
 cp "$DMG_PATH" "$PROJECT/dist/"
 cp "$ZIP_PATH" "$PROJECT/dist/"
 DMG_PATH="$PROJECT/dist/$DMG_NAME"
-ZIP_PATH="$PROJECT/dist/Cold.Bore.zip"
+ZIP_PATH="$PROJECT/dist/True.Zero.zip"
 
 DMG_SIZE=$(du -sh "$DMG_PATH" | awk '{print $1}')
 ZIP_SIZE=$(du -sh "$ZIP_PATH" | awk '{print $1}')

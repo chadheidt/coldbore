@@ -13,7 +13,7 @@ These two files are the source of truth. They override anything that conflicts i
 
 **https://chadheidt.github.io/coldbore/** (also `True Zero Website.webloc` at project root for one-click open from Finder).
 
-GitHub Pages serves from `docs/` on `main`. Hero images are rendered programmatically via `tools/render_workbook.py` and `tools/render_coldbore.py` — re-run those when the in-app drop zone or workbook layout changes so the marketing imagery stays accurate.
+GitHub Pages serves from `docs/` on `main`. Hero images are rendered programmatically via `tools/render_workbook.py` and `tools/render_truezero.py` — re-run those when the in-app drop zone or workbook layout changes so the marketing imagery stays accurate.
 
 ## How Chad and Claude work together
 
@@ -29,15 +29,15 @@ Chad is a precision rifle shooter, **not** a software developer. The collaborati
 1. Edit `app/version.py`, `setup.py`, `manifest.json` to the new version.
 2. Commit + push to `main`.
 3. Have Chad **double-click `Build App.command` from Finder** (NOT `python3 setup.py py2app` from a Bash tool — that path fails with EPERM on the bundled Python framework due to a `com.apple.provenance` xattr; only Build App.command from Finder works).
-4. Once `dist/True Zero.app` exists, zip via `ditto -c -k --keepParent "True Zero.app" "Cold.Bore.zip"`, then add the Quick Start docx via `zip -j "Cold.Bore.zip" "../True Zero — Quick Start.docx"`.
-5. `gh release create vX.Y.Z --repo chadheidt/coldbore --title "True Zero X.Y.Z" --notes-file <notes> --draft "dist/Cold.Bore.zip"`.
+4. Once `dist/True Zero.app` exists, zip via `ditto -c -k --keepParent "True Zero.app" "True.Zero.zip"`, then add the Quick Start docx via `zip -j "True.Zero.zip" "../True Zero — Quick Start.docx"`.
+5. `gh release create vX.Y.Z --repo chadheidt/coldbore --title "True Zero X.Y.Z" --notes-file <notes> --draft "dist/True.Zero.zip"`.
 6. `gh release edit vX.Y.Z --repo chadheidt/coldbore --draft=false --latest` to publish. The `published` event doesn't fire CI's `release: created` listener, so there's no race against manual asset attach.
 7. Chad opens True Zero from `/Applications` → yellow banner → Install Update → Quit and Install → app reopens at new version. Tools → About reports new version.
 
 ## Things that have bitten us before (read once)
 
 - **Don't put non-ASCII (em-dashes, curly quotes, etc.) in commit messages, the helper bash script in `installer._build_helper_script`, or asset filenames.** Python 3.9 default ASCII encoding on file writes has crashed builds.
-- **GitHub renames release-asset filenames** — `True Zero.zip` → `Cold.Bore.zip` (spaces → periods). Manifest URLs must use the period form.
+- **GitHub renames release-asset filenames** — `True Zero.zip` → `True.Zero.zip` (spaces → periods). Manifest URLs must use the period form.
 - **Stick with `macos-13` Intel CI runner** (or local Build App.command). `arch = 'universal2'` produces broken bundles because PyQt5 wheels go arm64-only.
 - **Auto-update test must run from `/Applications`**, not `dist/`. `can_self_install()` returns False in dev mode.
 

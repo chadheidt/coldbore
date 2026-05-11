@@ -43,7 +43,7 @@ def test_build_helper_script_contains_required_steps():
     and key macOS commands (ditto, mv, xattr, open). We're not running it
     in tests — just smoke-checking the structure."""
     script = installer._build_helper_script(
-        zip_path="/tmp/Cold.Bore.zip",
+        zip_path="/tmp/True.Zero.zip",
         app_bundle_path="/Applications/True Zero.app",
         error_log_path="/Users/x/Library/Application Support/True Zero/last_install_error.log",
     )
@@ -53,7 +53,7 @@ def test_build_helper_script_contains_required_steps():
     assert "set -u" in script
 
     # Each path got embedded in the script (via single-quote shell escaping)
-    assert "/tmp/Cold.Bore.zip" in script
+    assert "/tmp/True.Zero.zip" in script
     assert "True Zero.app" in script
     assert "last_install_error.log" in script
 

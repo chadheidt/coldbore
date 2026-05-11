@@ -464,7 +464,7 @@ footer p { margin-bottom: 8px; }
       <div class="step">
         <div class="num">2</div>
         <h3>Open the disk image</h3>
-        <p>Double-click <strong>Cold.Bore.dmg</strong> in your Downloads folder. A window opens with the True Zero icon and an Applications shortcut.</p>
+        <p>Double-click <strong>True.Zero.dmg</strong> in your Downloads folder. A window opens with the True Zero icon and an Applications shortcut.</p>
       </div>
       <div class="step">
         <div class="num">3</div>
@@ -622,7 +622,7 @@ async function submitAccessCode() {
     const r = await fetch(WORKER_AUTHORIZE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: code, file: "Cold.Bore.dmg" })
+      body: JSON.stringify({ code: code, file: "True.Zero.dmg" })
     });
     const data = await r.json();
     if (!r.ok) {
