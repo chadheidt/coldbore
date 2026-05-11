@@ -23,8 +23,8 @@ from PyQt5.QtGui import (
     QImage,
     QLinearGradient,
     QPainter,
+    QPainterPath,
     QPen,
-    QPolygonF,
     QRadialGradient,
 )
 from PyQt5.QtWidgets import QApplication
@@ -53,6 +53,10 @@ BULLET_DARK = QColor("#5a3010")          # copper-jacket shadow
 BULLET_MID = QColor("#b87333")           # copper jacket body
 BULLET_BRIGHT = QColor("#e6a060")        # copper highlight
 BULLET_TIP_DARK = QColor("#2a1808")
+
+POLY_TIP_DARK = QColor("#7a141c")        # polymer tip shadow
+POLY_TIP_MID = QColor("#d8232c")         # polymer tip body (matches bullseye family)
+POLY_TIP_BRIGHT = QColor("#f25058")      # polymer tip specular
 
 
 def draw_icon(painter, size):
@@ -99,16 +103,26 @@ def draw_icon(painter, size):
     painter.translate(cx, cy)
     painter.rotate(-90)  # vertical — bullet up, case base down
 
-    # Cartridge proportions (relative to icon size)
-    case_length = size * 0.46
+    # Cartridge proportions (relative to icon size) — modern long-range
+    # profile matched to a 6.5 Creedmoor / .300 PRC silhouette:
+    # case length ≈ 4× case width, exposed bullet ≈ 48% of case length,
+    # neck/bullet OD ≈ 65% of case OD, short neck.
+    case_length = size * 0.50
     case_width = size * 0.13
-    bullet_length = size * 0.20
-    bullet_width = size * 0.10
+    neck_width = case_width * 0.65       # neck OD (= bullet OD)
+    bullet_length = size * 0.24
+    bullet_width = neck_width
     total_length = case_length + bullet_length
 
     case_x = -total_length / 2
-    case_y = -case_width / 2
     bullet_x = case_x + case_length
+
+    # Case anatomy: body (wide) → shoulder taper → short neck → mouth
+    body_length = case_length * 0.72
+    shoulder_length = case_length * 0.10
+    body_end_x = case_x + body_length
+    neck_start_x = body_end_x + shoulder_length
+    case_mouth_x = case_x + case_length
 
     # Outline pen — visible at large sizes, vanishes at small ones
     outline_w = max(0.5, size / 350)
@@ -116,8 +130,60 @@ def draw_icon(painter, size):
     outline.setJoinStyle(Qt.RoundJoin)
     outline.setCapStyle(Qt.RoundCap)
 
-    # ---- Brass case (rectangle with cylindrical gradient) -------------
-    case_grad = QLinearGradient(0, case_y, 0, case_y + case_width)
+    # ---- Brass case: bottlenecked silhouette w/ curved shoulder
+    # fillets and a proper rimless extractor groove cut into the head.
+    shoulder_fillet = case_length * 0.025
+    shoulder_drop = (case_width - neck_width) * 0.125
+
+    groove_x = case_x + case_width * 0.26
+    groove_width = case_width * 0.08
+    groove_depth = case_width * 0.06
+
+    case_path = QPainterPath()
+    # Base (head) to top edge, with extractor groove notched in
+    case_path.moveTo(case_x, -case_width / 2)
+    case_path.lineTo(groove_x, -case_width / 2)
+    case_path.lineTo(groove_x, -case_width / 2 + groove_depth)
+    case_path.lineTo(groove_x + groove_width, -case_width / 2 + groove_depth)
+    case_path.lineTo(groove_x + groove_width, -case_width / 2)
+    case_path.lineTo(body_end_x - shoulder_fillet, -case_width / 2)
+    # Curved fillet into the angled shoulder
+    case_path.quadTo(
+        body_end_x, -case_width / 2,
+        body_end_x + shoulder_length * 0.25, -case_width / 2 + shoulder_drop,
+    )
+    case_path.lineTo(
+        neck_start_x - shoulder_length * 0.25, -neck_width / 2 - shoulder_drop,
+    )
+    # Curved fillet into the neck
+    case_path.quadTo(
+        neck_start_x, -neck_width / 2,
+        neck_start_x + shoulder_fillet, -neck_width / 2,
+    )
+    case_path.lineTo(case_mouth_x, -neck_width / 2)
+    # Case mouth
+    case_path.lineTo(case_mouth_x, neck_width / 2)
+    # Mirror back along the bottom edge
+    case_path.lineTo(neck_start_x + shoulder_fillet, neck_width / 2)
+    case_path.quadTo(
+        neck_start_x, neck_width / 2,
+        neck_start_x - shoulder_length * 0.25, neck_width / 2 + shoulder_drop,
+    )
+    case_path.lineTo(
+        body_end_x + shoulder_length * 0.25, case_width / 2 - shoulder_drop,
+    )
+    case_path.quadTo(
+        body_end_x, case_width / 2,
+        body_end_x - shoulder_fillet, case_width / 2,
+    )
+    case_path.lineTo(groove_x + groove_width, case_width / 2)
+    case_path.lineTo(groove_x + groove_width, case_width / 2 - groove_depth)
+    case_path.lineTo(groove_x, case_width / 2 - groove_depth)
+    case_path.lineTo(groove_x, case_width / 2)
+    case_path.lineTo(case_x, case_width / 2)
+    case_path.closeSubpath()
+
+    case_grad = QLinearGradient(0, -case_width / 2, 0, case_width / 2)
     case_grad.setColorAt(0.00, CASE_DARK)
     case_grad.setColorAt(0.18, CASE_MID)
     case_grad.setColorAt(0.42, CASE_BRIGHT)
@@ -127,33 +193,48 @@ def draw_icon(painter, size):
     case_grad.setColorAt(1.00, CASE_DARK)
     painter.setBrush(QBrush(case_grad))
     painter.setPen(outline)
-    painter.drawRect(QRectF(case_x, case_y, case_length, case_width))
+    painter.drawPath(case_path)
 
-    # ---- Extractor groove + rim at the base of the case ---------------
-    rim_w = case_width * 0.12
-    painter.setBrush(CASE_RIM)
-    painter.drawRect(QRectF(case_x, case_y, rim_w, case_width))
+    # ---- Extractor groove shadow — darker brass inside the recess ----
+    groove_inner_grad = QLinearGradient(0, -case_width / 2, 0, case_width / 2)
+    groove_inner_grad.setColorAt(0.00, CASE_DARK)
+    groove_inner_grad.setColorAt(0.50, CASE_RIM)
+    groove_inner_grad.setColorAt(1.00, CASE_DARK)
+    painter.setBrush(QBrush(groove_inner_grad))
+    painter.setPen(Qt.NoPen)
+    painter.drawRect(QRectF(
+        groove_x, -case_width / 2 + groove_depth,
+        groove_width, case_width - 2 * groove_depth,
+    ))
 
-    # ---- Primer pocket — small dark circle at base --------------------
-    primer_cx = case_x + rim_w * 0.45
-    primer_r = case_width * 0.18
-    primer_grad = QRadialGradient(primer_cx, 0, primer_r * 1.2)
-    primer_grad.setColorAt(0.0, PRIMER_MID)
-    primer_grad.setColorAt(1.0, PRIMER_DARK)
-    painter.setBrush(QBrush(primer_grad))
-    painter.setPen(QPen(QColor("#1a0e02"), outline_w * 0.6))
-    painter.drawEllipse(QPointF(primer_cx, 0), primer_r, primer_r)
+    # ---- Modern long-range bullet (copper jacket, sweeping ogive) ----
+    # Short bearing surface inside/near the neck, then a long curved
+    # ogive (cubic bezier) up to a narrow opening where the red polymer
+    # tip is seated.
+    bearing_end_x = bullet_x + bullet_length * 0.18
+    jacket_tip_x = bullet_x + bullet_length * 0.84
+    tip_x = bullet_x + bullet_length
+    jacket_opening_r = bullet_width * 0.16
 
-    # ---- Bullet (copper jacket, ogive shape) --------------------------
-    # Polygon points — base on left, tapered tip on right
-    ogive_start = bullet_x + bullet_length * 0.45
-    points = [
-        QPointF(bullet_x, -bullet_width / 2),                         # base top
-        QPointF(bullet_x, bullet_width / 2),                          # base bottom
-        QPointF(ogive_start, bullet_width / 2),                       # ogive bottom
-        QPointF(bullet_x + bullet_length, 0),                         # tip
-        QPointF(ogive_start, -bullet_width / 2),                      # ogive top
-    ]
+    ogive_span = jacket_tip_x - bearing_end_x
+
+    bullet_path = QPainterPath()
+    bullet_path.moveTo(bullet_x, -bullet_width / 2)
+    bullet_path.lineTo(bearing_end_x, -bullet_width / 2)
+    # Sweeping secant ogive — cubic bezier curves out to the jacket tip
+    bullet_path.cubicTo(
+        bearing_end_x + ogive_span * 0.40, -bullet_width / 2,
+        jacket_tip_x - ogive_span * 0.08, -jacket_opening_r * 1.4,
+        jacket_tip_x, -jacket_opening_r,
+    )
+    bullet_path.lineTo(jacket_tip_x, jacket_opening_r)
+    bullet_path.cubicTo(
+        jacket_tip_x - ogive_span * 0.08, jacket_opening_r * 1.4,
+        bearing_end_x + ogive_span * 0.40, bullet_width / 2,
+        bearing_end_x, bullet_width / 2,
+    )
+    bullet_path.lineTo(bullet_x, bullet_width / 2)
+    bullet_path.closeSubpath()
 
     bullet_grad = QLinearGradient(0, -bullet_width / 2, 0, bullet_width / 2)
     bullet_grad.setColorAt(0.00, BULLET_DARK)
@@ -163,20 +244,28 @@ def draw_icon(painter, size):
     bullet_grad.setColorAt(1.00, BULLET_TIP_DARK)
     painter.setBrush(QBrush(bullet_grad))
     painter.setPen(outline)
-    painter.drawPolygon(QPolygonF(points))
+    painter.drawPath(bullet_path)
 
-    # ---- Cannelure — a thin ring around the bullet shaft --------------
-    cannelure_x = bullet_x + bullet_length * 0.18
-    cannelure_w = bullet_length * 0.04
-    painter.setBrush(BULLET_DARK)
-    painter.setPen(Qt.NoPen)
-    painter.drawRect(QRectF(cannelure_x, -bullet_width / 2,
-                            cannelure_w, bullet_width))
+    # ---- Red polymer tip — pointed cone seated in the jacket ----------
+    poly_grad = QLinearGradient(0, -jacket_opening_r, 0, jacket_opening_r)
+    poly_grad.setColorAt(0.0, POLY_TIP_DARK)
+    poly_grad.setColorAt(0.5, POLY_TIP_BRIGHT)
+    poly_grad.setColorAt(1.0, POLY_TIP_DARK)
 
-    # ---- Case mouth — thin dark line where bullet meets case ---------
-    painter.setBrush(CASE_RIM)
-    painter.drawRect(QRectF(case_x + case_length - case_width * 0.04, case_y,
-                            case_width * 0.04, case_width))
+    poly_path = QPainterPath()
+    poly_path.moveTo(jacket_tip_x, -jacket_opening_r)
+    poly_path.quadTo(
+        (jacket_tip_x + tip_x) / 2, -jacket_opening_r * 0.45,
+        tip_x, 0,
+    )
+    poly_path.quadTo(
+        (jacket_tip_x + tip_x) / 2, jacket_opening_r * 0.45,
+        jacket_tip_x, jacket_opening_r,
+    )
+    poly_path.closeSubpath()
+    painter.setBrush(QBrush(poly_grad))
+    painter.setPen(outline)
+    painter.drawPath(poly_path)
 
     painter.restore()
 
