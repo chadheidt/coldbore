@@ -69,7 +69,7 @@ sys.path.insert(0, str(HERE / "app"))
 
 APP_DISPLAY_NAME = "True Zero"
 APP_BUNDLE_ID = "com.chadheidt.truezero"
-APP_VERSION = "0.12.0"  # keep in sync with app/version.py
+APP_VERSION = "0.12.1"  # keep in sync with app/version.py
 
 # The main entry script
 ENTRY = ["app/main.py"]
