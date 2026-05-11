@@ -38,6 +38,11 @@ VALID_KEYS = frozenset({
     "CBORE-LHNF-IMIT-IISA-IXFS",  # beta slot 3
     "CBORE-T7XV-Y7M7-L54X-FOHP",  # beta slot 4
     "CBORE-ROQG-NCQR-CAXN-N53D",  # beta slot 5
+    "CBORE-KZYC-TJRE-DAFV-LCOY",  # beta slot 6
+    "CBORE-H453-IKCN-2YHY-CPJR",  # beta slot 7
+    "CBORE-3LMH-IXAV-JXWT-URJ5",  # beta slot 8
+    "CBORE-AADE-RUVG-VLJU-PAWQ",  # beta slot 9
+    "CBORE-L5CI-RHZE-FGWP-WXL2",  # beta slot 10
 })
 
 

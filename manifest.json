@@ -1,9 +1,9 @@
 {
-  "app_version": "0.11.2",
+  "app_version": "0.11.3",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Cold.Bore.zip",
   "app_website_url": "https://chadheidt.github.io/coldbore/",
-  "app_release_notes": "Fixes a NameError crash when clicking Install Update in v0.11.0 (resolve_download_url was referenced via a module name that wasn't imported). Users on v0.11.0 must install this build manually from the website -- the in-app updater crashes before it can download. Auto-update from v0.11.2 onward works normally.",
+  "app_release_notes": "Closeout release before beta. Adds 5 pre-generated license-key slots so onboarding the first 10 testers won't require app rebuilds. Adds a pyflakes-based smoke test that would have caught yesterday's NameError before shipping. This is the build whose auto-update path is being verified end-to-end for the first time.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
