@@ -6,6 +6,66 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## 🔁 SECOND REBRAND IN FLIGHT: Cold Bore → True Zero → **LOADSCOPE** — May 11, 2026 (evening)
+
+**Decision locked in: the brand is `Loadscope` on the `.app` TLD.** Vetting clean across all 5 checks (no domain conflicts on `.io`/`.app`/`.co`/`.dev`/`.net`/`.org`; .com is a GoDaddy parking page squatter, no real product, no trademark; zero USPTO matches; zero common-law commercial use; pronounceable; product fit is strong — "Load" for load development + "Scope" for rifle scope/scope-of-work).
+
+Chad explicitly chose to NOT chase the `.com` squatter. The site lives at `https://loadscope.app/`. The `.app` TLD requires HTTPS (Google operates it) which is actually a brand strength signal.
+
+### Rebrand mapping — old → new
+
+| Surface | OLD (True Zero) | NEW (Loadscope) |
+|---|---|---|
+| Display name | True Zero | Loadscope |
+| Marketing site URL | https://truezero.co/ | https://loadscope.app/ |
+| Support email | support@truezero.co | support@loadscope.app |
+| Sender email (Worker) | True Zero <noreply@truezero.co> | Loadscope <noreply@loadscope.app> |
+| `.dmg` filename | True.Zero.dmg | Loadscope.dmg |
+| `.zip` filename | True.Zero.zip | Loadscope.zip |
+| App bundle name | True Zero.app | Loadscope.app |
+| Bundle ID | com.chadheidt.truezero | com.chadheidt.loadscope |
+| Shared-load file ext | .truezero | .loadscope |
+| Quick Start docx | True Zero — Quick Start.docx | Loadscope — Quick Start.docx |
+| Send-to-friends doc | Send True Zero to friends.md | Send Loadscope to friends.md |
+| Worker URL | (kept) coldbore-download.cheidt182.workers.dev | (still kept; intentional preservation) |
+| LEGACY_APP_NAMES tuple | ("Cold Bore", "Rifle Load Importer") | ("True Zero", "Cold Bore", "Rifle Load Importer") |
+| Resend verified domain | truezero.co | loadscope.app (verify after purchase) |
+| Cloudflare zone | truezero.co | + loadscope.app (after purchase) |
+| Cloudflare Email Routing | support@truezero.co → gmail | support@loadscope.app → gmail (set up new) |
+| Turnstile widget domains | adds loadscope.app + www.loadscope.app | (existing widget extended; or new widget) |
+
+### Sequencing the second rebrand
+
+1. **Chad buys `loadscope.app`** through Cloudflare Registrar (~$15-20/yr).
+2. **Wait for the zone to appear active** in his Cloudflare account.
+3. **Resend domain verification**: add loadscope.app in Resend dashboard, copy DNS records, I add them to Cloudflare DNS via API (same flow as before).
+4. **Cloudflare Email Routing**: enable on the new zone, set support@loadscope.app → cheidt182@gmail.com (Chad does in dashboard, same flow).
+5. **Update the Worker**: PUBLIC_SITE → https://loadscope.app/, FROM_EMAIL → Loadscope <noreply@loadscope.app>, also rename ALLOWED_FILES to include Loadscope.dmg + Loadscope.zip (alongside True.Zero.* and Cold.Bore.* for transition compatibility, though no one has Loadscope yet).
+6. **Update Turnstile widget**: add loadscope.app to the existing widget's domain list (or create a new widget for it).
+7. **Bulk-rename in source code**: same playbook as v0.12 rebrand — sed across app/*.py, docs/index.html, worker/coldbore-download.js, README, .md docs. Plus rename actual files: True Zero — *.docx → Loadscope — *.docx, Send True Zero to friends.md → Send Loadscope to friends.md.
+8. **Edit docx contents**: Python zipfile in-place text replacement for all 3 user-shipping docx files.
+9. **Bump version**: v0.12.1 → v0.13.0 in app/version.py + setup.py + manifest.json (CFBundleIdentifier also changes to com.chadheidt.loadscope).
+10. **Update LEGACY_APP_NAMES** to include "True Zero" so Chad's existing v0.12.1 config migrates clean.
+11. **Update RESERVED_CODES in Worker** — still has Chad's CBORE-DDCX-AEGK-J2FR-2SIB testing key.
+12. **GitHub Pages custom domain**: docs/CNAME → loadscope.app, set via gh CLI API.
+13. **Commit + push** every change in tight commits with clear messages.
+14. **Chad rebuilds via Build Signed App.command** (~30 min including notarization).
+15. **Upload `Loadscope.dmg` + `Loadscope.zip` to R2** via wrangler.
+16. **Test auto-update v0.12.1 → v0.13.0** on Chad's `/Applications/True Zero.app`.
+17. **Cleanup**: rename `/Applications/True Zero.app` → `/Applications/Loadscope.app`, delete `~/Library/Application Support/True Zero/` after confirming `Loadscope/` migrated.
+18. **Update docx files on Desktop in `TrueZeroapp/true zero notes/`** — rename folder to `Loadscope notes`, rename each file, update content. Also rename `TrueZeroapp` parent folder to `Loadscope`.
+19. **Update breadcrumb + state file** after ship.
+20. **THEN start beta-tester invites.** Real this time.
+
+### Direction preferences from Chad (locked in from this session)
+
+- **No lawyer for trademark** — DIY USPTO TEAS Plus filing only.
+- **Brand consistency with shooter terminology** — Loadscope follows the Cold Bore / True Zero pattern.
+- **No `.com` chase** for squatters — pick a different TLD if `.com` is parked.
+- **Standard auto-update across rename** — bundle ID can change between rebrands as long as LEGACY_APP_NAMES migration handles config.
+
+---
+
 ## ⚠️ TRUE ZERO BRAND IS BLOCKED — May 11, 2026 (evening — needs SECOND rebrand before beta)
 
 **Beta is PAUSED.** Chad is not shipping to testers under "True Zero." A trademark conflict was discovered RIGHT AFTER the v0.12.1 rebrand completed: `truezero.app` is a live tactical/military gear review service ("The Voice Operators Trust", partnered with the Special Forces Foundation). Different product, but same brand name in the firearms-adjacent industry. Likelihood-of-confusion risk is real enough that Chad won't ship commercially under True Zero — and he's not hiring a trademark attorney, so the bar for the next name is "no obvious conflicts anywhere we can check ourselves."
