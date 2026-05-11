@@ -6,11 +6,42 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🔁 SECOND REBRAND IN FLIGHT: Cold Bore → True Zero → **LOADSCOPE** — May 11, 2026 (evening)
+## ✅ LOADSCOPE v0.13.0 SHIPPED — May 11, 2026 (evening — Cold Bore → True Zero → LOADSCOPE)
 
-**Decision locked in: the brand is `Loadscope` on the `.app` TLD.** Vetting clean across all 5 checks (no domain conflicts on `.io`/`.app`/`.co`/`.dev`/`.net`/`.org`; .com is a GoDaddy parking page squatter, no real product, no trademark; zero USPTO matches; zero common-law commercial use; pronounceable; product fit is strong — "Load" for load development + "Scope" for rifle scope/scope-of-work).
+**Loadscope v0.13.0 is live on Chad's `/Applications/Loadscope.app`.** Auto-update v0.12.1 → v0.13.0 verified. Website at https://loadscope.app/ with valid HTTPS cert (after manual cert-provisioning toggle). All True Zero leftovers cleaned up (Application Support dir deleted, app folder renamed). Beta is unblocked.
 
-Chad explicitly chose to NOT chase the `.com` squatter. The site lives at `https://loadscope.app/`. The `.app` TLD requires HTTPS (Google operates it) which is actually a brand strength signal.
+### What's live as of ship
+
+| Surface | Status |
+|---|---|
+| `/Applications/Loadscope.app` v0.13.0 | INSTALLED, signed + notarized, com.chadheidt.loadscope, license carried across migration |
+| Marketing site | https://loadscope.app/ — full HTTPS via Let's Encrypt cert on GitHub Pages custom domain |
+| Auto-update pipeline (v0.12.1 → v0.13.0) | PROVEN end-to-end |
+| Cloudflare zone `loadscope.app` | Active. DNS: GitHub Pages apex A records + www CNAME |
+| Resend domain `loadscope.app` | VERIFIED. Sending from `Loadscope <noreply@loadscope.app>` works (test email delivered) |
+| Worker `coldbore-download` (URL preserved) | Deployed with all 9 Loadscope-branded bindings. ALLOWED_FILES has both Loadscope.{dmg,zip} AND legacy True.Zero.* + Cold.Bore.* for backward compat |
+| R2 bucket | Holds Loadscope.{dmg,zip} v0.13.0 plus legacy True.Zero.* + Cold.Bore.* |
+| Beta keys | 10 unassigned beta slots ready. Chad's CBORE-DDCX-AEGK-J2FR-2SIB reserved (KV marker + RESERVED_CODES safeguard in Worker) |
+| GitHub Pages custom domain | loadscope.app, HTTPS cert provisioned |
+| docs/CNAME | loadscope.app |
+| `main` branch HEAD | `99ef776` (Breadcrumb: queue Loadscope USPTO trademark filing) |
+| 85/85 tests | PASSING |
+
+### Why the second rebrand happened
+
+The first rebrand (Cold Bore → True Zero) shipped on 2026-05-11 morning. Hours later we discovered truezero.app is a live commercial product ("The Voice Operators Trust" — tactical/military gear review service partnered with the Special Forces Foundation). Same name, firearms-adjacent industry, real likelihood-of-confusion risk. Chad chose to rebrand again to clear trademark space rather than ship under a name that could be challenged at commercial launch.
+
+The True Zero brand work isn't wasted — everything we built (Worker, Resend automation, request-access flow, Email Routing destination, auto-update path, build pipeline, license migration) carries forward unchanged. Only the strings changed.
+
+### Loadscope vetting (the 5-check process — done RIGHT this time)
+
+- **Domains**: `.io`, `.app`, `.co`, `.dev`, `.net`, `.org` all free. `.com` is a GoDaddy parked squatter (no product, no trademark). Chad chose `.app` and explicitly skipped chasing `.com`.
+- **USPTO TESS**: zero matches for "Loadscope".
+- **Common-law commercial use**: WebSearch surfaced zero brand uses.
+- **Social handles**: not reserved (no brand exists).
+- **Pronounceability**: "Load + Scope" reads instantly; both words are precision-rifle terminology.
+
+### Original rebrand-in-flight notes preserved below for the engineering details
 
 ### Rebrand mapping — old → new
 
