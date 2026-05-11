@@ -1,4 +1,4 @@
-# Loadscope
+# Loadscope™
 
 A Mac app for precision rifle handloaders. Drag your Garmin Xero (chronograph) and BallisticX (target group) CSVs into the window, and Loadscope organizes the data into a structured Excel workbook that scores each load and points to the best one.
 

@@ -592,7 +592,7 @@ class MainWindow(QMainWindow):
 
         menu.addSeparator()
 
-        about_action = QAction(f"About {APP_NAME}", self)
+        about_action = QAction("About Loadscope™", self)
         about_action.setMenuRole(QAction.NoRole)
         about_action.triggered.connect(self._show_about)
         menu.addAction(about_action)
@@ -1766,12 +1766,12 @@ class MainWindow(QMainWindow):
         )
 
         msg = QMessageBox(self)
-        msg.setWindowTitle(f"About {APP_NAME}")
+        msg.setWindowTitle("About Loadscope™")
         msg.setIcon(QMessageBox.Information)
         msg.setTextFormat(Qt.RichText)
         msg.setTextInteractionFlags(Qt.TextBrowserInteraction)
         msg.setText(
-            f"<b>{APP_NAME}</b><br>"
+            f"<b>Loadscope™</b><br>"
             f"Version {APP_VERSION}<br><br>"
             f"<b>Supported chronographs:</b><br>{chrono_names}<br><br>"
             f"<b>Supported target-group apps:</b><br>{group_names}<br><br>"

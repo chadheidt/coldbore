@@ -226,7 +226,7 @@ function adminNotificationEmail(env, baseUrl, request) {
 function testerWelcomeEmail(env, request, code) {
   const html = `
     <div style="font-family: -apple-system, sans-serif; max-width: 560px; margin: 0 auto; color: #111;">
-      <h2 style="margin: 0 0 16px;">Welcome to Loadscope</h2>
+      <h2 style="margin: 0 0 16px;">Welcome to Loadscope™</h2>
       <p>Hi ${escapeHtml(request.name.split(/\s+/)[0])},</p>
       <p>You're in. Your beta access code:</p>
       <p style="background: #f3f4f6; border: 1px solid #d1d5db; padding: 14px 18px; border-radius: 6px; font-family: Menlo, Consolas, monospace; font-size: 16px; letter-spacing: 0.5px; margin: 20px 0;">
