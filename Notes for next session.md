@@ -127,6 +127,18 @@ Only present names that pass ALL FIVE checks. Anything that fails even one is si
 5. **AFTER VERIFICATION**: ship v0.13.0 with the new name as the FIRST tester-visible release
 6. **ONLY THEN**: start issuing keys to real beta testers
 
+### TODO — File the Loadscope USPTO trademark (DIY, $250-350)
+
+Chad's explicit ask (2026-05-11 after rebrand): file USPTO trademark for "Loadscope" before commercial launch. **NO LAWYER** — DIY via TEAS Plus form. Concrete steps:
+
+1. **TESS search at https://tmsearch.uspto.gov/search** — confirm no existing "Loadscope" marks (we vetted clean during naming, but file directly with USPTO for official record).
+2. **Use TEAS Plus** form ($250/class, fastest) at https://www.uspto.gov/trademarks/apply.
+3. **Classes**: Class 9 (downloadable software) — primary. Optionally Class 13 (firearms/ammunition) but that's another $250.
+4. **Specimen of use**: screenshot of the Loadscope About dialog (showing brand + version + icon) OR a screenshot of `https://loadscope.app/`.
+5. **Date of first use in commerce**: 2026-05-11 (today — beta invites under Loadscope branding).
+6. **Process**: USPTO may send an Office Action in 3-6 months if issues; otherwise registration in 10-14 months.
+7. **Save**: TEAS confirmation receipt + Serial Number for tracking via TSDR (https://tsdr.uspto.gov/).
+
 ### Original v0.12.1 shipped notes — preserved below for reference (still useful for the engineering details that carry forward)
 
 ---
