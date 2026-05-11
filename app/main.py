@@ -59,7 +59,7 @@ from parsers import detect_parser, chronograph_parsers, group_parsers
 import import_data
 import config as app_config
 from setup_wizard import run_wizard
-from updater import UpdateChecker, UpdateDownloader, DEFAULT_MANIFEST_URL
+from updater import UpdateChecker, UpdateDownloader, DEFAULT_MANIFEST_URL, resolve_download_url
 import installer
 from version import APP_NAME, APP_VERSION
 from disclaimer import needs_disclaimer, show_disclaimer, view_disclaimer
@@ -1164,7 +1164,7 @@ class MainWindow(QMainWindow):
         if manifest is not None:
             # Resolves either via the gated Worker (new) or returns the direct
             # URL (legacy). Returns None if the license-gated lookup fails.
-            url = updater.resolve_download_url(manifest)
+            url = resolve_download_url(manifest)
         else:
             url = self._pending_app_update_url
 
