@@ -6,6 +6,44 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## ✅ LOADSCOPE v0.13.1 SHIPPED — May 11, 2026 (later evening — icon redesign)
+
+**Cosmetic-only patch release.** Redesigned the app icon to a realistic modern long-range cartridge silhouette:
+
+- Bottlenecked brass case w/ curved shoulder fillets and a proper rimless extractor groove
+- Long, slender copper-jacket bullet w/ a sweeping secant ogive (cubic bezier path, not the old straight-line polygon)
+- Red polymer tip seated in the jacket opening
+- Proportions tuned to a 6.5 Creedmoor / .300 PRC silhouette (case length ~4× width, exposed bullet ~48% of case length)
+
+Source of truth: `app/resources/generate_icon.py`. AppIcon.icns + icon.iconset/ are gitignored build artifacts — re-run the script to regenerate.
+
+### Release pipeline executed end-to-end
+
+1. Commit `7ebb4fb`: icon redesign + docs/assets/icon.png (128×128 for marketing site)
+2. Commit `cf90e92`: bumped APP_VERSION to 0.13.1 in app/version.py + setup.py + manifest.json
+3. Both commits pushed to `main`
+4. Chad ran **Build Signed App.command** — signed + notarized
+5. GitHub release `v0.13.1` created, published as `--latest`, asset is `Loadscope.zip`
+6. **R2 uploaded via `wrangler r2 object put --remote`** (`coldbore-releases/Loadscope.{zip,dmg}`)
+7. **Worker `coldbore-download` re-deployed** via Cloudflare API multipart PUT (bindings preserved, secrets inherited). Welcome email H2 now says "Welcome to Loadscope™" — the pending update from earlier this day is now live.
+
+Cloudflare User API Token used (replacement for the previously-rotated one) is stored in the crash-recovery state file at `~/Documents/True Zero - v0.12 setup state.md` (and the Desktop mirror). Account ID `e702e42b2e4ee1ea8011074127fe6b95`. Token was generated from the "Edit Cloudflare Workers" template — includes Workers + R2 + KV. **Still should be rotated when fully ramped down**, same as before. Token is intentionally NOT in this repo so GitHub push protection doesn't flag the breadcrumb.
+
+Desktop avatar PNGs at `~/Desktop/Loadscope logo - {1024x1024,512x512}.png` now show the new icon — ready to upload to GitHub org / X / Instagram / etc.
+
+### Verified end-to-end
+
+- ✅ Manifest at https://raw.githubusercontent.com/chadheidt/coldbore/main/manifest.json returns `"app_version": "0.13.1"`
+- ✅ Worker GET shows "Welcome to Loadscope™" H2 in the welcome email template
+- ✅ R2 bucket `coldbore-releases/Loadscope.zip` is 60.5 MB, uploaded 2026-05-11 23:18 UTC
+- ✅ GitHub release v0.13.1 is `--latest` at https://github.com/chadheidt/coldbore/releases/tag/v0.13.1
+
+Chad's `/Applications/Loadscope.app` is still v0.13.0 — opening it should trigger the auto-update banner. GitHub raw CDN cache TTL is ~5 min so it may take that long for the v0.13.0 client to see the new manifest.
+
+`main` branch HEAD: `cf90e92` (will be a new commit after this breadcrumb update).
+
+---
+
 ## ✅ LOADSCOPE v0.13.0 SHIPPED — May 11, 2026 (evening — Cold Bore → True Zero → LOADSCOPE)
 
 **Loadscope v0.13.0 is live on Chad's `/Applications/Loadscope.app`.** Auto-update v0.12.1 → v0.13.0 verified. Website at https://loadscope.app/ with valid HTTPS cert (after manual cert-provisioning toggle). All True Zero leftovers cleaned up (Application Support dir deleted, app folder renamed). Beta is unblocked.
