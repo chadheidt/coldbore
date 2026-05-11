@@ -157,8 +157,18 @@ async function validateTurnstile(env, token, ip) {
 const REQUEST_TTL_SECONDS = 60 * 60 * 24 * 30; // requests expire from KV after 30 days
 const ASSIGNMENT_TTL_SECONDS = 60 * 60 * 24 * 365 * 2; // assignments kept 2 years
 
+// Codes that are part of VALID_CODES (so they unlock the website's "I have a code"
+// download flow) but should NEVER be auto-handed out by the request-access flow.
+// Chad's local-testing key lives here. Anything in this set is also recorded as
+// permanently "assigned" in KV (see the bootstrap doc) so an empty-KV recovery
+// wouldn't accidentally start handing it to testers.
+const RESERVED_CODES = new Set([
+  "CBORE-DDCX-AEGK-J2FR-2SIB", // Chad Heidt — local testing
+]);
+
 async function pickNextUnassignedKey(env) {
   for (const code of VALID_CODES) {
+    if (RESERVED_CODES.has(code)) continue;
     const existing = await env.BETA_REQUESTS.get(`assigned:${code}`);
     if (!existing) {
       return code;
