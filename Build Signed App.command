@@ -96,11 +96,22 @@ if ! command -v create-dmg &> /dev/null; then
 fi
 
 # ----- Step 1: Clean + build the unsigned .app -------------------------------
-echo "[1/8] Cleaning and building the .app via py2app…"
-rm -rf build dist
-/usr/bin/python3 setup.py py2app
+# IMPORTANT: build into /tmp/coldbore-build/ NOT into the project's dist/.
+# macOS attaches com.apple.provenance xattrs to files copied inside the project
+# tree, which then blocks py2app/macholib from rewriting the bundled Python3
+# framework binary -- manifests as [Errno 1] Operation not permitted during the
+# changefunc phase. Building outside the project tree avoids the xattr entirely.
+# We copy the final .dmg + .zip back into the project's dist/ at the end.
+# (See "Lessons learned" in Notes for next session.md under the v0.9.0 section.)
+BUILD_DIR="/tmp/coldbore-build"
+echo "[1/8] Cleaning and building the .app via py2app (out-of-tree at $BUILD_DIR)…"
+rm -rf "$BUILD_DIR"
+mkdir -p "$BUILD_DIR/dist" "$BUILD_DIR/build"
+rm -rf "$PROJECT/dist"
+mkdir -p "$PROJECT/dist"
+/usr/bin/python3 setup.py py2app --dist-dir "$BUILD_DIR/dist" --bdist-base "$BUILD_DIR/build"
 
-APP_PATH="$PROJECT/dist/$APP_NAME.app"
+APP_PATH="$BUILD_DIR/dist/$APP_NAME.app"
 if [ ! -d "$APP_PATH" ]; then
     echo "ERROR: py2app did not produce $APP_PATH"
     exit 1
@@ -110,14 +121,18 @@ fi
 # Order matters: sign inner-most binaries first, then the .app itself.
 echo "[2/8] Code-signing the .app and all embedded binaries…"
 
-# Sign every executable Mach-O file inside the bundle (frameworks, dylibs, etc.)
-# We use --deep at the end as a safety net; signing each leaf-level file first
-# avoids "resource fork, Finder information, or similar detritus not allowed"
-# errors on some files.
-
-find "$APP_PATH/Contents/Frameworks" "$APP_PATH/Contents/Resources" \
-    -type f \( -name "*.dylib" -o -name "*.so" -o -perm -u+x \) 2>/dev/null | while read -r f; do
-    if file "$f" | grep -qE 'Mach-O|executable'; then
+# Sign every Mach-O file anywhere inside the bundle. We walk the WHOLE bundle
+# (not just Frameworks/ and Resources/) because py2app places additional
+# binaries directly under Contents/MacOS/ -- specifically a `python` launcher
+# alongside the main executable, and the Python3 framework binary lives at
+# Contents/Frameworks/Python3.framework/Versions/3.9/Python3 with no extension
+# to match on. Earlier versions of this script's find loop missed both, and
+# notarization rejected the whole submission citing them as adhoc-signed.
+#
+# We use `file -b` to ask "is this a Mach-O" rather than filtering by name,
+# which is robust against py2app adding new binaries in future builds.
+find "$APP_PATH" -type f 2>/dev/null | while read -r f; do
+    if file -b "$f" 2>/dev/null | grep -q 'Mach-O'; then
         # --timestamp is REQUIRED for notarization; --deep alone reuses the
         # existing adhoc signature on each binary, which Apple rejects.
         codesign --force --options runtime --timestamp \
@@ -138,11 +153,13 @@ codesign --verify --deep --strict --verbose=2 "$APP_PATH" 2>&1 | tail -10
 spctl -a -v "$APP_PATH" 2>&1 || true  # may say "rejected" before notarization; that's expected
 
 # ----- Step 4: Build the DMG -------------------------------------------------
+# DMG is built in $BUILD_DIR/dist/ alongside the .app, then copied to the
+# project's dist/ at the end. Same provenance-xattr reason as Step 1.
 echo "[4/8] Building DMG…"
-DMG_PATH="$PROJECT/dist/$DMG_NAME"
+DMG_PATH="$BUILD_DIR/dist/$DMG_NAME"
 rm -f "$DMG_PATH"
 
-DMG_STAGE="$PROJECT/dist/dmg-stage"
+DMG_STAGE="$BUILD_DIR/dist/dmg-stage"
 rm -rf "$DMG_STAGE"
 mkdir -p "$DMG_STAGE"
 cp -R "$APP_PATH" "$DMG_STAGE/"
@@ -189,9 +206,9 @@ xcrun stapler validate "$DMG_PATH"
 # .app inside. We keep producing that zip alongside the .dmg so existing users
 # can auto-update smoothly while new users from the website download the .dmg.
 echo "[8/8] Building Cold.Bore.zip for v0.8.x auto-update path…"
-ZIP_PATH="$PROJECT/dist/Cold.Bore.zip"
+ZIP_PATH="$BUILD_DIR/dist/Cold.Bore.zip"
 rm -f "$ZIP_PATH"
-cd "$PROJECT/dist"
+cd "$BUILD_DIR/dist"
 ditto -c -k --keepParent "Cold Bore.app" "Cold.Bore.zip"
 if [ -f "$QUICKSTART" ]; then
     cp "$QUICKSTART" .
@@ -200,6 +217,13 @@ if [ -f "$QUICKSTART" ]; then
     rm -f "$QS_BASENAME"
 fi
 cd "$PROJECT"
+
+# Copy the final, signed/notarized .dmg + .zip back into the project's dist/
+# so existing workflow expectations (open dist/, upload from dist/) still work.
+cp "$DMG_PATH" "$PROJECT/dist/"
+cp "$ZIP_PATH" "$PROJECT/dist/"
+DMG_PATH="$PROJECT/dist/$DMG_NAME"
+ZIP_PATH="$PROJECT/dist/Cold.Bore.zip"
 
 DMG_SIZE=$(du -sh "$DMG_PATH" | awk '{print $1}')
 ZIP_SIZE=$(du -sh "$ZIP_PATH" | awk '{print $1}')
