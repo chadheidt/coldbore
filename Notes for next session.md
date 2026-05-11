@@ -6,9 +6,132 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🚧 v0.12.0 IN FLIGHT — May 11, 2026 (evening — request-access automation + full rebrand)
+## ⚠️ TRUE ZERO BRAND IS BLOCKED — May 11, 2026 (evening — needs SECOND rebrand before beta)
 
-**Branch: `v0.12-request-access`** (commit `2741f75` and beyond — pushed to origin). Main is still at proven v0.11.3. v0.12.0 is NOT in production yet; only the infrastructure that supports it is live.
+**Beta is PAUSED.** Chad is not shipping to testers under "True Zero." A trademark conflict was discovered RIGHT AFTER the v0.12.1 rebrand completed: `truezero.app` is a live tactical/military gear review service ("The Voice Operators Trust", partnered with the Special Forces Foundation). Different product, but same brand name in the firearms-adjacent industry. Likelihood-of-confusion risk is real enough that Chad won't ship commercially under True Zero — and he's not hiring a trademark attorney, so the bar for the next name is "no obvious conflicts anywhere we can check ourselves."
+
+**The previous session (Claude, May 11 morning) told Chad "truezero is open all around" when he was picking the name. That research was incomplete — `truezero.com`, `truezero.app`, `truezero.net` all turned out to be taken, and truezero.app is a real product in the broader firearms space. Chad is understandably miffed.** Future sessions: when vetting names, check ALL major TLDs + USPTO + Google for common-law use BEFORE recommending. Don't repeat this miss.
+
+### Current state of the world
+
+| What | Status |
+|---|---|
+| `/Applications/True Zero.app` v0.12.1 | INSTALLED and works, but is the SECOND rebrand we're about to undo |
+| `truezero.co` domain | OWNED by Chad — value goes to zero on rename, no immediate plan to liquidate |
+| Cloudflare Worker `coldbore-download` | DEPLOYED with True Zero strings in welcome emails + error messages |
+| Resend domain `truezero.co` verified | LIVE; need to either disable and verify the new domain, or run the new domain in parallel |
+| Cloudflare Email Routing `support@truezero.co` → gmail | LIVE; new domain will need its own setup |
+| GitHub Pages custom domain `truezero.co` | LIVE; new domain will replace this |
+| Beta keys / testers / KV state | UNAFFECTED — none of the 10 beta slots have been issued to a real tester yet |
+| 85/85 tests passing | YES |
+
+### What carries forward unchanged on the SECOND rebrand
+
+All of the engineering infrastructure carries forward — only string values change:
+- Auto-update pipeline (proven across v0.11.3 → v0.12.0 → v0.12.1)
+- Request-access form + Worker + Resend + Email Routing pipeline (proven end-to-end)
+- Build script + notarization + R2 upload + manifest publish
+- Test suite + LEGACY_APP_NAMES migration pattern
+- Cloudflare Worker name `coldbore-download` (intentionally never renamed — preserves v0.11.x compatibility AND now the second rebrand benefits from this too)
+
+### What needs to change on the second rebrand
+
+1. **Pick a name** that survives a thorough DIY vetting (see below).
+2. **Buy the new domain** (apex .com if possible; otherwise pick a TLD that doesn't have a conflict).
+3. Re-run the same playbook we ran today: app code strings, .dmg filenames, docx contents, Worker env vars (FROM_EMAIL, ADMIN_EMAIL stays, PUBLIC_SITE), Resend domain + DNS records, Cloudflare Email Routing on the new domain, GitHub Pages custom domain, manifest.json, app/main.py fallbacks, README, Send True Zero to friends.md (rename), Quick Start docx, app folder name in /Applications, LEGACY_APP_NAMES list, bundle ID.
+4. Update `LEGACY_APP_NAMES` to `("True Zero", "Cold Bore", "Rifle Load Importer")` so Chad's existing v0.12.1 config migrates cleanly when he installs the next version.
+
+### Name-vetting checklist (NO LAWYER — DIY)
+
+For every candidate, check ALL of these before presenting to Chad:
+1. **Domain availability** — query DNS for nameservers on `.com`, `.io`, `.app`, `.co`, `.dev`, `.net`, `.org`. No NS records = available.
+2. **USPTO Trademark Search** at tmsearch.uspto.gov — search the exact name in Class 9 (software) AND Class 13 (firearms/ammunition) AND Class 35 (business services). Any active or pending mark in a similar class = reject the name.
+3. **Common-law use search** — Google `"<name>" precision rifle`, `"<name>" software`, `"<name>" reloading`, `"<name>" firearms`. Any live commercial product with the name in this industry = reject.
+4. **Social handles** — quick check for `@name` on X/Instagram and YouTube. Not a blocker if taken but worth knowing.
+5. **Pronounceability + spell-ability** — does the name pass the "can you spell it after hearing it once" test?
+
+Only present names that pass ALL FIVE checks. Anything that fails even one is silently filtered out before Chad sees it.
+
+### Direction preferences from Chad
+
+- **Style**: in line with "Cold Bore" / "True Zero" — precision-shooter terminology, technical-but-evocative, 1-2 words, short.
+- **No lawyer**: trademark filing will be DIY ($250-350 USPTO TEAS Plus). Implication: the name MUST be clean of obvious conflicts because no professional safety net.
+- **Generic descriptive names** are harder to defend in trademark disputes; **invented/abstract names** are easier. Lean toward invented words if practical, descriptive only if very clean.
+
+### Timeline + sequencing
+
+1. **NOW**: brainstorm candidates → pre-vet thoroughly → present clean shortlist
+2. **CHAD PICKS**: one name from the shortlist
+3. **NEXT**: buy the new apex domain (`.com` if available)
+4. **THEN**: full rebrand playbook (~2-3 hours of work, mostly automated)
+5. **AFTER VERIFICATION**: ship v0.13.0 with the new name as the FIRST tester-visible release
+6. **ONLY THEN**: start issuing keys to real beta testers
+
+### Original v0.12.1 shipped notes — preserved below for reference (still useful for the engineering details that carry forward)
+
+---
+
+## ✅ v0.12.1 SHIPPED + REBRAND COMPLETE — May 11, 2026 (evening — True Zero IS LIVE BUT WE ARE REBRANDING AGAIN, see section above)
+
+**True Zero v0.12.1 is in production on Chad's `/Applications/True Zero.app`.** The Cold Bore → True Zero rebrand is complete across every user-touchable surface. The beta-access request-automation pipeline is live and end-to-end-verified. The marketing site has moved to its own domain at `https://truezero.co/`. Existing tokens still need to be rotated for security hygiene (see "Loose ends" below).
+
+**This entire section's "v0.12.1 SHIPPED" status is technically true but operationally moot — see the trademark-blocked section above. Beta is paused until the next rebrand.**
+
+### What shipped in v0.12 (rolled up across 0.12.0 + 0.12.1)
+
+1. **Brand rename**: app display name, window title, menu bar, About dialog, Dock label, license dialog, disclaimer, setup wizard, marketing site copy, `.dmg`/`.zip` filenames (`True.Zero.dmg/zip`), support email (`support@truezero.co`), shared-load file extension (`.coldbore` → `.truezero`), Quick Start + App Overview + How to Send Out Updates docx contents (in-place XML edit via Python zipfile), `/Applications/Cold Bore.app/` renamed to `/Applications/True Zero.app/`, old `~/Library/Application Support/Cold Bore/` deleted, Bundle ID changed from `com.chadheidt.coldbore` to `com.chadheidt.truezero`.
+
+2. **Beta-access request automation**: Website form at `https://truezero.co/` collects name/email/notes (Cloudflare Turnstile anti-bot). Worker stores request in KV (`BETA_REQUESTS` namespace), emails Chad's gmail with green Approve / red Deny buttons. Click Approve → Worker picks next unassigned key from `VALID_CODES` (skipping `RESERVED_CODES` like Chad's own testing key), records the assignment in KV, emails the tester via Resend with their key + download instructions pointing at `https://truezero.co/`. `tools/sync_beta_keys.py` pulls KV assignments back into local `beta-keys.txt`.
+
+3. **Tools menu additions** (v0.12.1): "Visit True Zero Website…" opens `https://truezero.co/` in default browser. "Send Feedback…" opens a pre-filled mailto to `support@truezero.co` (subject `True Zero vX.Y.Z feedback`). Both above the existing About item.
+
+4. **LEGACY_APP_NAMES fix**: Existing v0.11.x users (just Chad) carry their license, project folder, disclaimer state through the upgrade without re-entering anything. Caught a test-isolation bug as a side effect (`tests/test_license.py` fixture didn't stub LEGACY_APP_NAMES).
+
+### Infrastructure as of ship
+
+| Thing | Status |
+|---|---|
+| Cloudflare zone `truezero.co` | Active. DNS managed via Cloudflare, GitHub Pages serves the site over HTTPS via the custom domain. |
+| Cloudflare KV namespace `BETA_REQUESTS` | id `a0362498a5c74b1eb124decdb011f41c`. Bound to Worker. Currently holds only Chad's reserved-key marker. |
+| Cloudflare Turnstile widget "True Zero request-access" | Live for `truezero.co`, `www.truezero.co`, `chadheidt.github.io` |
+| Resend domain `truezero.co` | Verified (DKIM + SPF MX + SPF TXT + DMARC records in Cloudflare DNS) |
+| Cloudflare Email Routing | Active. `support@truezero.co` forwards to `cheidt182@gmail.com`. |
+| Cloudflare Worker `coldbore-download` (URL preserved for v0.11.x auto-update compatibility) | Latest deploy with RESERVED_CODES safeguard. All 9 bindings set: BUCKET (R2), HMAC_SECRET, BETA_REQUESTS (KV), RESEND_API_KEY, TURNSTILE_SECRET, ADMIN_TOKEN, FROM_EMAIL=`True Zero <noreply@truezero.co>`, ADMIN_EMAIL=`cheidt182@gmail.com`, PUBLIC_SITE=`https://truezero.co/`. ALLOWED_FILES accepts both `True.Zero.{dmg,zip}` and `Cold.Bore.{dmg,zip}`. |
+| R2 bucket `coldbore-releases` | Holds True.Zero.dmg + True.Zero.zip (v0.12.1) plus the legacy Cold.Bore.dmg/zip for any in-flight v0.11.x auto-update |
+| GitHub Pages custom domain | `truezero.co` configured + HTTPS cert provisioned. `docs/CNAME` committed. |
+| 10 beta keys ready to issue | Stored in `app/license.py` `VALID_KEYS` AND `worker/coldbore-download.js` `VALID_CODES`. Chad's local-testing key `CBORE-DDCX-AEGK-J2FR-2SIB` is permanently reserved (skipped by `pickNextUnassignedKey` via the `RESERVED_CODES` set, plus a defensive KV marker). |
+| `main` branch | commit `817208d` (Bump 0.12.0 → 0.12.1). Tests 85/85 passing. |
+
+### End-to-end test results
+
+- Auto-update v0.11.3 → v0.12.0: ✅ (Chad's `/Applications/Cold Bore.app` upgraded successfully)
+- Auto-update v0.12.0 → v0.12.1: ✅ (matching bundle IDs; clean transition)
+- Request-access form submission → admin email with approve/deny → click Approve → welcome email with key + download instructions: ✅ (both tested before and after PUBLIC_SITE rebrand to `https://truezero.co/`)
+- License carries across migrations: ✅ (verified — same `CBORE-DDCX-AEGK-J2FR-2SIB` works without re-entry through v0.11.3 → v0.12.0 → v0.12.1)
+- Folder rename `/Applications/Cold Bore.app` → `/Applications/True Zero.app`: ✅ (LaunchServices refreshed; app still notarized + Gatekeeper-accepted)
+
+### Crash-recovery state file
+
+`~/Documents/True Zero - v0.12 setup state.md` (also copied to `~/Desktop/In case of VS Code crash.md`) has the **live, un-redacted** Cloudflare API token + Resend API key + ADMIN_TOKEN — these are needed for next-session recovery if anything in this breadcrumb is unclear. Treat that file as sensitive; rotate the tokens it lists before discarding it.
+
+### Loose ends — DO NEXT SESSION (or whenever Chad has 5 min)
+
+1. **Rotate the two API tokens that have been visible in this chat:**
+   - **Cloudflare**: dashboard → My Profile (top-right icon) → API Tokens → click the existing token → **Roll** → copy new value. The new token can stay the same scope. After rolling, the chat's old token is dead; the state file's recorded value is now stale and should be updated or deleted.
+   - **Resend**: resend.com → API Keys → create a new "Sending only" key → copy its `re_...` value → update the Worker's `RESEND_API_KEY` secret via the Cloudflare dashboard (`Workers & Pages → coldbore-download → Settings → Variables and Secrets → Edit RESEND_API_KEY`). Then revoke the old key on resend.com. 30 seconds total.
+
+2. **Optional cosmetic cleanup**:
+   - `Rifle Loads 2026.xlsx` placeholder workbook at the project root was created in this session to unstick a CSV-import test. Chad's real working data lives in `Completed Loads/7 Saum hunter load dev.xlsx`. Decide whether to delete the placeholder.
+
+3. **Start sending invites to pro-shooter beta testers.** This is the actual milestone the v0.12 work was building toward. The website at `https://truezero.co/` is ready, the request-access flow works, the auto-issue system works, the 10 beta slots are pristine. To invite someone: just send them the website URL — they can self-serve a request, which lands in your gmail with Approve buttons.
+
+### Phase 9 commercialization (when you're ready)
+
+LLC formation, USPTO trademark for "True Zero", lawyer for EULA + privacy + refund policy, Gumroad or Stripe Checkout embed on the website, public launch via YouTube demo + forum outreach. The Resend + Cloudflare + Worker + license-key plumbing built in this session all carries forward unchanged when commerce comes online. Stripe webhook would hit the Worker and add codes to `VALID_CODES` programmatically.
+
+---
+
+## 🚧 v0.12.0 IN FLIGHT — May 11, 2026 (this section is historical — see the "v0.12.1 SHIPPED" section above)
 
 **STATE FILE LIVES AT `~/Documents/True Zero - v0.12 setup state.md`** (also copied to `~/Desktop/In case of VS Code crash.md`). Contains API tokens, IDs, step-by-step where we are. If VS Code crashes mid-flight, open that file, paste it into a fresh Claude session, and we pick up in 30 seconds with zero loss.
 
