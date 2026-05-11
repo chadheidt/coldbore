@@ -6,6 +6,43 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## ✅ v0.11.2 SHIPPED — May 11, 2026 (morning — auto-update fix)
+
+**v0.11.2 is on Chad's `/Applications/Cold Bore.app` right now.** Manually installed via the website .dmg flow (which means the same flow a real beta tester would use was just verified end-to-end). Tools → About reports 0.11.2.
+
+### What happened (the short version)
+
+We set out to do the one thing yesterday's breadcrumb flagged as untested: prove the in-app auto-update path on the new v0.11.0 stack. We shipped v0.11.1 as a trivial test-bump so v0.11.0 had something to update to. The test exposed a real, embarrassing bug in v0.11.0: clicking **Install Update** crashed with `NameError: name 'updater' is not defined` — `app/main.py:1167` called `updater.resolve_download_url(manifest)` but line 62's import was a `from updater import …` style that didn't bring the module name into scope. Yesterday's session never caught it because the code path was never exercised before shipping. **The test did exactly what we wanted: surfaced the regression on Chad's own machine before any beta tester saw it.**
+
+v0.11.1 the binary is doomed — same bug as v0.11.0, just a version-string bump. We skipped past it in the manifest and shipped v0.11.2 with the actual fix. Chad's v0.11.0 in /Applications can't auto-update past the crash, so Chad did a one-time **manual install** of v0.11.2 via the website .dmg flow. Auto-updates from v0.11.2 forward should work, but **this has NOT been tested yet** — that test costs another build+notarize+upload cycle and we deferred it. First chance to verify: the next real release.
+
+### Other lessons baked in during the morning
+
+1. **`Build Signed App.command` had two long-standing bugs** that bit us on the first build attempt today, both already documented in the v0.9.0 lessons but never patched into the script. Both fixed now (commit `9e4b9fd`):
+   - **Build out-of-tree.** py2app now writes into `/tmp/coldbore-build/` instead of the project's `dist/`. macOS attaches `com.apple.provenance` xattrs to files copied inside the project tree, blocking py2app/macholib from rewriting the bundled Python3 framework — manifests as `[Errno 1] Operation not permitted` during the changefunc phase. The .dmg + .zip get copied back to `dist/` at the end so downstream workflow steps (Finder open, R2 upload) are unchanged.
+   - **Codesign every Mach-O, not just `.dylib`/`.so`.** The old find loop missed `Contents/MacOS/python` (a py2app-generated launcher) and `Contents/Frameworks/Python3.framework/Versions/3.9/Python3` (no extension to match). Both shipped adhoc-signed and Apple's notary service rejected the whole submission. New loop walks the entire bundle and asks `file -b` whether each entry is Mach-O. 249 binaries signed now.
+
+2. **The auto-update path is the thing that always breaks silently.** Code is written, code compiles, tests pass, build succeeds, binary ships — and the failure only surfaces when a real running app actually tries to download a real update. The breadcrumb yesterday DID say "this is unproven" but the wording was buried. For future releases, anytime the updater or installer code changes, suggest a test-bump release (like v0.11.1 today) BEFORE assuming the change works. The cost is one extra 15-min build+notarize cycle; the value is finding the bug on Chad's machine instead of on five strangers' machines.
+
+3. **Settings change today: project-level `Bash(*)` + `Edit(*)` + `Write(*)` + `Read(*)`** are now in `.claude/settings.local.json` (gitignored). Chad explicitly asked for "all bash commands" and "all write access" mid-session because the prompts were piling up. Future sessions in this project won't prompt for these.
+
+### State on Chad's machine right now
+
+- `/Applications/Cold Bore.app` runs **v0.11.2** (manually installed via .dmg from website, license key `CBORE-DDCX-AEGK-J2FR-2SIB` re-validated silently on launch)
+- `main` HEAD: `4afd571` ("v0.11.2 - fix NameError in v0.11.0 auto-updater")
+- Working tree clean except the untracked `Cold Bore.app alias` (already gitignored — see `ee1cc0a`)
+- Cloudflare R2 holds `Cold.Bore.dmg` and `Cold.Bore.zip` for v0.11.2 (both replaced today; the broken v0.11.1 binaries that briefly existed there have been overwritten)
+- Manifest on `main` says v0.11.2 with the fix release notes
+
+### What's pending after v0.11.2
+
+- **Verify auto-update v0.11.2 → vX.Y.Z works.** First chance is the next real release. Build it, ship it, watch Chad's v0.11.2 banner show up, click Install Update, confirm clean swap. If it fails, we'll have a real crash log this time (not a NameError) and we'll know what next layer of the stack is broken.
+- **Add a smoke test for `app.main`'s import surface.** A test that does nothing but `import app.main` and walks the module's globals would have caught today's NameError in 0.5 seconds. Cost: ~20 lines in `tests/`. Worth doing in a quiet moment.
+- **Issue keys + send the website link to beta testers.** v0.11.2 is the version that goes out. Use `~/Desktop/Cold Bore — How to Issue License Keys.docx`. **Remember the doc still needs updating** to mention that new keys go in TWO places: `app/license.py` AND the Cloudflare Worker's `VALID_CODES` set in the dashboard. Without the Worker update, a new tester would have a key that unlocks the app but can't download from the website.
+- **Phase 9 commercialization** (when ready): LLC, EULA, USPTO trademark, `coldbore.app` domain, Gumroad/Stripe, public launch.
+
+---
+
 ## ✅ v0.11.0 SHIPPED — May 10, 2026 (evening — private downloads via Cloudflare Worker)
 
 **Beginning with v0.11.0, Cold Bore binaries are not available on GitHub.** Both the marketing `.dmg` and the auto-update `.zip` are served by a Cloudflare Worker (`coldbore-download.cheidt182.workers.dev`) that validates an access code server-side and returns a 5-minute signed URL pointing at Cloudflare R2 storage. Without a valid code there is no path to the binary, period.
