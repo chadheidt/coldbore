@@ -20,7 +20,7 @@ Manifest format (host this anywhere — GitHub Releases, Dropbox, S3, etc.):
 
     {
         "app_version": "0.5.0",
-        "app_download_url": "https://github.com/.../releases/download/v0.6.0/ColdBore.zip",
+        "app_download_url": "https://github.com/.../releases/download/v0.6.0/True.Zero.zip",
         "app_release_notes": "Added charge weight scaling. Fixed bug X.",
         "template_version": "1.1",
         "template_download_url": "https://...",
@@ -87,7 +87,7 @@ def resolve_download_url(manifest):
                 data=payload,
                 headers={
                     "Content-Type": "application/json",
-                    "User-Agent": f"ColdBore/{APP_VERSION}",
+                    "User-Agent": f"TrueZero/{APP_VERSION}",
                 },
                 method="POST",
             )
@@ -137,7 +137,7 @@ class UpdateChecker(QThread):
         try:
             req = urllib.request.Request(
                 self.manifest_url,
-                headers={"User-Agent": f"ColdBore/{APP_VERSION}"},
+                headers={"User-Agent": f"TrueZero/{APP_VERSION}"},
             )
             with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT_SECONDS) as resp:
                 raw_bytes = resp.read()
@@ -231,11 +231,11 @@ class UpdateDownloader(QThread):
 
         # Stream to a temp file we OWN — caller is responsible for moving
         # or deleting it once the install completes.
-        tmp_fd, tmp_path = tempfile.mkstemp(prefix="ColdBoreUpdate_", suffix=".zip")
+        tmp_fd, tmp_path = tempfile.mkstemp(prefix="TrueZeroUpdate_", suffix=".zip")
         try:
             req = urllib.request.Request(
                 self.url,
-                headers={"User-Agent": f"ColdBore/{APP_VERSION}"},
+                headers={"User-Agent": f"TrueZero/{APP_VERSION}"},
             )
             with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT_SECONDS) as resp:
                 total = int(resp.headers.get("Content-Length") or 0)

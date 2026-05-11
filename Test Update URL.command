@@ -28,7 +28,7 @@ url = "$URL"
 
 print("Step 1: Opening connection…")
 try:
-    req = urllib.request.Request(url, headers={"User-Agent": "ColdBore/0.6.0"})
+    req = urllib.request.Request(url, headers={"User-Agent": "TrueZero/0.6.0"})
     with urllib.request.urlopen(req, timeout=8) as resp:
         status = resp.getcode()
         ctype = resp.headers.get("Content-Type")

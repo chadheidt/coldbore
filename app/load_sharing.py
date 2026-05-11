@@ -80,8 +80,8 @@ def export_load(workbook_path):
     }
 
     payload = {
-        "format": COLDBORE_FORMAT,
-        "format_version": COLDBORE_VERSION,
+        "format": TRUEZERO_FORMAT,
+        "format_version": TRUEZERO_VERSION,
         "exported_at": datetime.now().isoformat(timespec="seconds"),
         "exported_by": f"{APP_NAME} v{APP_VERSION}",
         "rifle": rifle,
@@ -136,14 +136,14 @@ def import_load(file_path):
         raise LoadFileError("File doesn't contain a load object.")
 
     fmt = data.get("format")
-    if fmt != COLDBORE_FORMAT:
+    if fmt != TRUEZERO_FORMAT:
         raise LoadFileError(
             f"This file isn't a True Zero shared load "
-            f"(format={fmt!r}, expected {COLDBORE_FORMAT!r})."
+            f"(format={fmt!r}, expected {TRUEZERO_FORMAT!r})."
         )
 
     fmt_v = data.get("format_version")
-    if isinstance(fmt_v, int) and fmt_v > COLDBORE_VERSION:
+    if isinstance(fmt_v, int) and fmt_v > TRUEZERO_VERSION:
         # Newer format version — try to read it anyway, but warn
         # (intentionally not raising; forward-compat best effort)
         pass

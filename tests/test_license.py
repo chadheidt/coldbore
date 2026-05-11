@@ -11,12 +11,17 @@ import license as app_license
 @pytest.fixture
 def isolated_config(tmp_path, monkeypatch):
     """Point the config module at a per-test temp dir so save_license() doesn't
-    overwrite the developer's real config under ~/Library/Application Support."""
+    overwrite the developer's real config under ~/Library/Application Support.
+    Also stubs LEGACY_APP_NAMES to empty so _migrate_legacy_config() doesn't
+    pull the developer's real ~/Library/Application Support/Cold Bore/config.json
+    into the test sandbox (which was making test_state_missing_when_no_config
+    see a valid license key)."""
     import config as app_config
     cfg_dir = tmp_path / "True Zero"
     cfg_dir.mkdir()
     monkeypatch.setattr(app_config, "CONFIG_DIR", cfg_dir)
     monkeypatch.setattr(app_config, "CONFIG_PATH", cfg_dir / "config.json")
+    monkeypatch.setattr(app_config, "LEGACY_APP_NAMES", ())
     return cfg_dir
 
 
