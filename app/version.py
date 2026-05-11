@@ -10,7 +10,7 @@ from the app itself (e.g., a workbook tweak doesn't require rebuilding the .app)
 
 # App branding — one source of truth for display name + version
 APP_NAME = "True Zero"
-LEGACY_APP_NAMES = ("True Zero", "Rifle Load Importer")  # for config migration on first launch
+LEGACY_APP_NAMES = ("Cold Bore", "Rifle Load Importer")  # for config migration on first launch
 APP_VERSION = "0.12.0"
 TEMPLATE_VERSION = "1.0"
 
