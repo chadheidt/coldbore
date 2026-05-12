@@ -196,10 +196,18 @@ xcrun notarytool submit "$DMG_PATH" \
 echo "[6/8] Stapling notarization ticket to DMG…"
 xcrun stapler staple "$DMG_PATH"
 
+# Also staple the standalone .app — the .zip built in step 8 packages the .app
+# directly (not the .dmg). Without this, the .app inside Loadscope.zip would
+# have no offline notarization ticket; Gatekeeper would fall back to online
+# verification, which fails on first launch when the tester has no internet.
+echo "       Stapling notarization ticket to .app…"
+xcrun stapler staple "$APP_PATH"
+
 # ----- Step 7: Final verification --------------------------------------------
 echo "[7/8] Final verification…"
 spctl -a -t install -v "$DMG_PATH"
 xcrun stapler validate "$DMG_PATH"
+xcrun stapler validate "$APP_PATH"
 
 # ----- Step 8: Also produce Loadscope.zip for auto-update compatibility ------
 # The in-app self-installer (v0.8.x and later) downloads a .zip and swaps the
