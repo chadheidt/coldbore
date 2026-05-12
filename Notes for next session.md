@@ -6,6 +6,39 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## ✅ LOADSCOPE v0.13.2 SHIPPED — May 11, 2026 (very late evening — pre-beta deep dive)
+
+**Pre-beta deep-dive patch.** Found and fixed two issues a first beta tester would have noticed:
+
+1. **All three bundled Loadscope docx files still said "True Zero"** (34 references across App Overview, Quick Start, How to Send Out Updates). The v0.13.0 rebrand renamed the FILES but the in-place content edit didn't take. Fixed via Python zipfile + XML rewrite. Now "Loadscope" 34×, "True Zero" 0×.
+2. **Build script only stapled the .dmg, not the .app**. The auto-update path uses the .zip (which packages the .app directly), so its .app had no offline notarization ticket — first launch without internet would have shown a Gatekeeper warning. Build Signed App.command now staples both. Verified on the v0.13.2 build: `xcrun stapler validate Loadscope.app` returns "The validate action worked!"
+
+The deep-dive also confirmed everything else is healthy: tests 85/85, all worker bindings + secrets intact, RESERVED_CODES preserves Chad's testing key (9 of 10 beta slots unassigned), 0 legacy brand refs in user-facing app/docs/HTML/JS, license key generator working, marketing site loading at 120ms TTFB.
+
+### Ship pipeline (same as v0.13.1, fully proven again)
+
+- `app/version.py`, `setup.py`, `manifest.json` → 0.13.2
+- Three docx files patched + Build Signed App.command updated
+- Commit `a151ba3` pushed to main
+- Build Signed App.command ran (Chad's Terminal, or possibly headless from Claude's Bash — the build completed during a window where both might have fired; verified end product is correct)
+- R2: `wrangler r2 object put --remote` for both .zip and .dmg
+- GitHub release v0.13.2 created + published as --latest
+- All verified end-to-end before this breadcrumb
+
+### Important note for future build sessions
+
+The historical CLAUDE.md guidance says Claude can't run `python3 setup.py py2app` from a Bash tool due to a `com.apple.provenance` xattr EPERM. That note predates the rewrite of Build Signed App.command to build out-of-tree in `/tmp/coldbore-build/`. In v0.13.2 the build did complete (artifacts have correct content, signatures, staples), but it's not yet conclusively proven whether Claude's `bash Build Signed App.command` call DID the build or whether Chad's parallel Finder double-click did. Next build session, test cleanly to confirm Claude can now drive the build directly — would close out one of the last "needs Chad's hands" workflows.
+
+### Open beta-readiness items
+
+Beta-ready as of v0.13.2. Remaining items are all NOT blockers:
+- Chad's `/Applications/Loadscope.app` may still be v0.13.0 until he opens it (auto-update will ladder through 0.13.0 → 0.13.2 directly; manifest comparison is strict-greater-than).
+- Chad tomorrow (2026-05-12): drag-drop CSV testing on his Mac, then start sending beta invites. Plus Windows port begins on his Windows laptop — any phrase like "build our windows platform" triggers Phase 7 workflow (memory entry `project_windows_port_trigger.md`).
+
+`main` HEAD after this breadcrumb commit: will be one ahead of `a151ba3`.
+
+---
+
 ## ✅ LOADSCOPE v0.13.1 SHIPPED — May 11, 2026 (later evening — icon redesign)
 
 **Cosmetic-only patch release.** Redesigned the app icon to a realistic modern long-range cartridge silhouette:
