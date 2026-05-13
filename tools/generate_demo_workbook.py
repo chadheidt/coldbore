@@ -263,6 +263,7 @@ def main():
     _write_static_composite_scores(wb)
     _write_seating_depth_static_values(wb)
     _populate_ballistics_dope(wb)
+    _populate_load_library(wb)
 
     # Force Excel to do a full recalc when opening this workbook. Without this,
     # Excel may trust the (stale or empty) cached values from openpyxl's save
@@ -445,23 +446,18 @@ def _write_static_composite_scores(wb):
         ch.cell(row=r, column=10).value = round(max(0.001, norm_mr[i]), 3)
         ch.cell(row=r, column=11).value = round(max(0.001, norm_vert[i]), 3)
 
-    # --- Write Charts B18:C22 — Low / High of each candidate's shot velocities ---
-    # Chad expects these populated even though template formula returns "" in
-    # test mode. Showing low/high gives prospects a quick visual on each
-    # charge's velocity spread.
-    chronograph_by_tag = {c["Tag"]: c for c in POWDER_LADDER}
-    for i, c in enumerate(candidates):
-        chrono = None
-        # Find the corresponding chronograph record by matching charge
-        for entry in POWDER_LADDER:
-            if entry["ChargeOrJump"] == c["charge"]:
-                chrono = entry
-                break
-        if chrono and chrono.get("Shots"):
-            shots = [s for s in chrono["Shots"] if s is not None]
-            if shots:
-                ch.cell(row=18 + i, column=2).value = min(shots)  # B = Low
-                ch.cell(row=18 + i, column=3).value = max(shots)  # C = High
+    # --- Charts B18:C22 (Low/High) intentionally LEFT EMPTY in test mode ---
+    # Chad's clarification 2026-05-13: those columns only make sense in
+    # window mode (low/middle/high charges of a 3-step rolling window). In
+    # test mode they're meaningless — leave blank per template formula intent.
+    for i in range(len(candidates)):
+        ch.cell(row=18 + i, column=2).value = None
+        ch.cell(row=18 + i, column=3).value = None
+    # Also fix the column headers in test mode (template uses
+    # IF($B$100="window","Middle Charge",...) which Excel-Mac doesn't
+    # always recompute).
+    ch["A17"].value = "Charge"
+    ch["D17"].value = "Avg Vel (fps)"
 
     # --- Write Charts L18:L22 + R18:R22 (composite + per-row best-in tags) ---
     for i, (comp, label) in enumerate(zip(composites, best_in_labels)):
@@ -558,6 +554,113 @@ def _populate_ballistics_dope(wb):
         b.cell(row=r, column=6).value = wind_mils  # F = Wind Mils / 10 mph
         b.cell(row=r, column=8).value = wind_moa   # H = Wind MOA / 10 mph
         b.cell(row=r, column=10).value = tof       # J = TOF (sec)
+
+    # Row 5 / 6 — rifle setup header that the Pocket Range Card reads. These
+    # cells are normally formulas pulling from Load Log; openpyxl save doesn't
+    # compute formulas, so the cached values are blank → Pocket Card shows
+    # missing fps/gr. Write static values directly.
+    b["B5"].value = "Tikka T3X CTR 6.5 CM"
+    b["E5"].value = "Hornady 140gr ELD-M"
+    b["H5"].value = 42.4   # charge gr
+    b["K5"].value = 2780   # avg vel fps
+    b["B6"].value = "Leupold Mark 5HD 5-25x56"
+    # E6 (Zero yd), H6 (Sight Ht), K6 (Twist) are user-fill defaults
+    # already set in the template (100, 1.75, 1:8 RH)
+
+
+def _populate_load_library(wb):
+    """Populate Load Library with 3 historical winning loads so prospects
+    see what a built-up library looks like.
+
+    Entry 1 = current demo's winning load (6.5 CM 140gr ELD-M H4350 42.4gr).
+    Entry 2 = older 6.5 CM season with different bullet (Berger Hybrid).
+    Entry 3 = different cartridge (6 ARC) showing the library grows over
+    rifles and seasons.
+    """
+    if "Load Library" not in wb.sheetnames:
+        return
+    ll_lib = wb["Load Library"]
+    from datetime import datetime
+    entries = [
+        # (date_added, load_name, rifle, bullet, bullet_wt, powder, charge,
+        #  primer, brass, cbto, jump, avg_vel, sd, group, mr, notes)
+        (
+            datetime(2026, 5, 1),
+            "6.5 CM 140 ELD-M / H4350 42.4 / 0.035 jump",
+            "Tikka T3X CTR 6.5 CM",
+            "Hornady ELD-M",
+            140,
+            "Hodgdon H4350",
+            42.4,
+            "CCI BR-2",
+            "Hornady",
+            2.224,
+            0.035,
+            2780,
+            2.5,
+            0.38,
+            0.18,
+            "Confirmed at 100 yd, 65°F, 1500 ft DA. 10-shot string."
+        ),
+        (
+            datetime(2025, 11, 10),
+            "6.5 CM 140 Berger Hybrid / H4350 42.1 / 0.020 jump",
+            "Tikka T3X CTR 6.5 CM",
+            "Berger Hybrid Target",
+            140,
+            "Hodgdon H4350",
+            42.1,
+            "Fed 210M",
+            "Lapua",
+            2.218,
+            0.020,
+            2745,
+            5.1,
+            0.52,
+            0.24,
+            "Prior season — switched to ELD-M for lower SD."
+        ),
+        (
+            datetime(2026, 3, 18),
+            "6 ARC 108 ELD-M / CFE 223 26.5 / 0.040 jump",
+            "Bergara B14 HMR 6 ARC",
+            "Hornady ELD-M",
+            108,
+            "Hodgdon CFE 223",
+            26.5,
+            "CCI 450",
+            "Hornady",
+            1.910,
+            0.040,
+            2680,
+            6.8,
+            0.55,
+            0.28,
+            "Truck gun build. Good cold-bore consistency."
+        ),
+    ]
+    # Rows 5-19 hold up to 15 entries. Write our 3 starting at row 5.
+    for i, (date, name, rifle, bullet, bwt, powder, charge, primer, brass,
+            cbto, jump, vel, sd, group, mr, notes) in enumerate(entries):
+        r = 5 + i
+        ll_lib.cell(row=r, column=1).value = i + 1
+        ll_lib.cell(row=r, column=2).value = date
+        ll_lib.cell(row=r, column=2).number_format = "mm/dd/yyyy"
+        ll_lib.cell(row=r, column=3).value = name
+        ll_lib.cell(row=r, column=4).value = rifle
+        ll_lib.cell(row=r, column=5).value = bullet
+        ll_lib.cell(row=r, column=6).value = bwt
+        ll_lib.cell(row=r, column=7).value = powder
+        ll_lib.cell(row=r, column=8).value = charge
+        ll_lib.cell(row=r, column=9).value = primer
+        ll_lib.cell(row=r, column=10).value = brass
+        ll_lib.cell(row=r, column=11).value = cbto
+        ll_lib.cell(row=r, column=12).value = jump
+        ll_lib.cell(row=r, column=13).value = vel
+        ll_lib.cell(row=r, column=14).value = sd
+        ll_lib.cell(row=r, column=15).value = group
+        ll_lib.cell(row=r, column=16).value = mr
+        ll_lib.cell(row=r, column=17).value = notes
 
 
 def _write_seating_depth_static_values(wb):
@@ -673,18 +776,31 @@ def _write_seating_depth_static_values(wb):
         sd.cell(row=r, column=10).value = round(max(0.001, norm_mr[i]), 3)
         sd.cell(row=r, column=11).value = round(max(0.001, norm_vert[i]), 3)
 
-    # --- Write SD!B/C low/high per candidate (from chronograph Shots list) ---
-    for i, c in enumerate(candidates):
-        chrono = None
-        for entry in SEATING_LADDER:
-            if entry["ChargeOrJump"] == c["jump"]:
-                chrono = entry
-                break
-        if chrono and chrono.get("Shots"):
-            shots = [s for s in chrono["Shots"] if s is not None]
-            if shots:
-                sd.cell(row=30 + i, column=2).value = min(shots)  # B = Low
-                sd.cell(row=30 + i, column=3).value = max(shots)  # C = High
+    # --- SD!B/C (Low/High) intentionally LEFT EMPTY in test mode ---
+    # Those columns are only meaningful in window mode (3-step rolling
+    # window of jumps). In test mode they're noise.
+    for i in range(len(candidates)):
+        sd.cell(row=30 + i, column=2).value = None
+        sd.cell(row=30 + i, column=3).value = None
+
+    # --- SD!M30:M34 (Rank column) — 1 (best) to N (worst) by composite ---
+    sorted_composites = sorted(enumerate(composites), key=lambda x: x[1])
+    rank_by_idx = {idx: rank for rank, (idx, _) in enumerate(sorted_composites, start=1)}
+    for i in range(len(candidates)):
+        sd.cell(row=30 + i, column=13).value = rank_by_idx[i]  # M column
+
+    # --- SD!N30:N34 (Best in tags) — per-row best-in metrics ---
+    tags_per_row_sd = []
+    for i in range(len(candidates)):
+        tags = [tag for tag, best_i in bests.items() if best_i == i]
+        if len(tags) == 4:
+            tags_per_row_sd.append("All metrics ✓")
+        else:
+            tags_per_row_sd.append(" ".join(tags))
+    for i, label in enumerate(tags_per_row_sd):
+        # Always overwrite — empty string for non-winners. Otherwise the
+        # template's per-row formula displays uncomputed in Excel-Mac.
+        sd.cell(row=30 + i, column=14).value = label or ""
 
 
 def _populate_demo_headers(wb):

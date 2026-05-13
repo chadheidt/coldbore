@@ -962,6 +962,29 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
         for coord in ("G7", "H7", "I7", "J7"):
             ws[coord].border = rifle_border
 
+    # v0.14 fix — give all action-button cells consistent yellow accent +
+    # bold blue text + thin border so they read as clickable. Each cell is
+    # already a hyperlink (clicking triggers the loadscope:// URL handler),
+    # but template styling left them as plain text — easy to miss visually.
+    button_fill = PatternFill(start_color="FFFFE082", end_color="FFFFE082", fill_type="solid")
+    button_font = Font(color="FF1F4E78", bold=True)
+    BUTTON_CELLS = [
+        ("Charts", "A6"),    # Save Suggested Load to Library
+        ("Charts", "A12"),   # Reset weights to Loadscope defaults
+        ("Seating Depth", "A26"),  # Save Suggested Load to Library
+        ("Ballistics", "A2"),       # Print Pocket Range Card
+    ]
+    for sheet_name, coord in BUTTON_CELLS:
+        if sheet_name not in wb.sheetnames:
+            continue
+        ws = wb[sheet_name]
+        c = ws[coord]
+        if c.hyperlink:  # only style cells that are actually clickable
+            c.fill = button_fill
+            c.font = button_font
+            c.border = Border(left=gray_side, right=gray_side, top=gray_side, bottom=gray_side)
+            fixes.append(f"{sheet_name}!{coord}: button styling (yellow fill + bold blue + border)")
+
     # v0.14 fix — SD!A28 "Reset weights" cell shares row 28 with the
     # weight VALUE cells (B28-L28), so column A can't merge wider for the
     # long instruction text. Inserting a new dedicated row would shift the
@@ -1166,6 +1189,17 @@ def _write_pl_static(wb, pl_chrono, group_by_tag):
         ch = wb["Charts"]
         # Pin to test mode for predictable row alignment
         ch["B100"].value = "test"
+        # Row 17 headers — overwrite IF($B$100="window",...) formulas + the
+        # "Norm Spread" label which only matches D17's window-mode meaning.
+        # In test mode the analysis is per-row averages, not 3-row spreads.
+        ch["A17"].value = "Charge"
+        ch["D17"].value = "Avg Vel (fps)"
+        ch["H17"].value = "Norm Vel"
+        # B17 / C17 (Low / High) headers — these only describe window-mode
+        # rolling-window data. In test mode the columns are blank, so the
+        # headers are misleading. Clear them.
+        ch["B17"].value = None
+        ch["C17"].value = None
         # Row 3-5 winner-summary cells (replace ArrayFormulas + hardcoded G5)
         ch["B3"].value = winner["charge_or_jump"]
         ch["E3"].value = round(composites[winner_idx], 3)
@@ -1173,12 +1207,15 @@ def _write_pl_static(wb, pl_chrono, group_by_tag):
         ch["G4"].value = winner["mr"]
         ch["E5"].value = winner["vel"]
         ch["G5"].value = winner_tags
-        # Analysis grid rows 18-25 (floor normalized at 0.001 so 0s display)
+        # Analysis grid rows 18-25 (floor normalized at 0.001 so 0s display).
+        # B/C (Low/High) columns are intentionally LEFT BLANK in test mode —
+        # they only carry meaning in window mode (low/middle/high charges of
+        # a 3-step rolling window). The template formula returns "" in test
+        # mode; we write empty to match.
         for i, c in enumerate(candidates):
             r = 18 + i
-            if c["shots"]:
-                ch.cell(row=r, column=2).value = min(c["shots"])  # B Low
-                ch.cell(row=r, column=3).value = max(c["shots"])  # C High
+            ch.cell(row=r, column=2).value = None  # B Low (window-mode only)
+            ch.cell(row=r, column=3).value = None  # C High (window-mode only)
             ch.cell(row=r, column=4).value = c["vel"]
             ch.cell(row=r, column=5).value = c["sd"]
             ch.cell(row=r, column=6).value = c["mr"]
@@ -1246,13 +1283,26 @@ def _write_sd_static(wb, sd_chrono, group_by_tag):
         sd.cell(row=16 + i, column=15).value = round(comp, 3)
     for r in range(16 + len(composites), 26):
         sd.cell(row=r, column=15).value = "=NA()"
-    # Analysis grid rows 30-37
+    # Row 29 headers — overwrite IF($B$100="window",...) formulas + the
+    # "Norm Spread" label which only matches D29's window-mode meaning.
+    # B29 / C29 (Low / High) headers cleared in test mode since the
+    # columns underneath are blank — meaningless headers look broken.
+    sd["A29"].value = "Jump"
+    sd["B29"].value = None
+    sd["C29"].value = None
+    sd["D29"].value = "Avg Vel (fps)"
+    sd["H29"].value = "Norm Vel"
+    # Analysis grid rows 30-37. B/C (Low/High) are intentionally left blank
+    # in test mode — they only carry meaning in window mode (3-step rolling
+    # window of jumps).
+    # Compute ranks from composites (1 = lowest = best)
+    sorted_idx = sorted(range(len(composites)), key=lambda i: composites[i])
+    rank_by_idx = {idx: r for r, idx in enumerate(sorted_idx, start=1)}
     for i, c in enumerate(candidates):
         r = 30 + i
         sd.cell(row=r, column=1).value = c["charge_or_jump"]
-        if c["shots"]:
-            sd.cell(row=r, column=2).value = min(c["shots"])
-            sd.cell(row=r, column=3).value = max(c["shots"])
+        sd.cell(row=r, column=2).value = None  # B Low (window-mode only)
+        sd.cell(row=r, column=3).value = None  # C High (window-mode only)
         sd.cell(row=r, column=4).value = c["vel"]
         sd.cell(row=r, column=5).value = c["sd"]
         sd.cell(row=r, column=6).value = c["mr"]
@@ -1264,10 +1314,14 @@ def _write_sd_static(wb, sd_chrono, group_by_tag):
         sd.cell(row=r, column=10).value = round(max(0.001, nmr[i]), 3)
         sd.cell(row=r, column=11).value = round(max(0.001, nvert[i]), 3)
         sd.cell(row=r, column=12).value = round(composites[i], 3)
+        sd.cell(row=r, column=13).value = rank_by_idx[i]  # M = Rank
+        # N = Best in — always overwrite (empty for non-winners). Otherwise
+        # the template's per-row formula displays uncomputed in Excel-Mac.
+        sd.cell(row=r, column=14).value = tags_per_row[i] or ""
     for r in range(30 + len(candidates), 38):
-        for col in (1, 4, 5, 6, 7, 8, 9, 10, 11, 12):
+        for col in (1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14):
             sd.cell(row=r, column=col).value = "=NA()"
-    fixes.append(f"Seating Depth row 2 + O16:O{15+len(composites)} + A-L30:37 static values ({len(candidates)} candidates)")
+    fixes.append(f"Seating Depth row 2 + O16:O{15+len(composites)} + A-N30:37 static values ({len(candidates)} candidates)")
 
     return fixes
 
