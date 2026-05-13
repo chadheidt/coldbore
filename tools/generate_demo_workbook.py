@@ -279,6 +279,12 @@ def main():
     print(f"\nSaving: {OUTPUT_PATH}")
     wb.save(OUTPUT_PATH)
     print(f"OK — {os.path.getsize(OUTPUT_PATH)} bytes")
+
+    # Post-save: resize VML comment boxes (must run after save since VML
+    # files only exist inside the saved .xlsx zip)
+    n_resized = import_data.resize_comment_boxes(OUTPUT_PATH)
+    print(f"Resized {n_resized} comment box(es) to 360x220 px")
+
     print(f"\nNext: open in Excel + visually verify the data looks realistic.")
 
 

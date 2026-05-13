@@ -974,30 +974,26 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
         sd_ws = wb["Seating Depth"]
         a28 = sd_ws["A28"]
         current_value = (a28.value or "").strip()
-        if current_value and "Reset" in current_value and "hover" in current_value:
-            a28.value = "↺ Reset weights"
-            # Comment provides the rationale that previously lived in the cell text.
-            if not a28.comment:
-                a28.comment = Comment(
-                    "Click this cell to restore the default composite-score "
-                    "weights: Velocity 0.15, SD 0.25, MR 0.25, SD-Vert 0.35.\n\n"
-                    "These weights bias the winner toward jumps with the "
-                    "tightest vertical dispersion (best for long-range "
-                    "elevation consistency).",
-                    "Loadscope",
-                )
-            # Bump row height to 24 (a bit taller than default) so the
-            # short text doesn't look squashed against neighboring cells.
+        if current_value and "Reset" in current_value:
+            # Widen column A so "Reset weights" fits (was 10; bump to 16).
+            current_w = sd_ws.column_dimensions["A"].width if "A" in sd_ws.column_dimensions else None
+            if current_w is None or current_w < 16:
+                sd_ws.column_dimensions["A"].width = 16
+            a28.value = "Reset weights"
             current_h = sd_ws.row_dimensions[28].height if 28 in sd_ws.row_dimensions else None
             if current_h is None or current_h < 24:
                 sd_ws.row_dimensions[28].height = 24
-            # Switch from shrink_to_fit to normal alignment now that the
-            # text is short enough to fit at default font size.
             a28.alignment = Alignment(
                 horizontal="center", vertical="center",
                 wrap_text=False, shrink_to_fit=False,
             )
-            fixes.append("Seating Depth!A28: shortened reset-weights text + moved hint to comment")
+            # Yellow accent fill makes it look like a button
+            a28.fill = PatternFill(
+                start_color="FFFFE082", end_color="FFFFE082", fill_type="solid"
+            )
+            a28.font = Font(color="FF1F4E78", bold=True)
+            a28.border = Border(left=gray_side, right=gray_side, top=gray_side, bottom=gray_side)
+            fixes.append("Seating Depth!A28: 'Reset weights' button + widened col A + yellow accent")
 
     # v0.14 fix — Excel-Mac doesn't reliably recompute the AGGREGATE-based
     # composite-score formula chain after an openpyxl save. Precompute the
@@ -1274,6 +1270,47 @@ def _write_sd_static(wb, sd_chrono, group_by_tag):
     fixes.append(f"Seating Depth row 2 + O16:O{15+len(composites)} + A-L30:37 static values ({len(candidates)} candidates)")
 
     return fixes
+
+
+def resize_comment_boxes(xlsx_path, width_px=360, height_px=220):
+    """Resize every VML comment shape in an .xlsx file to width_px x height_px.
+
+    Excel defaults comment boxes to 144x79 px which clips most Loadscope
+    tooltip text (200-700 chars per comment). 360x220 is Chad's v0.13.3
+    proven size — fits the longest comments without scrolling.
+
+    Must run AFTER wb.save() since the VML files only exist on disk inside
+    the .xlsx zip. Operates on the file in place via tempfile + replace.
+    """
+    import re
+    import shutil
+    import tempfile
+    import zipfile
+    from pathlib import Path
+    xlsx_path = Path(xlsx_path)
+    pattern = re.compile(r"width:\d+(?:\.\d+)?px;height:\d+(?:\.\d+)?px")
+    replacement = f"width:{width_px}px;height:{height_px}px"
+    tmpdir = Path(tempfile.mkdtemp())
+    new_zip = tmpdir / "out.xlsx"
+    resized = 0
+    try:
+        with zipfile.ZipFile(xlsx_path, "r") as zin:
+            with zipfile.ZipFile(new_zip, "w", zipfile.ZIP_DEFLATED) as zout:
+                for item in zin.namelist():
+                    data = zin.read(item)
+                    if (item.startswith("xl/drawings/commentsDrawing")
+                            and item.endswith(".vml")):
+                        text = data.decode("utf-8")
+                        n = len(pattern.findall(text))
+                        if n:
+                            text = pattern.sub(replacement, text)
+                            resized += n
+                            data = text.encode("utf-8")
+                    zout.writestr(item, data)
+        shutil.copy(new_zip, xlsx_path)
+    finally:
+        shutil.rmtree(tmpdir, ignore_errors=True)
+    return resized
 
 
 # Default composite-score weights — used by the Tools → Reset Composite
@@ -1716,6 +1753,15 @@ def run_import(workbook_path, project_dir=None, open_excel=True):
     try:
         wb.save(workbook_path)
         print(f"  Saved.")
+        # Post-save: resize VML comment boxes (Excel defaults them to 144x79
+        # which clips most Loadscope tooltip text). Must run after save since
+        # the VML files only exist inside the saved .xlsx zip.
+        try:
+            n_resized = resize_comment_boxes(workbook_path)
+            if n_resized:
+                print(f"  Resized {n_resized} comment box(es) to 360x220 px")
+        except Exception as e:
+            print(f"  (Couldn't resize comment boxes: {e} — not fatal)")
     except PermissionError:
         msg = "Workbook is open in Excel. Close it and try again."
         print(f"  ERROR: {msg}")
