@@ -639,6 +639,21 @@ def _populate_load_library(wb):
             "Truck gun build. Good cold-bore consistency."
         ),
     ]
+    # Widen narrow columns so the demo entries are readable
+    from openpyxl.styles import Alignment
+    LL_COL_WIDTHS = {
+        "E": 18,  # Bullet
+        "G": 16,  # Powder ("Hodgdon H4350" is 13 chars)
+        "J": 12,  # Brass
+        "M": 12,  # Avg Vel
+        "P": 10,  # MR MOA
+        "Q": 28,  # Notes / Conditions — needs room for sentence-length notes
+    }
+    for col_letter, width in LL_COL_WIDTHS.items():
+        current = ll_lib.column_dimensions[col_letter].width if col_letter in ll_lib.column_dimensions else 0
+        if (current or 0) < width:
+            ll_lib.column_dimensions[col_letter].width = width
+
     # Rows 5-19 hold up to 15 entries. Write our 3 starting at row 5.
     for i, (date, name, rifle, bullet, bwt, powder, charge, primer, brass,
             cbto, jump, vel, sd, group, mr, notes) in enumerate(entries):
@@ -661,6 +676,12 @@ def _populate_load_library(wb):
         ll_lib.cell(row=r, column=15).value = group
         ll_lib.cell(row=r, column=16).value = mr
         ll_lib.cell(row=r, column=17).value = notes
+        # Wrap text on the Notes column so multi-sentence notes display
+        ll_lib.cell(row=r, column=17).alignment = Alignment(
+            horizontal="left", vertical="top", wrap_text=True
+        )
+        # Bump row height for wrapped notes
+        ll_lib.row_dimensions[r].height = 32
 
 
 def _write_seating_depth_static_values(wb):
