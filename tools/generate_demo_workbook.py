@@ -261,6 +261,8 @@ def main():
     # correctly; the user just can't change weights without re-running this.
     print("[6/7] Writing static composite scores + suggested-winner row 2")
     _write_static_composite_scores(wb)
+    _write_seating_depth_static_values(wb)
+    _populate_ballistics_dope(wb)
 
     # Force Excel to do a full recalc when opening this workbook. Without this,
     # Excel may trust the (stale or empty) cached values from openpyxl's save
@@ -441,6 +443,145 @@ def _write_static_composite_scores(wb):
         wb["Seating Depth"]["O2"].fill = red_yellow_fill
         wb["Seating Depth"]["O2"].font = yellow_font
         wb["Seating Depth"]["O2"].alignment = centered
+
+
+def _populate_ballistics_dope(wb):
+    """Fill the Ballistics tab DOPE table with realistic 6.5 Creedmoor numbers.
+
+    Values are typical for a 140gr ELD-M at 2780 fps muzzle velocity with a
+    100-yard zero, at sea level (G7 BC ≈ 0.323). User-fill cells:
+      B = Mils Elev
+      D = MOA Elev
+      F = Wind Mils / 10 mph
+      H = Wind MOA / 10 mph
+      J = TOF (sec)
+    The C/E/G/I "Clicks" columns are formulas that compute from B/D/F/H.
+    """
+    if "Ballistics" not in wb.sheetnames:
+        return
+    b = wb["Ballistics"]
+
+    # (yards, mils_elev, moa_elev, wind_mils_per_10mph, wind_moa_per_10mph, tof_sec)
+    dope = [
+        (100,  0.0,   0.0,   0.0,  0.0,  0.11),
+        (200,  0.1,   0.5,   0.3,  1.0,  0.23),
+        (300,  0.6,   2.0,   0.5,  1.7,  0.36),
+        (400,  1.2,   4.1,   0.7,  2.4,  0.50),
+        (500,  2.0,   6.9,   0.9,  3.1,  0.66),
+        (600,  2.8,   9.6,   1.2,  4.1,  0.83),
+        (700,  3.7,  12.7,   1.5,  5.1,  1.02),
+        (800,  4.8,  16.5,   1.8,  6.2,  1.23),
+        (900,  6.0,  20.6,   2.1,  7.2,  1.46),
+        (1000, 7.3,  25.0,   2.4,  8.2,  1.71),
+    ]
+    # Rows 9-18 correspond to 100-1000 yards
+    for i, (yd, mils, moa, wind_mils, wind_moa, tof) in enumerate(dope):
+        r = 9 + i
+        b.cell(row=r, column=2).value = mils       # B = Mils Elev
+        b.cell(row=r, column=4).value = moa        # D = MOA Elev
+        b.cell(row=r, column=6).value = wind_mils  # F = Wind Mils / 10 mph
+        b.cell(row=r, column=8).value = wind_moa   # H = Wind MOA / 10 mph
+        b.cell(row=r, column=10).value = tof       # J = TOF (sec)
+
+
+def _write_seating_depth_static_values(wb):
+    """Write static composite scores + suggested-winner cells for the Seating Depth tab.
+
+    Same shape as _write_static_composite_scores but targeting Seating Depth's
+    analysis block at rows 30-37 (vs Charts' 18-25), with Seating Depth's
+    default weights (0.15 Vel / 0.25 SD / 0.25 MR / 0.35 Vert).
+    """
+    if "Seating Depth" not in wb.sheetnames:
+        return
+    sd = wb["Seating Depth"]
+
+    # SD-specific weights (Seating Depth!C28/F28/I28/L28 = 0.15/0.25/0.25/0.35)
+    w_vel, w_sd, w_mr, w_vert = 0.15, 0.25, 0.25, 0.35
+
+    # Pair each SD chronograph record with its group record (matched by Tag)
+    by_tag = {g["Tag"]: g for g in GROUP_RECORDS}
+    candidates = []
+    for chrono in SEATING_LADDER:
+        grp = by_tag.get(chrono["Tag"])
+        if not grp:
+            continue
+        candidates.append({
+            "jump": chrono["ChargeOrJump"],
+            "vel": chrono["AvgVel"],
+            "sd": chrono["SD"],
+            "group": grp["GroupIn"],
+            "mr": grp["MRIn"],
+            "vert": grp["SDVertIn"],
+        })
+
+    if not candidates:
+        return
+
+    def normalize(values):
+        lo, hi = min(values), max(values)
+        rng = hi - lo
+        return [0.0 if rng == 0 else (v - lo) / rng for v in values]
+
+    # Note: SD uses GROUP as the "Vel" proxy too (D column in SD's analysis block)
+    norm_group = normalize([c["group"] for c in candidates])
+    norm_sd = normalize([c["sd"] for c in candidates])
+    norm_mr = normalize([c["mr"] for c in candidates])
+    norm_vert = normalize([c["vert"] for c in candidates])
+
+    composites = [
+        w_vel * ng + w_sd * nsd + w_mr * nmr + w_vert * nvert
+        for ng, nsd, nmr, nvert in zip(norm_group, norm_sd, norm_mr, norm_vert)
+    ]
+    composites = [max(0.001, c) for c in composites]
+
+    winner_idx = composites.index(min(composites))
+    winner = candidates[winner_idx]
+
+    def best_idx(values):
+        return values.index(min(values))
+
+    bests = {
+        "Vel ✓": best_idx([c["group"] for c in candidates]),
+        "SD ✓": best_idx([c["sd"] for c in candidates]),
+        "MR ✓": best_idx([c["mr"] for c in candidates]),
+        "Vert ✓": best_idx([c["vert"] for c in candidates]),
+    }
+
+    # --- Write Seating Depth row 2 — suggested-jump summary ---
+    sd["D2"].value = winner["jump"]
+    sd["G2"].value = winner["vel"]
+    sd["J2"].value = winner["sd"]
+    sd["L2"].value = winner["mr"]
+    sd["N2"].value = winner["vert"]
+
+    # --- Write Seating Depth O2 — static "Best in: <tags>" ---
+    winner_tags = " ".join(tag for tag, i in bests.items() if i == winner_idx) or "Composite ✓"
+    sd["O2"].value = f"Best in:  {winner_tags}"
+    # Styling already applied in _write_static_composite_scores
+
+    # --- Write SD!L30:L37 — composite scores (5 candidates + 3 #N/A) ---
+    for i, comp in enumerate(composites):
+        sd.cell(row=30 + i, column=12).value = round(comp, 3)
+    for r in range(30 + len(composites), 38):
+        sd.cell(row=r, column=12).value = "=NA()"
+
+    # --- Write SD!A30:A37 — candidate jump values (since template formulas
+    # may reference Load Log which is for charges, not jumps) ---
+    for i, c in enumerate(candidates):
+        sd.cell(row=30 + i, column=1).value = c["jump"]
+    for r in range(30 + len(candidates), 38):
+        sd.cell(row=r, column=1).value = "=NA()"
+
+    # --- Write SD!D-G analysis metrics for each candidate ---
+    # D=Vel-proxy(group), E=SD, F=MR, G=Vert
+    for i, c in enumerate(candidates):
+        sd.cell(row=30 + i, column=4).value = c["group"]   # D
+        sd.cell(row=30 + i, column=5).value = c["sd"]      # E
+        sd.cell(row=30 + i, column=6).value = c["mr"]      # F
+        sd.cell(row=30 + i, column=7).value = c["vert"]    # G
+    for r in range(30 + len(candidates), 38):
+        for col in (4, 5, 6, 7):
+            sd.cell(row=r, column=col).value = "=NA()"
 
 
 def _populate_demo_headers(wb):
