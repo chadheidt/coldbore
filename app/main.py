@@ -437,6 +437,13 @@ class MainWindow(QMainWindow):
                                   theme.PAD_WINDOW, theme.PAD_WINDOW)
         layout.setSpacing(theme.GAP_LARGE)
 
+        # v0.14 demo-mode banner — shows ONLY when the app is running unlicensed
+        # (no valid key). Persistent, never auto-dismisses. Has a "Purchase"
+        # button that opens loadscope.app/.
+        if app_license.is_demo_mode():
+            demo_banner = self._build_demo_banner()
+            layout.addWidget(demo_banner)
+
         # Tools-menu banner — points new users at the menu bar (which is in
         # macOS's system menu, easy to overlook). Dismissed by clicking the X;
         # acceptance saved to config so it doesn't keep popping back.
@@ -597,6 +604,13 @@ class MainWindow(QMainWindow):
         pocket_card_action.setMenuRole(QAction.NoRole)
         pocket_card_action.triggered.connect(self._print_pocket_card)
         wb_menu.addAction(pocket_card_action)
+
+        wb_menu.addSeparator()
+
+        demo_tour_action = QAction("Replay the Demo Tour…", self)
+        demo_tour_action.setMenuRole(QAction.NoRole)
+        demo_tour_action.triggered.connect(self._open_demo_tour)
+        wb_menu.addAction(demo_tour_action)
 
         # ===== 2. FOLDERS =====
         folders_menu = mbar.addMenu("Folders")
@@ -827,6 +841,104 @@ class MainWindow(QMainWindow):
         self._log("\nStaged list cleared. (Files remain in import folders.)", color=theme.LOG_WARNING)
         self._refresh_status()
 
+    def _build_demo_banner(self):
+        """Yellow/orange banner shown at the top of the main window when the
+        app is in demo mode. Has the Purchase a License CTA. Non-dismissable —
+        the banner is the constant "you're previewing" cue.
+        """
+        banner = QWidget()
+        banner.setObjectName("demoBanner")
+        banner.setStyleSheet(
+            f"#demoBanner {{ "
+            f"  background-color: {theme.ACCENT}; "
+            f"  border-radius: 6px; "
+            f"}}"
+        )
+        row = QHBoxLayout(banner)
+        row.setContentsMargins(14, 10, 14, 10)
+        row.setSpacing(12)
+
+        msg = QLabel(
+            "DEMO MODE — You're previewing Loadscope with sample data. "
+            "Purchase a license to import your own CSVs."
+        )
+        msg_font = QFont()
+        msg_font.setPointSize(12)
+        msg_font.setWeight(QFont.DemiBold)
+        msg.setFont(msg_font)
+        msg.setStyleSheet("color: white;")
+        msg.setWordWrap(True)
+        row.addWidget(msg, stretch=1)
+
+        purchase_btn = QPushButton("Purchase a License")
+        purchase_btn.setMinimumHeight(34)
+        pf = QFont()
+        pf.setPointSize(12)
+        pf.setWeight(QFont.DemiBold)
+        purchase_btn.setFont(pf)
+        purchase_btn.setStyleSheet(
+            "QPushButton { background-color: white; color: " + theme.ACCENT + "; "
+            "border: none; border-radius: 4px; padding: 6px 14px; }"
+            "QPushButton:hover { background-color: #f4f4f4; }"
+        )
+        purchase_btn.clicked.connect(self._open_purchase_page)
+        row.addWidget(purchase_btn)
+
+        return banner
+
+    def _open_purchase_page(self):
+        """Open the loadscope.app purchase page in the default browser."""
+        import webbrowser
+        webbrowser.open(app_license.PURCHASE_URL)
+        self._log("Opened purchase page in browser.", color=theme.LOG_SUCCESS)
+
+    def _show_demo_upgrade_prompt(self, reason="general"):
+        """Modal that gates a real action behind a license purchase.
+
+        `reason` lets us tailor the message slightly:
+            'csv_drop'  — user tried to drop real CSVs in demo mode
+            'general'   — generic "this feature needs a license"
+        """
+        if reason == "csv_drop":
+            title = "Import requires a license"
+            body = (
+                "You're in demo mode. Importing your own Garmin Xero and "
+                "BallisticX CSVs requires a Loadscope license.\n\n"
+                "Want to continue with your own data? Purchase a license — "
+                "your demo workbook stays read-only, and a fresh empty "
+                "workbook takes its place."
+            )
+        else:
+            title = "Feature requires a license"
+            body = (
+                "This feature requires a Loadscope license. You're currently "
+                "in demo mode."
+            )
+
+        box = QMessageBox(self)
+        box.setIcon(QMessageBox.Information)
+        box.setWindowTitle(title)
+        box.setText(body)
+        purchase = box.addButton("Purchase a License", QMessageBox.AcceptRole)
+        enter_key = box.addButton("Enter License Key…", QMessageBox.ActionRole)
+        cancel = box.addButton("Not now", QMessageBox.RejectRole)
+        box.setDefaultButton(purchase)
+        box.exec_()
+        clicked = box.clickedButton()
+        if clicked is purchase:
+            self._open_purchase_page()
+        elif clicked is enter_key:
+            from license_dialog import show_license_dialog
+            if show_license_dialog(parent=self):
+                # Successfully entered key — refresh banner state by warning
+                # the user to restart for full effect.
+                QMessageBox.information(
+                    self,
+                    "License accepted",
+                    "Your license key is saved. Restart Loadscope to "
+                    "exit demo mode and use your own data.",
+                )
+
     def handle_drops(self, paths):
         """Called when the user drops files into the drop zone. Stages but does NOT import.
 
@@ -834,7 +946,15 @@ class MainWindow(QMainWindow):
         handles it. The matching parser's IMPORT_FOLDER determines where the
         file is copied. New parsers added under app/parsers/ work automatically
         without changes here.
+
+        v0.14 demo-mode gating: in demo mode, real CSV drops trigger an upgrade
+        modal instead of staging. The demo tour uses bundled demo CSVs through
+        a different code path that bypasses this gate.
         """
+        if app_license.is_demo_mode():
+            self._show_demo_upgrade_prompt(reason="csv_drop")
+            return
+
         self._log("")
         self._log(f"Staging {len(paths)} dropped item(s)…", color=theme.LOG_SUCCESS)
 
@@ -1706,6 +1826,50 @@ class MainWindow(QMainWindow):
             color=theme.LOG_SUCCESS,
         )
 
+    def _open_demo_tour(self):
+        """Open the guided demo tour panel beside Excel.
+
+        Walks the user through Load Log, Charts, Seating Depth, Ballistics,
+        Pocket Range Card, and Load Library with timed narration. Used both
+        from the Workbook menu (any user can replay) and from the first-launch
+        trial flow (auto-fires once).
+        """
+        wb_path = self._selected_workbook()
+        if not wb_path or not os.path.isfile(wb_path):
+            QMessageBox.information(
+                self,
+                "No workbook",
+                "Pick a workbook first so the tour has something to walk you through.",
+            )
+            return
+        try:
+            from demo_tour import DemoTourPanel
+        except ImportError as e:
+            QMessageBox.critical(
+                self,
+                "Couldn't load demo tour",
+                f"demo_tour module is missing or broken:\n\n{e}",
+            )
+            return
+
+        def _on_purchase():
+            # Placeholder until v0.14 commerce ships — opens the marketing site.
+            import webbrowser
+            webbrowser.open("https://loadscope.app/")
+            self._log("Opened purchase page in browser.", color=theme.LOG_SUCCESS)
+
+        self._demo_tour_panel = DemoTourPanel(
+            wb_path,
+            on_purchase=_on_purchase,
+            parent=None,
+        )
+        # Left-half geometry on a 1440-wide screen. The panel itself can be
+        # repositioned by the user; this is just the initial layout.
+        self._demo_tour_panel.setGeometry(0, 25, 720, 875)
+        self._demo_tour_panel.show()
+        self._demo_tour_panel.start()
+        self._log("Demo tour started.", color=theme.LOG_SUCCESS)
+
     def _print_workbook(self):
         """Open the active workbook in Excel and trigger the Print dialog.
         Uses AppleScript to send Excel a print command after opening the file.
@@ -2281,15 +2445,33 @@ def main():
     except ImportError:
         pass  # safe to skip if module isn't available for some reason
 
-    # License gate — beta lockdown. Each tester has a unique key; without
-    # a valid stored key the app refuses to proceed past this point.
-    # Re-validates the stored key on every launch so revocations land
-    # automatically via the auto-updater.
+    # License gate — v0.14 changed from a hard wall to a soft splash. On the
+    # very first launch (no valid key, splash never dismissed) we offer the
+    # user three choices: try the demo, enter a license key, or purchase. On
+    # subsequent launches the user just lands directly in whichever mode they
+    # have — licensed users skip the splash entirely.
     state = app_license.license_state()
-    if state != "valid":
-        if not show_license_dialog(revoked=(state == "invalid")):
-            # User clicked Quit — don't proceed
-            return 0
+    if state != "valid" and app_license.should_show_first_launch_splash():
+        from splash_dialog import (
+            FirstLaunchSplash,
+            CHOICE_DEMO,
+            CHOICE_LICENSE,
+            CHOICE_PURCHASE,
+            CHOICE_CANCEL,
+        )
+        splash = FirstLaunchSplash()
+        splash.exec_()
+        choice = splash.choice
+        if choice == CHOICE_LICENSE:
+            # User wants to enter a key — open the existing license dialog.
+            # If they enter a valid key, license_state() becomes 'valid' on
+            # the next call. If they Cancel out, fall through to demo mode.
+            show_license_dialog(revoked=(state == "invalid"))
+        # Whatever they picked (or didn't), mark the splash dismissed so
+        # they don't see it every launch.
+        app_license.mark_first_launch_splash_seen()
+    # No hard quit gate anymore — the app always proceeds, either in
+    # licensed mode or demo mode.
 
     # First-launch disclaimer — must be accepted before the user can use the app.
     # Tracked in config; user only sees it once unless DISCLAIMER_VERSION bumps.

@@ -98,3 +98,67 @@ def save_license(key):
     cfg = app_config.load_config()
     cfg["license_key"] = normalize_key(key)
     app_config.save_config(cfg)
+
+
+# ---------------------------------------------------------------------------
+# v0.14 demo-mode helpers
+#
+# Loadscope ships with a built-in trial that doesn't require a license key.
+# Anyone without a license key gets the demo workbook + guided tour and CAN'T
+# import their own CSVs (drop zone is gated). Buying a license unlocks the
+# real app. The helpers below are the high-level surface the rest of the app
+# uses to decide demo-vs-licensed behavior, without re-implementing the
+# license_state() granularity in every call site.
+# ---------------------------------------------------------------------------
+
+APP_MODE_LICENSED = "licensed"
+APP_MODE_DEMO = "demo"
+
+# Where the Purchase a License button on the splash + tour panel points.
+# Updated when the Lemon Squeezy product page is live. For now, the marketing
+# site landing page collects emails for the buyer list.
+PURCHASE_URL = "https://loadscope.app/"
+
+
+def app_mode():
+    """High-level mode for the rest of the app.
+
+    Returns one of:
+        'licensed' — user has a valid (still-accepted) license key on file
+        'demo'     — no key, or key has been revoked; show demo UX
+    """
+    return APP_MODE_LICENSED if is_licensed() else APP_MODE_DEMO
+
+
+def is_demo_mode():
+    """Convenience: True iff app_mode() == 'demo'."""
+    return app_mode() == APP_MODE_DEMO
+
+
+def should_show_first_launch_splash():
+    """True iff: in demo mode AND user hasn't dismissed the splash yet.
+
+    The splash offers Try Demo / Enter License Key / Purchase. Once the user
+    picks any of those, mark_first_launch_splash_seen() is called and the
+    splash never appears again unless the user explicitly invokes
+    "Replay the Demo Tour…" from the Workbook menu.
+    """
+    if is_licensed():
+        return False
+    cfg = app_config.load_config()
+    return not cfg.get("first_launch_splash_seen", False)
+
+
+def mark_first_launch_splash_seen():
+    """Persist the fact that the splash has been dismissed."""
+    cfg = app_config.load_config()
+    cfg["first_launch_splash_seen"] = True
+    app_config.save_config(cfg)
+
+
+def reset_first_launch_splash():
+    """Re-enable the splash on next launch. Used by 'Replay the Demo Tour…'
+    when the user wants the splash again (testing, or showing a buddy)."""
+    cfg = app_config.load_config()
+    cfg["first_launch_splash_seen"] = False
+    app_config.save_config(cfg)

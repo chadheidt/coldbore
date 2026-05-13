@@ -6,6 +6,14 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## 🔄 If Claude crashes mid-build, paste THIS into a fresh session
+
+> Continue v0.14 — read `project_loadscope_v014_plan` memory and pick up where we left off.
+
+That tells future-Claude to load the v0.14 design memory (where we locked in demo mode + commerce design on 2026-05-13) and resume the build without re-deriving anything.
+
+---
+
 ## ✅ LOADSCOPE v0.13.3 SHIPPED — May 13, 2026 (workbook polish + new features)
 
 Big one. 10-shot sessions (was 7), new Pocket Range Card (4×6 printable DOPE card), Save Suggested Load to Library, Reset Composite Weights, scope-click dropdown for automatic click-count math, After Range Day rewrite, and ~50 smaller workbook polish items.
