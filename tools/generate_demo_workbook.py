@@ -413,11 +413,55 @@ def _write_static_composite_scores(wb):
     # selection matches our data.
     ch["B100"].value = "test"
 
-    # --- Write Charts L18:L22 + R18:R22 ---
+    # --- Write Charts D18:K22 — metric + normalized blocks for each candidate ---
+    # In test mode (which we force above):
+    #   D = Avg Vel (fps)         H = Norm Spread (normalized D)
+    #   E = SD (fps)              I = Norm SD
+    #   F = Mean Radius (MOA)     J = Norm MR
+    #   G = SD-Vert (MOA)         K = Norm SD-Vert
+    # At 100 yd, 1 MOA ≈ 1 inch, so MR/Vert inches ≈ MOA. Fine for demo realism.
+    for i, c in enumerate(candidates):
+        r = 18 + i
+        ch.cell(row=r, column=4).value = c["vel"]    # D = Avg Vel
+        ch.cell(row=r, column=5).value = c["sd"]     # E = SD
+        ch.cell(row=r, column=6).value = c["mr"]     # F = MR (≈MOA at 100yd)
+        ch.cell(row=r, column=7).value = c["vert"]   # G = SD-Vert (≈MOA at 100yd)
+        # Normalized values (already computed above as norm_group/norm_sd/norm_mr/norm_vert)
+        ch.cell(row=r, column=8).value = round(norm_group[i], 3)  # H
+        ch.cell(row=r, column=9).value = round(norm_sd[i], 3)     # I
+        ch.cell(row=r, column=10).value = round(norm_mr[i], 3)    # J
+        ch.cell(row=r, column=11).value = round(norm_vert[i], 3)  # K
+
+    # --- Write Charts B18:C22 — Low / High of each candidate's shot velocities ---
+    # Chad expects these populated even though template formula returns "" in
+    # test mode. Showing low/high gives prospects a quick visual on each
+    # charge's velocity spread.
+    chronograph_by_tag = {c["Tag"]: c for c in POWDER_LADDER}
+    for i, c in enumerate(candidates):
+        chrono = None
+        # Find the corresponding chronograph record by matching charge
+        for entry in POWDER_LADDER:
+            if entry["ChargeOrJump"] == c["charge"]:
+                chrono = entry
+                break
+        if chrono and chrono.get("Shots"):
+            shots = [s for s in chrono["Shots"] if s is not None]
+            if shots:
+                ch.cell(row=18 + i, column=2).value = min(shots)  # B = Low
+                ch.cell(row=18 + i, column=3).value = max(shots)  # C = High
+
+    # --- Write Charts L18:L22 + R18:R22 (composite + per-row best-in tags) ---
     for i, (comp, label) in enumerate(zip(composites, best_in_labels)):
         ch.cell(row=18 + i, column=12).value = round(comp, 3)  # L column
         if label:
             ch.cell(row=18 + i, column=18).value = label  # R column
+
+    # --- Fix D4/E4 — clear odd dark-blue + white fills that show empty in test mode ---
+    # Template styles these for the window-mode "Charge: Spread:" label area.
+    # In test mode the formulas return "" but the fills stay, looking unfinished.
+    no_fill = PatternFill(fill_type=None)
+    ch["D4"].fill = no_fill
+    ch["E4"].fill = no_fill
 
     # --- Restore M2 styling (red fill + yellow font) + write static "Best in: <label>" ---
     # apply_workbook_repairs writes a formula to M2 that uses AGGREGATE +
@@ -573,15 +617,36 @@ def _write_seating_depth_static_values(wb):
         sd.cell(row=r, column=1).value = "=NA()"
 
     # --- Write SD!D-G analysis metrics for each candidate ---
-    # D=Vel-proxy(group), E=SD, F=MR, G=Vert
+    # D=Velocity (group/spread proxy in template), E=SD, F=MR, G=Vert
     for i, c in enumerate(candidates):
-        sd.cell(row=30 + i, column=4).value = c["group"]   # D
-        sd.cell(row=30 + i, column=5).value = c["sd"]      # E
-        sd.cell(row=30 + i, column=6).value = c["mr"]      # F
-        sd.cell(row=30 + i, column=7).value = c["vert"]    # G
+        sd.cell(row=30 + i, column=4).value = c["vel"]     # D = Vel
+        sd.cell(row=30 + i, column=5).value = c["sd"]      # E = SD
+        sd.cell(row=30 + i, column=6).value = c["mr"]      # F = MR
+        sd.cell(row=30 + i, column=7).value = c["vert"]    # G = SD-Vert
     for r in range(30 + len(candidates), 38):
         for col in (4, 5, 6, 7):
             sd.cell(row=r, column=col).value = "=NA()"
+
+    # --- Write SD!H-K analysis normalized values ---
+    for i in range(len(candidates)):
+        r = 30 + i
+        sd.cell(row=r, column=8).value = round(norm_group[i], 3)  # H = Norm Spread (vel)
+        sd.cell(row=r, column=9).value = round(norm_sd[i], 3)     # I = Norm SD
+        sd.cell(row=r, column=10).value = round(norm_mr[i], 3)    # J = Norm MR
+        sd.cell(row=r, column=11).value = round(norm_vert[i], 3)  # K = Norm SD-Vert
+
+    # --- Write SD!B/C low/high per candidate (from chronograph Shots list) ---
+    for i, c in enumerate(candidates):
+        chrono = None
+        for entry in SEATING_LADDER:
+            if entry["ChargeOrJump"] == c["jump"]:
+                chrono = entry
+                break
+        if chrono and chrono.get("Shots"):
+            shots = [s for s in chrono["Shots"] if s is not None]
+            if shots:
+                sd.cell(row=30 + i, column=2).value = min(shots)  # B = Low
+                sd.cell(row=30 + i, column=3).value = max(shots)  # C = High
 
 
 def _populate_demo_headers(wb):
