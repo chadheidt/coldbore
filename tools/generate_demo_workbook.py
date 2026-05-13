@@ -420,17 +420,18 @@ def _write_static_composite_scores(wb):
     #   F = Mean Radius (MOA)     J = Norm MR
     #   G = SD-Vert (MOA)         K = Norm SD-Vert
     # At 100 yd, 1 MOA ≈ 1 inch, so MR/Vert inches ≈ MOA. Fine for demo realism.
+    # Floor normalized values at 0.001 too — same Excel-Mac format issue as
+    # composites (the winner's 0 gets hidden by `[=NA()]"";0.000`).
     for i, c in enumerate(candidates):
         r = 18 + i
         ch.cell(row=r, column=4).value = c["vel"]    # D = Avg Vel
         ch.cell(row=r, column=5).value = c["sd"]     # E = SD
         ch.cell(row=r, column=6).value = c["mr"]     # F = MR (≈MOA at 100yd)
         ch.cell(row=r, column=7).value = c["vert"]   # G = SD-Vert (≈MOA at 100yd)
-        # Normalized values (already computed above as norm_group/norm_sd/norm_mr/norm_vert)
-        ch.cell(row=r, column=8).value = round(norm_group[i], 3)  # H
-        ch.cell(row=r, column=9).value = round(norm_sd[i], 3)     # I
-        ch.cell(row=r, column=10).value = round(norm_mr[i], 3)    # J
-        ch.cell(row=r, column=11).value = round(norm_vert[i], 3)  # K
+        ch.cell(row=r, column=8).value = round(max(0.001, norm_group[i]), 3)
+        ch.cell(row=r, column=9).value = round(max(0.001, norm_sd[i]), 3)
+        ch.cell(row=r, column=10).value = round(max(0.001, norm_mr[i]), 3)
+        ch.cell(row=r, column=11).value = round(max(0.001, norm_vert[i]), 3)
 
     # --- Write Charts B18:C22 — Low / High of each candidate's shot velocities ---
     # Chad expects these populated even though template formula returns "" in
@@ -462,6 +463,19 @@ def _write_static_composite_scores(wb):
     no_fill = PatternFill(fill_type=None)
     ch["D4"].fill = no_fill
     ch["E4"].fill = no_fill
+
+    # --- Write Charts row 3-5 winner-summary cells as STATIC values ---
+    # These cells normally hold ArrayFormulas (E5/G3/G4) or LOOKUP formulas
+    # (B3/E3) that Excel-Mac doesn't reliably recompute. Overwrite with the
+    # precomputed winner values. G5 ("Best in: <tag>") is hardcoded "MR ✓"
+    # in the template — overwrite with the full multi-tag winner label.
+    winner_for_charts = candidates[winner_idx]
+    ch["B3"].value = winner_for_charts["charge"]    # Suggested charge
+    ch["E3"].value = round(composites[winner_idx], 3)  # Composite
+    ch["G3"].value = winner_for_charts["sd"]         # SD
+    ch["G4"].value = winner_for_charts["mr"]         # Group/MR (label F4 says "Group:")
+    ch["E5"].value = winner_for_charts["vel"]        # Avg Vel
+    ch["G5"].value = best_in_labels[winner_idx] or "Composite ✓"  # Best-in tags
 
     # --- Restore M2 styling (red fill + yellow font) + write static "Best in: <label>" ---
     # apply_workbook_repairs writes a formula to M2 that uses AGGREGATE +
@@ -627,13 +641,13 @@ def _write_seating_depth_static_values(wb):
         for col in (4, 5, 6, 7):
             sd.cell(row=r, column=col).value = "=NA()"
 
-    # --- Write SD!H-K analysis normalized values ---
+    # --- Write SD!H-K analysis normalized values (floored at 0.001 for display) ---
     for i in range(len(candidates)):
         r = 30 + i
-        sd.cell(row=r, column=8).value = round(norm_group[i], 3)  # H = Norm Spread (vel)
-        sd.cell(row=r, column=9).value = round(norm_sd[i], 3)     # I = Norm SD
-        sd.cell(row=r, column=10).value = round(norm_mr[i], 3)    # J = Norm MR
-        sd.cell(row=r, column=11).value = round(norm_vert[i], 3)  # K = Norm SD-Vert
+        sd.cell(row=r, column=8).value = round(max(0.001, norm_group[i]), 3)
+        sd.cell(row=r, column=9).value = round(max(0.001, norm_sd[i]), 3)
+        sd.cell(row=r, column=10).value = round(max(0.001, norm_mr[i]), 3)
+        sd.cell(row=r, column=11).value = round(max(0.001, norm_vert[i]), 3)
 
     # --- Write SD!B/C low/high per candidate (from chronograph Shots list) ---
     for i, c in enumerate(candidates):

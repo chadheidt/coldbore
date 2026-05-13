@@ -853,6 +853,259 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
         print("  Workbook repairs applied:")
         for f in fixes:
             print(f"    - {f}")
+
+    # v0.14 fix — Excel-Mac doesn't reliably recompute the AGGREGATE-based
+    # composite-score formula chain after an openpyxl save. Precompute the
+    # static values in Python and write them as cell values so the user
+    # opens the workbook to a fully-rendered analysis grid, not a sea of
+    # empty cells that "would" compute if Excel recalced.
+    static_fixes = _write_static_analysis_values(wb, chronograph_records or [], group_records or [])
+    if static_fixes:
+        fixes.extend(static_fixes)
+        print("Wrote static analysis values:")
+        for f in static_fixes:
+            print(f"    - {f}")
+
+    return fixes
+
+
+def _write_static_analysis_values(wb, chronograph_records, group_records):
+    """Precompute composite scores + Best-in tags + normalized metrics and
+    write them as STATIC values to Charts + Load Log + Seating Depth.
+
+    Why: Excel-Mac doesn't reliably recompute the AGGREGATE-based composite
+    chain after openpyxl saves. Writing static values forces the right
+    display every time, at the cost of the user not being able to change
+    weights and see the recompute live (which they could do before only if
+    Excel happened to cooperate — many didn't).
+
+    Tags: powder ladder uses "P1"-"P10", seating depth uses "S1"-"S10".
+    Matched cross-record by Tag (chrono provides shots/SD/AvgVel, group
+    provides MR/SD-Vert/group size).
+    """
+    fixes = []
+    if not chronograph_records:
+        return fixes
+
+    # Build tag -> group_record map for fast lookup
+    group_by_tag = {g.get("Tag", ""): g for g in group_records}
+
+    # Partition chronograph records into powder-ladder (P*) vs seating-depth (S*)
+    pl_chrono = [c for c in chronograph_records if str(c.get("Tag", "")).startswith("P")]
+    sd_chrono = [c for c in chronograph_records if str(c.get("Tag", "")).startswith("S")]
+
+    if pl_chrono:
+        fixes.extend(_write_pl_static(wb, pl_chrono, group_by_tag))
+    if sd_chrono:
+        fixes.extend(_write_sd_static(wb, sd_chrono, group_by_tag))
+
+    return fixes
+
+
+def _pair_chrono_with_groups(chrono_records, group_by_tag):
+    """Build a list of unified candidate dicts (one per chrono record that
+    has a matching group record). Skip records without a group match —
+    they don't have the metrics needed for normalization."""
+    candidates = []
+    for c in chrono_records:
+        tag = c.get("Tag", "")
+        grp = group_by_tag.get(tag)
+        if not grp:
+            continue
+        # Skip rows with missing essential metrics
+        if c.get("AvgVel") in (None, "") or c.get("SD") in (None, ""):
+            continue
+        if grp.get("GroupIn") in (None, "") or grp.get("MRIn") in (None, ""):
+            continue
+        candidates.append({
+            "tag": tag,
+            "charge_or_jump": c.get("ChargeOrJump"),
+            "vel": c.get("AvgVel"),
+            "sd": c.get("SD"),
+            "group": grp.get("GroupIn"),
+            "mr": grp.get("MRIn"),
+            "vert": grp.get("SDVertIn") or 0,
+            "shots": [s for s in (c.get("Shots") or []) if s is not None],
+        })
+    return candidates
+
+
+def _normalize(values):
+    """Return 0-1 normalized values where 0 = best (smallest). Identical
+    values all return 0.0 (no spread to normalize)."""
+    if not values:
+        return []
+    lo, hi = min(values), max(values)
+    rng = hi - lo
+    return [0.0 if rng == 0 else (v - lo) / rng for v in values]
+
+
+def _compute_composites_and_bests(candidates, weights):
+    """Given candidates + (w_vel, w_sd, w_mr, w_vert) weights, return:
+        composites (floored at 0.001 so winner displays),
+        best_in_tags_per_row,
+        winner_idx
+    """
+    norm_group = _normalize([c["group"] for c in candidates])
+    norm_sd = _normalize([c["sd"] for c in candidates])
+    norm_mr = _normalize([c["mr"] for c in candidates])
+    norm_vert = _normalize([c["vert"] for c in candidates])
+    w_vel, w_sd, w_mr, w_vert = weights
+    composites = [
+        w_vel * ng + w_sd * nsd + w_mr * nmr + w_vert * nvert
+        for ng, nsd, nmr, nvert in zip(norm_group, norm_sd, norm_mr, norm_vert)
+    ]
+    composites = [max(0.001, c) for c in composites]
+
+    def best_idx(vals):
+        return vals.index(min(vals)) if vals else 0
+    bests = {
+        "Vel ✓": best_idx([c["group"] for c in candidates]),
+        "SD ✓": best_idx([c["sd"] for c in candidates]),
+        "MR ✓": best_idx([c["mr"] for c in candidates]),
+        "Vert ✓": best_idx([c["vert"] for c in candidates]),
+    }
+    tags_per_row = []
+    for i in range(len(candidates)):
+        tags = [t for t, idx in bests.items() if idx == i]
+        tags_per_row.append(" ".join(tags))
+    winner_idx = composites.index(min(composites))
+    return composites, tags_per_row, winner_idx, norm_group, norm_sd, norm_mr, norm_vert
+
+
+def _write_pl_static(wb, pl_chrono, group_by_tag):
+    """Powder ladder static-value writes targeting Load Log + Charts."""
+    fixes = []
+    candidates = _pair_chrono_with_groups(pl_chrono, group_by_tag)
+    if len(candidates) < 2:
+        return fixes  # need at least 2 to normalize
+
+    weights = (
+        DEFAULT_WEIGHTS_CHARTS["B11"],
+        DEFAULT_WEIGHTS_CHARTS["D11"],
+        DEFAULT_WEIGHTS_CHARTS["F11"],
+        DEFAULT_WEIGHTS_CHARTS["H11"],
+    )
+    composites, tags_per_row, winner_idx, ng, nsd, nmr, nvert = (
+        _compute_composites_and_bests(candidates, weights)
+    )
+    winner = candidates[winner_idx]
+    winner_tags = tags_per_row[winner_idx] or "Composite ✓"
+
+    if "Load Log" in wb.sheetnames:
+        ll = wb["Load Log"]
+        # Winner row 2 (D2/G2/J2/L2 + M2 Best in)
+        ll["D2"].value = winner["charge_or_jump"]
+        ll["G2"].value = winner["vel"]
+        ll["J2"].value = winner["sd"]
+        ll["L2"].value = winner["mr"]
+        ll["M2"].value = f"Best in:  {winner_tags}"
+        # O16:O25 — composite per row, pad with #N/A
+        for i, comp in enumerate(composites):
+            ll.cell(row=16 + i, column=15).value = round(comp, 3)
+        for r in range(16 + len(composites), 26):
+            ll.cell(row=r, column=15).value = "=NA()"
+        fixes.append(f"Load Log!D2/G2/J2/L2/M2 + O16:O{15+len(composites)} static values")
+
+    if "Charts" in wb.sheetnames:
+        ch = wb["Charts"]
+        # Pin to test mode for predictable row alignment
+        ch["B100"].value = "test"
+        # Row 3-5 winner-summary cells (replace ArrayFormulas + hardcoded G5)
+        ch["B3"].value = winner["charge_or_jump"]
+        ch["E3"].value = round(composites[winner_idx], 3)
+        ch["G3"].value = winner["sd"]
+        ch["G4"].value = winner["mr"]
+        ch["E5"].value = winner["vel"]
+        ch["G5"].value = winner_tags
+        # Analysis grid rows 18-25 (floor normalized at 0.001 so 0s display)
+        for i, c in enumerate(candidates):
+            r = 18 + i
+            if c["shots"]:
+                ch.cell(row=r, column=2).value = min(c["shots"])  # B Low
+                ch.cell(row=r, column=3).value = max(c["shots"])  # C High
+            ch.cell(row=r, column=4).value = c["vel"]
+            ch.cell(row=r, column=5).value = c["sd"]
+            ch.cell(row=r, column=6).value = c["mr"]
+            ch.cell(row=r, column=7).value = c["vert"]
+            ch.cell(row=r, column=8).value = round(max(0.001, ng[i]), 3)
+            ch.cell(row=r, column=9).value = round(max(0.001, nsd[i]), 3)
+            ch.cell(row=r, column=10).value = round(max(0.001, nmr[i]), 3)
+            ch.cell(row=r, column=11).value = round(max(0.001, nvert[i]), 3)
+            ch.cell(row=r, column=12).value = round(composites[i], 3)
+            if tags_per_row[i]:
+                ch.cell(row=r, column=18).value = tags_per_row[i]
+        # Sorted Vel-vs-Charge helper (T18:U25)
+        sorted_pairs = sorted([(c["charge_or_jump"], c["vel"]) for c in candidates])
+        for i, (chg, vel) in enumerate(sorted_pairs):
+            ch.cell(row=18 + i, column=20).value = chg
+            ch.cell(row=18 + i, column=21).value = vel
+        for r in range(18 + len(sorted_pairs), 26):
+            ch.cell(row=r, column=20).value = "=NA()"
+            ch.cell(row=r, column=21).value = "=NA()"
+        fixes.append(f"Charts!B-L18:25 + R18:25 + T-U18:25 static values ({len(candidates)} candidates)")
+
+    return fixes
+
+
+def _write_sd_static(wb, sd_chrono, group_by_tag):
+    """Seating depth static-value writes targeting Seating Depth sheet."""
+    fixes = []
+    candidates = _pair_chrono_with_groups(sd_chrono, group_by_tag)
+    if len(candidates) < 2:
+        return fixes
+
+    weights = (
+        DEFAULT_WEIGHTS_SEATING_DEPTH["C28"],
+        DEFAULT_WEIGHTS_SEATING_DEPTH["F28"],
+        DEFAULT_WEIGHTS_SEATING_DEPTH["I28"],
+        DEFAULT_WEIGHTS_SEATING_DEPTH["L28"],
+    )
+    composites, tags_per_row, winner_idx, ng, nsd, nmr, nvert = (
+        _compute_composites_and_bests(candidates, weights)
+    )
+    winner = candidates[winner_idx]
+    winner_tags = tags_per_row[winner_idx] or "Composite ✓"
+
+    if "Seating Depth" not in wb.sheetnames:
+        return fixes
+
+    sd = wb["Seating Depth"]
+    # Winner row 2
+    sd["D2"].value = winner["charge_or_jump"]
+    sd["G2"].value = winner["vel"]
+    sd["J2"].value = winner["sd"]
+    sd["L2"].value = winner["mr"]
+    sd["N2"].value = winner["vert"]
+    sd["O2"].value = f"Best in:  {winner_tags}"
+    # O column composite per row (rows 16-25), pad #N/A
+    for i, comp in enumerate(composites):
+        sd.cell(row=16 + i, column=15).value = round(comp, 3)
+    for r in range(16 + len(composites), 26):
+        sd.cell(row=r, column=15).value = "=NA()"
+    # Analysis grid rows 30-37
+    for i, c in enumerate(candidates):
+        r = 30 + i
+        sd.cell(row=r, column=1).value = c["charge_or_jump"]
+        if c["shots"]:
+            sd.cell(row=r, column=2).value = min(c["shots"])
+            sd.cell(row=r, column=3).value = max(c["shots"])
+        sd.cell(row=r, column=4).value = c["vel"]
+        sd.cell(row=r, column=5).value = c["sd"]
+        sd.cell(row=r, column=6).value = c["mr"]
+        sd.cell(row=r, column=7).value = c["vert"]
+        # Floor normalized values at 0.001 so winner's 0 displays (Excel
+        # number format `[=NA()]"";0.000` appears to hide exactly-zero)
+        sd.cell(row=r, column=8).value = round(max(0.001, ng[i]), 3)
+        sd.cell(row=r, column=9).value = round(max(0.001, nsd[i]), 3)
+        sd.cell(row=r, column=10).value = round(max(0.001, nmr[i]), 3)
+        sd.cell(row=r, column=11).value = round(max(0.001, nvert[i]), 3)
+        sd.cell(row=r, column=12).value = round(composites[i], 3)
+    for r in range(30 + len(candidates), 38):
+        for col in (1, 4, 5, 6, 7, 8, 9, 10, 11, 12):
+            sd.cell(row=r, column=col).value = "=NA()"
+    fixes.append(f"Seating Depth row 2 + O16:O{15+len(composites)} + A-L30:37 static values ({len(candidates)} candidates)")
+
     return fixes
 
 
