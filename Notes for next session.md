@@ -8,9 +8,13 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ## 🔄 If Claude crashes mid-build, paste THIS into a fresh session
 
-> Continue v0.14 — read `project_loadscope_v014_plan` memory and pick up where we left off.
+> Continue v0.14 — checkout the `v0.14-demo-mode` branch and read `project_loadscope_v014_inflight` memory for where we left off.
 
-That tells future-Claude to load the v0.14 design memory (where we locked in demo mode + commerce design on 2026-05-13) and resume the build without re-deriving anything.
+That tells future-Claude:
+1. **`git checkout v0.14-demo-mode`** — the in-progress v0.14 work lives on a feature branch (NOT main). Main is stable at v0.13.3.
+2. **Read the inflight memory** — has the precise next-step list (Seating Depth static values, Ballistics DOPE, apply_workbook_repairs port, commerce decisions, etc).
+
+The original design rationale lives in the `project_loadscope_v014_plan` memory (where we locked in demo mode + commerce design on 2026-05-13).
 
 ---
 
