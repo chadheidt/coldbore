@@ -934,6 +934,17 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
         if not ws["F7"].value:
             ws["F7"].value = "Turret:"
             fixes.append(f"{sheet_name}!F7: added 'Turret:' label for G7 dropdown")
+        # Ensure G7:J7 merge exists (Load Log already has it from the
+        # template; Seating Depth doesn't, leaving G/H/I/J as four
+        # separate cells which looks broken next to row 6's merge).
+        g7_merge_present = False
+        for r in ws.merged_cells.ranges:
+            if r.min_row == 7 and r.max_row == 7 and r.min_col == 7 and r.max_col == 10:
+                g7_merge_present = True
+                break
+        if not g7_merge_present:
+            ws.merge_cells("G7:J7")
+            fixes.append(f"{sheet_name}!G7:J7: added missing merge for turret dropdown")
         # Match row 7 height + fills to row 5/6 (rifle-setup block)
         ws.row_dimensions[7].height = 31.5
         # F7 = label cell
@@ -951,31 +962,42 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
         for coord in ("G7", "H7", "I7", "J7"):
             ws[coord].border = rifle_border
 
-    # v0.14 fix — A28 (SD) / A12 (Charts) "Reset weights" cells use
-    # shrink_to_fit which makes the text painfully small in narrow column A.
-    # Switch to wrap_text + bumped row height so the font stays readable.
+    # v0.14 fix — SD!A28 "Reset weights" cell shares row 28 with the
+    # weight VALUE cells (B28-L28), so column A can't merge wider for the
+    # long instruction text. Inserting a new dedicated row would shift the
+    # $C$28/$F$28/$I$28/$L$28 references downstream formulas use. Pragmatic
+    # fix: shorten the text to fit column A's width, move the "hover for
+    # rationale" hint into a cell comment.
     from openpyxl.styles import Alignment
-    SHRUNK_RESET_CELLS = [
-        ("Seating Depth", "A28", 28),
-        # Charts!A12 is fine in Chad's 6.xlsx (A12:L12 merge gives it room)
-    ]
-    for sheet_name, coord, row_idx in SHRUNK_RESET_CELLS:
-        if sheet_name not in wb.sheetnames:
-            continue
-        ws = wb[sheet_name]
-        c = ws[coord]
-        if c.alignment.shrink_to_fit:
-            c.alignment = Alignment(
-                horizontal=c.alignment.horizontal or "center",
-                vertical=c.alignment.vertical or "center",
-                wrap_text=True,
-                shrink_to_fit=False,
+    from openpyxl.comments import Comment
+    if "Seating Depth" in wb.sheetnames:
+        sd_ws = wb["Seating Depth"]
+        a28 = sd_ws["A28"]
+        current_value = (a28.value or "").strip()
+        if current_value and "Reset" in current_value and "hover" in current_value:
+            a28.value = "↺ Reset weights"
+            # Comment provides the rationale that previously lived in the cell text.
+            if not a28.comment:
+                a28.comment = Comment(
+                    "Click this cell to restore the default composite-score "
+                    "weights: Velocity 0.15, SD 0.25, MR 0.25, SD-Vert 0.35.\n\n"
+                    "These weights bias the winner toward jumps with the "
+                    "tightest vertical dispersion (best for long-range "
+                    "elevation consistency).",
+                    "Loadscope",
+                )
+            # Bump row height to 24 (a bit taller than default) so the
+            # short text doesn't look squashed against neighboring cells.
+            current_h = sd_ws.row_dimensions[28].height if 28 in sd_ws.row_dimensions else None
+            if current_h is None or current_h < 24:
+                sd_ws.row_dimensions[28].height = 24
+            # Switch from shrink_to_fit to normal alignment now that the
+            # text is short enough to fit at default font size.
+            a28.alignment = Alignment(
+                horizontal="center", vertical="center",
+                wrap_text=False, shrink_to_fit=False,
             )
-            # Bump row height so wrapped text has room (2 lines)
-            current_h = ws.row_dimensions[row_idx].height if row_idx in ws.row_dimensions else None
-            if current_h is None or current_h < 32:
-                ws.row_dimensions[row_idx].height = 32
-            fixes.append(f"{sheet_name}!{coord}: shrink_to_fit → wrap_text + row {row_idx} height bumped")
+            fixes.append("Seating Depth!A28: shortened reset-weights text + moved hint to comment")
 
     # v0.14 fix — Excel-Mac doesn't reliably recompute the AGGREGATE-based
     # composite-score formula chain after an openpyxl save. Precompute the
