@@ -264,6 +264,7 @@ def main():
     _write_seating_depth_static_values(wb)
     _populate_ballistics_dope(wb)
     _populate_load_library(wb)
+    _add_load_card_tab(wb)
 
     # Force Excel to do a full recalc when opening this workbook. Without this,
     # Excel may trust the (stale or empty) cached values from openpyxl's save
@@ -566,6 +567,145 @@ def _populate_ballistics_dope(wb):
     b["B6"].value = "Leupold Mark 5HD 5-25x56"
     # E6 (Zero yd), H6 (Sight Ht), K6 (Twist) are user-fill defaults
     # already set in the template (100, 1.75, 1:8 RH)
+
+
+def _add_load_card_tab(wb):
+    """Insert a 'Load Card' sheet next to Ballistics that visually mirrors
+    the printable Pocket Range Card in Excel cells.
+
+    Prospects can see the card preview WITHOUT clicking 'Print Pocket Range
+    Card' (which opens an HTML in browser). Cells layout mimics the 6x4
+    landscape card: title bar, rifle/bullet/charge/vel header, scope info,
+    DOPE table 100-1000yd, footer notes.
+
+    Pulls static values written elsewhere in the demo build so the card
+    displays correctly even without Excel recompute.
+    """
+    from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
+    from openpyxl.utils import get_column_letter
+
+    # Position right after Ballistics in the tab bar
+    if "Load Card" in wb.sheetnames:
+        return  # already exists; nothing to do
+    ballistics_idx = wb.sheetnames.index("Ballistics") if "Ballistics" in wb.sheetnames else 7
+    card = wb.create_sheet("Load Card", index=ballistics_idx + 1)
+
+    # Demo data — mirror what _populate_ballistics_dope writes
+    rifle = "Tikka T3X CTR 6.5 CM"
+    bullet = "Hornady 140gr ELD-M"
+    charge_gr = 42.4
+    vel_fps = 2780
+    scope = "Leupold Mark 5HD 5-25x56"
+    click = "0.1 Mil"
+    zero = 100
+    sight_ht = 1.75
+    twist = "1:8 RH"
+    dope = [
+        (100,  0.0,   0,  0.0,   0,  0.0,  0,  0.0,  0,  0.11),
+        (200,  0.1,   1,  0.5,   2,  0.3,  3,  1.0,  4,  0.23),
+        (300,  0.6,   6,  2.0,   8,  0.5,  5,  1.7,  7,  0.36),
+        (400,  1.2,  12,  4.1,  16,  0.7,  7,  2.4, 10,  0.50),
+        (500,  2.0,  20,  6.9,  28,  0.9,  9,  3.1, 12,  0.66),
+        (600,  2.8,  28,  9.6,  38,  1.2, 12,  4.1, 16,  0.83),
+        (700,  3.7,  37, 12.7,  51,  1.5, 15,  5.1, 20,  1.02),
+        (800,  4.8,  48, 16.5,  66,  1.8, 18,  6.2, 25,  1.23),
+        (900,  6.0,  60, 20.6,  82,  2.1, 21,  7.2, 29,  1.46),
+        (1000, 7.3,  73, 25.0, 100,  2.4, 24,  8.2, 33,  1.71),
+    ]
+
+    # Styling
+    title_fill = PatternFill(start_color="FF1F4E78", end_color="FF1F4E78", fill_type="solid")
+    title_font = Font(color="FFFFFFFF", bold=True, size=16)
+    sub_fill = PatternFill(start_color="FFFFE082", end_color="FFFFE082", fill_type="solid")
+    sub_font = Font(color="FF1F4E78", bold=True, size=11)
+    header_fill = PatternFill(start_color="FF305496", end_color="FF305496", fill_type="solid")
+    header_font = Font(color="FFFFFFFF", bold=True, size=10)
+    data_font = Font(color="FF000000", size=10)
+    center = Alignment(horizontal="center", vertical="center")
+    left = Alignment(horizontal="left", vertical="center", wrap_text=True)
+    thin = Side(style="thin", color="FF888888")
+    border = Border(left=thin, right=thin, top=thin, bottom=thin)
+
+    # Column widths (10 cols for the DOPE table + matching layout)
+    col_widths = [10, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+    for i, w in enumerate(col_widths, start=1):
+        card.column_dimensions[get_column_letter(i)].width = w
+
+    # Row 1 - Title bar
+    card.merge_cells("A1:J1")
+    c = card["A1"]
+    c.value = "POCKET RANGE CARD"
+    c.fill = title_fill
+    c.font = title_font
+    c.alignment = center
+    card.row_dimensions[1].height = 26
+
+    # Row 2 - Rifle / Bullet / Charge / Vel (the prominent identifier)
+    card.merge_cells("A2:J2")
+    c = card["A2"]
+    c.value = f"{rifle}  •  {bullet}  •  {charge_gr}gr  •  {vel_fps} fps"
+    c.fill = sub_fill
+    c.font = sub_font
+    c.alignment = center
+    card.row_dimensions[2].height = 22
+
+    # Row 3 - Scope info
+    card.merge_cells("A3:J3")
+    c = card["A3"]
+    c.value = (
+        f"Scope: {scope}   |   Click: {click}   |   "
+        f"Zero: {zero} yd   |   Sight Ht: {sight_ht}\"   |   Twist: {twist}"
+    )
+    c.alignment = center
+    c.font = Font(color="FF555555", size=10, italic=True)
+    card.row_dimensions[3].height = 18
+
+    # Row 5 - DOPE table header
+    headers = [
+        "Range\n(yd)", "Mils\nElev", "Mil\nClicks",
+        "MOA\nElev", "MOA\nClicks",
+        "Wind\nMils/10", "Wind\nMil Clk",
+        "Wind\nMOA/10", "Wind\nMOA Clk", "TOF\n(sec)"
+    ]
+    for col_idx, header in enumerate(headers, start=1):
+        cell = card.cell(row=5, column=col_idx)
+        cell.value = header
+        cell.fill = header_fill
+        cell.font = header_font
+        cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+        cell.border = border
+    card.row_dimensions[5].height = 30
+
+    # Rows 6-15 - DOPE table data
+    for i, row in enumerate(dope):
+        r = 6 + i
+        for col_idx, value in enumerate(row, start=1):
+            cell = card.cell(row=r, column=col_idx)
+            cell.value = value
+            cell.font = data_font
+            cell.alignment = center
+            cell.border = border
+        card.row_dimensions[r].height = 18
+
+    # Row 17 - Footer note
+    card.merge_cells("A17:J17")
+    c = card["A17"]
+    c.value = (
+        "Sample card based on Ballistics tab DOPE values. "
+        "Click 'Print Pocket Range Card' on the Ballistics tab to generate "
+        "a printable 4x6 version."
+    )
+    c.font = Font(color="FF888888", italic=True, size=9)
+    c.alignment = center
+    card.row_dimensions[17].height = 30
+
+    # Page setup for printing — landscape 6x4
+    card.page_setup.orientation = card.ORIENTATION_LANDSCAPE
+    card.page_setup.paperSize = 1  # Letter; user can change to custom 6x4
+    card.page_margins.left = 0.25
+    card.page_margins.right = 0.25
+    card.page_margins.top = 0.25
+    card.page_margins.bottom = 0.25
 
 
 def _populate_load_library(wb):

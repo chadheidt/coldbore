@@ -106,18 +106,20 @@ TOUR_STOPS = [
         "special": None,
     },
     {
-        "title": "Pocket Range Card — printable DOPE",
-        "sheet": "Ballistics",  # stays on Ballistics; opens HTML in browser
-        "select_range": None,
+        "title": "Load Card — your printable DOPE",
+        "sheet": "Load Card",
+        "select_range": "A1:J17",
         "narration": (
-            "Loadscope generates a printable 4×6 DOPE card from your Ballistics "
-            "data. Look at your browser — that's what it produces. Print it on "
-            "cardstock or save as a PDF; it folds into your shirt pocket for "
-            "the firing line. No more squinting at notes on your phone in the "
-            "wind."
+            "This is your Pocket Range Card. Loadscope builds it automatically "
+            "from your Ballistics tab data — rifle, bullet, charge, velocity "
+            "across the top, then your full DOPE table from 100 to 1000 yards. "
+            "When you click 'Print Pocket Range Card' from any tab, the print "
+            "dialog opens and you can print this card on cardstock or save as "
+            "a 4×6 PDF. It folds into your shirt pocket for the firing line — "
+            "no more squinting at notes on your phone."
         ),
         "min_dwell_seconds": 10,
-        "special": "open_pocket_range_card",
+        "special": None,  # Card preview lives on this tab — no need to open HTML
     },
     {
         "title": "Load Library — your winners over time",

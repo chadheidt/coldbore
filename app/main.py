@@ -1792,9 +1792,13 @@ class MainWindow(QMainWindow):
         )
 
     def _print_pocket_card(self):
-        """Generate + open a printable Pocket Range Card from the
-        Ballistics tab's DOPE data. Opens in the user's default browser
-        so they can print or save as PDF."""
+        """Navigate to the workbook's Load Card sheet (in-Excel preview of
+        the Pocket Range Card) and open Excel's print dialog. The Load Card
+        tab is a styled cell-based mirror of the printable card — what the
+        user sees on-screen is what prints.
+
+        Falls back to the HTML-export pocket card if the workbook doesn't
+        have a Load Card sheet (older workbooks before v0.14)."""
         wb_path = self._selected_workbook()
         if not wb_path or not os.path.isfile(wb_path):
             QMessageBox.information(
@@ -1803,6 +1807,57 @@ class MainWindow(QMainWindow):
                 "There's no workbook to generate a card from yet.",
             )
             return
+
+        # Check if the workbook has a Load Card sheet (v0.14+). If yes, use
+        # the Excel-native flow. If no, fall back to HTML export.
+        has_load_card = False
+        try:
+            from openpyxl import load_workbook as _lw
+            _wb = _lw(wb_path, read_only=True)
+            has_load_card = "Load Card" in _wb.sheetnames
+            _wb.close()
+        except Exception:
+            pass
+
+        if has_load_card:
+            # Excel-native flow: open the workbook in Excel, activate Load
+            # Card sheet, fire Print dialog.
+            script = f'''
+                tell application "Microsoft Excel"
+                    activate
+                    try
+                        open workbook workbook file name "{wb_path}"
+                    end try
+                    delay 0.5
+                    activate object sheet "Load Card" of active workbook
+                    delay 0.3
+                end tell
+                tell application "System Events"
+                    keystroke "p" using command down
+                end tell
+            '''
+            try:
+                import subprocess
+                subprocess.run(
+                    ["osascript", "-e", script],
+                    timeout=15, capture_output=True,
+                )
+            except Exception as e:
+                QMessageBox.warning(
+                    self, "Couldn't open Load Card",
+                    f"Excel command failed:\n\n{e}\n\n"
+                    "Falling back to HTML export.",
+                )
+                has_load_card = False  # fall through to HTML fallback
+            else:
+                self._log(
+                    "Opened Load Card in Excel — use the print dialog "
+                    "to print or save as PDF.",
+                    color=theme.LOG_SUCCESS,
+                )
+                return
+
+        # Fallback: generate HTML card and open in browser (pre-v0.14 path)
         try:
             from pocket_card import generate_pocket_card
             out_path = generate_pocket_card(wb_path, open_after=True)
@@ -1822,7 +1877,7 @@ class MainWindow(QMainWindow):
                                  f"Couldn't generate Pocket Range Card:\n\n{e}")
             return
         self._log(
-            f"Pocket Range Card generated: {os.path.basename(out_path)}",
+            f"Pocket Range Card (HTML) generated: {os.path.basename(out_path)}",
             color=theme.LOG_SUCCESS,
         )
 
