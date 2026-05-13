@@ -873,42 +873,83 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
                 ws.row_dimensions[idx].height = target
                 fixes.append(f"{sheet_name}!row{idx}: height {current or 'default'} → {target} ({why})")
 
-    # v0.14 fix — mirror Load Log's MOA/MIL scope click-count dropdown onto
-    # Seating Depth!G7 so the user can pick (or see) their click value on
-    # whichever tab they're working in. Load Log already has the data
-    # validation in the template; SD doesn't.
-    if "Seating Depth" in wb.sheetnames and "Load Log" in wb.sheetnames:
-        sd_ws = wb["Seating Depth"]
-        # Check if SD already has a click-count validation on G7
-        has_g7_validation = False
-        for dv in sd_ws.data_validations.dataValidation:
+    # v0.14 fix — Turret-type dropdown on G7 of both Load Log and Seating
+    # Depth. The same list is mirrored on both sheets so the user can pick
+    # (or see) their click value on whichever tab they're working in.
+    # "N/A" added 2026-05-13 for users whose scope has no adjustable turret
+    # (e.g., fixed-power optics, BDC reticles only).
+    TURRET_LIST = '"0.1 Mil,0.05 Mil,1/4 MOA,1/8 MOA,N/A"'
+
+    def _replace_g7_validation(ws, sheet_name_for_log):
+        # Remove any existing G7 validation
+        from openpyxl.worksheet.datavalidation import DataValidation
+        keep = []
+        for dv in ws.data_validations.dataValidation:
+            covers_g7 = False
             for rng in dv.sqref.ranges:
                 if rng.min_row <= 7 <= rng.max_row and rng.min_col <= 7 <= rng.max_col:
-                    has_g7_validation = True
+                    covers_g7 = True
                     break
-        if not has_g7_validation:
-            from openpyxl.worksheet.datavalidation import DataValidation
-            dv = DataValidation(
-                type="list",
-                formula1='"0.1 Mil,0.05 Mil,1/4 MOA,1/8 MOA"',
-                allow_blank=True,
-                showDropDown=False,  # False = show the arrow
-            )
-            dv.add("G7")
-            sd_ws.add_data_validation(dv)
-            # Match LL's row 7 height so the dropdown is visible
-            sd_ws.row_dimensions[7].height = 22.0
-            fixes.append("Seating Depth!G7: added MOA/MIL click-count dropdown (mirror of Load Log G7)")
+            if not covers_g7:
+                keep.append(dv)
+        ws.data_validations.dataValidation = keep
+        # Add the canonical N/A-inclusive list
+        dv = DataValidation(
+            type="list", formula1=TURRET_LIST, allow_blank=True, showDropDown=False
+        )
+        dv.add("G7")
+        ws.add_data_validation(dv)
+        fixes.append(f"{sheet_name_for_log}!G7: turret dropdown set to {TURRET_LIST}")
 
-    # v0.14 fix — F7 label describing what G7's dropdown is for. Without a
-    # label, the dropdown looks like a stray value cell.
+    for sheet_name in ("Load Log", "Seating Depth"):
+        if sheet_name in wb.sheetnames:
+            _replace_g7_validation(wb[sheet_name], sheet_name)
+
+    # v0.14 fix — F7 label describing what G7's dropdown is for, and match
+    # row 7's styling to rows 5/6 (rifle/shooter/cartridge row). Without
+    # this, the Turret Type row looks like an orphan vs the rest of the
+    # rifle-setup block.
+    from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
+    yellow_label_fill = PatternFill(
+        start_color="FFFFE082", end_color="FFFFE082", fill_type="solid"
+    )
+    cream_value_fill = PatternFill(
+        start_color="FFFFF8E1", end_color="FFFFF8E1", fill_type="solid"
+    )
+    label_font = Font(color="FF1F4E78", bold=True)
+    value_font = Font(color="FF000000")
+    # Alignment conventions (matches rows 5/6/9/10/13):
+    #   Labels (A/F/K/N column): horizontal=right, vertical=center
+    #   Values (B/G/L/O column): horizontal=left,  vertical=center
+    label_align = Alignment(horizontal="right", vertical="center")
+    value_align = Alignment(horizontal="left", vertical="center")
+    # Thin gray border to match rest of rifle-setup block (style="thin",
+    # color="FFB0B0B0").
+    gray_side = Side(style="thin", color="FFB0B0B0")
+    rifle_border = Border(left=gray_side, right=gray_side, top=gray_side, bottom=gray_side)
     for sheet_name in ("Load Log", "Seating Depth"):
         if sheet_name not in wb.sheetnames:
             continue
         ws = wb[sheet_name]
         if not ws["F7"].value:
-            ws["F7"].value = "Scope click:"
-            fixes.append(f"{sheet_name}!F7: added 'Scope click:' label for G7 dropdown")
+            ws["F7"].value = "Turret:"
+            fixes.append(f"{sheet_name}!F7: added 'Turret:' label for G7 dropdown")
+        # Match row 7 height + fills to row 5/6 (rifle-setup block)
+        ws.row_dimensions[7].height = 31.5
+        # F7 = label cell
+        ws["F7"].fill = yellow_label_fill
+        ws["F7"].font = label_font
+        ws["F7"].alignment = label_align
+        ws["F7"].border = rifle_border
+        # G7:J7 merge — apply value styling to every cell in the merge so
+        # the border draws continuously (Excel uses each cell's own border
+        # within a merge for the outline). value font + alignment on the
+        # top-left only; fill on top-left propagates visually to the merge.
+        ws["G7"].fill = cream_value_fill
+        ws["G7"].font = value_font
+        ws["G7"].alignment = value_align
+        for coord in ("G7", "H7", "I7", "J7"):
+            ws[coord].border = rifle_border
 
     # v0.14 fix — A28 (SD) / A12 (Charts) "Reset weights" cells use
     # shrink_to_fit which makes the text painfully small in narrow column A.
