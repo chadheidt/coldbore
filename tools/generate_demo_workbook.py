@@ -616,54 +616,74 @@ def _add_load_card_tab(wb):
         (1000, 7.3,  73, 25.0, 100,  2.4, 24,  8.2, 33,  1.71),
     ]
 
-    # Styling
-    title_fill = PatternFill(start_color="FF1F4E78", end_color="FF1F4E78", fill_type="solid")
-    title_font = Font(color="FFFFFFFF", bold=True, size=16)
-    sub_fill = PatternFill(start_color="FFFFE082", end_color="FFFFE082", fill_type="solid")
-    sub_font = Font(color="FF1F4E78", bold=True, size=11)
-    header_fill = PatternFill(start_color="FF305496", end_color="FF305496", fill_type="solid")
-    header_font = Font(color="FFFFFFFF", bold=True, size=10)
-    data_font = Font(color="FF000000", size=10)
-    center = Alignment(horizontal="center", vertical="center")
-    left = Alignment(horizontal="left", vertical="center", wrap_text=True)
-    thin = Side(style="thin", color="FF888888")
-    border = Border(left=thin, right=thin, top=thin, bottom=thin)
+    # Hide Excel gridlines + header row/col so the tab reads as a printed
+    # artifact, not a spreadsheet.
+    card.sheet_view.showGridLines = False
+    card.sheet_view.showRowColHeaders = False
+    # Default zoom up a touch so the card fills the viewport readably
+    card.sheet_view.zoomScale = 125
 
-    # Column widths (10 cols for the DOPE table + matching layout)
-    col_widths = [10, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+    # Styling — clean print-style palette matching the HTML pocket card
+    white_fill = PatternFill(start_color="FFFFFFFF", end_color="FFFFFFFF", fill_type="solid")
+    title_font = Font(color="FF1F4E78", bold=True, size=22, name="Helvetica Neue")
+    sub_font = Font(color="FF1F4E78", bold=True, size=13, name="Helvetica Neue")
+    scope_font = Font(color="FF555555", italic=False, size=11, name="Helvetica Neue")
+    header_fill = PatternFill(start_color="FF1F4E78", end_color="FF1F4E78", fill_type="solid")
+    header_font = Font(color="FFFFFFFF", bold=True, size=10, name="Helvetica Neue")
+    data_font = Font(color="FF000000", size=11, name="Helvetica Neue")
+    alt_row_fill = PatternFill(start_color="FFF7F9FC", end_color="FFF7F9FC", fill_type="solid")
+    center = Alignment(horizontal="center", vertical="center")
+    thick_bottom = Side(style="medium", color="FF1F4E78")  # underline for title
+    thin = Side(style="thin", color="FFBBBBBB")
+    table_border = Border(left=thin, right=thin, top=thin, bottom=thin)
+
+    # Column widths — leftmost is the "Range" column (wider for label),
+    # then 9 numeric columns of equal width
+    col_widths = [11, 8, 8, 8, 8, 9, 8, 9, 8, 9]
     for i, w in enumerate(col_widths, start=1):
         card.column_dimensions[get_column_letter(i)].width = w
+    # Add some left padding via column A indent? Just keep tight.
 
-    # Row 1 - Title bar
+    # White background on the whole used range so the card reads as a
+    # clean printed page (after we hid the gridlines above)
+    for r in range(1, 18):
+        for col_idx in range(1, 11):
+            card.cell(row=r, column=col_idx).fill = white_fill
+
+    # Row 1 — Title (large, with bottom border as underline)
     card.merge_cells("A1:J1")
     c = card["A1"]
     c.value = "POCKET RANGE CARD"
-    c.fill = title_fill
     c.font = title_font
     c.alignment = center
-    card.row_dimensions[1].height = 26
+    # Underline via bottom border on each cell of the merged row
+    for col_idx in range(1, 11):
+        card.cell(row=1, column=col_idx).border = Border(bottom=thick_bottom)
+    card.row_dimensions[1].height = 36
 
-    # Row 2 - Rifle / Bullet / Charge / Vel (the prominent identifier)
+    # Row 2 — Rifle / Bullet / Charge / Vel (the prominent identifier)
     card.merge_cells("A2:J2")
     c = card["A2"]
     c.value = f"{rifle}  •  {bullet}  •  {charge_gr}gr  •  {vel_fps} fps"
-    c.fill = sub_fill
     c.font = sub_font
     c.alignment = center
-    card.row_dimensions[2].height = 22
+    card.row_dimensions[2].height = 26
 
-    # Row 3 - Scope info
+    # Row 3 — Scope info
     card.merge_cells("A3:J3")
     c = card["A3"]
     c.value = (
-        f"Scope: {scope}   |   Click: {click}   |   "
-        f"Zero: {zero} yd   |   Sight Ht: {sight_ht}\"   |   Twist: {twist}"
+        f"Scope: {scope}   ·   Click: {click}   ·   "
+        f"Zero: {zero} yd   ·   Sight Ht: {sight_ht}\"   ·   Twist: {twist}"
     )
     c.alignment = center
-    c.font = Font(color="FF555555", size=10, italic=True)
-    card.row_dimensions[3].height = 18
+    c.font = scope_font
+    card.row_dimensions[3].height = 22
 
-    # Row 5 - DOPE table header
+    # Row 4 — visual breathing space
+    card.row_dimensions[4].height = 8
+
+    # Row 5 — DOPE table header
     headers = [
         "Range\n(yd)", "Mils\nElev", "Mil\nClicks",
         "MOA\nElev", "MOA\nClicks",
@@ -676,30 +696,35 @@ def _add_load_card_tab(wb):
         cell.fill = header_fill
         cell.font = header_font
         cell.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-        cell.border = border
-    card.row_dimensions[5].height = 30
+        cell.border = table_border
+    card.row_dimensions[5].height = 34
 
-    # Rows 6-15 - DOPE table data
+    # Rows 6-15 — DOPE table data with subtle alternating-row stripes
     for i, row in enumerate(dope):
         r = 6 + i
+        row_fill = alt_row_fill if i % 2 == 1 else white_fill
         for col_idx, value in enumerate(row, start=1):
             cell = card.cell(row=r, column=col_idx)
             cell.value = value
             cell.font = data_font
+            cell.fill = row_fill
             cell.alignment = center
-            cell.border = border
-        card.row_dimensions[r].height = 18
+            cell.border = table_border
+        card.row_dimensions[r].height = 20
 
-    # Row 17 - Footer note
+    # Row 16 — visual breathing space
+    card.row_dimensions[16].height = 8
+
+    # Row 17 — Footer note (subtle, italic)
     card.merge_cells("A17:J17")
     c = card["A17"]
     c.value = (
         "Click \"Print Pocket Range Card\" on the Ballistics tab to print "
         "this card as a 4×6 page."
     )
-    c.font = Font(color="FF555555", italic=True, size=10)
+    c.font = Font(color="FF888888", italic=True, size=10, name="Helvetica Neue")
     c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-    card.row_dimensions[17].height = 36
+    card.row_dimensions[17].height = 32
 
     # Page setup for printing — landscape 6x4
     card.page_setup.orientation = card.ORIENTATION_LANDSCAPE
