@@ -585,10 +585,13 @@ def _add_load_card_tab(wb):
     from openpyxl.utils import get_column_letter
 
     # Position right after Ballistics in the tab bar
-    if "Load Card" in wb.sheetnames:
+    if "Range Card" in wb.sheetnames:
         return  # already exists; nothing to do
+    # Clean up legacy "Load Card" name if a previous build created it
+    if "Load Card" in wb.sheetnames:
+        del wb["Load Card"]
     ballistics_idx = wb.sheetnames.index("Ballistics") if "Ballistics" in wb.sheetnames else 7
-    card = wb.create_sheet("Load Card", index=ballistics_idx + 1)
+    card = wb.create_sheet("Range Card", index=ballistics_idx + 1)
 
     # Demo data — mirror what _populate_ballistics_dope writes
     rifle = "Tikka T3X CTR 6.5 CM"
@@ -691,13 +694,12 @@ def _add_load_card_tab(wb):
     card.merge_cells("A17:J17")
     c = card["A17"]
     c.value = (
-        "Sample card based on Ballistics tab DOPE values. "
-        "Click 'Print Pocket Range Card' on the Ballistics tab to generate "
-        "a printable 4x6 version."
+        "Click \"Print Pocket Range Card\" on the Ballistics tab to print "
+        "this card as a 4×6 page."
     )
-    c.font = Font(color="FF888888", italic=True, size=9)
-    c.alignment = center
-    card.row_dimensions[17].height = 30
+    c.font = Font(color="FF555555", italic=True, size=10)
+    c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+    card.row_dimensions[17].height = 36
 
     # Page setup for printing — landscape 6x4
     card.page_setup.orientation = card.ORIENTATION_LANDSCAPE
@@ -779,20 +781,41 @@ def _populate_load_library(wb):
             "Truck gun build. Good cold-bore consistency."
         ),
     ]
-    # Widen narrow columns so the demo entries are readable
+    # Set column widths sized to fit content WITHOUT bloat, so the whole
+    # library prints on one landscape page. Replaces (not just widens) the
+    # template widths — some are way oversized (K was 22 chars for a 5-char
+    # CBTO number).
     from openpyxl.styles import Alignment
     LL_COL_WIDTHS = {
-        "E": 18,  # Bullet
-        "G": 16,  # Powder ("Hodgdon H4350" is 13 chars)
-        "J": 12,  # Brass
-        "M": 12,  # Avg Vel
-        "P": 10,  # MR MOA
-        "Q": 28,  # Notes / Conditions — needs room for sentence-length notes
+        "A": 4,   # # (sequential)
+        "B": 11,  # Date Added
+        "C": 25,  # Load Name
+        "D": 18,  # Rifle
+        "E": 15,  # Bullet
+        "F": 8,   # Bullet Wt (gr)
+        "G": 14,  # Powder
+        "H": 8,   # Charge (gr)
+        "I": 10,  # Primer
+        "J": 10,  # Brass
+        "K": 8,   # CBTO (in)
+        "L": 8,   # Jump (in)
+        "M": 9,   # Avg Vel (fps)
+        "N": 7,   # SD (fps)
+        "O": 8,   # Group (MOA)
+        "P": 8,   # MR (MOA)
+        "Q": 22,  # Notes / Conditions
     }
     for col_letter, width in LL_COL_WIDTHS.items():
-        current = ll_lib.column_dimensions[col_letter].width if col_letter in ll_lib.column_dimensions else 0
-        if (current or 0) < width:
-            ll_lib.column_dimensions[col_letter].width = width
+        ll_lib.column_dimensions[col_letter].width = width
+
+    # Print setup — landscape, fit-to-1-page-wide, no fixed page-tall so
+    # the library can grow down across pages as the user adds more loads.
+    ll_lib.page_setup.orientation = ll_lib.ORIENTATION_LANDSCAPE
+    ll_lib.page_setup.fitToWidth = 1
+    ll_lib.page_setup.fitToHeight = 0
+    ll_lib.sheet_properties.pageSetUpPr.fitToPage = True
+    ll_lib.page_margins.left = 0.25
+    ll_lib.page_margins.right = 0.25
 
     # Rows 5-19 hold up to 15 entries. Write our 3 starting at row 5.
     for i, (date, name, rifle, bullet, bwt, powder, charge, primer, brass,

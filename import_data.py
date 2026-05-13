@@ -1185,6 +1185,31 @@ def _write_pl_static(wb, pl_chrono, group_by_tag):
             ll.cell(row=r, column=15).value = "=NA()"
         fixes.append(f"Load Log!D2/G2/J2/L2/M2 + O16:O{15+len(composites)} static values")
 
+    # Auto-fill Ballistics tab header (B5/E5/H5/K5 = rifle/bullet/charge/vel)
+    # from the data we already have. The Pocket Range Card reads these
+    # cells via data_only=True (cached values) — without auto-fill the
+    # template's cross-sheet formulas show blank → card prints with dashes.
+    if "Ballistics" in wb.sheetnames and "Load Log" in wb.sheetnames:
+        ball = wb["Ballistics"]
+        ll = wb["Load Log"]
+        # Pull rifle + bullet from Load Log's user-fill cells (header row 5/9)
+        rifle = ll["B5"].value
+        bullet = ll["B9"].value
+        scope = ll["G6"].value
+        if rifle and not ball["B5"].value:
+            ball["B5"].value = rifle
+        if bullet and not ball["E5"].value:
+            ball["E5"].value = bullet
+        if scope and not ball["B6"].value:
+            ball["B6"].value = scope
+        # Winning charge + velocity come from the precomputed winner
+        ball["H5"].value = winner["charge_or_jump"]
+        ball["K5"].value = winner["vel"]
+        fixes.append(
+            "Ballistics row 5/6: auto-filled rifle/bullet/scope from Load Log, "
+            f"charge/vel from winner ({winner['charge_or_jump']}gr @ {winner['vel']} fps)"
+        )
+
     if "Charts" in wb.sheetnames:
         ch = wb["Charts"]
         # Pin to test mode for predictable row alignment
