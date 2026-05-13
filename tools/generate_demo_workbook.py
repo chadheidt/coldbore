@@ -487,20 +487,26 @@ def _write_static_composite_scores(wb):
         start_color="FFC00000", end_color="FFC00000", fill_type="solid"
     )
     yellow_font = Font(color="FFFFFF00", bold=True)
-    centered = Alignment(horizontal="center", vertical="center")
+    # Wrap_text=True so long Best-in labels (4 tags) flow onto a second line
+    # instead of getting clipped at the cell edge.
+    centered_wrapped = Alignment(horizontal="center", vertical="center", wrap_text=True)
     winner_label = best_in_labels[winner_idx] or "Composite ✓"
     static_best_in = f"Best in:  {winner_label}"
     ll["M2"].value = static_best_in
     ll["M2"].fill = red_yellow_fill
     ll["M2"].font = yellow_font
-    ll["M2"].alignment = centered
-    # Seating Depth O2 has the same role — apply styling, but leave the
-    # value alone since we haven't computed the seating-depth winner yet.
-    # The Seating Depth Best-in will follow once we precompute its composite.
+    ll["M2"].alignment = centered_wrapped
+    # Bump LL row 2 height so wrap has room
+    current_h = ll.row_dimensions[2].height if 2 in ll.row_dimensions else None
+    if current_h is None or current_h < 38:
+        ll.row_dimensions[2].height = 38
+    # Seating Depth O2 — same styling. The value is written by
+    # _write_seating_depth_static_values which runs separately.
     if "Seating Depth" in wb.sheetnames:
-        wb["Seating Depth"]["O2"].fill = red_yellow_fill
-        wb["Seating Depth"]["O2"].font = yellow_font
-        wb["Seating Depth"]["O2"].alignment = centered
+        sd_o2 = wb["Seating Depth"]["O2"]
+        sd_o2.fill = red_yellow_fill
+        sd_o2.font = yellow_font
+        sd_o2.alignment = centered_wrapped
 
 
 def _populate_ballistics_dope(wb):
@@ -696,6 +702,9 @@ def _populate_demo_headers(wb):
         sht["B6"].value = barrel
         sht["G6"].value = optic
         sht["L6"].value = chrono
+        # Row 7 — scope click-count selection. Demo defaults to 0.1 Mil (most
+        # common precision-rifle scope today: NF NX8, Leupold Mark 5HD, etc.)
+        sht["G7"].value = "0.1 Mil"
         # Row 9 — Bullet / Powder / Primer / Brass
         sht["B9"].value = bullet
         # G9 has a formula pulling powder from GarminSessions — leave as-is
@@ -705,7 +714,9 @@ def _populate_demo_headers(wb):
         sht["B10"].value = cbto
         sht["G10"].value = oal
         # L10 is already 100 (set by apply_workbook_repairs)
-        # Row 13 — Date / Temp / Notes (Date + Notes filled by repairs)
+        # Row 13 — Date / Temp / Notes (LL Date + Notes filled by repairs; SD needs it)
+        if sheet_name == "Seating Depth":
+            sht["B13"].value = "2026-04-26"  # SD ladder test date
         sht["G13"].value = temp_f
         # Replace the messy auto-concatenated notes with a clean range note
         sht["L13"].value = notes

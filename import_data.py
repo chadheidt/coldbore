@@ -854,6 +854,52 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
         for f in fixes:
             print(f"    - {f}")
 
+    # v0.14 fix — repair template-level row-height + column-width bugs
+    # carried in the .xltx that make important rows nearly invisible. Each
+    # is a 1-line height set; idempotent (won't shrink rows the user widened).
+    LAYOUT_FIXES = [
+        ("Load Log", "row", 7, 22.0,
+         "MOA/MIL scope click dropdown row (G7:J7) was 6.0 px — invisible"),
+        ("Seating Depth", "row", 26, 30.0,
+         "'Save Suggested Load to Library' button row was 7.5 px — invisible"),
+    ]
+    for sheet_name, kind, idx, target, why in LAYOUT_FIXES:
+        if sheet_name not in wb.sheetnames:
+            continue
+        ws = wb[sheet_name]
+        if kind == "row":
+            current = ws.row_dimensions[idx].height if idx in ws.row_dimensions else None
+            if current is None or current < target:
+                ws.row_dimensions[idx].height = target
+                fixes.append(f"{sheet_name}!row{idx}: height {current or 'default'} → {target} ({why})")
+
+    # v0.14 fix — mirror Load Log's MOA/MIL scope click-count dropdown onto
+    # Seating Depth!G7 so the user can pick (or see) their click value on
+    # whichever tab they're working in. Load Log already has the data
+    # validation in the template; SD doesn't.
+    if "Seating Depth" in wb.sheetnames and "Load Log" in wb.sheetnames:
+        sd_ws = wb["Seating Depth"]
+        # Check if SD already has a click-count validation on G7
+        has_g7_validation = False
+        for dv in sd_ws.data_validations.dataValidation:
+            for rng in dv.sqref.ranges:
+                if rng.min_row <= 7 <= rng.max_row and rng.min_col <= 7 <= rng.max_col:
+                    has_g7_validation = True
+                    break
+        if not has_g7_validation:
+            from openpyxl.worksheet.datavalidation import DataValidation
+            dv = DataValidation(
+                type="list",
+                formula1='"0.1 Mil,0.05 Mil,1/4 MOA,1/8 MOA"',
+                allow_blank=True,
+                showDropDown=False,  # False = show the arrow
+            )
+            dv.add("G7")
+            sd_ws.add_data_validation(dv)
+            # Match LL's row 7 height so the dropdown is visible
+            sd_ws.row_dimensions[7].height = 22.0
+            fixes.append("Seating Depth!G7: added MOA/MIL click-count dropdown (mirror of Load Log G7)")
+
     # v0.14 fix — Excel-Mac doesn't reliably recompute the AGGREGATE-based
     # composite-score formula chain after an openpyxl save. Precompute the
     # static values in Python and write them as cell values so the user
@@ -1000,6 +1046,14 @@ def _write_pl_static(wb, pl_chrono, group_by_tag):
         ll["J2"].value = winner["sd"]
         ll["L2"].value = winner["mr"]
         ll["M2"].value = f"Best in:  {winner_tags}"
+        # Enable text wrap + bump row 2 height so long Best-in labels fit
+        from openpyxl.styles import Alignment
+        ll["M2"].alignment = Alignment(
+            horizontal="center", vertical="center", wrap_text=True
+        )
+        current_h = ll.row_dimensions[2].height if 2 in ll.row_dimensions else None
+        if current_h is None or current_h < 38:
+            ll.row_dimensions[2].height = 38
         # O16:O25 — composite per row, pad with #N/A
         for i, comp in enumerate(composites):
             ll.cell(row=16 + i, column=15).value = round(comp, 3)
@@ -1078,6 +1132,14 @@ def _write_sd_static(wb, sd_chrono, group_by_tag):
     sd["L2"].value = winner["mr"]
     sd["N2"].value = winner["vert"]
     sd["O2"].value = f"Best in:  {winner_tags}"
+    # Enable text wrap + bump row 2 height so long Best-in labels fit
+    from openpyxl.styles import Alignment
+    sd["O2"].alignment = Alignment(
+        horizontal="center", vertical="center", wrap_text=True
+    )
+    current_h = sd.row_dimensions[2].height if 2 in sd.row_dimensions else None
+    if current_h is None or current_h < 38:
+        sd.row_dimensions[2].height = 38
     # O column composite per row (rows 16-25), pad #N/A
     for i, comp in enumerate(composites):
         sd.cell(row=16 + i, column=15).value = round(comp, 3)
