@@ -369,7 +369,13 @@ def _write_static_composite_scores(wb):
     best_in_labels = []
     for i in range(len(candidates)):
         tags = [tag for tag, best_i in bests.items() if best_i == i]
-        best_in_labels.append(" ".join(tags))
+        # When a row wins all four metrics, the short "All metrics ✓" label
+        # reads better than concatenating four "X ✓" tags (avoids awkward
+        # wrap in the merged "Best in:" cell).
+        if len(tags) == 4:
+            best_in_labels.append("All metrics ✓")
+        else:
+            best_in_labels.append(" ".join(tags))
 
     # --- Write Load Log O16:O20 — composite per row ---
     for i, comp in enumerate(composites):
@@ -619,7 +625,13 @@ def _write_seating_depth_static_values(wb):
     sd["N2"].value = winner["vert"]
 
     # --- Write Seating Depth O2 — static "Best in: <tags>" ---
-    winner_tags = " ".join(tag for tag, i in bests.items() if i == winner_idx) or "Composite ✓"
+    winner_tags_list = [tag for tag, i in bests.items() if i == winner_idx]
+    if len(winner_tags_list) == 4:
+        winner_tags = "All metrics ✓"
+    elif winner_tags_list:
+        winner_tags = " ".join(winner_tags_list)
+    else:
+        winner_tags = "Composite ✓"
     sd["O2"].value = f"Best in:  {winner_tags}"
     # Styling already applied in _write_static_composite_scores
 
@@ -675,6 +687,7 @@ def _populate_demo_headers(wb):
     instead of half-empty cells."""
 
     # 6.5 Creedmoor PRS-style demo shooter setup
+    from datetime import datetime
     rifle = "Tikka T3X CTR 6.5 CM"
     barrel = '24" 1:8 twist, threaded muzzle'
     shooter = "Demo Shooter"
@@ -715,8 +728,15 @@ def _populate_demo_headers(wb):
         sht["G10"].value = oal
         # L10 is already 100 (set by apply_workbook_repairs)
         # Row 13 — Date / Temp / Notes (LL Date + Notes filled by repairs; SD needs it)
-        if sheet_name == "Seating Depth":
-            sht["B13"].value = "2026-04-26"  # SD ladder test date
+        # Write as datetime object so Excel formats per locale (US: MM/DD/YYYY).
+        # apply_workbook_repairs auto-filled LL!B13 with the ISO string from
+        # the import — also rewrite it as a datetime so it displays right.
+        date_for_sheet = (
+            datetime(2026, 4, 26) if sheet_name == "Seating Depth"
+            else datetime(2026, 4, 12)
+        )
+        sht["B13"].value = date_for_sheet
+        sht["B13"].number_format = "mm/dd/yyyy"
         sht["G13"].value = temp_f
         # Replace the messy auto-concatenated notes with a clean range note
         sht["L13"].value = notes

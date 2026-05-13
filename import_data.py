@@ -900,6 +900,42 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
             sd_ws.row_dimensions[7].height = 22.0
             fixes.append("Seating Depth!G7: added MOA/MIL click-count dropdown (mirror of Load Log G7)")
 
+    # v0.14 fix — F7 label describing what G7's dropdown is for. Without a
+    # label, the dropdown looks like a stray value cell.
+    for sheet_name in ("Load Log", "Seating Depth"):
+        if sheet_name not in wb.sheetnames:
+            continue
+        ws = wb[sheet_name]
+        if not ws["F7"].value:
+            ws["F7"].value = "Scope click:"
+            fixes.append(f"{sheet_name}!F7: added 'Scope click:' label for G7 dropdown")
+
+    # v0.14 fix — A28 (SD) / A12 (Charts) "Reset weights" cells use
+    # shrink_to_fit which makes the text painfully small in narrow column A.
+    # Switch to wrap_text + bumped row height so the font stays readable.
+    from openpyxl.styles import Alignment
+    SHRUNK_RESET_CELLS = [
+        ("Seating Depth", "A28", 28),
+        # Charts!A12 is fine in Chad's 6.xlsx (A12:L12 merge gives it room)
+    ]
+    for sheet_name, coord, row_idx in SHRUNK_RESET_CELLS:
+        if sheet_name not in wb.sheetnames:
+            continue
+        ws = wb[sheet_name]
+        c = ws[coord]
+        if c.alignment.shrink_to_fit:
+            c.alignment = Alignment(
+                horizontal=c.alignment.horizontal or "center",
+                vertical=c.alignment.vertical or "center",
+                wrap_text=True,
+                shrink_to_fit=False,
+            )
+            # Bump row height so wrapped text has room (2 lines)
+            current_h = ws.row_dimensions[row_idx].height if row_idx in ws.row_dimensions else None
+            if current_h is None or current_h < 32:
+                ws.row_dimensions[row_idx].height = 32
+            fixes.append(f"{sheet_name}!{coord}: shrink_to_fit → wrap_text + row {row_idx} height bumped")
+
     # v0.14 fix — Excel-Mac doesn't reliably recompute the AGGREGATE-based
     # composite-score formula chain after an openpyxl save. Precompute the
     # static values in Python and write them as cell values so the user
@@ -1014,7 +1050,13 @@ def _compute_composites_and_bests(candidates, weights):
     tags_per_row = []
     for i in range(len(candidates)):
         tags = [t for t, idx in bests.items() if idx == i]
-        tags_per_row.append(" ".join(tags))
+        # When a single row wins all four metrics, "All metrics ✓" is shorter
+        # and reads better than concatenating four "X ✓" tags (which wraps
+        # awkwardly in the merged "Best in:" cell).
+        if len(tags) == 4:
+            tags_per_row.append("All metrics ✓")
+        else:
+            tags_per_row.append(" ".join(tags))
     winner_idx = composites.index(min(composites))
     return composites, tags_per_row, winner_idx, norm_group, norm_sd, norm_mr, norm_vert
 
