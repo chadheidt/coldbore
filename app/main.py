@@ -79,6 +79,20 @@ WINDOW_W = 960
 WINDOW_H = 760
 
 
+def parse_loadscope_action(url):
+    """Extract the action token from a loadscope:// QUrl.
+
+    Returns the action as a lowercase string (e.g. 'reset-weights') or
+    '' for an invalid / actionless URL. Accepts both `loadscope://action`
+    (action in host) and `loadscope:///action` (action in path) shapes.
+
+    Pure function — safe to unit-test without instantiating QApplication.
+    """
+    if url is None or not url.isValid() or url.scheme() != "loadscope":
+        return ""
+    return (url.host() or url.path().strip("/") or "").strip().lower()
+
+
 class RifleLoadApp(QApplication):
     """Custom QApplication that intercepts macOS QFileOpenEvent so CSVs
     dragged onto the Dock icon (or right-clicked → Open With) are routed
@@ -101,12 +115,25 @@ class RifleLoadApp(QApplication):
         super().__init__(argv)
         self._main_window = None
         self._pending_files = []
+        # URLs (loadscope:// scheme) received before the main window is
+        # ready get queued and dispatched once set_main_window fires.
+        self._pending_urls = []
         self._batch_timer = QTimer(self)
         self._batch_timer.setSingleShot(True)
         self._batch_timer.timeout.connect(self._flush_pending)
 
     def event(self, e):
         if e.type() == QEvent.FileOpen:
+            # QFileOpenEvent carries either a file path (CSV drag-on-icon)
+            # or a URL (custom loadscope:// scheme clicked from Excel etc.).
+            # Route accordingly.
+            url = e.url()
+            if url is not None and url.isValid() and url.scheme() == "loadscope":
+                if self._main_window:
+                    self._main_window.handle_loadscope_url(url)
+                else:
+                    self._pending_urls.append(url)
+                return True
             path = e.file()
             if path:
                 self._pending_files.append(path)
@@ -116,6 +143,10 @@ class RifleLoadApp(QApplication):
 
     def set_main_window(self, win):
         self._main_window = win
+        # Flush any URLs that arrived before the window was ready.
+        for url in self._pending_urls:
+            win.handle_loadscope_url(url)
+        self._pending_urls = []
 
     def _flush_pending(self):
         if not self._pending_files or not self._main_window:
@@ -495,111 +526,158 @@ class MainWindow(QMainWindow):
         QTimer.singleShot(0, self._refresh_workbooks)
 
         # Tools menu — manual "Check for Updates", folder shortcuts, About.
-        # macOS auto-merges menus named "Help" into its system Help menu and can
-        # hide custom items, so we use "Tools" instead.
-        menu = self.menuBar().addMenu("Tools")
+        # Menu bar organized into four top-level menus instead of one giant
+        # "Tools" menu. macOS-specific: avoid the literal name "Help" — the
+        # OS auto-merges any menu by that name into its system Help menu and
+        # can hide custom items. "Support" sidesteps that.
+        mbar = self.menuBar()
 
-        # Help is the most-needed item for new users, so it's the first menu entry
-        help_action = QAction(f"How to Use {APP_NAME}…", self)
-        help_action.setMenuRole(QAction.NoRole)
-        help_action.triggered.connect(self._show_help)
-        menu.addAction(help_action)
+        # ===== 1. WORKBOOK =====
+        wb_menu = mbar.addMenu("Workbook")
 
-        menu.addSeparator()
+        open_wb_action = QAction("Open Workbook in Excel", self)
+        open_wb_action.setMenuRole(QAction.NoRole)
+        open_wb_action.triggered.connect(self._open_workbook_in_excel)
+        wb_menu.addAction(open_wb_action)
+        self._open_wb_action = open_wb_action  # store so we can enable/disable
 
-        check_action = QAction("Check for Updates…", self)
-        check_action.setMenuRole(QAction.NoRole)
-        check_action.triggered.connect(lambda: self._start_update_check(manual=True))
-        menu.addAction(check_action)
+        print_wb_action = QAction("Print Workbook…", self)
+        print_wb_action.setMenuRole(QAction.NoRole)
+        print_wb_action.triggered.connect(self._print_workbook)
+        wb_menu.addAction(print_wb_action)
+        self._print_wb_action = print_wb_action
 
-        settings_action = QAction("Settings…", self)
-        settings_action.setMenuRole(QAction.NoRole)
-        settings_action.triggered.connect(self._show_settings)
-        menu.addAction(settings_action)
-
-        run_now_action = QAction("Run Import Now (use existing folder contents)", self)
-        run_now_action.setMenuRole(QAction.NoRole)
-        run_now_action.triggered.connect(self._run_import_now_menu)
-        menu.addAction(run_now_action)
-
-        restore_action = QAction("Restore From Backup…", self)
-        restore_action.setMenuRole(QAction.NoRole)
-        restore_action.triggered.connect(self._restore_from_backup)
-        menu.addAction(restore_action)
-
-        load_card_action = QAction("Generate Load Card…", self)
-        load_card_action.setMenuRole(QAction.NoRole)
-        load_card_action.triggered.connect(self._generate_load_card)
-        menu.addAction(load_card_action)
+        wb_menu.addSeparator()
 
         new_cycle_action = QAction("Start New Cycle…", self)
         new_cycle_action.setMenuRole(QAction.NoRole)
         new_cycle_action.triggered.connect(self._start_new_cycle)
-        menu.addAction(new_cycle_action)
+        wb_menu.addAction(new_cycle_action)
+
+        wb_menu.addSeparator()
+
+        run_now_action = QAction("Run Import Now (use existing folder contents)", self)
+        run_now_action.setMenuRole(QAction.NoRole)
+        run_now_action.triggered.connect(self._run_import_now_menu)
+        wb_menu.addAction(run_now_action)
+
+        restore_action = QAction("Restore From Backup…", self)
+        restore_action.setMenuRole(QAction.NoRole)
+        restore_action.triggered.connect(self._restore_from_backup)
+        wb_menu.addAction(restore_action)
+
+        wb_menu.addSeparator()
+
+        load_card_action = QAction("Generate Load Card…", self)
+        load_card_action.setMenuRole(QAction.NoRole)
+        load_card_action.triggered.connect(self._generate_load_card)
+        wb_menu.addAction(load_card_action)
 
         export_load_action = QAction("Export Suggested Load…", self)
         export_load_action.setMenuRole(QAction.NoRole)
         export_load_action.triggered.connect(self._export_load)
-        menu.addAction(export_load_action)
+        wb_menu.addAction(export_load_action)
 
         import_load_action = QAction("Import Shared Load…", self)
         import_load_action.setMenuRole(QAction.NoRole)
         import_load_action.triggered.connect(self._import_load)
-        menu.addAction(import_load_action)
+        wb_menu.addAction(import_load_action)
 
-        menu.addSeparator()
+        reset_weights_action = QAction("Reset Composite Weights…", self)
+        reset_weights_action.setMenuRole(QAction.NoRole)
+        reset_weights_action.triggered.connect(self._reset_composite_weights)
+        wb_menu.addAction(reset_weights_action)
 
-        # Show-in-Finder shortcuts so users don't have to navigate manually
-        show_project_action = QAction("Show Project Folder in Finder", self)
+        save_load_action = QAction("Save Suggested Load to Library…", self)
+        save_load_action.setMenuRole(QAction.NoRole)
+        save_load_action.triggered.connect(self._save_suggested_load)
+        wb_menu.addAction(save_load_action)
+
+        pocket_card_action = QAction("Print Pocket Range Card…", self)
+        pocket_card_action.setMenuRole(QAction.NoRole)
+        pocket_card_action.triggered.connect(self._print_pocket_card)
+        wb_menu.addAction(pocket_card_action)
+
+        # ===== 2. FOLDERS =====
+        folders_menu = mbar.addMenu("Folders")
+
+        show_project_action = QAction("Show Project Folder", self)
         show_project_action.setMenuRole(QAction.NoRole)
         show_project_action.triggered.connect(
             lambda: self._reveal_in_finder(self.project)
         )
-        menu.addAction(show_project_action)
+        folders_menu.addAction(show_project_action)
 
-        show_garmin_action = QAction("Show Garmin Imports Folder", self)
+        show_garmin_action = QAction("Show Garmin Imports", self)
         show_garmin_action.setMenuRole(QAction.NoRole)
         show_garmin_action.triggered.connect(
             lambda: self._reveal_in_finder(os.path.join(self.project, "Garmin Imports"))
         )
-        menu.addAction(show_garmin_action)
+        folders_menu.addAction(show_garmin_action)
 
-        show_bx_action = QAction("Show BallisticX Imports Folder", self)
+        show_bx_action = QAction("Show BallisticX Imports", self)
         show_bx_action.setMenuRole(QAction.NoRole)
         show_bx_action.triggered.connect(
             lambda: self._reveal_in_finder(os.path.join(self.project, "BallisticX Imports"))
         )
-        menu.addAction(show_bx_action)
+        folders_menu.addAction(show_bx_action)
 
-        show_backups_action = QAction("Show Backups Folder", self)
+        show_backups_action = QAction("Show Backups", self)
         show_backups_action.setMenuRole(QAction.NoRole)
         show_backups_action.triggered.connect(
             lambda: self._reveal_in_finder(os.path.join(self.project, ".backups"))
         )
-        menu.addAction(show_backups_action)
+        folders_menu.addAction(show_backups_action)
 
-        menu.addSeparator()
+        # ===== 3. SETTINGS =====
+        settings_menu = mbar.addMenu("Settings")
+
+        settings_action = QAction("Settings…", self)
+        settings_action.setMenuRole(QAction.NoRole)
+        settings_action.triggered.connect(self._show_settings)
+        settings_menu.addAction(settings_action)
+
+        check_action = QAction("Check for Updates…", self)
+        check_action.setMenuRole(QAction.NoRole)
+        check_action.triggered.connect(lambda: self._start_update_check(manual=True))
+        settings_menu.addAction(check_action)
+
+        # ===== 4. SUPPORT =====
+        support_menu = mbar.addMenu("Support")
+
+        help_action = QAction(f"How to Use {APP_NAME}…", self)
+        help_action.setMenuRole(QAction.NoRole)
+        help_action.triggered.connect(self._show_help)
+        support_menu.addAction(help_action)
+
+        support_menu.addSeparator()
 
         visit_website_action = QAction(f"Visit {APP_NAME} Website…", self)
         visit_website_action.setMenuRole(QAction.NoRole)
         visit_website_action.triggered.connect(self._visit_website)
-        menu.addAction(visit_website_action)
+        support_menu.addAction(visit_website_action)
 
         send_feedback_action = QAction("Send Feedback…", self)
         send_feedback_action.setMenuRole(QAction.NoRole)
         send_feedback_action.triggered.connect(self._send_feedback)
-        menu.addAction(send_feedback_action)
+        support_menu.addAction(send_feedback_action)
 
-        menu.addSeparator()
+        support_menu.addSeparator()
 
         about_action = QAction("About Loadscope™", self)
         about_action.setMenuRole(QAction.NoRole)
         about_action.triggered.connect(self._show_about)
-        menu.addAction(about_action)
+        support_menu.addAction(about_action)
+
         disclaimer_action = QAction("View Disclaimer…", self)
         disclaimer_action.setMenuRole(QAction.NoRole)
         disclaimer_action.triggered.connect(self._show_disclaimer)
-        menu.addAction(disclaimer_action)
+        support_menu.addAction(disclaimer_action)
+
+        # Wire up enable/disable for "Open Workbook in Excel" based on whether
+        # there's actually a workbook to open. Updates whenever the picker
+        # selection changes.
+        self._update_open_workbook_action_state()
 
         # Drop zone
         self.drop = DropZone(self.handle_drops)
@@ -615,7 +693,11 @@ class MainWindow(QMainWindow):
         all_names = [p.NAME for p in chronograph_parsers()] + \
                     [p.NAME for p in group_parsers()]
         if all_names:
-            supports_text = "Supports " + " · ".join(all_names) + "  ·  more added in updates"
+            supports_text = (
+                "Supports " + " · ".join(all_names) +
+                "    Have a different chronograph? Email support@loadscope.app with a sample CSV "
+                "and we'll add it in the next update."
+            )
         else:
             supports_text = "(no parsers registered)"
         self.supports_label = QLabel(supports_text)
@@ -793,6 +875,35 @@ class MainWindow(QMainWindow):
                 color=theme.LOG_WARNING,
             )
 
+    def handle_loadscope_url(self, url):
+        """Dispatcher for loadscope:// URLs (clickable workbook hyperlinks).
+
+        URL shapes recognized:
+          loadscope://reset-weights   — run the Reset Composite Weights flow
+                                        on the active workbook.
+
+        Bring the window forward so the user sees the confirmation dialog.
+        Unknown actions are logged but do not raise.
+        """
+        self.show()
+        self.raise_()
+        self.activateWindow()
+
+        action = parse_loadscope_action(url)
+        if not action:
+            self._log("Received loadscope:// URL with no action — ignoring.",
+                      color=theme.LOG_DIM)
+            return
+        if action == "reset-weights":
+            self._reset_composite_weights()
+        elif action == "save-to-library":
+            self._save_suggested_load()
+        elif action == "print-pocket-card":
+            self._print_pocket_card()
+        else:
+            self._log(f"Unknown loadscope:// action: {action!r}",
+                      color=theme.LOG_DIM)
+
     def handle_external_files(self, paths):
         """Files arrived from outside the window — drag-on-Dock-icon, "Open With…",
         or sys.argv at launch.
@@ -899,11 +1010,31 @@ class MainWindow(QMainWindow):
         # multiple workbooks exist, otherwise auto-pick most-recent)
         workbook_path = self._selected_workbook()
         if not workbook_path:
-            self._log("\nERROR: No working .xlsx workbook found in the project folder.",
-                      color=theme.LOG_ERROR)
-            self._log(f"  Looked in: {self.project}")
-            self._log("  Make a working copy via File → Save As from the .xltx template.")
-            return
+            # First-time user: no .xlsx yet. Prompt for a name and create one
+            # from the template before continuing.
+            workbook_path = self._prompt_first_load_name()
+            if not workbook_path:
+                self._log("\nImport cancelled — no workbook to write to.",
+                          color=theme.LOG_DIM)
+                return
+            self._refresh_workbooks()
+        else:
+            # Active workbook already exists. If it has data, confirm with the user
+            # so they don't accidentally mix new-cycle data into an old workbook.
+            if self._workbook_has_data(workbook_path):
+                choice = self._confirm_continue_or_new_cycle(workbook_path)
+                if choice == "cancel":
+                    self._log("\nImport cancelled.", color=theme.LOG_DIM)
+                    return
+                elif choice == "new_cycle":
+                    new_wb = self._start_new_cycle_inline()
+                    if not new_wb:
+                        self._log("\nImport cancelled — new cycle wasn't created.",
+                                  color=theme.LOG_DIM)
+                        return
+                    workbook_path = new_wb
+                    self._refresh_workbooks()
+                # else "continue": just keep going
 
         # If picker shows multiple, log which one we're using so the user is sure
         all_workbooks = import_data.list_workbooks(project_dir=self.project)
@@ -1351,6 +1482,10 @@ class MainWindow(QMainWindow):
         # for a picker when there's nothing to pick from.
         self.wb_row_widget.setVisible(len(workbooks) > 1)
 
+        # Refresh the enable state of the "Open Workbook in Excel" menu item
+        # so it greys out when no workbook exists yet.
+        self._update_open_workbook_action_state()
+
     def _on_workbook_changed(self, _index):
         """User picked a different workbook in the combo box. Persist their
         choice to config so the next launch defaults to it."""
@@ -1370,6 +1505,350 @@ class MainWindow(QMainWindow):
         # Fallback: rescan and use most-recent
         workbooks = import_data.list_workbooks(project_dir=self.project)
         return workbooks[0] if workbooks else None
+
+    def _open_workbook_in_excel(self):
+        """Open the currently-active workbook in Excel (or whatever app is
+        registered to open .xlsx files). Useful when Excel ends up behind
+        the Loadscope window and the user can't find their workbook."""
+        wb_path = self._selected_workbook()
+        if not wb_path or not os.path.isfile(wb_path):
+            self._log("No workbook to open yet. Drop CSVs and click Run Import to create one.",
+                      color=theme.LOG_DIM)
+            return
+        try:
+            subprocess.run(["open", wb_path], check=False)
+        except Exception as e:
+            self._log(f"Couldn't open workbook: {e}", color=theme.LOG_ERROR)
+
+    def _update_open_workbook_action_state(self):
+        """Enable the 'Open Workbook in Excel' menu item only when there's
+        actually a workbook to open. Called on startup and whenever the
+        workbook picker selection changes."""
+        wb = self._selected_workbook()
+        enabled = bool(wb and os.path.isfile(wb))
+        for attr in ("_open_wb_action", "_print_wb_action"):
+            action = getattr(self, attr, None)
+            if action is not None:
+                action.setEnabled(enabled)
+
+    def _reset_composite_weights(self):
+        """Restore the workbook's composite-score weights to Loadscope's
+        defaults on both the Charts and Seating Depth sheets."""
+        wb_path = self._selected_workbook()
+        if not wb_path or not os.path.isfile(wb_path):
+            QMessageBox.information(
+                self,
+                "No workbook",
+                "There's no workbook to reset yet. Drop CSVs and click Run "
+                "Import to create one first.",
+            )
+            return
+        reply = QMessageBox.question(
+            self,
+            "Reset Composite Weights",
+            (
+                f"Reset the composite-score weights on '{os.path.basename(wb_path)}' "
+                f"to Loadscope defaults?\n\n"
+                f"Charts (powder ladder):   Vel 0.30  •  SD 0.20  •  MR 0.20  •  SD-Vert 0.30\n"
+                f"Seating Depth:            Vel 0.15  •  SD 0.25  •  MR 0.25  •  SD-Vert 0.35\n\n"
+                f"Any custom weights you've typed will be overwritten."
+            ),
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.No,
+        )
+        if reply != QMessageBox.Yes:
+            return
+        try:
+            changes = import_data.reset_composite_weights(wb_path)
+        except PermissionError:
+            QMessageBox.warning(
+                self,
+                "Workbook is open",
+                "Close the workbook in Excel and try again. Loadscope can't "
+                "write to a workbook that Excel has open.",
+            )
+            return
+        except Exception as e:
+            QMessageBox.critical(
+                self,
+                "Reset failed",
+                f"Couldn't reset weights:\n\n{e}",
+            )
+            return
+        self._log(
+            f"Reset composite weights on {os.path.basename(wb_path)} "
+            f"({len(changes)} cell(s) updated).",
+            color=theme.LOG_SUCCESS,
+        )
+
+    def _save_suggested_load(self):
+        """Append a new row to Load Library capturing the current
+        suggested load (winning charge from Charts, winning jump from
+        Seating Depth, components from Load Log header, performance
+        metrics from the matching winner rows)."""
+        wb_path = self._selected_workbook()
+        if not wb_path or not os.path.isfile(wb_path):
+            QMessageBox.information(
+                self,
+                "No workbook",
+                "There's no workbook to save from yet. Drop CSVs and click "
+                "Run Import to create one first.",
+            )
+            return
+        # Gather the suggested load data so the confirmation dialog has
+        # something concrete to show. Surfaces "no winner yet" errors
+        # early before bothering the user with a save dialog.
+        try:
+            data = import_data.gather_suggested_load(wb_path)
+        except ValueError as e:
+            QMessageBox.warning(self, "Nothing to save", str(e))
+            return
+        except Exception as e:
+            QMessageBox.critical(self, "Couldn't read workbook", str(e))
+            return
+
+        # Build a human-readable summary for the confirmation dialog.
+        def fmt(val, suffix=""):
+            if val in (None, ""):
+                return "—"
+            if isinstance(val, float):
+                return f"{val:g}{suffix}"
+            return f"{val}{suffix}"
+
+        summary_lines = [
+            f"Date Added:  {fmt(data.get('date_added'))}",
+            f"Load Name:   {fmt(data.get('load_name'))}",
+            f"Rifle:       {fmt(data.get('rifle'))}",
+            f"Bullet:      {fmt(data.get('bullet'))}  ({fmt(data.get('bullet_wt'), ' gr')})",
+            f"Powder:      {fmt(data.get('powder'))}  ({fmt(data.get('charge'), ' gr')})",
+            f"Primer:      {fmt(data.get('primer'))}",
+            f"Brass:       {fmt(data.get('brass'))}",
+            f"CBTO:        {fmt(data.get('cbto'), ' in')}",
+            f"Jump:        {fmt(data.get('jump'), ' in')}",
+            f"Avg Vel:     {fmt(data.get('avg_vel'), ' fps')}",
+            f"SD:          {fmt(data.get('sd_fps'), ' fps')}",
+            f"Group:       {fmt(data.get('group_moa'), ' MOA')}",
+            f"Mean Radius: {fmt(data.get('mr_moa'), ' MOA')}",
+        ]
+        if data.get("notes"):
+            summary_lines.append(f"Notes:       {data.get('notes')[:80]}")
+        prompt = (
+            f"Save this load to Load Library on "
+            f"'{os.path.basename(wb_path)}'?\n\n"
+            + "\n".join(summary_lines)
+            + "\n\nYou can edit any of these cells in Load Library after "
+            "the row is added."
+        )
+
+        reply = QMessageBox.question(
+            self,
+            "Save Suggested Load to Library",
+            prompt,
+            QMessageBox.Save | QMessageBox.Cancel,
+            QMessageBox.Save,
+        )
+        if reply != QMessageBox.Save:
+            return
+        try:
+            row, written = import_data.save_suggested_load_to_library(wb_path, data=data)
+        except PermissionError:
+            QMessageBox.warning(
+                self,
+                "Workbook is open",
+                "Close the workbook in Excel and try again. Loadscope can't "
+                "write to a workbook that Excel has open.",
+            )
+            return
+        except ValueError as e:
+            QMessageBox.warning(self, "Couldn't save", str(e))
+            return
+        except Exception as e:
+            QMessageBox.critical(self, "Save failed", f"Couldn't save load:\n\n{e}")
+            return
+        self._log(
+            f"Saved suggested load to Load Library!A{row} on "
+            f"{os.path.basename(wb_path)}.",
+            color=theme.LOG_SUCCESS,
+        )
+
+    def _print_pocket_card(self):
+        """Generate + open a printable Pocket Range Card from the
+        Ballistics tab's DOPE data. Opens in the user's default browser
+        so they can print or save as PDF."""
+        wb_path = self._selected_workbook()
+        if not wb_path or not os.path.isfile(wb_path):
+            QMessageBox.information(
+                self,
+                "No workbook",
+                "There's no workbook to generate a card from yet.",
+            )
+            return
+        try:
+            from pocket_card import generate_pocket_card
+            out_path = generate_pocket_card(wb_path, open_after=True)
+        except ValueError as e:
+            QMessageBox.warning(self, "Couldn't generate card", str(e))
+            return
+        except PermissionError:
+            QMessageBox.warning(
+                self,
+                "Workbook is open",
+                "Close the workbook in Excel and try again. Loadscope needs "
+                "to read the latest cached values to build the card.",
+            )
+            return
+        except Exception as e:
+            QMessageBox.critical(self, "Generation failed",
+                                 f"Couldn't generate Pocket Range Card:\n\n{e}")
+            return
+        self._log(
+            f"Pocket Range Card generated: {os.path.basename(out_path)}",
+            color=theme.LOG_SUCCESS,
+        )
+
+    def _print_workbook(self):
+        """Open the active workbook in Excel and trigger the Print dialog.
+        Uses AppleScript to send Excel a print command after opening the file.
+        Each user-facing sheet is preconfigured to fit on one landscape page,
+        so the user just confirms and prints."""
+        wb_path = self._selected_workbook()
+        if not wb_path or not os.path.isfile(wb_path):
+            self._log("No workbook to print yet. Drop CSVs and click Run Import to create one.",
+                      color=theme.LOG_DIM)
+            return
+        # AppleScript: open in Excel + show print dialog
+        osa = (
+            'tell application "Microsoft Excel"\n'
+            '    activate\n'
+            f'    open POSIX file "{wb_path}"\n'
+            '    delay 1\n'
+            '    tell active workbook to print out without print dialog -- show=true makes it interactive\n'
+            'end tell'
+        )
+        # NOTE: "print out without print dialog" actually sends straight to default
+        # printer. To SHOW the dialog (so the user can pick printer, copies, page
+        # range), use "print out" without that clause. We use the latter.
+        osa = (
+            'tell application "Microsoft Excel"\n'
+            '    activate\n'
+            f'    open POSIX file "{wb_path}"\n'
+            '    delay 1\n'
+            '    print active workbook\n'
+            'end tell'
+        )
+        try:
+            subprocess.run(["osascript", "-e", osa], check=False)
+        except Exception as e:
+            self._log(f"Couldn't trigger print: {e}", color=theme.LOG_ERROR)
+
+    def _workbook_has_data(self, workbook_path):
+        """Return True if Load Log row 16+ has any imported data (any charge value
+        in column B). Used to decide whether to prompt for new-cycle confirmation."""
+        try:
+            from openpyxl import load_workbook
+            wb = load_workbook(workbook_path, data_only=True, keep_vba=False)
+            if "Load Log" not in wb.sheetnames:
+                return False
+            ws = wb["Load Log"]
+            for r in range(16, 26):
+                v = ws.cell(r, 2).value
+                if v not in (None, ""):
+                    return True
+            return False
+        except Exception:
+            return False  # err on the safe side — don't prompt if we can't read
+
+    def _confirm_continue_or_new_cycle(self, workbook_path):
+        """Ask the user whether to continue with the current workbook or start a
+        new cycle. Returns 'continue', 'new_cycle', or 'cancel'."""
+        from PyQt5.QtWidgets import QMessageBox
+        box = QMessageBox(self)
+        box.setIcon(QMessageBox.Question)
+        box.setWindowTitle("Continue this load, or start a new one?")
+        box.setText(
+            f"You're about to import into:\n\n"
+            f"     {os.path.basename(workbook_path)}\n\n"
+            f"Is this more data for the same load, or are you starting a new one "
+            f"(different powder, bullet, or cartridge)?"
+        )
+        continue_btn = box.addButton("Continue this load", QMessageBox.AcceptRole)
+        new_btn = box.addButton("Start a new load…", QMessageBox.ActionRole)
+        cancel_btn = box.addButton("Cancel", QMessageBox.RejectRole)
+        box.setDefaultButton(continue_btn)
+        box.exec_()
+        clicked = box.clickedButton()
+        if clicked is continue_btn: return "continue"
+        if clicked is new_btn:      return "new_cycle"
+        return "cancel"
+
+    def _start_new_cycle_inline(self):
+        """Launch the New Cycle dialog and return the path of the new workbook
+        (or None if the user cancelled)."""
+        from new_cycle_dialog import show_new_cycle
+        return show_new_cycle(self.project, self._selected_workbook(), parent=self)
+
+    def _prompt_first_load_name(self):
+        """Brand-new user has no .xlsx in their project folder yet. Prompt for
+        a name for their first load and create the workbook from the template.
+        Returns the new workbook's path, or None if the user cancelled."""
+        from PyQt5.QtWidgets import QInputDialog
+        name, ok = QInputDialog.getText(
+            self,
+            "Name your first load",
+            "Looks like this is your first load. What would you like to call it?\n\n"
+            "Pick something descriptive — for example:\n"
+            "  6.5 Creedmoor 140 ELD-M H4350\n"
+            "  300 PRC 225 ELD-M H1000",
+            text="",
+        )
+        if not ok:
+            return None
+        name = name.strip()
+        if not name:
+            return None
+        # Sanitize for filename safety
+        safe = name.replace("/", "-").replace(":", "-")
+        new_path = os.path.join(self.project, f"{safe}.xlsx")
+        if os.path.exists(new_path):
+            self._log(f"\nA workbook named '{safe}.xlsx' already exists. Pick a different name.",
+                      color=theme.LOG_ERROR)
+            return None
+        # Find the bundled template
+        try:
+            from setup_wizard import find_bundled_template
+            template = find_bundled_template()
+        except Exception:
+            template = None
+        # Also check the project folder itself
+        if not template:
+            for f in os.listdir(self.project):
+                if f.lower().endswith(".xltx") and "template" in f.lower():
+                    template = os.path.join(self.project, f)
+                    break
+        if not template or not os.path.exists(str(template)):
+            self._log("\nCouldn't find the workbook template — please contact support@loadscope.app.",
+                      color=theme.LOG_ERROR)
+            return None
+        # Copy template → .xlsx (re-save through openpyxl so it's a proper workbook,
+        # not a template — same trick the New Cycle dialog uses). Also stamp
+        # the load name onto each user-facing sheet so the user knows which
+        # load they're viewing.
+        try:
+            from openpyxl import load_workbook
+            import import_data
+            wb = load_workbook(str(template), keep_vba=False)
+            wb.template = False
+            import_data.stamp_load_name(wb, name)
+            inherited = import_data.inherit_rifle_setup(wb, self.project, exclude_path=new_path)
+            wb.save(new_path)
+        except Exception as e:
+            self._log(f"\nCouldn't create the new workbook: {e}", color=theme.LOG_ERROR)
+            return None
+        self._log(f"\nCreated workbook: {safe}.xlsx", color=theme.LOG_SUCCESS)
+        if inherited:
+            self._log(f"  Pre-filled from previous workbook: {', '.join(inherited)}",
+                      color=theme.LOG_DIM)
+        return new_path
 
     def _log_workbook_state(self):
         """Show a one-line summary of the current workbook contents in the

@@ -223,7 +223,8 @@ def format_load_for_display(data):
         lines.append(f"  {data['notes']}")
 
     lines.append("")
-    lines.append("⚠  Always cross-reference loads against published reloading manuals.")
-    lines.append("   Start below this charge and work up. Watch for pressure signs.")
+    lines.append("⚠  This is shared data, not a load recommendation. Always cross-reference")
+    lines.append("   every charge weight against current published load data from your")
+    lines.append("   powder, bullet, and cartridge manufacturers before shooting.")
 
     return "\n".join(lines)

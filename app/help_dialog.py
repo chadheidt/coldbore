@@ -110,6 +110,77 @@ The same applies to Seating Depth — at least 3 different jump distances
 before the SUGGESTED JUMP bar will recommend one.
 
 
+HOW THE SUGGESTED LOAD IS PICKED
+
+Each load is scored on four factors. Each factor is normalized to a
+0–1 scale across all loads (0 = best in class, 1 = worst), then
+combined into one Composite Score using the weights below. The LOWEST
+Composite Score wins.
+
+The four factors:
+
+   1. VELOCITY FLAT SPOT
+      Spread of average velocities across a 3-charge window (low / middle
+      / high). Tighter spread = a flatter velocity node = less sensitive
+      to small charge-weight variation.
+
+   2. STANDARD DEVIATION (SD)
+      Shot-to-shot velocity consistency for the middle charge. Pulled
+      directly from your Garmin Xero session.
+
+   3. MEAN RADIUS (MR, in MOA)
+      Average distance of each shot from the group center, converted
+      to MOA. Better than extreme-spread group size because it uses every
+      shot's distance from center, not just the two outliers.
+
+   4. VERTICAL DISPERSION (in MOA)
+      Vertical-only dispersion at the middle charge.
+      Loadscope prefers SD-Vert (the statistical standard deviation of
+      vertical positions across every shot) because it correlates best
+      with real-world long-range hit probability.
+      Fallback chain:
+          SD-Vert  →  Height (extreme spread)  →  MR
+      If your BallisticX export didn't include SD-Vert, Loadscope falls
+      back to Height. If neither is available, it uses MR so the score
+      doesn't break.
+
+DEFAULT WEIGHTS
+
+   Load Log (powder ladder):    Vel 30 %  SD 20 %  MR 20 %  Vert 30 %
+   Seating Depth:               Vel 15 %  SD 25 %  MR 25 %  Vert 35 %
+
+WHY THESE WEIGHTS?
+
+   Powder ladder defaults — a ladder is built to find a flat velocity
+   node, so Velocity gets the highest weight (30 %). Vertical
+   dispersion gets the same weight because it's the strongest predictor
+   of long-range accuracy. SD and MR get 20 % each — useful sanity
+   checks, but a 5-shot group is too small a sample to outrank
+   velocity-stability at this stage.
+
+   Seating depth defaults — once the powder charge is locked in,
+   seating depth tuning is about tight groups, not chasing velocity.
+   Vertical gets the highest weight (35 %) because vertical dispersion
+   is the dominant predictor of long-range accuracy and seating has
+   the biggest effect on it. SD and MR get 25 % each — both visible in
+   group consistency since seating depth affects bullet jump and
+   barrel time. Velocity drops to 15 % because it barely changes with
+   seating.
+
+You can edit these weights on the Charts tab and Seating Depth tab —
+they live in row 11 (Charts) and row 28 (Seating Depth). Weights must
+sum to 1.0. To restore Loadscope's defaults, use
+Tools → Reset Composite Weights.
+
+NOTE
+
+The Composite Score ranks the charges you entered by your weighted
+scoring criteria — it is not a load recommendation. Loadscope does
+not certify safe charges, recommend loads, or assess pressure. Always
+cross-reference any charge weight against current published load data
+from your powder, bullet, and cartridge manufacturers before shooting.
+
+
 TIPS THAT WILL SAVE YOU TIME
 
 • Close Excel BEFORE you click Run Import. The script can't write to a
@@ -129,18 +200,18 @@ TIPS THAT WILL SAVE YOU TIME
   (count is configurable in Tools → Settings…). Or use Tools → Restore
   From Backup… to roll back from inside the app.
 
-• If a friend has a different chronograph (LabRadar, MagnetoSpeed, etc.),
-  contact the developers (Tools → About → click here) and send a sample
-  CSV — we'll add support.
+• If you have a different chronograph (LabRadar, MagnetoSpeed,
+  Caldwell ChronoMaster, ProChrono, Oehler, etc.), email a sample CSV
+  to support@loadscope.app — we'll add it to the next release.
+  Loadscope's parser system is designed to grow.
 
 
 SAFETY REMINDER
 
-Loadscope is an analysis tool. It does NOT provide load data. Always
-cross-reference loads against published reloading manuals from powder,
-bullet, and cartridge manufacturers. Watch for pressure signs. Start
-below maximum loads and work up. See Tools → View Disclaimer for the
-full text.
+Loadscope is an analysis tool. It does NOT provide load data or
+recommend loads. Always cross-reference every charge weight against
+current published load data from your powder, bullet, and cartridge
+manufacturers. See Tools → View Disclaimer for the full text.
 """
 
 

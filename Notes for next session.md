@@ -6,6 +6,117 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## 🟧 PICK UP HERE — May 12, 2026 ~16:50 (Loadscope v0.13.3 IN FLIGHT, NOT shipped)
+
+**Session paused after extensive workbook polish + bug-fix iterations. Nothing committed, nothing shipped. Versions still 0.13.2. Tests still 85/85.**
+
+**Chad is verifying `~/Desktop/6_LATEST_1649.xlsx` overnight before greenlighting ship.**
+
+### Resume order
+
+1. **Read `project-loadscope-current-inflight` memory in full** — comprehensive state with every single workbook change documented, every Excel-Mac gotcha learned today, and the ordered open-items list.
+2. **Ask Chad what he found** overnight — if there are issues, address those FIRST.
+3. **Continue the open-items list** in the inflight memory (start with: verify chart2/3/5/6 on Load Log, then chart7/8/9 on Seating Depth).
+4. **Critical TODO before ship**: update `apply_workbook_repairs()` in `import_data.py` to recompute the now-static Charts H/I/J/K/L + M-Q + T/U + R + Load Log O column values on every CSV import. Otherwise legacy user workbooks won't self-heal.
+
+### What got fixed today (high-level)
+
+- Load Log "Best in" cell working + properly styled (white label + yellow value, centered)
+- Composite Score column populated (LL O15:O18)
+- Charts G5 "Best in indicator" working
+- Charts row 13-17 layout cleaned up (hidden rows close the gap)
+- Charts B17/C17 "Low" / "High" labels visible
+- G11 renamed "Vertical" → "SD-Vert"
+- Comment hover-box sizes restored (360×200 for all 87 comments)
+- Heat maps added to all metric columns (D/E/F/G/H/I/K on Charts; O + D-G analysis on Seating Depth)
+- Charts D4/E4 hidden in test mode (was duplicating Avg Vel value)
+- Seating Depth O2 "Best in" matches Load Log M2 styling
+- Seating Depth B29/C29 "Low" / "High" labels
+- All 9 chart numCaches rebuilt with proper numRef (was getting corrupted by openpyxl saves)
+- Chart1 + chart4 (Velocity vs Charge) now plot in sorted charge order via hidden helper columns T/U
+- All 9 charts have `plotVisOnly="0"` (so they render data from hidden cells)
+- Workbook now opens to "After Range Day" tab by default (was Seating Depth)
+
+### Critical Excel-Mac lessons (saved in inflight memory)
+
+- Excel-Mac stubbornly returns 0 for AGGREGATE formulas in certain cells; STATIC values are the only reliable workaround
+- Mixed-type ranges (numbers + empty strings) get converted numRef→strRef by Excel on save — use NA() or #N/A error cells for empties
+- Hidden columns + chart references requires `plotVisOnly="0"` or charts render blank
+- openpyxl saves corrupt chart XML; use direct XML edits + snapshot+restore for chart files
+- `_xludf.AGGREGATE` prefix gets injected by Excel on save and locks in stale `<v>0</v>` cache
+- AppleScript `open POSIX file` to Excel often fails; use Excel's native `open workbook workbook file name` verb
+
+### Quick orientation when you resume
+
+1. **Latest in-flight workbook:** `~/Desktop/6_LATEST_1358.xlsx` (open this in Excel to see current state)
+2. **Source of truth files:** `6.xlsx` and `Rifle Loads Template (do not edit).xltx` in the project folder — both have the latest formatting
+3. **Source code state:** All today's morning UI changes (menu bar reorg, first-load prompt, etc.) intact in `app/main.py`, `app/help_dialog.py`, `app/new_cycle_dialog.py`, `import_data.py`. Tests 85/85 pass.
+4. **Versions still 0.13.2** in `app/version.py`, `setup.py`, `manifest.json` — NOT bumped to 0.13.3 yet
+5. **Nothing committed to git** — all today's source + workbook changes are uncommitted
+
+### What today (2026-05-12) accomplished
+
+A massive UX-polish + workbook-formatting batch on top of v0.13.2:
+
+**Source code (in `app/main.py`, `app/help_dialog.py`, `app/new_cycle_dialog.py`, `import_data.py`):**
+- Menu bar reorganized into 4 menus: Workbook / Folders / Settings / Support
+- "Open Workbook in Excel" + "Print Workbook…" menu items added
+- First-load prompt (`_prompt_first_load_name`) for users who drop CSVs with no `.xlsx` yet
+- Continue-or-new-cycle confirmation when running Import on a workbook that already has data
+- New help-dialog section "HOW THE SUGGESTED LOAD IS PICKED" with SD-Vert + Composite explanations
+- New-cycle dialog rewritten in friendlier language ("Done with this load? Start a new one")
+- New `import_data.py` helpers: `inherit_rifle_setup()`, `stamp_load_name()`, `apply_workbook_repairs()`
+- `apply_workbook_repairs()` runs on every import; fixes chart `dispBlanksAs` zero→gap, hides on-axis markers, NA() rewires chart-source cells, auto-fills date/cartridge/bullet/notes from imported records
+
+**Workbook (`6.xlsx` + `Rifle Loads Template (do not edit).xltx`):**
+- Section header bars (rows 1, 3, 4, 8, 12) extended A:P on Load Log + Seating Depth
+- Row 9 component layout standardized: Bullet (B-E val) | Powder (G-J val above OAL) | Primer (L-M val) | Brass (O-P val rightmost) — both sheets
+- "Cart:" → "Cartridge:" on K5; col K widened to 12
+- New Composite Score column at Load Log!O15:O25 with per-row lookup
+- Winner column at Load Log!P15:P25 (renamed from "Notes")
+- Heat map (green→red, low=best) on ES, SD, Group, Vertical, SD-Vert, MR, Composite
+- Hide #N/A: conditional formatting white-on-NA + number format prefix `[=NA()]"";...`
+- Seating Depth K9 dark blue label fix
+- Seating Depth col A widened 8→10 (WEIGHTS: fits), col B widened 8→10 (Velocity fits)
+- Seating Depth O2:P2 merged with `="Best in: "&IFERROR(...)` — confirmed working by Chad
+- Charts!G5 hover comment added explaining Best-in indicators + 3-load test mode
+- Charts row 100 (mode debug) hidden
+- All chart widths set to `col=16, colOff=0` (chart right edge exactly at end of column P, no overflow)
+- All 87 comment boxes resized to 320×160px via VML edit (last step, since openpyxl saves clobber them)
+
+### ⚠️ ONE OPEN ISSUE BEFORE SHIPPING
+
+**Load Log!M2:P2 (merged "Best in:" cell) renders BLANK in Excel.**
+- The inline-expanded formula is on disk and looks correct
+- Seating Depth's analogous formula (referencing its own analysis section, not cross-sheet) DOES work
+- Hypotheses to test next session:
+  1. Force Excel recalc (`Cmd+=`) on the open workbook
+  2. Excel for Mac may need `Ctrl+Shift+Enter` for cross-sheet array-style formulas
+  3. Add a "Best in" column on the Charts sheet (R column?) so Load Log can use a simple non-array INDEX/MATCH like Seating Depth does
+
+See `project-loadscope-current-inflight` memory for full details.
+
+### Remaining checklist for v0.13.3 ship
+
+1. **Resolve the Load Log Best in display** (the only known visible issue)
+2. Bump 0.13.2 → 0.13.3 in `app/version.py`, `setup.py`, `manifest.json`
+3. Commit all uncommitted source + workbook + xltx changes
+4. Push to main
+5. Build via `Build Signed App.command`
+6. R2 upload via `wrangler r2 object put --remote`
+7. GitHub release v0.13.3 + publish `--latest`
+8. Verify auto-update v0.13.2 → v0.13.3 from Chad's `/Applications/Loadscope.app`
+
+### Lessons learned this session (already in memory)
+
+- openpyxl silently corrupts chart XML on every save — snapshot charts → openpyxl edit → restore charts. See `feedback_check_all_sheets.md`.
+- Comment box sizes (VML) get clobbered by openpyxl saves — resize as the LAST step.
+- Cell colors and number formats from openpyxl can be ignored by Excel for Mac if encoded weirdly — use direct XML style index manipulation when copy() doesn't take.
+- Excel caches workbooks by file path — for review iterations, deliver as `~/Desktop/6_LATEST_HHMM.xlsx` (unique timestamped name).
+- Self-evaluate every claimed change BEFORE delivering — Chad shouldn't be the QA loop.
+
+---
+
 ## ✅ LOADSCOPE v0.13.2 SHIPPED — May 11, 2026 (very late evening — pre-beta deep dive)
 
 **Pre-beta deep-dive patch.** Found and fixed two issues a first beta tester would have noticed:

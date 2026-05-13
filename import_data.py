@@ -269,6 +269,164 @@ def find_workbook():
         print(f"  Invalid choice. Type a number from 1 to {len(candidates)}.")
 
 
+def migrate_schema_to_10_shot(wb):
+    """One-time, idempotent migration from the pre-v0.13.3 7-shot schema
+    to the v0.13.3 10-shot schema. MUST run BEFORE write_chronograph_records
+    on any workbook that might be on the legacy schema — otherwise the
+    writer's new column targets collide with legacy data positions.
+
+    Detection signals:
+      - GarminSessions!L1 == 'AvgVel'  (legacy hidden-sheet header)
+      - 'Garmin Xero Import'!L5 == 'Avg Vel (fps)'  (legacy visible header)
+
+    Returns a list of human-readable fix strings (empty if no migration
+    was needed).
+    """
+    fixes = []
+
+    # --- GarminSessions hidden sheet: shift legacy summary cols L..R → O..U
+    if "GarminSessions" in wb.sheetnames:
+        gs = wb["GarminSessions"]
+        if (gs.cell(1, 12).value or "") == "AvgVel":
+            last_row = gs.max_row
+            for r in range(2, last_row + 1):
+                # Walk right-to-left so dst writes don't clobber unread src
+                for src_col, dst_col in [
+                    (18, 21), (17, 20), (16, 19), (15, 18),
+                    (14, 17), (13, 16), (12, 15),
+                ]:
+                    gs.cell(r, dst_col).value = gs.cell(r, src_col).value
+                    gs.cell(r, src_col).value = None
+            for col, header in [
+                (12, "Shot8"), (13, "Shot9"), (14, "Shot10"),
+                (15, "AvgVel"), (16, "SD"), (17, "ES"),
+                (18, "BulletWt"), (19, "AvgKE"),
+                (20, "SessionTitle"), (21, "SessionNote"),
+            ]:
+                gs.cell(1, col).value = header
+            fixes.append(
+                "GarminSessions: migrated 7-shot → 10-shot schema "
+                f"({last_row - 1} data row(s) shifted)"
+            )
+
+    # --- Garmin Xero Import visible sheet: shift L..Q → O..T, add new shot cells
+    if "Garmin Xero Import" in wb.sheetnames:
+        gxi = wb["Garmin Xero Import"]
+        if (gxi.cell(5, 12).value or "") == "Avg Vel (fps)":
+            # Map: old visible col → new visible col, GS letter the new
+            # formula must reference (post-GS-migration positions).
+            #   old L (AvgVel, GS!$L) → new O (AvgVel, GS!$O)
+            #   old M (SD,     GS!$M) → new P (SD,     GS!$P)
+            #   old N (ES,     GS!$N) → new Q (ES,     GS!$Q)
+            #   old O (BWt,    GS!$O) → new R (BWt,    GS!$R)
+            #   old P (KE,     GS!$P) → new S (KE,     GS!$S)
+            #   old Q (Notes,  GS!$R) → new T (Notes,  GS!$U)
+            shift_map = [
+                (12, 15, "L", "O"),
+                (13, 16, "M", "P"),
+                (14, 17, "N", "Q"),
+                (15, 18, "O", "R"),
+                (16, 19, "P", "S"),
+                (17, 20, "R", "U"),  # Notes: GS source jumps R→U
+            ]
+            for row_n in range(6, 27):
+                if row_n == 16:
+                    continue  # section header
+                e_style = gxi.cell(row_n, 5).style
+                # Move summary cells right-to-left
+                for src_col, dst_col, old_gs, new_gs in shift_map[::-1]:
+                    src = gxi.cell(row_n, src_col)
+                    dst = gxi.cell(row_n, dst_col)
+                    val = src.value
+                    if isinstance(val, str) and val.startswith("="):
+                        val = val.replace(
+                            f"GarminSessions!${old_gs}$2:${old_gs}$200",
+                            f"GarminSessions!${new_gs}$2:${new_gs}$200",
+                        )
+                    dst.value = val
+                    dst.style = src.style
+                # Plant new Shot 8/9/10 formulas at L/M/N with shot styling.
+                # ISNUMBER guard so empty source cells display as "" not 0.
+                for col, gs_letter in [(12, "L"), (13, "M"), (14, "N")]:
+                    cell = gxi.cell(row_n, col)
+                    inner = (
+                        f"LOOKUP(2,1/(GarminSessions!$A$2:$A$200=$A{row_n}),"
+                        f"GarminSessions!${gs_letter}$2:${gs_letter}$200)"
+                    )
+                    cell.value = f'=IFERROR(IF({inner}>0,{inner},""),"")'
+                    cell.style = e_style
+                # Update D's COUNT range
+                d_cell = gxi.cell(row_n, 4)
+                if isinstance(d_cell.value, str) and d_cell.value.startswith("="):
+                    d_cell.value = d_cell.value.replace(
+                        f"E{row_n}:K{row_n}", f"E{row_n}:N{row_n}"
+                    )
+                # Update C's SessionTitle ref (GS!$Q → GS!$T)
+                c_cell = gxi.cell(row_n, 3)
+                if isinstance(c_cell.value, str) and "GarminSessions!$Q" in c_cell.value:
+                    c_cell.value = c_cell.value.replace(
+                        "GarminSessions!$Q$2:$Q$200",
+                        "GarminSessions!$T$2:$T$200",
+                    )
+            # Row 5 headers
+            for col, label in [
+                (12, "Shot 8 (fps)"), (13, "Shot 9 (fps)"), (14, "Shot 10 (fps)"),
+                (15, "Avg Vel (fps)"), (16, "SD (fps)"), (17, "ES (fps)"),
+                (18, "Bullet Wt (gr)"), (19, "Avg KE (ft·lb)"), (20, "Notes"),
+            ]:
+                gxi.cell(5, col).value = label
+            # Row 2 help text
+            r2 = gxi.cell(2, 1)
+            if isinstance(r2.value, str) and "Shot 1–5 cells (E:I)" in r2.value:
+                r2.value = r2.value.replace(
+                    "Shot 1–5 cells (E:I)", "Shot 1–10 cells (E:N)"
+                )
+            fixes.append(
+                "Garmin Xero Import: migrated 7-shot → 10-shot layout"
+            )
+
+    # --- Load Log + Seating Depth: cross-sheet refs to 'Garmin Xero Import'
+    # The candidate tables on these sheets pull Avg Vel / ES / SD values
+    # from 'Garmin Xero Import' cols L/M/N (pre-migration AvgVel/SD/ES).
+    # After the visible-sheet migration above, those values now live in
+    # cols O/P/Q. Remap each formula. Only fires if the legacy references
+    # are still in place.
+    for sheet_name, rows in (("Load Log", range(16, 26)), ("Seating Depth", range(16, 27))):
+        if sheet_name not in wb.sheetnames:
+            continue
+        ws = wb[sheet_name]
+        sheet_fixes = 0
+        for ll_row in rows:
+            for ll_col in range(2, 17):  # B..P
+                cell = ws.cell(ll_row, ll_col)
+                v = cell.value
+                if not (isinstance(v, str) and v.startswith("=") and "Garmin Xero Import" in v):
+                    continue
+                new_v = v
+                # The GXI row referenced is independent of this cell's row;
+                # the legacy refs are like 'Garmin Xero Import'!L6, M6, N6.
+                # Apply substitutions: !L<n> → !O<n>, !M<n> → !P<n>, !N<n> → !Q<n>.
+                # Use word-boundary-style match so we don't double-shift.
+                import re as _re
+                new_v = _re.sub(r"('Garmin Xero Import'!\$?)L(\$?\d+)", r"\1O\2", new_v)
+                new_v = _re.sub(r"('Garmin Xero Import'!\$?)M(\$?\d+)", r"\1P\2", new_v)
+                new_v = _re.sub(r"('Garmin Xero Import'!\$?)N(\$?\d+)", r"\1Q\2", new_v)
+                if new_v != v:
+                    cell.value = new_v
+                    sheet_fixes += 1
+        if sheet_fixes:
+            fixes.append(
+                f"{sheet_name}: remapped {sheet_fixes} cross-sheet ref(s) "
+                "to new Garmin Xero Import layout"
+            )
+
+    if fixes:
+        print("  Schema migration applied:")
+        for f in fixes:
+            print(f"    - {f}")
+    return fixes
+
+
 def write_chronograph_records(wb, records):
     """Write all chronograph session records to the GarminSessions hidden sheet.
 
@@ -286,27 +444,663 @@ def write_chronograph_records(wb, records):
         for cell in row:
             cell.value = None
 
+    # v0.13.3 schema:
+    #   A=Tag, B=ChargeOrJump, C=Powder, D=Date,
+    #   E-N = Shot 1..10,
+    #   O=AvgVel, P=SD, Q=ES, R=BulletWt, S=AvgKE,
+    #   T=SessionTitle, U=SessionNote.
     out_row = 2
     for d in records:
         sht.cell(row=out_row, column=1).value = d.get("Tag", "")
         sht.cell(row=out_row, column=2).value = d.get("ChargeOrJump")
         sht.cell(row=out_row, column=3).value = d.get("Powder", "")
         sht.cell(row=out_row, column=4).value = d.get("Date", "")
-        for i, shot in enumerate((d.get("Shots") or [])[:7]):
+        for i, shot in enumerate((d.get("Shots") or [])[:10]):
             sht.cell(row=out_row, column=5 + i).value = shot
-        sht.cell(row=out_row, column=12).value = d.get("AvgVel")
-        sht.cell(row=out_row, column=13).value = d.get("SD")
-        sht.cell(row=out_row, column=14).value = d.get("ES")
-        sht.cell(row=out_row, column=15).value = d.get("BulletWt")
-        sht.cell(row=out_row, column=16).value = d.get("AvgKE")
-        sht.cell(row=out_row, column=17).value = d.get("SessionTitle", "")
-        sht.cell(row=out_row, column=18).value = d.get("SessionNote", "")
+        sht.cell(row=out_row, column=15).value = d.get("AvgVel")
+        sht.cell(row=out_row, column=16).value = d.get("SD")
+        sht.cell(row=out_row, column=17).value = d.get("ES")
+        sht.cell(row=out_row, column=18).value = d.get("BulletWt")
+        sht.cell(row=out_row, column=19).value = d.get("AvgKE")
+        sht.cell(row=out_row, column=20).value = d.get("SessionTitle", "")
+        sht.cell(row=out_row, column=21).value = d.get("SessionNote", "")
         out_row += 1
     return out_row - 2
 
 
 # Backwards-compat alias for any callers still using the old name
 write_garmin = write_chronograph_records
+
+
+def inherit_rifle_setup(new_wb, project_dir, exclude_path=None):
+    """Pre-fill the new workbook's Rifle/Shooter/Components fields from the
+    user's most recent prior workbook in the project folder (or the
+    Completed Loads subfolder). Users typically run multiple cycles on the
+    same rifle and same components — copying these fields saves them from
+    re-entering 9 metadata cells every time.
+
+    Only fills cells that are currently empty. Never overwrites.
+    `exclude_path` is the new workbook being created — don't read from itself.
+    """
+    import os
+    from openpyxl import load_workbook
+    if "Load Log" not in new_wb.sheetnames:
+        return []
+
+    # Find candidate prior workbooks: .xlsx files in the project folder + Completed Loads
+    candidates = []
+    for d in (project_dir, os.path.join(project_dir, "Completed Loads")):
+        if not os.path.isdir(d):
+            continue
+        for fn in os.listdir(d):
+            if not fn.lower().endswith(".xlsx") or fn.startswith("~"):
+                continue
+            full = os.path.join(d, fn)
+            if exclude_path and os.path.abspath(full) == os.path.abspath(exclude_path):
+                continue
+            try:
+                mtime = os.path.getmtime(full)
+            except OSError:
+                continue
+            candidates.append((mtime, full))
+    if not candidates:
+        return []
+    candidates.sort(reverse=True)  # most recent first
+
+    # Fields to inherit, by (row, col) coordinate on Load Log
+    # Layout: A=label, B=value, F=label, G=value, K=label, L=value (and below)
+    FIELDS = [
+        (5, 2,  "Rifle"),
+        (5, 7,  "Shooter"),
+        (5, 12, "Cartridge"),
+        (6, 2,  "Barrel"),
+        (6, 7,  "Optic"),
+        (6, 12, "Chrono"),
+        (9, 2,  "Bullet"),
+        (9, 6,  "Powder"),
+        (9, 9,  "Primer"),
+        (9, 12, "Brass"),
+    ]
+    target_ws = new_wb["Load Log"]
+    inherited = []
+    for _mtime, prior_path in candidates:
+        try:
+            prior_wb = load_workbook(prior_path, data_only=True, keep_vba=False)
+        except Exception:
+            continue
+        if "Load Log" not in prior_wb.sheetnames:
+            continue
+        prior_ws = prior_wb["Load Log"]
+        any_inherited = False
+        for r, c, label in FIELDS:
+            tgt = target_ws.cell(r, c)
+            if tgt.value not in (None, ""):
+                continue  # don't overwrite
+            src_val = prior_ws.cell(r, c).value
+            # Skip formulas, empty, and openpyxl objects (formula placeholders)
+            if src_val in (None, ""):
+                continue
+            if isinstance(src_val, str) and src_val.startswith("="):
+                continue
+            tgt.value = src_val
+            inherited.append(label)
+            any_inherited = True
+        if any_inherited:
+            # Found a prior workbook with usable data — stop scanning
+            break
+    return inherited
+
+
+def stamp_load_name(wb, load_name):
+    """Write the user-chosen load name into the top header cell on each
+    user-facing sheet so the user knows which load they're viewing at a glance.
+
+    Called once when a new workbook is created (first-load prompt or new-cycle
+    dialog). Idempotent — calling again just overwrites the title cells.
+    """
+    if not load_name:
+        return
+    stamps = {
+        "Load Log": load_name,
+        "Seating Depth": f"{load_name}  —  Seating Depth",
+        "Charts": f"{load_name}  —  Suggested Best Load",
+        "After Range Day": f"After Range Day  —  {load_name}",
+    }
+    for sheet, value in stamps.items():
+        if sheet in wb.sheetnames:
+            try:
+                wb[sheet]["A1"] = value
+            except Exception:
+                # Cell may be part of a merged range that needs special handling.
+                # The top-left cell of a merge is writable, so this should
+                # normally succeed; swallow errors so a stamp failure doesn't
+                # block workbook creation.
+                pass
+
+
+def apply_workbook_repairs(wb, group_records, chronograph_records=None):
+    """Patch a workbook's template-level bugs and auto-populate user-entry
+    fields that we can infer from the import data.
+
+    Idempotent — only fills cells/attributes that are currently missing or
+    set to the wrong defaults. Existing user input is never overwritten.
+
+    Fixes:
+      - Load Log + Charts "Accuracy Node Finder" LineChart: display_blanks
+        was set to 'zero' in early templates, which made the chart line
+        drop to a flat zero baseline after the last shot. Changes it to
+        'gap' so empty cells are skipped.
+      - Load Log!L10 + Seating Depth!L10 (Dist (yd)): if the user hasn't
+        filled it in yet AND the imported BallisticX records agree on a
+        single distance, set it. The MR display in the suggested-charge
+        red row divides by this distance to convert inches to MOA --
+        without it, MR + Best-in render blank.
+    """
+    fixes = []
+
+    # Self-heal the A3 "Click here to jump to Charts" hyperlink on Load Log
+    # and Seating Depth. Pre-v0.13.3 templates pointed it at an intra-sheet
+    # row (A27) that was just a header label — no charts under it. We
+    # retarget the link to the Charts sheet where the actual charts live.
+    from openpyxl.worksheet.hyperlink import Hyperlink
+    JUMP_DISPLAY = (
+        "↓  Click here to jump to the Charts sheet "
+        "(Suggested Best Load)  ↓"
+    )
+    for sheet_name in ("Load Log", "Seating Depth"):
+        if sheet_name not in wb.sheetnames:
+            continue
+        ws = wb[sheet_name]
+        a3 = ws["A3"]
+        hl = a3.hyperlink
+        # Treat as broken if missing, if pointing at any !A27 target, or if
+        # target/display still mentions A27 / 'this sheet'.
+        broken = (
+            hl is None
+            or (hl.location or "").endswith("!A27")
+            or (hl.target or "").endswith("!A27")
+            or (hl.target or "").endswith("'!A27")
+        )
+        if broken:
+            a3.hyperlink = Hyperlink(
+                ref="A3", location="Charts!A1", display=JUMP_DISPLAY
+            )
+            a3.value = JUMP_DISPLAY
+            fixes.append(f"{sheet_name}!A3: retargeted jump link to Charts sheet")
+
+    for sheet_name in ("Load Log", "Charts"):
+        if sheet_name not in wb.sheetnames:
+            continue
+        ws = wb[sheet_name]
+        for chart in ws._charts:
+            try:
+                title = chart.title.tx.rich.paragraphs[0].r[0].t if chart.title else ""
+            except Exception:
+                title = ""
+            if "Accuracy Node" not in title:
+                continue
+            chart_changed = False
+            if getattr(chart, "display_blanks", None) == "zero":
+                chart.display_blanks = "gap"
+                chart_changed = True
+            # Series 1 (Group MOA) + Series 2 (SD) had white markers that
+            # sat ON the x-axis line at the bottom of the chart, since both
+            # series plot at very small y-values compared to Velocity. The
+            # markers visually broke up the gray axis line. Hide them --
+            # the lines themselves stay visible (when colored).
+            try:
+                from openpyxl.chart.marker import Marker
+                for series_idx in (1, 2):
+                    if series_idx < len(chart.series):
+                        s = chart.series[series_idx]
+                        if s.marker is None or (s.marker.symbol or "circle") != "none":
+                            s.marker = Marker(symbol="none")
+                            chart_changed = True
+            except Exception:
+                pass
+            if chart_changed:
+                fixes.append(f"{sheet_name}/Accuracy Node Finder: cleaned up empty-cell handling + axis-obscuring markers")
+
+    distances = [g.get("Distance") for g in (group_records or []) if g.get("Distance")]
+    common_distance = None
+    if distances:
+        from collections import Counter
+        common_distance = Counter(distances).most_common(1)[0][0]
+    if common_distance is not None:
+        for sheet_name in ("Load Log", "Seating Depth"):
+            if sheet_name not in wb.sheetnames:
+                continue
+            ws = wb[sheet_name]
+            l10 = ws.cell(10, 12)
+            if l10.value is None or l10.value == "":
+                l10.value = common_distance
+                fixes.append(f"{sheet_name}!L10: set Dist (yd) = {common_distance}")
+
+    # Chart-source cells in Load Log H/J/K (Avg Vel, SD, Group) — these
+    # feed the Accuracy Node Finder LineChart. Excel charts plot empty
+    # strings as zero (which is why the line dropped to a zero baseline
+    # after the last shot). Returning NA() instead makes the chart skip
+    # the cell. Custom number format hides #N/A from the user view.
+    if "Load Log" in wb.sheetnames:
+        ws = wb["Load Log"]
+        chart_src_changes = 0
+        for r in range(16, 26):
+            for col in (8, 10, 11):  # H, J, K
+                cell = ws.cell(r, col)
+                v = cell.value
+                if isinstance(v, str) and v.startswith("=") and ',""' in v and "NA()" not in v:
+                    cell.value = v.replace(',""', ',NA()')
+                    chart_src_changes += 1
+                if '[=NA()]' not in (cell.number_format or ""):
+                    cell.number_format = '[=NA()]"";General'
+        if chart_src_changes:
+            fixes.append(f"Load Log H/J/K16:25: rewired {chart_src_changes} chart-source formula(s) to skip empties")
+
+    # Load Log!M2 "Best in:" indicator. v0.13.2 templates had an inline
+    # cross-sheet concat formula that Excel for Mac failed to render
+    # (the cell appeared blank). v0.13.3 mirrors the working Seating
+    # Depth pattern: pre-compute a per-row Best-in string on Charts!R18:R25,
+    # then Load Log!M2 does a simple INDEX/MATCH against the winning row.
+    if "Charts" in wb.sheetnames and "Load Log" in wb.sheetnames:
+        charts = wb["Charts"]
+        loadlog = wb["Load Log"]
+        # AGGREGATE(5,6,...) = MIN ignoring errors. Required because the
+        # NA() rewiring on Load Log H/J/K (above) propagates #N/A into
+        # Charts D-G for empty rows, and plain MIN errors out on any #N/A.
+        new_m2 = ('="Best in: "&IFERROR(INDEX(Charts!$R$18:$R$25,'
+                  'MATCH(AGGREGATE(5,6,Charts!$L$18:$L$25),'
+                  'Charts!$L$18:$L$25,0)),"")')
+        if loadlog["M2"].value != new_m2:
+            loadlog["M2"] = new_m2
+            fixes.append("Load Log!M2: simplified Best-in formula (cross-sheet INDEX/MATCH)")
+        if charts["R17"].value != "Best in (per row)":
+            charts["R17"] = "Best in (per row)"
+            fixes.append("Charts!R17: added Best-in (per row) header")
+        for r in range(18, 26):
+            want = (f'=IFERROR('
+                    f'IF(D{r}=AGGREGATE(5,6,$D$18:$D$25),"Vel ✓ ","")&'
+                    f'IF(E{r}=AGGREGATE(5,6,$E$18:$E$25),"SD ✓ ","")&'
+                    f'IF(F{r}=AGGREGATE(5,6,$F$18:$F$25),"MR ✓ ","")&'
+                    f'IF(G{r}=AGGREGATE(5,6,$G$18:$G$25),"Vert ✓ ","")'
+                    f',"")')
+            if charts.cell(r, 18).value != want:
+                charts.cell(r, 18).value = want
+                fixes.append(f"Charts!R{r}: per-row Best-in formula")
+
+    # ---- Auto-fill session metadata from CSV data ----
+    # Skip if the workbook isn't a Load Log structure.
+    if "Load Log" in wb.sheetnames:
+        ws = wb["Load Log"]
+
+        # Auto-fill Date in the Test Session bar (row 13, column B).
+        # Use earliest date present in chronograph or group records.
+        if (chronograph_records or group_records):
+            b13 = ws.cell(13, 2)
+            if b13.value in (None, ""):
+                # Collect candidate dates from both sources
+                date_candidates = []
+                for d in (chronograph_records or []):
+                    dv = d.get("Date")
+                    if dv: date_candidates.append(str(dv).strip())
+                for g in (group_records or []):
+                    dv = g.get("Date")
+                    if dv: date_candidates.append(str(dv).strip())
+                if date_candidates:
+                    # Pick the first encountered (typically all from same range trip)
+                    b13.value = date_candidates[0]
+                    fixes.append(f"Load Log!B13 (Date): auto-filled = {date_candidates[0]!r}")
+
+        # Auto-fill Cartridge from BallisticX caliber (row 5, column L)
+        if group_records:
+            calibers = [g.get("Caliber") for g in group_records if g.get("Caliber")]
+            if calibers:
+                from collections import Counter
+                most_common_cal = Counter(calibers).most_common(1)[0][0]
+                l5 = ws.cell(5, 12)  # Cartridge value cell
+                if l5.value in (None, ""):
+                    l5.value = most_common_cal
+                    fixes.append(f"Load Log!L5 (Cartridge): auto-filled = {most_common_cal!r}")
+
+        # Auto-fill Bullet weight in row 9 (append to Bullet field if it has
+        # text but no weight, or set to "{weight} gr" if empty)
+        if chronograph_records:
+            weights = [d.get("BulletWt") for d in chronograph_records if d.get("BulletWt")]
+            if weights:
+                from collections import Counter
+                most_common_wt = Counter(weights).most_common(1)[0][0]
+                b9 = ws.cell(9, 2)
+                cur = (b9.value or "")
+                if not isinstance(cur, str):
+                    cur = str(cur)
+                # If the current value already mentions the weight, skip
+                if not (cur and (f"{most_common_wt}" in cur or "gr" in cur.lower())):
+                    if cur:
+                        b9.value = f"{cur} ({most_common_wt} gr)"
+                    else:
+                        b9.value = f"{most_common_wt} gr"
+                    fixes.append(f"Load Log!B9 (Bullet): added weight = {most_common_wt} gr")
+
+        # Auto-fill Session note from Garmin into the Notes column for the
+        # matching row. Each chronograph record may have a SessionNote.
+        if chronograph_records:
+            for d in chronograph_records:
+                note = (d.get("SessionNote") or "").strip()
+                tag = (d.get("Tag") or "").strip()
+                if not note or not tag:
+                    continue
+                # Find which Load Log row this tag will land in. Tags map to
+                # rows by order of P1, P2, ... appearing in the data table.
+                # Simpler approach: scan B16:B25, find matching charge, write note.
+                # The matching is loose — we just want to ENRICH, never overwrite.
+                # Since tag→row mapping depends on lookup formulas, just append
+                # session notes to the row 13 Test Session Notes field if it
+                # doesn't already contain them.
+                k13 = ws.cell(13, 12)  # Notes value cell (column L is value-of K13 label)
+                # Actually K13 is the "Notes:" label. Value cell is L13.
+                # Re-check: row 13 layout is A=Date:, B=date, F=Temp:, G=temp, K=Notes:, L=notes
+                l13 = ws.cell(13, 12)
+                cur_notes = str(l13.value or "")
+                if note not in cur_notes:
+                    new_notes = (cur_notes + " " + note).strip() if cur_notes else note
+                    if new_notes != cur_notes:
+                        l13.value = new_notes
+                        fixes.append(f"Load Log!L13 (Notes): appended session note from {tag}")
+
+    # Reset every user-facing sheet's saved scroll/selection state so
+    # the workbook opens at the top of each tab next time. Excel persists
+    # the scroll position per-sheet — resetting on every import means the
+    # saved file always opens fresh, regardless of where the user last
+    # scrolled in their previous session.
+    from openpyxl.worksheet.views import Selection
+    user_facing_sheets = (
+        "After Range Day", "Load Log", "Charts", "Seating Depth",
+        "Garmin Xero Import", "BallisticX Import", "Load Library", "Ballistics",
+    )
+    view_resets = 0
+    for sheet_name in user_facing_sheets:
+        if sheet_name not in wb.sheetnames:
+            continue
+        view = wb[sheet_name].sheet_view
+        changed = False
+        if view.topLeftCell is not None:
+            view.topLeftCell = None
+            changed = True
+        # Force selection to A1
+        target_sel = [Selection(activeCell="A1", sqref="A1")]
+        # Compare by attribute since Selection __eq__ may not be identity-safe
+        cur_sel = list(view.selection or [])
+        if (len(cur_sel) != 1 or
+                getattr(cur_sel[0], "activeCell", None) != "A1" or
+                getattr(cur_sel[0], "sqref", None) != "A1"):
+            view.selection = target_sel
+            changed = True
+        # Only After Range Day should claim tabSelected; everyone else
+        # should be unselected. The workbook.xml activeTab="0" picks the
+        # initial tab on open.
+        want_selected = (sheet_name == "After Range Day")
+        if bool(view.tabSelected) != want_selected:
+            view.tabSelected = want_selected
+            changed = True
+        if changed:
+            view_resets += 1
+    if view_resets:
+        fixes.append(
+            f"Reset saved scroll/selection state on {view_resets} sheet(s) "
+            "so workbook opens at top of every tab"
+        )
+
+    if fixes:
+        print("  Workbook repairs applied:")
+        for f in fixes:
+            print(f"    - {f}")
+    return fixes
+
+
+# Default composite-score weights — used by the Tools → Reset Composite
+# Weights menu item to restore the workbook to Loadscope's recommended
+# starting values. Rationale lives in app/help_dialog.py and as a cell
+# comment on Charts!A10 + Seating Depth!A28.
+DEFAULT_WEIGHTS_CHARTS = {
+    "B11": 0.3,   # Velocity
+    "D11": 0.2,   # SD
+    "F11": 0.2,   # MR
+    "H11": 0.3,   # SD-Vert
+}
+DEFAULT_WEIGHTS_SEATING_DEPTH = {
+    "C28": 0.15,  # Velocity
+    "F28": 0.25,  # SD
+    "I28": 0.25,  # MR
+    "L28": 0.35,  # SD-Vert
+}
+
+
+def _inches_to_moa(inches, distance_yd):
+    """Convert linear inches to MOA at a given distance in yards.
+
+    1 MOA subtends 1.047 inches at 100 yards, scaling linearly with
+    distance. Returns None if either input is missing or distance is
+    not positive (can't compute MOA without a known shot distance)."""
+    if inches in (None, "") or distance_yd in (None, "", 0):
+        return None
+    try:
+        inches_f = float(inches)
+        dist_f = float(distance_yd)
+        if dist_f <= 0:
+            return None
+        return round(inches_f * 100.0 / (dist_f * 1.047), 3)
+    except (ValueError, TypeError):
+        return None
+
+
+def gather_suggested_load(workbook_path):
+    """Read the current 'suggested load' state from the workbook —
+    winning charge from the powder ladder analysis, winning jump from
+    the seating-depth analysis, plus the load components and
+    performance metrics for the winner row(s).
+
+    Returns a dict ready to be written to one row in the Load Library
+    sheet. Raises ValueError if no powder-ladder winner exists.
+
+    Reads cached values via data_only=True; the caller should have run
+    a CSV import (or Excel session) before calling this so formulas
+    have current cached results.
+    """
+    import datetime
+    import os
+    import re as _re
+    from openpyxl import load_workbook
+
+    wb = load_workbook(workbook_path, data_only=True, keep_vba=False)
+    if "Charts" not in wb.sheetnames or "Load Log" not in wb.sheetnames:
+        raise ValueError(
+            "This workbook doesn't have the expected sheets (Charts + Load Log)."
+        )
+    charts = wb["Charts"]
+    ll = wb["Load Log"]
+    sd = wb["Seating Depth"] if "Seating Depth" in wb.sheetnames else None
+
+    winning_charge = charts["B3"].value
+    if winning_charge in (None, "", 0):
+        raise ValueError(
+            "No suggested charge yet — run a powder ladder first."
+        )
+
+    # Find which Load Log candidate row corresponds to the winner so
+    # we can pull its metrics. Match by charge weight.
+    winner_row = None
+    for r in range(16, 26):
+        v = ll.cell(r, 2).value  # col B = Charge (gr)
+        if v == winning_charge:
+            winner_row = r
+            break
+        # tolerate small float drift
+        try:
+            if v not in (None, "") and abs(float(v) - float(winning_charge)) < 1e-6:
+                winner_row = r
+                break
+        except (ValueError, TypeError):
+            pass
+
+    # Distance for MOA conversion lives at L10 on both Load Log + SD
+    distance_yd = ll["L10"].value
+    if distance_yd in (None, "") and sd is not None:
+        distance_yd = sd["L10"].value
+
+    # Performance metrics from the winning Load Log row (inches → MOA).
+    # Columns: H=AvgVel, J=SD, K=Group(in), N=MeanRadius(in).
+    if winner_row:
+        avg_vel = ll.cell(winner_row, 8).value
+        sd_fps = ll.cell(winner_row, 10).value
+        group_in = ll.cell(winner_row, 11).value
+        mr_in = ll.cell(winner_row, 14).value
+    else:
+        avg_vel = sd_fps = group_in = mr_in = None
+
+    group_moa = _inches_to_moa(group_in, distance_yd)
+    mr_moa = _inches_to_moa(mr_in, distance_yd)
+
+    # Optional: seating-depth winner overrides AvgVel/SD with the more
+    # refined measurements from the seating-depth test session.
+    winning_jump = None
+    if sd is not None:
+        winning_jump = sd["D2"].value
+        if winning_jump not in (None, "", 0):
+            sd_avg = sd["G2"].value  # AvgVel of winning jump
+            sd_sd = sd["J2"].value   # SD of winning jump
+            sd_mr_moa = sd["L2"].value  # MR (MOA) — SD analysis is already in MOA
+            if sd_avg not in (None, ""):
+                avg_vel = sd_avg
+            if sd_sd not in (None, ""):
+                sd_fps = sd_sd
+            if sd_mr_moa not in (None, ""):
+                mr_moa = sd_mr_moa
+        else:
+            winning_jump = None
+
+    # Load components from Load Log header (top section).
+    rifle = ll["B5"].value
+    bullet = ll["B9"].value
+    powder = ll["G9"].value
+    primer = ll["L9"].value
+    brass = ll["O9"].value
+    cbto = ll["B10"].value
+    notes = ll["L13"].value or ""
+
+    # Parse bullet weight from the Bullet field text (e.g. "140 ELD-M (140 gr)").
+    bullet_wt = None
+    if bullet:
+        m = _re.search(r"(\d+(?:\.\d+)?)\s*gr", str(bullet))
+        if m:
+            try:
+                bullet_wt = float(m.group(1))
+            except ValueError:
+                pass
+
+    load_name = os.path.splitext(os.path.basename(workbook_path))[0]
+    date_added = datetime.date.today().strftime("%Y-%m-%d")
+
+    return {
+        "date_added": date_added,
+        "load_name": load_name,
+        "rifle": rifle,
+        "bullet": bullet,
+        "bullet_wt": bullet_wt,
+        "powder": powder,
+        "charge": winning_charge,
+        "primer": primer,
+        "brass": brass,
+        "cbto": cbto,
+        "jump": winning_jump,
+        "avg_vel": avg_vel,
+        "sd_fps": sd_fps,
+        "group_moa": group_moa,
+        "mr_moa": mr_moa,
+        "notes": notes,
+    }
+
+
+def save_suggested_load_to_library(workbook_path, data=None):
+    """Append a new Load Library row from the current suggested load.
+
+    If `data` is provided, use it directly (lets a confirmation dialog
+    pass an edited version). Otherwise call `gather_suggested_load` to
+    build the default row from the workbook's current state.
+
+    Returns (row_number, data_dict). Raises ValueError on any of:
+      - no suggested charge yet (gather_suggested_load raised)
+      - Load Library sheet missing
+      - Load Library full (no empty rows in the 5-19 data range)
+    """
+    from openpyxl import load_workbook
+
+    if data is None:
+        data = gather_suggested_load(workbook_path)
+
+    wb = load_workbook(workbook_path, keep_vba=False)
+    wb.template = False
+    if "Load Library" not in wb.sheetnames:
+        raise ValueError("This workbook doesn't have a Load Library sheet.")
+    library = wb["Load Library"]
+
+    # Find next empty row in 5-19 (data rows). Detect "empty" by the
+    # # column (A) being blank.
+    target_row = None
+    for r in range(5, 20):
+        if library.cell(r, 1).value in (None, ""):
+            target_row = r
+            break
+    if target_row is None:
+        raise ValueError(
+            "Load Library is full (rows 5-19 all in use). "
+            "Delete or archive a row before saving a new load."
+        )
+
+    # Write the row. Column → key mapping mirrors the Load Library
+    # header row 4 layout (see workbook for the canonical truth).
+    library.cell(target_row, 1).value = target_row - 4  # A: sequential #
+    library.cell(target_row, 2).value = data.get("date_added")
+    library.cell(target_row, 3).value = data.get("load_name")
+    library.cell(target_row, 4).value = data.get("rifle")
+    library.cell(target_row, 5).value = data.get("bullet")
+    library.cell(target_row, 6).value = data.get("bullet_wt")
+    library.cell(target_row, 7).value = data.get("powder")
+    library.cell(target_row, 8).value = data.get("charge")
+    library.cell(target_row, 9).value = data.get("primer")
+    library.cell(target_row, 10).value = data.get("brass")
+    library.cell(target_row, 11).value = data.get("cbto")
+    library.cell(target_row, 12).value = data.get("jump")
+    library.cell(target_row, 13).value = data.get("avg_vel")
+    library.cell(target_row, 14).value = data.get("sd_fps")
+    library.cell(target_row, 15).value = data.get("group_moa")
+    library.cell(target_row, 16).value = data.get("mr_moa")
+    library.cell(target_row, 17).value = data.get("notes")
+
+    wb.save(workbook_path)
+    return target_row, data
+
+
+def reset_composite_weights(workbook_path):
+    """Restore Charts and Seating Depth composite-score weights to the
+    Loadscope defaults. Returns a list of (sheet, cell, old, new) tuples
+    describing what changed."""
+    from openpyxl import load_workbook
+    wb = load_workbook(workbook_path, keep_vba=False)
+    wb.template = False
+    changes = []
+    if "Charts" in wb.sheetnames:
+        ws = wb["Charts"]
+        for cell_ref, value in DEFAULT_WEIGHTS_CHARTS.items():
+            old = ws[cell_ref].value
+            ws[cell_ref] = value
+            changes.append(("Charts", cell_ref, old, value))
+    if "Seating Depth" in wb.sheetnames:
+        ws = wb["Seating Depth"]
+        for cell_ref, value in DEFAULT_WEIGHTS_SEATING_DEPTH.items():
+            old = ws[cell_ref].value
+            ws[cell_ref] = value
+            changes.append(("Seating Depth", cell_ref, old, value))
+    wb.save(workbook_path)
+    return changes
 
 
 def write_group_records(wb, bx_records):
@@ -485,9 +1279,19 @@ def run_import(workbook_path, project_dir=None, open_excel=True):
     # Force save as regular workbook (not template)
     wb.template = False
 
+    # Migrate any legacy 7-shot schema to v0.13.3 10-shot BEFORE the
+    # writer runs — otherwise the writer's new column targets collide
+    # with legacy data positions.
+    migrate_schema_to_10_shot(wb)
+
     n_g = write_chronograph_records(wb, chronograph_records)
     n_b = write_group_records(wb, group_records)
     print(f"  Wrote {n_g} chronograph row(s) and {n_b} target-group row(s)")
+
+    # Auto-repair template-level bugs in older workbooks and auto-fill
+    # session metadata from the imported data. Safe to call every time --
+    # idempotent and never overwrites user input.
+    apply_workbook_repairs(wb, group_records, chronograph_records=chronograph_records)
 
     try:
         wb.save(workbook_path)

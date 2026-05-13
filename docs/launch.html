@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Launching Loadscope…</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="assets/favicon.png">
+<style>
+  :root {
+    --bg: #0e0f12;
+    --bg-card: #16181d;
+    --text: #e8e9ed;
+    --text-dim: #9aa0aa;
+    --accent: #d97706;
+    --accent-hover: #ea580c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 40px 36px;
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+  }
+  h1 {
+    margin: 0 0 16px;
+    font-size: 24px;
+    font-weight: 600;
+  }
+  p {
+    margin: 8px 0;
+    line-height: 1.5;
+    color: var(--text-dim);
+  }
+  .spinner {
+    display: inline-block;
+    width: 36px;
+    height: 36px;
+    border: 3px solid #3a3d44;
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    margin: 8px auto 16px;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .action-name {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .fallback {
+    display: none;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #2a2d33;
+  }
+  .fallback.show { display: block; }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-top: 12px;
+    transition: background 0.15s;
+  }
+  .btn:hover { background: var(--accent-hover); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid #3a3d44;
+  }
+  .btn-secondary:hover {
+    background: #1f2126;
+    color: var(--text);
+  }
+  code {
+    background: #1f2126;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--accent);
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="loading">
+    <div class="spinner"></div>
+    <h1>Launching Loadscope…</h1>
+    <p>Sending <span class="action-name" id="action-display">…</span> to Loadscope on your Mac.</p>
+    <p style="font-size: 13px; margin-top: 24px;">You can close this tab once Loadscope responds.</p>
+  </div>
+
+  <div class="fallback" id="fallback">
+    <h1>Loadscope didn't respond</h1>
+    <p>If you have Loadscope installed, the action may still be running — switch to the Loadscope window to confirm.</p>
+    <p>If Loadscope isn't installed yet:</p>
+    <a href="https://loadscope.app/" class="btn">Download Loadscope</a>
+    <p style="margin-top: 20px;">
+      <a href="#" id="retry-btn" class="btn btn-secondary">Try again</a>
+    </p>
+  </div>
+</div>
+
+<script>
+  // Read the action from the query string. Whitelist allowed actions so
+  // we don't blindly forward arbitrary user input into the loadscope://
+  // URL scheme.
+  var ALLOWED_ACTIONS = {
+    "save-to-library":   "Save Suggested Load to Library",
+    "reset-weights":     "Reset Composite Weights",
+    "print-pocket-card": "Print Pocket Range Card"
+  };
+
+  var params = new URLSearchParams(window.location.search);
+  var rawAction = (params.get("action") || "").trim().toLowerCase();
+  var action = ALLOWED_ACTIONS[rawAction] ? rawAction : "";
+  var displayName = ALLOWED_ACTIONS[rawAction] || rawAction || "(unknown action)";
+
+  document.getElementById("action-display").textContent = displayName;
+
+  if (!action) {
+    // Bad / missing action — go straight to the fallback (no redirect).
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("fallback").classList.add("show");
+  } else {
+    // Fire the loadscope:// URL. macOS Launch Services routes it to
+    // Loadscope.app, which handles the action and brings its window
+    // to the foreground. If the user doesn't have Loadscope installed
+    // (or has blocked custom scheme handlers), nothing happens — we
+    // surface the fallback after a short delay.
+    var target = "loadscope://" + action;
+    setTimeout(function () { window.location.href = target; }, 50);
+
+    // After 2s, if the user is still here (Loadscope didn't take over),
+    // show the fallback UI. macOS often keeps the browser tab focused
+    // even after a successful launch, so this isn't a reliable "did
+    // Loadscope launch?" detector — just a recovery affordance.
+    setTimeout(function () {
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("fallback").classList.add("show");
+    }, 2000);
+  }
+
+  document.getElementById("retry-btn").addEventListener("click", function (e) {
+    e.preventDefault();
+    window.location.reload();
+  });
+</script>
+</body>
+</html>

@@ -69,7 +69,7 @@ sys.path.insert(0, str(HERE / "app"))
 
 APP_DISPLAY_NAME = "Loadscope"
 APP_BUNDLE_ID = "com.chadheidt.loadscope"
-APP_VERSION = "0.13.2"  # keep in sync with app/version.py
+APP_VERSION = "0.13.3"  # keep in sync with app/version.py
 
 # The main entry script
 ENTRY = ["app/main.py"]
@@ -137,6 +137,18 @@ OPTIONS = {
                 "LSHandlerRank": "Alternate",
             },
         ],
+        # Custom URL scheme: clickable workbook hyperlinks (e.g. on
+        # Charts!A10 'Reset Composite Weights') open the loadscope://
+        # scheme, which macOS routes to this app. The app translates the
+        # URL into an in-app action (e.g. trigger the reset-weights flow).
+        # Handler: RifleLoadApp.event() in app/main.py inspects
+        # QFileOpenEvent.url() for the 'loadscope' scheme.
+        "CFBundleURLTypes": [
+            {
+                "CFBundleURLName": "Loadscope URL",
+                "CFBundleURLSchemes": ["loadscope"],
+            },
+        ],
     },
     # Bundle these top-level packages in full
     "packages": ["PyQt5", "openpyxl", "parsers"],
@@ -155,6 +167,7 @@ OPTIONS = {
         "license_dialog",
         "settings_dialog",
         "load_card",
+        "pocket_card",
         "load_sharing",
         "crash_reporter",
         "help_dialog",

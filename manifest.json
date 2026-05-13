@@ -1,9 +1,9 @@
 {
-  "app_version": "0.13.2",
+  "app_version": "0.13.3",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "Pre-beta polish: fixed bundled Quick Start / App Overview / How-to-Send-Updates docs that still said 'True Zero' (legacy rename never updated the content). Build script now staples the .app's notarization ticket directly so first-launch works even without internet.",
+  "app_release_notes": "Major workbook polish + new features. 10-shot sessions (was 7). New action buttons throughout: Save Suggested Load to Library, Reset Composite Weights, Print Pocket Range Card (a new 4x6 printable DOPE card from your Ballistics tab). New scope-click dropdown on Load Log makes click-count math automatic for any scope. After Range Day tab rewritten for clarity. Many smaller polish items across every user-facing tab.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

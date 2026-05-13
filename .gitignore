@@ -64,3 +64,6 @@ beta-keys.txt
 # --- Local convenience alias to /Applications/Cold Bore.app ---
 #     Created via Finder; not source-controlled.
 /Cold Bore.app
+
+# --- Wrangler CLI cache (Cloudflare R2 uploads) ---
+.wrangler/

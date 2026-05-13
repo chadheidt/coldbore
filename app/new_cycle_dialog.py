@@ -58,7 +58,7 @@ class NewCycleDialog(QDialog):
         layout.setSpacing(12)
 
         # Title
-        title = QLabel("Start a new load development cycle")
+        title = QLabel("Done with this load? Start a new one")
         f = QFont()
         f.setPointSize(17)
         f.setWeight(QFont.DemiBold)
@@ -69,9 +69,10 @@ class NewCycleDialog(QDialog):
 
         # Description
         intro = QLabel(
-            "When you finish a load (different cartridge, bullet, or powder), "
-            "Loadscope can wrap up the current cycle and start a clean one in "
-            "one step."
+            "Finished testing this load and want to start a new one "
+            "(different bullet, powder, or cartridge)? Loadscope cleans "
+            "everything up for you. Your old files aren't deleted — they're "
+            "just moved out of the way so the new cycle stays organized."
         )
         intro.setWordWrap(True)
         if self._t:
@@ -83,13 +84,13 @@ class NewCycleDialog(QDialog):
         form.setSpacing(10)
         self.name_edit = QLineEdit()
         self.name_edit.setPlaceholderText(
-            "e.g. 6.5 Creedmoor 140 ELDM H4350 Spring 2026"
+            "e.g. 6.5 Creedmoor 140 ELD-M H4350"
         )
-        form.addRow("New cycle name:", self.name_edit)
+        form.addRow("Name your new load:", self.name_edit)
         layout.addLayout(form)
 
         # Checkboxes for what gets archived
-        what_label = QLabel("What this will do:")
+        what_label = QLabel("When you click Start, Loadscope will:")
         if self._t:
             what_label.setStyleSheet(
                 f"color: {self._t.TEXT_TERTIARY}; "
@@ -100,7 +101,7 @@ class NewCycleDialog(QDialog):
         layout.addWidget(what_label)
 
         self.archive_workbook_cb = QCheckBox(
-            f"Move current workbook to Completed Loads/  "
+            f"Save the current workbook to the Completed Loads folder  "
             f"({os.path.basename(current_workbook) if current_workbook else 'none'})"
         )
         self.archive_workbook_cb.setChecked(bool(current_workbook))
@@ -108,19 +109,19 @@ class NewCycleDialog(QDialog):
         layout.addWidget(self.archive_workbook_cb)
 
         self.archive_garmin_cb = QCheckBox(
-            "Archive Garmin Imports/ CSVs to a dated subfolder"
+            "Move your old Garmin CSV files into a dated folder (kept safe, just out of the way)"
         )
         self.archive_garmin_cb.setChecked(True)
         layout.addWidget(self.archive_garmin_cb)
 
         self.archive_bx_cb = QCheckBox(
-            "Archive BallisticX Imports/ CSVs to a dated subfolder"
+            "Move your old BallisticX CSV files into a dated folder (kept safe, just out of the way)"
         )
         self.archive_bx_cb.setChecked(True)
         layout.addWidget(self.archive_bx_cb)
 
         self.create_new_cb = QCheckBox(
-            "Create a fresh workbook from the .xltx template"
+            "Create a brand new empty workbook for your new load"
         )
         self.create_new_cb.setChecked(True)
         layout.addWidget(self.create_new_cb)
@@ -130,7 +131,7 @@ class NewCycleDialog(QDialog):
         ok_btn = btns.button(QDialogButtonBox.Ok)
         if ok_btn is not None:
             ok_btn.setObjectName("primary")
-            ok_btn.setText("Start New Cycle")
+            ok_btn.setText("Start")
         btns.accepted.connect(self._do_it)
         btns.rejected.connect(self.reject)
         layout.addWidget(btns)
@@ -140,8 +141,8 @@ class NewCycleDialog(QDialog):
         if self.create_new_cb.isChecked() and not name:
             QMessageBox.warning(
                 self, "Name required",
-                "Please enter a name for the new cycle, or uncheck "
-                "'Create a fresh workbook'."
+                "Please type a name for the new load. "
+                "Or, if you don't want a new workbook, uncheck the bottom box."
             )
             return
 
@@ -193,33 +194,51 @@ class NewCycleDialog(QDialog):
                 # Avoid overwriting an existing file
                 if os.path.exists(new_path):
                     QMessageBox.warning(
-                        self, "File already exists",
-                        f"A workbook named '{safe_name}.xlsx' already exists. "
-                        "Pick a different name."
+                        self, "Name already used",
+                        f"A workbook called '{safe_name}.xlsx' already exists in your folder. "
+                        "Please pick a different name."
                     )
                     return
-                # Open the template and re-save as .xlsx so it's a proper workbook
+                # Open the template and re-save as .xlsx so it's a proper workbook.
+                # Also stamp the load name onto each user-facing sheet so the
+                # user always knows which load they're viewing.
                 from openpyxl import load_workbook
+                try:
+                    import import_data
+                except ImportError:
+                    import_data = None
                 wb = load_workbook(template_path, keep_vba=False)
                 wb.template = False  # critical — same fix as setup_wizard
+                inherited_labels = []
+                if import_data is not None:
+                    import_data.stamp_load_name(wb, name)
+                    inherited_labels = import_data.inherit_rifle_setup(
+                        wb, self.project, exclude_path=new_path,
+                    )
                 wb.save(new_path)
                 self.created_workbook_path = new_path
                 actions_done.append(f"Created workbook: {safe_name}.xlsx")
+                if inherited_labels:
+                    actions_done.append(
+                        f"Pre-filled rifle setup from previous workbook: {', '.join(inherited_labels)}"
+                    )
 
         except Exception as e:
-            done_list = "\n  ".join(actions_done) if actions_done else "(none)"
+            done_list = "\n  ".join(actions_done) if actions_done else "(none yet)"
             QMessageBox.critical(
-                self, "Couldn't complete new-cycle setup",
-                f"Something went wrong:\n\n{e}\n\n"
-                f"Actions completed before the error:\n  {done_list}",
+                self, "Something went wrong",
+                f"Loadscope couldn't finish setting up the new cycle:\n\n{e}\n\n"
+                f"Steps that did finish:\n  {done_list}",
             )
             return
 
         QMessageBox.information(
-            self, "New cycle ready",
-            "Done.\n\n" + "\n".join(f"• {a}" for a in actions_done) +
-            ("\n\nThe new workbook is now your active one — drop CSVs into "
-             "Loadscope to start the cycle." if self.created_workbook_path else "")
+            self, "All set!",
+            "Loadscope finished setting up your new cycle:\n\n"
+            + "\n".join(f"• {a}" for a in actions_done) +
+            ("\n\nYour new workbook is ready. Drop CSVs into Loadscope "
+             "whenever you're ready to import range data."
+             if self.created_workbook_path else "")
         )
         self.accept()
 
