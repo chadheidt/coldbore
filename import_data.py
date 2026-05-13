@@ -1205,9 +1205,30 @@ def _write_pl_static(wb, pl_chrono, group_by_tag):
         # Winning charge + velocity come from the precomputed winner
         ball["H5"].value = winner["charge_or_jump"]
         ball["K5"].value = winner["vel"]
+        # Long rifle/scope names get cut off — col B default 13 chars,
+        # "Leupold Mark 5HD 5-25x56" is 24 chars. Merge B:C on rows 5/6 so
+        # the long names have room without breaking the DOPE table below.
+        for r_idx, coord_pair in ((5, "B5:C5"), (6, "B6:C6")):
+            merged = any(
+                rr.min_row == rr.max_row == r_idx
+                and rr.min_col == 2 and rr.max_col == 3
+                for rr in ball.merged_cells.ranges
+            )
+            if not merged:
+                ball.merge_cells(coord_pair)
+        # Disable wrap so long names fit on one line in the merged width
+        from openpyxl.styles import Alignment as _Align
+        for coord in ("B5", "B6"):
+            existing = ball[coord].alignment
+            ball[coord].alignment = _Align(
+                horizontal=existing.horizontal or "left",
+                vertical=existing.vertical or "center",
+                wrap_text=False,
+            )
         fixes.append(
             "Ballistics row 5/6: auto-filled rifle/bullet/scope from Load Log, "
-            f"charge/vel from winner ({winner['charge_or_jump']}gr @ {winner['vel']} fps)"
+            f"charge/vel from winner ({winner['charge_or_jump']}gr @ {winner['vel']} fps); "
+            "merged B:C on rows 5+6 for long rifle/scope names"
         )
 
     if "Charts" in wb.sheetnames:
