@@ -264,7 +264,13 @@ def main():
     _write_seating_depth_static_values(wb)
     _populate_ballistics_dope(wb)
     _populate_load_library(wb)
-    _add_load_card_tab(wb)
+    # Remove legacy Range Card / Load Card tabs from prior builds.
+    # Chad picked Option A (2026-05-13): drop the in-Excel preview and let
+    # the HTML "Print Pocket Range Card" output be the single source of
+    # truth for the card. Cleaner design — one card, polished typography.
+    for legacy_name in ("Range Card", "Load Card"):
+        if legacy_name in wb.sheetnames:
+            del wb[legacy_name]
 
     # Force Excel to do a full recalc when opening this workbook. Without this,
     # Excel may trust the (stale or empty) cached values from openpyxl's save
@@ -620,29 +626,44 @@ def _add_load_card_tab(wb):
     # artifact, not a spreadsheet.
     card.sheet_view.showGridLines = False
     card.sheet_view.showRowColHeaders = False
-    # Default zoom up a touch so the card fills the viewport readably
-    card.sheet_view.zoomScale = 125
+    card.sheet_view.zoomScale = 130
 
-    # Styling — clean print-style palette matching the HTML pocket card
+    # Palette matches the HTML pocket card (app/pocket_card.py):
+    #   orange title bar: #d97706 / dark border #b45309
+    #   DOPE header (spanner): dark navy #1f2229
+    #   Sub-header: cream #f0eee9
+    #   Range column: warm cream #faf8f4
+    #   Clicks columns: muted gray #777
+    #   TOF column: muted gray #555
+    orange_fill = PatternFill(start_color="FFD97706", end_color="FFD97706", fill_type="solid")
+    spanner_fill = PatternFill(start_color="FF1F2229", end_color="FF1F2229", fill_type="solid")
+    subheader_fill = PatternFill(start_color="FFF0EEE9", end_color="FFF0EEE9", fill_type="solid")
+    range_fill = PatternFill(start_color="FFFAF8F4", end_color="FFFAF8F4", fill_type="solid")
     white_fill = PatternFill(start_color="FFFFFFFF", end_color="FFFFFFFF", fill_type="solid")
-    title_font = Font(color="FF1F4E78", bold=True, size=22, name="Helvetica Neue")
-    sub_font = Font(color="FF1F4E78", bold=True, size=13, name="Helvetica Neue")
-    scope_font = Font(color="FF555555", italic=False, size=11, name="Helvetica Neue")
-    header_fill = PatternFill(start_color="FF1F4E78", end_color="FF1F4E78", fill_type="solid")
-    header_font = Font(color="FFFFFFFF", bold=True, size=10, name="Helvetica Neue")
-    data_font = Font(color="FF000000", size=11, name="Helvetica Neue")
-    alt_row_fill = PatternFill(start_color="FFF7F9FC", end_color="FFF7F9FC", fill_type="solid")
-    center = Alignment(horizontal="center", vertical="center")
-    thick_bottom = Side(style="medium", color="FF1F4E78")  # underline for title
-    thin = Side(style="thin", color="FFBBBBBB")
-    table_border = Border(left=thin, right=thin, top=thin, bottom=thin)
 
-    # Column widths — leftmost is the "Range" column (wider for label),
-    # then 9 numeric columns of equal width
-    col_widths = [11, 8, 8, 8, 8, 9, 8, 9, 8, 9]
+    title_font = Font(color="FFFFFFFF", bold=True, size=14, name="Helvetica Neue")
+    subtitle_font = Font(color="FFFFFFFF", bold=True, size=10, name="Helvetica Neue")
+    titleline_font = Font(color="FF000000", bold=True, size=12, name="Helvetica Neue")
+    setup_label_font = Font(color="FF555555", bold=True, size=10, name="Helvetica Neue")
+    setup_value_font = Font(color="FF000000", size=10, name="Helvetica Neue")
+    spanner_font = Font(color="FFFFFFFF", bold=True, size=10, name="Helvetica Neue")
+    subheader_font = Font(color="FF000000", bold=True, size=10, name="Helvetica Neue")
+    data_font = Font(color="FF000000", size=10, name="Helvetica Neue")
+    range_data_font = Font(color="FF000000", bold=True, size=11, name="Helvetica Neue")
+    clk_font = Font(color="FF777777", italic=True, size=9, name="Helvetica Neue")
+    tof_font = Font(color="FF555555", size=9, name="Helvetica Neue")
+    footer_font = Font(color="FF888888", italic=True, size=9, name="Helvetica Neue")
+
+    center = Alignment(horizontal="center", vertical="center")
+    left = Alignment(horizontal="left", vertical="center", indent=1)
+    right = Alignment(horizontal="right", vertical="center", indent=1)
+
+    thin_gray = Side(style="thin", color="FFDDDDDD")
+    bottom_dark = Side(style="thin", color="FFB45309")  # orange-bar separator
+
+    col_widths = [11, 7, 6, 7, 6, 8, 6, 8, 6, 9]
     for i, w in enumerate(col_widths, start=1):
         card.column_dimensions[get_column_letter(i)].width = w
-    # Add some left padding via column A indent? Just keep tight.
 
     # White background on the whole used range so the card reads as a
     # clean printed page (after we hid the gridlines above)
