@@ -422,19 +422,24 @@ if QWidget is not None:
             self.setWindowTitle("Loadscope — Demo Tour")
             # v0.14: top-strip layout (Chad 2026-05-14). Narration panel
             # is a thin horizontal band at the top of the screen, Excel
-            # gets the rest of the height. Iterated 220→140 after first
-            # pass — too much vertical real estate for narration text.
-            self._panel_height = 140
+            # gets the rest of the height. v0.14.2: compact layout —
+            # title+step on one row, smaller fonts, less padding.
+            # 180px = enough room for ~4 lines of narration without truncation.
+            self._panel_height = 180
             # Stay on top so it doesn't get buried behind Excel when the
             # user clicks into the workbook to look at something.
             self.setWindowFlag(Qt.WindowStaysOnTopHint, True)
             # Poll for Excel still-running every 2s; close ourselves if
             # the user closes Excel mid-tour (otherwise the tour keeps
             # narrating about a workbook that's gone).
+            # IMPORTANT: do NOT start the timer here. Excel may take 3-5s
+            # to cold-launch when start() runs ensure_workbook_open(). If
+            # the poll fires while Excel is still launching, it sees "not
+            # running" and closes the panel. Started in start() instead,
+            # AFTER Excel is confirmed up.
             self._excel_watch = QTimer(self)
             self._excel_watch.setInterval(2000)
             self._excel_watch.timeout.connect(self._check_excel_alive)
-            self._excel_watch.start()
 
             self._build_ui()
             # Don't auto-start; caller invokes start() so they can position
@@ -442,49 +447,68 @@ if QWidget is not None:
 
         # --- UI construction ----------------------------------------------------
         def _build_ui(self):
+            # v0.14.2: compact layout (Chad 2026-05-14: more workbook,
+            # less narration panel). Target panel height ~120-140px so
+            # the workbook gets the lion's share of vertical space.
             layout = QVBoxLayout(self)
-            layout.setContentsMargins(28, 24, 28, 22)
-            layout.setSpacing(14)
+            layout.setContentsMargins(16, 8, 16, 8)
+            layout.setSpacing(6)
 
-            # Header
+            # Top row: title (left) + step indicator (right)
+            header_row = QHBoxLayout()
+            header_row.setSpacing(12)
+
             self.title_label = QLabel("")
             tf = QFont()
-            tf.setPointSize(22)
+            tf.setPointSize(14)
             tf.setWeight(QFont.DemiBold)
             self.title_label.setFont(tf)
-            self.title_label.setWordWrap(True)
             if _theme:
-                self.title_label.setStyleSheet(f"color: {_theme.TEXT_PRIMARY};")
-            layout.addWidget(self.title_label)
+                # v0.14.2: title in accent orange (Chad 2026-05-14:
+                # bring the brand into the demo panel without
+                # over-saturating with full orange background).
+                self.title_label.setStyleSheet(f"color: {_theme.ACCENT};")
+            header_row.addWidget(self.title_label, stretch=1)
 
-            # Progress indicator + bar
             self.progress_label = QLabel("")
             pf = QFont()
-            pf.setPointSize(11)
+            pf.setPointSize(10)
             self.progress_label.setFont(pf)
+            self.progress_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
             if _theme:
                 self.progress_label.setStyleSheet(f"color: {_theme.TEXT_SECONDARY};")
-            layout.addWidget(self.progress_label)
+            header_row.addWidget(self.progress_label)
 
+            layout.addLayout(header_row)
+
+            # Thin progress bar
             self.progress_bar = QProgressBar()
             self.progress_bar.setRange(0, len(self._stops))
             self.progress_bar.setTextVisible(False)
-            self.progress_bar.setFixedHeight(6)
+            self.progress_bar.setFixedHeight(3)
             layout.addWidget(self.progress_bar)
 
-            # Narration body
+            # Narration body — compact
             self.narration_label = QLabel("")
             nf = QFont()
-            nf.setPointSize(14)
+            nf.setPointSize(12)
             self.narration_label.setFont(nf)
             self.narration_label.setWordWrap(True)
             self.narration_label.setAlignment(Qt.AlignTop | Qt.AlignLeft)
-            self.narration_label.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+            self.narration_label.setSizePolicy(
+                QSizePolicy.Expanding, QSizePolicy.Expanding
+            )
             if _theme:
+                # v0.14.2: orange left-edge stripe + dark gray surface.
+                # Branded look without sacrificing legibility (Chad
+                # picked option A 2026-05-14).
                 self.narration_label.setStyleSheet(
                     f"color: {_theme.TEXT_PRIMARY}; "
                     f"background-color: {_theme.BG_ELEVATED}; "
-                    f"padding: 22px; border-radius: 10px; line-height: 1.5;"
+                    f"border-left: 4px solid {_theme.ACCENT}; "
+                    f"padding: 8px 12px 8px 14px; "
+                    f"border-top-right-radius: 6px; "
+                    f"border-bottom-right-radius: 6px;"
                 )
             layout.addWidget(self.narration_label, stretch=1)
 
@@ -544,15 +568,19 @@ if QWidget is not None:
         def start(self):
             """Open the workbook, position Excel below the tour panel, render
             the first stop. Layout (Chad 2026-05-14):
-              - Tour panel: top of screen, full width, ~140px tall, on-top
-              - Excel:      below the panel, full width, all remaining height,
-                            in Excel's "Full Screen" view (no ribbon)
+              - Tour panel: top of screen, full width, ~140-230px tall, on-top
+              - Excel:      below the panel, full width, all remaining height
             """
             # 1. Position the tour panel at the top-strip of the screen
             screen_w, screen_h = self._controller._screen
             self.setGeometry(
                 0, MENU_BAR_HEIGHT, screen_w, self._panel_height
             )
+            # Force show + raise + activate to ensure visibility before
+            # Excel comes up and fights for focus.
+            self.show()
+            self.raise_()
+            self.activateWindow()
             # 2. Open the workbook
             ok = self._controller.ensure_workbook_open()
             if ok:
@@ -565,16 +593,21 @@ if QWidget is not None:
                 self._controller.close_other_excel_windows(wb_basename)
                 # 4. Park Excel below the panel, full width of remaining screen
                 self._controller.position_excel_bottom_band(self._panel_height)
-                # 5. Toggle Excel's Full Screen view to hide the ribbon
-                # (Chad 2026-05-14: maximize the demo experience)
-                self._controller.enter_excel_fullscreen_view()
-                # 6. Re-position after fullscreen toggle (which can resize
-                # the window). Small delay so Excel finishes the toggle.
+                # 5. Force the tour panel to the front. Without this on
+                # macOS, the panel can be hidden behind Excel even with
+                # WindowStaysOnTopHint set (the activate-Excel-window in
+                # position_excel_bottom_band brings Excel forward).
                 from PyQt5.QtCore import QTimer as _QT
-                _QT.singleShot(
-                    400,
-                    lambda: self._controller.position_excel_bottom_band(self._panel_height)
-                )
+                def _bring_panel_forward():
+                    self.raise_()
+                    self.activateWindow()
+                    self.show()  # in case it was hidden behind Excel's space
+                _QT.singleShot(300, _bring_panel_forward)
+                # 6. Lifecycle watcher temporarily DISABLED for v0.14.2
+                # bisection. Was closing the panel prematurely. Re-enable
+                # in v0.14.3 once we've confirmed the panel survives
+                # without it.
+                # self._excel_watch.start()
             self._render_stop(0)
 
         def next_stop(self):
@@ -669,9 +702,16 @@ if QWidget is not None:
                     self._excel_watch.stop()
                     self.close()
                     return
-                # Excel is alive — also check our specific workbook is still open
+                # Excel is alive — also check our specific workbook is still open.
+                # v0.14.2 fix: Excel sometimes returns workbook names WITHOUT
+                # the .xlsx extension. Compare against the STEM (no extension)
+                # so the substring check doesn't false-negative and close the
+                # panel when the workbook is actually open. Earlier code did
+                # `wb_basename` (with .xlsx) `in` open_books_string and the
+                # comparison failed -> panel closed prematurely.
                 wb_basename = os.path.basename(self._controller.workbook_path or "")
-                if wb_basename:
+                wb_stem = os.path.splitext(wb_basename)[0]
+                if wb_stem:
                     script = f'''
                         tell application "Microsoft Excel"
                             set names_list to ""
@@ -684,7 +724,7 @@ if QWidget is not None:
                         end tell
                     '''
                     open_books = self._controller._run_script(script, timeout=3)
-                    if wb_basename not in open_books:
+                    if wb_stem not in open_books:
                         self._excel_watch.stop()
                         self.close()
             except Exception:

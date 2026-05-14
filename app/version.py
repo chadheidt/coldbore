@@ -11,7 +11,7 @@ from the app itself (e.g., a workbook tweak doesn't require rebuilding the .app)
 # App branding — one source of truth for display name + version
 APP_NAME = "Loadscope"
 LEGACY_APP_NAMES = ("True Zero", "Cold Bore", "Rifle Load Importer")  # for config migration on first launch
-APP_VERSION = "0.14.1"
+APP_VERSION = "0.14.2"
 TEMPLATE_VERSION = "1.0"
 
 # Disclaimer version — bump this if the disclaimer text changes substantively.

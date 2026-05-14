@@ -1,9 +1,9 @@
 {
-  "app_version": "0.14.1",
+  "app_version": "0.14.2",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.14.1 hotfix \u2014 Print Pocket Range Card now works when launched from the bundled demo workbook (was failing with permission denied because the demo workbook lives inside the read-only /Applications/Loadscope.app bundle). The card now writes to ~/Documents/Loadscope Range Cards/ when its normal location isn't writable.",
+  "app_release_notes": "v0.14.2 hotfix \u2014 splash \"Try the Free Demo\" button now actually launches the guided tour. v0.14.0 had the wiring in place but disabled because the panel was disappearing during testing. Root cause: the Excel-running watchdog timer started in the panel constructor and fired before Excel finished cold-launching, closing the panel prematurely. The main Loadscope window also competed with the tour panel for screen space at the top. Fix: defer the watchdog until Excel is confirmed up, and hide the main window while the tour is active.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
