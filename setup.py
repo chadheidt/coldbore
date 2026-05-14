@@ -69,7 +69,7 @@ sys.path.insert(0, str(HERE / "app"))
 
 APP_DISPLAY_NAME = "Loadscope"
 APP_BUNDLE_ID = "com.chadheidt.loadscope"
-APP_VERSION = "0.14.0"  # keep in sync with app/version.py
+APP_VERSION = "0.14.1"  # keep in sync with app/version.py
 
 # The main entry script
 ENTRY = ["app/main.py"]

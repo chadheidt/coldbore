@@ -340,9 +340,28 @@ def generate_pocket_card(workbook_path, open_after=True):
     data = _gather(workbook_path)
     html = _build_html(data)
 
+    # Pick a writable output directory. Default = "Range Cards" next to
+    # the workbook (works for normal user workbooks in their project
+    # folder). Fallback = ~/Documents/Loadscope Range Cards/ when the
+    # workbook lives in a read-only location like the bundled demo
+    # workbook at /Applications/Loadscope.app/Contents/Resources/.
+    # v0.14.1 fix: previously this would crash with PermissionError when
+    # demo users clicked Print Pocket Range Card.
     project_dir = os.path.dirname(os.path.abspath(workbook_path))
     out_dir = os.path.join(project_dir, "Range Cards")
-    os.makedirs(out_dir, exist_ok=True)
+    try:
+        os.makedirs(out_dir, exist_ok=True)
+        # Also test writability — makedirs can succeed on a path that's
+        # readable but not writable (e.g., something already exists).
+        _probe = os.path.join(out_dir, ".loadscope_writable_probe")
+        with open(_probe, "w") as _pf:
+            _pf.write("")
+        os.remove(_probe)
+    except (PermissionError, OSError):
+        # Fall back to user's Documents folder
+        fallback = os.path.expanduser("~/Documents/Loadscope Range Cards")
+        os.makedirs(fallback, exist_ok=True)
+        out_dir = fallback
 
     workbook_base = os.path.splitext(os.path.basename(workbook_path))[0]
     stamp = datetime.now().strftime("%Y-%m-%d %H-%M")

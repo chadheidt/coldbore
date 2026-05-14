@@ -1,9 +1,9 @@
 {
-  "app_version": "0.14.0",
+  "app_version": "0.14.1",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "Demo mode + major workbook + UI polish. New first-launch splash with Try the Free Demo / Enter License Key / Request Beta Access. Demo workbook bundled with the app — fully populated 6.5 Creedmoor load development sample, viewable but read-only so you can preview every Loadscope feature without dropping any CSVs. Workbook polish across every tab: Start Here is now a clean onboarding page (was After Range Day), Ballistics auto-hides MOA columns when scope is Mil (and vice versa) plus relabeled headers (Mils Dialed / MOA Dialed) so input vs auto-calc is obvious, Garmin Xero + BallisticX Import tabs cleaned up with collapsible Shot 1-10 columns. Load Log + Seating Depth get a 🥇 #1 / 🥈 2nd / 🥉 3rd ranking column. Every formula is now protected — no more accidental overwrites. App polish: refined drop-zone with reticle hero icon and clickable Garmin Xero / BallisticX chips that open the import folders, in-card Run Import CTA when files staged, FAQ dialog under Support menu, Contact Support menu item (renamed from Send Feedback), reorganized menu bar (Settings first), trademark ™ on first-use brand mentions.",
+  "app_release_notes": "v0.14.1 hotfix \u2014 Print Pocket Range Card now works when launched from the bundled demo workbook (was failing with permission denied because the demo workbook lives inside the read-only /Applications/Loadscope.app bundle). The card now writes to ~/Documents/Loadscope Range Cards/ when its normal location isn't writable.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
