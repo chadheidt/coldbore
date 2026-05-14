@@ -316,25 +316,86 @@ def application_stylesheet():
 
 
 def dropzone_idle_stylesheet():
+    """v0.14 refined card: solid surface, no dashed border, hero crosshair
+    + chip badges. Targets QFrame#DropZone + child labels by objectName."""
     return f"""
-        QLabel {{
-            border: 2px dashed {BORDER_MEDIUM};
-            border-radius: {RADIUS}px;
-            background-color: {BG_SURFACE};
+        QFrame#DropZone {{
+            background-color: {BG_ELEVATED};
+            border: 1px solid {BG_ELEVATED};
+            border-radius: 14px;
+        }}
+        QLabel#DropZoneTitle {{
+            font-size: 18pt;
+            font-weight: 600;
             color: {TEXT_PRIMARY};
-            padding: {PAD_DROPZONE}px 20px;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }}
+        QLabel#DropZoneChip {{
+            background-color: {BG_SURFACE};
+            border: 1px solid {BORDER_MEDIUM};
+            border-radius: 13px;
+            padding: 5px 14px;
+            font-size: 11px;
+            color: {TEXT_SECONDARY};
+        }}
+        QLabel#DropZoneFooter {{
+            color: {TEXT_TERTIARY};
+            font-size: 11px;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }}
+        QPushButton#DropZoneCTA {{
+            background-color: {ACCENT};
+            color: #1a1208;
+            border: none;
+            border-radius: 8px;
+            font-size: 13pt;
+            font-weight: 600;
+            letter-spacing: 0.4px;
+            padding: 10px 28px;
+        }}
+        QPushButton#DropZoneCTA:hover {{
+            background-color: {ACCENT_HOVER};
+        }}
+        QPushButton#DropZoneCTA:pressed {{
+            background-color: {ACCENT_PRESSED};
         }}
     """
 
 
 def dropzone_hover_stylesheet():
+    """Hover: accent border + accent title color + chip glow."""
     return f"""
-        QLabel {{
-            border: 2px solid {ACCENT};
-            border-radius: {RADIUS}px;
-            background-color: rgba(217, 119, 6, 16);
+        QFrame#DropZone {{
+            background-color: {BG_ELEVATED};
+            border: 1.5px solid {ACCENT};
+            border-radius: 14px;
+        }}
+        QLabel#DropZoneTitle {{
+            font-size: 18pt;
+            font-weight: 600;
             color: {ACCENT};
-            padding: {PAD_DROPZONE}px 20px;
+            background: transparent;
+            border: none;
+            padding: 0;
+        }}
+        QLabel#DropZoneChip {{
+            background-color: rgba(217, 119, 6, 30);
+            border: 1px solid {ACCENT};
+            border-radius: 13px;
+            padding: 5px 14px;
+            font-size: 11px;
+            color: #f5b56b;
+        }}
+        QLabel#DropZoneFooter {{
+            color: {TEXT_SECONDARY};
+            font-size: 11px;
+            background: transparent;
+            border: none;
+            padding: 0;
         }}
     """
 

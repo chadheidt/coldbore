@@ -6,6 +6,22 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## 🔄 If Claude crashes mid-build, paste THIS into a fresh session
+
+> Continue v0.14 — checkout the `v0.14-demo-mode` branch and read `project_loadscope_v014_inflight` memory for where we left off.
+
+## 🚦 v0.14 SHIP GATE (Chad's explicit instruction 2026-05-13)
+
+**Do not declare v0.14 ready to ship until Chad has personally sampled the full demo end-to-end** — Loadscope built + installed from `/Applications`, opens splash, picks "Try the Free Demo", walks every tour stop, verifies Excel actually switches tabs + Pocket Range Card actually opens. Audit-passing is not equivalent to user-flow-verified.
+
+That tells future-Claude:
+1. **`git checkout v0.14-demo-mode`** — the in-progress v0.14 work lives on a feature branch (NOT main). Main is stable at v0.13.3.
+2. **Read the inflight memory** — has the precise next-step list (Seating Depth static values, Ballistics DOPE, apply_workbook_repairs port, commerce decisions, etc).
+
+The original design rationale lives in the `project_loadscope_v014_plan` memory (where we locked in demo mode + commerce design on 2026-05-13).
+
+---
+
 ## ✅ LOADSCOPE v0.13.3 SHIPPED — May 13, 2026 (workbook polish + new features)
 
 Big one. 10-shot sessions (was 7), new Pocket Range Card (4×6 printable DOPE card), Save Suggested Load to Library, Reset Composite Weights, scope-click dropdown for automatic click-count math, After Range Day rewrite, and ~50 smaller workbook polish items.

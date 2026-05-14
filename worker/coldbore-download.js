@@ -21,6 +21,12 @@
 //   GET  /deny?id=&token=                            -> marks request denied
 //   GET  /admin/assignments?token=<ADMIN_TOKEN>      -> JSON dump of all assignments
 //                                                       (used by tools/sync_beta_keys.py)
+//   POST /lemonsqueezy-webhook   X-Signature header  -> Lemon Squeezy purchase events
+//                                                       (order_created issues key,
+//                                                        order_refunded revokes it)
+//   POST /verify                 body: {key}         -> {valid, status}
+//                                                       (called by Loadscope app to check
+//                                                        license keys at runtime)
 //
 // Bindings expected (configured in dashboard, NOT in this file):
 //   BUCKET            -> R2 bucket "coldbore-releases"
@@ -32,6 +38,8 @@
 //   ADMIN_TOKEN       -> encrypted env var (random string for /admin/* auth)
 //   TURNSTILE_SECRET  -> encrypted env var (anti-bot)
 //   PUBLIC_SITE       -> e.g. "https://chadheidt.github.io/coldbore/"
+//   LEMONSQUEEZY_WEBHOOK_SECRET -> encrypted env var (matches secret in LS dashboard)
+//   PURCHASED_KEYS    -> KV namespace (stores license keys from Lemon Squeezy purchases)
 
 const VALID_CODES = new Set([
   "CBORE-DDCX-AEGK-J2FR-2SIB",
@@ -515,6 +523,203 @@ async function handleGet(request, env, url) {
 
 // ---------- Router ----------
 
+// ============================================================================
+// Lemon Squeezy commerce integration (v0.14, added 2026-05-14).
+//
+// When a customer buys Loadscope on Lemon Squeezy:
+//   1. LS POSTs an order_created webhook to /lemonsqueezy-webhook
+//   2. We verify the X-Signature header against LEMONSQUEEZY_WEBHOOK_SECRET
+//   3. Extract the LS-generated license key + customer email from the payload
+//   4. Store the key in PURCHASED_KEYS KV (status=active)
+//   5. Email the customer their welcome message with the key + download link
+// On refund:
+//   1. LS POSTs an order_refunded webhook
+//   2. We mark the matching key as status=revoked in KV
+//
+// The Loadscope app calls /verify with {key: "..."} to check a key at runtime.
+// /verify checks both PURCHASED_KEYS (commercial buyers) and the legacy
+// VALID_CODES set (Chad's testing key + reserved beta slots).
+// ============================================================================
+
+async function verifyLemonSqueezySignature(rawBody, signature, secret) {
+  // Lemon Squeezy sends X-Signature as hex-encoded HMAC-SHA256 of the raw body.
+  if (!signature || !secret) return false;
+  const enc = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw", enc.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false, ["sign"]
+  );
+  const expected = await crypto.subtle.sign("HMAC", key, enc.encode(rawBody));
+  // Convert ArrayBuffer to lowercase hex
+  const expectedHex = [...new Uint8Array(expected)]
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+  // Constant-time-ish comparison
+  if (expectedHex.length !== signature.length) return false;
+  let diff = 0;
+  for (let i = 0; i < expectedHex.length; i++) {
+    diff |= expectedHex.charCodeAt(i) ^ signature.charCodeAt(i);
+  }
+  return diff === 0;
+}
+
+function welcomeEmailHtml(name, licenseKey) {
+  const greeting = name ? `Hi ${escapeHtml(name)},` : "Hi,";
+  const keyEsc = escapeHtml(licenseKey);
+  return `
+    <p>${greeting}</p>
+    <p>Welcome to Loadscope&trade;! Your purchase is complete and your
+    license key is below.</p>
+    <p style="font-family: 'SF Mono', Menlo, monospace; background: #f5f5f5;
+    padding: 14px 20px; border-radius: 6px; font-size: 16px; letter-spacing: 1px;">
+    <b>${keyEsc}</b></p>
+    <h3 style="margin-top: 28px;">Get started in 3 steps:</h3>
+    <ol>
+      <li><b>Download Loadscope:</b>
+      <a href="https://github.com/chadheidt/coldbore/releases/latest">
+      grab the latest release here</a> (Loadscope.zip or Loadscope.dmg).</li>
+      <li><b>Install:</b> open the downloaded file and drag Loadscope to
+      /Applications.</li>
+      <li><b>Open Loadscope</b> and paste your license key when prompted.</li>
+    </ol>
+    <p>Your purchase includes <b>lifetime updates</b> &mdash; every new
+    feature is yours. Don&rsquo;t love it? Reply to this email within 30 days
+    for a refund, no questions asked.</p>
+    <p>Questions or stuck on anything? Reply to this email and I&rsquo;ll
+    help.</p>
+    <p>Welcome aboard.<br>&mdash; Chad</p>
+  `;
+}
+
+async function handleLemonSqueezyWebhook(request, env) {
+  const signature = request.headers.get("X-Signature") || "";
+  const rawBody = await request.text();
+  const valid = await verifyLemonSqueezySignature(
+    rawBody, signature, env.LEMONSQUEEZY_WEBHOOK_SECRET
+  );
+  if (!valid) {
+    console.warn("LS webhook signature mismatch");
+    return jsonResponse({ error: "Invalid signature" }, 401);
+  }
+
+  let payload;
+  try {
+    payload = JSON.parse(rawBody);
+  } catch {
+    return jsonResponse({ error: "Invalid JSON" }, 400);
+  }
+
+  const eventName = payload.meta && payload.meta.event_name;
+  if (eventName === "order_created") {
+    return handleOrderCreated(payload, env);
+  }
+  if (eventName === "order_refunded") {
+    return handleOrderRefunded(payload, env);
+  }
+  // Acknowledge unrecognized events without erroring (LS retries on non-2xx)
+  return jsonResponse({ ok: true, message: `Event ${eventName} ignored` });
+}
+
+async function handleOrderCreated(payload, env) {
+  const order = payload.data || {};
+  const attrs = order.attributes || {};
+  const customerEmail = attrs.user_email || "";
+  const customerName = attrs.user_name || "";
+  const orderId = order.id || "(unknown)";
+
+  // Lemon Squeezy includes the license key in the included[] array when
+  // the product has license-key generation enabled.
+  const licenseKeyData = (payload.included || []).find(
+    item => item.type === "license-keys"
+  );
+  if (!licenseKeyData) {
+    console.error(`order_created ${orderId}: no license-key in payload`);
+    return jsonResponse({ ok: false, error: "No license key in payload" }, 400);
+  }
+  const licenseKey = licenseKeyData.attributes.key;
+
+  // Store in KV — keyed by license key
+  await env.PURCHASED_KEYS.put(licenseKey, JSON.stringify({
+    email: customerEmail,
+    name: customerName,
+    order_id: orderId,
+    total: attrs.total_formatted || "",
+    status: "active",
+    created_at: new Date().toISOString(),
+  }));
+
+  // Send welcome email
+  if (customerEmail) {
+    try {
+      await sendEmail(env, {
+        to: customerEmail,
+        subject: "Welcome to Loadscope — your license key is inside",
+        html: welcomeEmailHtml(customerName, licenseKey),
+      });
+    } catch (e) {
+      console.error(`Failed to email license key to ${customerEmail}: ${e}`);
+      // Don't fail the webhook — key is stored, customer can email support
+    }
+  }
+
+  return jsonResponse({ ok: true, message: "License key issued" });
+}
+
+async function handleOrderRefunded(payload, env) {
+  const order = payload.data || {};
+  const orderId = order.id || "(unknown)";
+  const licenseKeyData = (payload.included || []).find(
+    item => item.type === "license-keys"
+  );
+  if (!licenseKeyData) {
+    return jsonResponse({ ok: true, message: "No license key to revoke" });
+  }
+  const licenseKey = licenseKeyData.attributes.key;
+  const existing = await env.PURCHASED_KEYS.get(licenseKey);
+  if (existing) {
+    const data = JSON.parse(existing);
+    data.status = "revoked";
+    data.refunded_at = new Date().toISOString();
+    await env.PURCHASED_KEYS.put(licenseKey, JSON.stringify(data));
+  }
+  return jsonResponse({ ok: true, message: "License key revoked", orderId });
+}
+
+async function handleVerifyLicense(request, env) {
+  let body;
+  try {
+    body = await request.json();
+  } catch {
+    return jsonResponse({ valid: false, status: "missing" });
+  }
+  const key = String(body.key || "").trim().toUpperCase();
+  if (!key) {
+    return jsonResponse({ valid: false, status: "missing" });
+  }
+
+  // 1) Legacy beta keys + Chad's testing key (hardcoded, never revoked)
+  if (VALID_CODES.has(key)) {
+    return jsonResponse({ valid: true, status: "beta" });
+  }
+
+  // 2) Commercial keys from Lemon Squeezy purchases
+  if (env.PURCHASED_KEYS) {
+    const data = await env.PURCHASED_KEYS.get(key);
+    if (data) {
+      const parsed = JSON.parse(data);
+      if (parsed.status === "active") {
+        return jsonResponse({ valid: true, status: "active" });
+      }
+      if (parsed.status === "revoked") {
+        return jsonResponse({ valid: false, status: "revoked" });
+      }
+    }
+  }
+
+  return jsonResponse({ valid: false, status: "invalid" });
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -540,6 +745,12 @@ export default {
     }
     if (url.pathname === "/admin/assignments" && request.method === "GET") {
       return handleAdminAssignments(request, env, url);
+    }
+    if (url.pathname === "/lemonsqueezy-webhook" && request.method === "POST") {
+      return handleLemonSqueezyWebhook(request, env);
+    }
+    if (url.pathname === "/verify" && request.method === "POST") {
+      return handleVerifyLicense(request, env);
     }
 
     return new Response("Not found", { status: 404, headers: CORS });

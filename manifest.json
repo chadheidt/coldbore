@@ -1,9 +1,9 @@
 {
-  "app_version": "0.13.3",
+  "app_version": "0.14.0",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "Major workbook polish + new features. 10-shot sessions (was 7). New action buttons throughout: Save Suggested Load to Library, Reset Composite Weights, Print Pocket Range Card (a new 4x6 printable DOPE card from your Ballistics tab). New scope-click dropdown on Load Log makes click-count math automatic for any scope. After Range Day tab rewritten for clarity. Many smaller polish items across every user-facing tab.",
+  "app_release_notes": "Demo mode + major workbook + UI polish. New first-launch splash with Try the Free Demo / Enter License Key / Request Beta Access. Demo workbook bundled with the app — fully populated 6.5 Creedmoor load development sample, viewable but read-only so you can preview every Loadscope feature without dropping any CSVs. Workbook polish across every tab: Start Here is now a clean onboarding page (was After Range Day), Ballistics auto-hides MOA columns when scope is Mil (and vice versa) plus relabeled headers (Mils Dialed / MOA Dialed) so input vs auto-calc is obvious, Garmin Xero + BallisticX Import tabs cleaned up with collapsible Shot 1-10 columns. Load Log + Seating Depth get a 🥇 #1 / 🥈 2nd / 🥉 3rd ranking column. Every formula is now protected — no more accidental overwrites. App polish: refined drop-zone with reticle hero icon and clickable Garmin Xero / BallisticX chips that open the import folders, in-card Run Import CTA when files staged, FAQ dialog under Support menu, Contact Support menu item (renamed from Send Feedback), reorganized menu bar (Settings first), trademark ™ on first-use brand mentions.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

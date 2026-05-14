@@ -21,13 +21,14 @@ from contextlib import redirect_stdout
 from pathlib import Path
 
 try:
-    from PyQt5.QtCore import QEvent, Qt, QTimer, QUrl, QPointF
+    from PyQt5.QtCore import QEvent, Qt, QTimer, QUrl, QPointF, QRectF
     from PyQt5.QtGui import (
         QBrush,
         QColor,
         QDesktopServices,
         QFont,
         QPainter,
+        QPainterPath,
         QPen,
         QRadialGradient,
     )
@@ -35,6 +36,8 @@ try:
         QAction,
         QApplication,
         QComboBox,
+        QFrame,
+        QGraphicsDropShadowEffect,
         QHBoxLayout,
         QLabel,
         QMainWindow,
@@ -171,213 +174,211 @@ class CarbonBackground(QWidget):
         painter.end()
 
 
-class DropZone(QLabel):
-    """Drop zone with a faded precision-rifle reticle painted behind the text."""
+class HeroCrosshair(QWidget):
+    """Big precision-rifle crosshair painted as the dropzone hero icon.
 
-    # Reticle geometry — concentric rings + crosshair + mil-dot subtensions
-    RETICLE_RINGS = (28, 56, 88)
-    CROSSHAIR_H_HALF = 110     # half-width of the horizontal crosshair line
-    CROSSHAIR_V_HALF = 70      # half-height of the vertical crosshair line
-    MIL_DOT_RADIUS = 1.6       # subtension dot size
-    MIL_DOT_SPACINGS = (16, 32, 48, 64, 80)  # distances from center for each dot
-    HASH_MARK_DISTANCES = (48, 80)           # distances where we draw a perpendicular hash
-    HASH_MARK_LENGTH = 6                     # perpendicular tick length (each side)
-    RETICLE_ALPHA_IDLE = 50    # 0-255; subtle but readable behind text
-    RETICLE_ALPHA_HOVER = 110  # more visible on drag-over
-    RING_ALPHA_FACTOR = 0.45   # rings are softer than the rest of the reticle
+    Concentric rings + full-diameter crosshair + mil-dots + accent center.
+    Brightens to accent color on hover (set via set_hover()).
+    """
 
-    # MOA-style grid + spotlight (Option 3 polish layer)
-    GRID_SPACING = 24                        # px between grid lines
-    GRID_ALPHA_FACTOR = 0.22                 # how prominent grid is vs reticle alpha
-    SPOTLIGHT_CENTER_ALPHA_IDLE = 16         # subtle highlight brightening the center
-    SPOTLIGHT_CENTER_ALPHA_HOVER = 32        # stronger spotlight on drag-over
+    def __init__(self, parent=None, size=92):
+        super().__init__(parent)
+        self.setFixedSize(size, size)
+        # Mouse events pass through to the parent QFrame so drag-over still hits
+        self.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+        self._hover = False
 
-    def __init__(self, on_drop):
+    def set_hover(self, on):
+        self._hover = on
+        self.update()
+
+    def paintEvent(self, _):
+        p = QPainter(self)
+        p.setRenderHint(QPainter.Antialiasing)
+        s = self.width()
+        cx = cy = s / 2
+        fg = QColor(theme.ACCENT if self._hover else theme.TEXT_PRIMARY)
+        accent = QColor(theme.ACCENT)
+
+        # Outer ring (heavy)
+        p.setPen(QPen(fg, 2.2))
+        p.setBrush(Qt.NoBrush)
+        p.drawEllipse(QPointF(cx, cy), s * 0.46, s * 0.46)
+
+        # Two inner rings (lighter)
+        ring = QColor(fg)
+        ring.setAlpha(140)
+        p.setPen(QPen(ring, 1.4))
+        p.drawEllipse(QPointF(cx, cy), s * 0.32, s * 0.32)
+        p.drawEllipse(QPointF(cx, cy), s * 0.18, s * 0.18)
+
+        # Crosshair (full diameter, slim)
+        p.setPen(QPen(fg, 1.6))
+        tick = s * 0.50
+        p.drawLine(QPointF(cx - tick, cy), QPointF(cx + tick, cy))
+        p.drawLine(QPointF(cx, cy - tick), QPointF(cx, cy + tick))
+
+        # Mil-dots along the crosshair arms
+        p.setBrush(QBrush(fg))
+        p.setPen(Qt.NoPen)
+        for d in (s * 0.18, s * 0.32):
+            for dx, dy in ((-d, 0), (d, 0), (0, -d), (0, d)):
+                p.drawEllipse(QPointF(cx + dx, cy + dy), 1.6, 1.6)
+
+        # Accent center dot — always at full accent for the "you are here" pop
+        p.setBrush(QBrush(accent))
+        p.drawEllipse(QPointF(cx, cy), 3.5, 3.5)
+        p.end()
+
+
+class DropZone(QFrame):
+    """Refined-card drop zone with a hero precision crosshair.
+
+    Layout: hero crosshair → "Drop your CSV files here" title → file-type
+    chips (Garmin Xero · BallisticX) → footer hint. No dashed border —
+    solid card surface with a soft drop shadow for depth.
+    """
+
+    def __init__(self, on_drop, on_chip_click=None, on_import_click=None,
+                 chip_labels=None):
         super().__init__()
         self.on_drop = on_drop
-        self.setTextFormat(Qt.RichText)
-        self.setAlignment(Qt.AlignCenter)
-        self.setAcceptDrops(True)
-        self.setMinimumHeight(210)
+        self.on_chip_click = on_chip_click   # opens import folder in Finder
+        self.on_import_click = on_import_click  # runs the import
+        # Chip labels are data-driven so adding a new parser (LabRadar,
+        # MagnetoSpeed, etc.) auto-populates the dropzone with no UI edit.
+        # Callers should pass [parser.NAME for parser in chronograph_parsers()
+        #                      + group_parsers()].
+        if chip_labels is None:
+            chip_labels = ("Garmin Xero", "BallisticX")  # fallback for tests
+        self._chip_labels = list(chip_labels)
         self._hovering = False
-        self._set_idle_style()
+        self.setObjectName("DropZone")
+        self.setAcceptDrops(True)
+        self.setMinimumHeight(300)
 
-    def _content_html(self, hover):
-        title_color = theme.ACCENT if hover else theme.TEXT_PRIMARY
-        sub_color = "#e3a35e" if hover else theme.TEXT_SECONDARY
-        return (
-            f'<div style="text-align:center; line-height:1.3;">'
-            f'<span style="font-size:{theme.FONT_SIZE_DROPZONE}pt; font-weight:600; color:{title_color};">'
-            f'Drop your Garmin &amp; BallisticX CSVs here'
-            f'</span><br>'
-            f'<span style="font-size:{theme.FONT_SIZE_BODY - 1}pt; color:{sub_color}; letter-spacing:0.4px;">'
-            f'Auto-detects format &middot; drop multiple at once'
-            f'</span>'
-            f'</div>'
-        )
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(20, 24, 20, 22)
+        layout.setSpacing(10)
+        layout.setAlignment(Qt.AlignCenter)
+
+        # Hero crosshair
+        self.icon = HeroCrosshair(self, size=92)
+        layout.addWidget(self.icon, alignment=Qt.AlignCenter)
+
+        # Title
+        self.title = QLabel("Drop your CSV files here")
+        self.title.setObjectName("DropZoneTitle")
+        self.title.setAlignment(Qt.AlignCenter)
+        self.title.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+        layout.addWidget(self.title)
+
+        # Chip row — file-type indicators. Clickable when on_chip_click
+        # callback is supplied: clicking opens the import folder for that
+        # device in Finder so users can quickly grab their CSVs.
+        chip_row = QHBoxLayout()
+        chip_row.setAlignment(Qt.AlignCenter)
+        chip_row.setSpacing(8)
+        self._chips = []
+        for label_text in self._chip_labels:
+            chip = QLabel(label_text)
+            chip.setObjectName("DropZoneChip")
+            chip.setAlignment(Qt.AlignCenter)
+            if on_chip_click:
+                chip.setCursor(Qt.PointingHandCursor)
+                chip.setToolTip(
+                    f"Open the {label_text} import folder in Finder"
+                )
+                # Bind label_text into the lambda's default-arg scope
+                chip.mousePressEvent = (
+                    lambda e, name=label_text: on_chip_click(name)
+                )
+            else:
+                chip.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+            chip_row.addWidget(chip)
+            self._chips.append(chip)
+        layout.addLayout(chip_row)
+
+        # In-card CTA button — visible only when files are staged.
+        # Replaces the external Run Import button; clicking calls
+        # on_import_click. Hidden by default.
+        self.cta_button = QPushButton("Run Import →")
+        self.cta_button.setObjectName("DropZoneCTA")
+        self.cta_button.setCursor(Qt.PointingHandCursor)
+        self.cta_button.setFixedHeight(40)
+        self.cta_button.setMinimumWidth(180)
+        self.cta_button.hide()
+        if on_import_click:
+            self.cta_button.clicked.connect(on_import_click)
+        cta_row = QHBoxLayout()
+        cta_row.setAlignment(Qt.AlignCenter)
+        cta_row.addWidget(self.cta_button)
+        layout.addLayout(cta_row)
+        self._chip_row = chip_row  # remember so we can hide/show
+
+        # Footer hint
+        self.footer = QLabel("Drop multiple at once · format auto-detected")
+        self.footer.setObjectName("DropZoneFooter")
+        self.footer.setAlignment(Qt.AlignCenter)
+        self.footer.setAttribute(Qt.WA_TransparentForMouseEvents, True)
+        layout.addWidget(self.footer)
+
+        # Soft drop shadow for the card (gives the "lifted off the surface" feel)
+        shadow = QGraphicsDropShadowEffect(self)
+        shadow.setBlurRadius(22)
+        shadow.setOffset(0, 4)
+        shadow.setColor(QColor(0, 0, 0, 90))
+        self.setGraphicsEffect(shadow)
+
+        self._set_idle_style()
 
     def _set_idle_style(self):
         self._hovering = False
+        self.icon.set_hover(False)
         self.setStyleSheet(theme.dropzone_idle_stylesheet())
-        self.setText(self._content_html(hover=False))
-        self.update()
 
     def _set_hover_style(self):
         self._hovering = True
+        self.icon.set_hover(True)
         self.setStyleSheet(theme.dropzone_hover_stylesheet())
-        self.setText(self._content_html(hover=True))
-        self.update()
+
+    def set_staged_state(self, count, breakdown_text=""):
+        """Update the title + footer to reflect staged-files state.
+
+        count=0 → neutral state ('Drop your CSV files here' + format hint).
+        count>0 → accent state ('✓ X files staged' + 'Click Run Import below ↓').
+        """
+        if count <= 0:
+            # Neutral state: chips visible, CTA hidden, format hint footer.
+            self.title.setText("Drop your CSV files here")
+            self.title.setStyleSheet("")  # fall back to parent QSS rule
+            self.footer.setText("Drop multiple at once · format auto-detected")
+            for chip in self._chips:
+                chip.show()
+            self.cta_button.hide()
+        else:
+            # Staged state: chips hidden, CTA shown, accent title.
+            suffix = "s" if count != 1 else ""
+            fallback = f"{count} file{suffix} staged"
+            text = breakdown_text or fallback
+            self.title.setText(f"✓  {text}")
+            # Inline stylesheet REPLACES parent QSS, so include font props.
+            self.title.setStyleSheet(
+                f"color: {theme.ACCENT}; font-size: 18pt; font-weight: 600;"
+                " background: transparent; border: none; padding: 0;"
+            )
+            self.footer.setText("Ready to build your workbook")
+            for chip in self._chips:
+                chip.hide()
+            self.cta_button.show()
 
     def dragEnterEvent(self, e):
         if e.mimeData().hasUrls():
             self._set_hover_style()
             e.acceptProposedAction()
 
-    def dragLeaveEvent(self, e):
+    def dragLeaveEvent(self, _):
         self._set_idle_style()
-
-    def paintEvent(self, event):
-        # Let QLabel draw the background, dashed border, and text first.
-        super().paintEvent(event)
-
-        # Then overlay the grid + spotlight + reticle. All at low alpha so
-        # the text stays readable; together they read as a precision-rifle
-        # mental model behind the words.
-        painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
-
-        alpha = self.RETICLE_ALPHA_HOVER if self._hovering else self.RETICLE_ALPHA_IDLE
-        ring_alpha = max(1, int(alpha * self.RING_ALPHA_FACTOR))
-        grid_alpha = max(1, int(alpha * self.GRID_ALPHA_FACTOR))
-        spotlight_alpha = (
-            self.SPOTLIGHT_CENTER_ALPHA_HOVER if self._hovering
-            else self.SPOTLIGHT_CENTER_ALPHA_IDLE
-        )
-
-        w = self.width()
-        h = self.height()
-        cx = w / 2.0
-        cy = h / 2.0
-
-        # --- MOA-style grid (bottom layer, very faint) ---------------------
-        # Vertical and horizontal lines on a fixed pixel pitch, anchored to
-        # center so the crosshair always sits on a major grid intersection.
-        # Inset by 4px so we don't overpaint the dashed border.
-        grid_ink = QColor(theme.ACCENT)
-        grid_ink.setAlpha(grid_alpha)
-        grid_pen = QPen(grid_ink)
-        grid_pen.setWidth(1)
-        painter.setPen(grid_pen)
-        margin = 4
-        # Vertical grid lines (right of center, then left)
-        x = cx
-        while x < w - margin:
-            painter.drawLine(int(x), margin, int(x), h - margin)
-            x += self.GRID_SPACING
-        x = cx - self.GRID_SPACING
-        while x > margin:
-            painter.drawLine(int(x), margin, int(x), h - margin)
-            x -= self.GRID_SPACING
-        # Horizontal grid lines (below center, then above)
-        y = cy
-        while y < h - margin:
-            painter.drawLine(margin, int(y), w - margin, int(y))
-            y += self.GRID_SPACING
-        y = cy - self.GRID_SPACING
-        while y > margin:
-            painter.drawLine(margin, int(y), w - margin, int(y))
-            y -= self.GRID_SPACING
-
-        # --- Spotlight (subtle radial highlight at center) -----------------
-        # Brighter at center, fading out — pulls the eye toward the reticle.
-        # Painted as additive-feeling white-ish overlay at low alpha.
-        spotlight = QRadialGradient(cx, cy, max(w, h) * 0.45)
-        spotlight.setColorAt(0.0, QColor(255, 255, 255, spotlight_alpha))
-        spotlight.setColorAt(0.6, QColor(255, 255, 255, 0))
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(QBrush(spotlight))
-        painter.drawRect(0, 0, w, h)
-
-        # --- Concentric rings (softer — set the "target" feel) -------------
-        ring_ink = QColor(theme.ACCENT)
-        ring_ink.setAlpha(ring_alpha)
-        ring_pen = QPen(ring_ink)
-        ring_pen.setWidth(1)
-        painter.setPen(ring_pen)
-        painter.setBrush(Qt.NoBrush)
-        for r in self.RETICLE_RINGS:
-            painter.drawEllipse(QPointF(cx, cy), r, r)
-
-        # --- Crosshair (firmer line — set the "precision" feel) ------------
-        line_ink = QColor(theme.ACCENT)
-        line_ink.setAlpha(alpha)
-        line_pen = QPen(line_ink)
-        line_pen.setWidth(1)
-        painter.setPen(line_pen)
-        painter.setBrush(Qt.NoBrush)
-
-        # Gap of 8px on either side of center so dot/text stays clean.
-        gap = 8
-        # horizontal
-        painter.drawLine(
-            int(cx - self.CROSSHAIR_H_HALF), int(cy),
-            int(cx - gap), int(cy),
-        )
-        painter.drawLine(
-            int(cx + gap), int(cy),
-            int(cx + self.CROSSHAIR_H_HALF), int(cy),
-        )
-        # vertical
-        painter.drawLine(
-            int(cx), int(cy - self.CROSSHAIR_V_HALF),
-            int(cx), int(cy - gap),
-        )
-        painter.drawLine(
-            int(cx), int(cy + gap),
-            int(cx), int(cy + self.CROSSHAIR_V_HALF),
-        )
-
-        # --- Mil-dot subtensions on each axis ------------------------------
-        # Small filled dots at fixed distances from center along the crosshair
-        # arms. Reads as a precision-rifle reticle without overwhelming the text.
-        dot_ink = QColor(theme.ACCENT)
-        dot_ink.setAlpha(alpha)
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(dot_ink)
-        for d in self.MIL_DOT_SPACINGS:
-            # horizontal axis: only draw if within crosshair length
-            if d <= self.CROSSHAIR_H_HALF - 2:
-                painter.drawEllipse(QPointF(cx - d, cy), self.MIL_DOT_RADIUS, self.MIL_DOT_RADIUS)
-                painter.drawEllipse(QPointF(cx + d, cy), self.MIL_DOT_RADIUS, self.MIL_DOT_RADIUS)
-            # vertical axis: only draw if within crosshair length
-            if d <= self.CROSSHAIR_V_HALF - 2:
-                painter.drawEllipse(QPointF(cx, cy - d), self.MIL_DOT_RADIUS, self.MIL_DOT_RADIUS)
-                painter.drawEllipse(QPointF(cx, cy + d), self.MIL_DOT_RADIUS, self.MIL_DOT_RADIUS)
-
-        # --- Major hash marks at HASH_MARK_DISTANCES -----------------------
-        # Perpendicular ticks across the crosshair at the major mil intervals,
-        # giving the reticle the layered look of a real precision optic.
-        painter.setPen(line_pen)
-        painter.setBrush(Qt.NoBrush)
-        h = self.HASH_MARK_LENGTH
-        for d in self.HASH_MARK_DISTANCES:
-            # horizontal axis: vertical tick (perpendicular to horizontal line)
-            if d <= self.CROSSHAIR_H_HALF - 2:
-                painter.drawLine(int(cx - d), int(cy - h), int(cx - d), int(cy + h))
-                painter.drawLine(int(cx + d), int(cy - h), int(cx + d), int(cy + h))
-            # vertical axis: horizontal tick (perpendicular to vertical line)
-            if d <= self.CROSSHAIR_V_HALF - 2:
-                painter.drawLine(int(cx - h), int(cy - d), int(cx + h), int(cy - d))
-                painter.drawLine(int(cx - h), int(cy + d), int(cx + h), int(cy + d))
-
-        # --- Center dot — always at full accent ----------------------------
-        center_ink = QColor(theme.ACCENT)
-        center_ink.setAlpha(min(255, alpha * 4))
-        painter.setBrush(center_ink)
-        painter.setPen(Qt.NoPen)
-        painter.drawEllipse(QPointF(cx, cy), 2.5, 2.5)
-
-        painter.end()
 
     def dropEvent(self, e):
         self._set_idle_style()
@@ -436,6 +437,13 @@ class MainWindow(QMainWindow):
         layout.setContentsMargins(theme.PAD_WINDOW, theme.PAD_WINDOW,
                                   theme.PAD_WINDOW, theme.PAD_WINDOW)
         layout.setSpacing(theme.GAP_LARGE)
+
+        # v0.14 demo-mode banner — shows ONLY when the app is running unlicensed
+        # (no valid key). Persistent, never auto-dismisses. Has a "Purchase"
+        # button that opens loadscope.app/.
+        if app_license.is_demo_mode():
+            demo_banner = self._build_demo_banner()
+            layout.addWidget(demo_banner)
 
         # Tools-menu banner — points new users at the menu bar (which is in
         # macOS's system menu, easy to overlook). Dismissed by clicking the X;
@@ -532,6 +540,13 @@ class MainWindow(QMainWindow):
         # can hide custom items. "Support" sidesteps that.
         mbar = self.menuBar()
 
+        # v0.14: menu order is Settings → Workbook → Folders → Support
+        # (Chad 2026-05-14: Settings should be first user menu, before
+        # Folders). The addMenu calls below establish the bar order;
+        # actions are added to each menu further down where each section
+        # block lives, so the existing action-setup code stays put.
+        settings_menu = mbar.addMenu("Settings")
+
         # ===== 1. WORKBOOK =====
         wb_menu = mbar.addMenu("Workbook")
 
@@ -598,6 +613,13 @@ class MainWindow(QMainWindow):
         pocket_card_action.triggered.connect(self._print_pocket_card)
         wb_menu.addAction(pocket_card_action)
 
+        wb_menu.addSeparator()
+
+        demo_tour_action = QAction("Replay the Demo Tour…", self)
+        demo_tour_action.setMenuRole(QAction.NoRole)
+        demo_tour_action.triggered.connect(self._open_demo_tour)
+        wb_menu.addAction(demo_tour_action)
+
         # ===== 2. FOLDERS =====
         folders_menu = mbar.addMenu("Folders")
 
@@ -629,9 +651,7 @@ class MainWindow(QMainWindow):
         )
         folders_menu.addAction(show_backups_action)
 
-        # ===== 3. SETTINGS =====
-        settings_menu = mbar.addMenu("Settings")
-
+        # ===== 3. SETTINGS ===== (menu created above; just adding actions here)
         settings_action = QAction("Settings…", self)
         settings_action.setMenuRole(QAction.NoRole)
         settings_action.triggered.connect(self._show_settings)
@@ -650,6 +670,13 @@ class MainWindow(QMainWindow):
         help_action.triggered.connect(self._show_help)
         support_menu.addAction(help_action)
 
+        # v0.14: dedicated FAQ dialog (Chad 2026-05-14: commercial-product
+        # polish — sits in Support menu next to How to Use).
+        faq_action = QAction("Frequently Asked Questions…", self)
+        faq_action.setMenuRole(QAction.NoRole)
+        faq_action.triggered.connect(self._show_faq)
+        support_menu.addAction(faq_action)
+
         support_menu.addSeparator()
 
         visit_website_action = QAction(f"Visit {APP_NAME} Website…", self)
@@ -657,10 +684,10 @@ class MainWindow(QMainWindow):
         visit_website_action.triggered.connect(self._visit_website)
         support_menu.addAction(visit_website_action)
 
-        send_feedback_action = QAction("Send Feedback…", self)
-        send_feedback_action.setMenuRole(QAction.NoRole)
-        send_feedback_action.triggered.connect(self._send_feedback)
-        support_menu.addAction(send_feedback_action)
+        contact_support_action = QAction("Contact Support…", self)
+        contact_support_action.setMenuRole(QAction.NoRole)
+        contact_support_action.triggered.connect(self._send_feedback)
+        support_menu.addAction(contact_support_action)
 
         support_menu.addSeparator()
 
@@ -680,7 +707,15 @@ class MainWindow(QMainWindow):
         self._update_open_workbook_action_state()
 
         # Drop zone
-        self.drop = DropZone(self.handle_drops)
+        # Chip labels come from the live parser registry so adding a new
+        # parser (LabRadar, MagnetoSpeed, etc.) auto-extends the chips
+        # with zero UI work.
+        chip_names = [p.NAME for p in chronograph_parsers()] + \
+                     [p.NAME for p in group_parsers()]
+        self.drop = DropZone(self.handle_drops,
+                             on_chip_click=self._open_import_folder_for_chip,
+                             on_import_click=self.run_import_clicked,
+                             chip_labels=chip_names)
         self.drop.setToolTip(
             "Drag your Garmin and BallisticX CSVs here. "
             "Loadscope detects the format automatically and routes each file "
@@ -727,8 +762,12 @@ class MainWindow(QMainWindow):
         self.clear_button.clicked.connect(self.clear_staged)
         button_row.addWidget(self.clear_button)
 
+        # External Run Import button — kept as a hidden fallback for keyboard
+        # default-button behavior (Enter key triggers it). The visible CTA
+        # now lives INSIDE the DropZone card (Chad 2026-05-14: cleaner,
+        # matches Stripe/Notion/Linear upload patterns).
         self.go_button = QPushButton("Run Import")
-        self.go_button.setObjectName("primary")  # picks up the orange #primary style
+        self.go_button.setObjectName("primary")
         self.go_button.setEnabled(False)
         self.go_button.setDefault(True)
         self.go_button.setToolTip(
@@ -736,6 +775,7 @@ class MainWindow(QMainWindow):
             "active workbook, and open the workbook in Excel."
         )
         self.go_button.clicked.connect(self.run_import_clicked)
+        self.go_button.hide()  # CTA moved into the DropZone card
         button_row.addWidget(self.go_button)
 
         layout.addLayout(button_row)
@@ -810,15 +850,22 @@ class MainWindow(QMainWindow):
         total = self.staged_garmin + self.staged_bx
         if total == 0:
             self.status_label.setText("0 files staged")
+            breakdown = ""
         else:
             parts = []
             if self.staged_garmin:
                 parts.append(f"{self.staged_garmin} Garmin")
             if self.staged_bx:
                 parts.append(f"{self.staged_bx} BallisticX")
-            self.status_label.setText(" • ".join(parts) + "  staged — drop more or click Run Import")
+            breakdown = " · ".join(parts) + " staged"
+            self.status_label.setText(breakdown + " — drop more or click Run Import")
         self.go_button.setEnabled(total > 0)
         self.clear_button.setEnabled(total > 0)
+        # v0.14: update the dropzone card to show the staged state inline
+        # (accent title + "click Run Import below ↓" footer). Visible
+        # post-drop CTA Chad asked for 2026-05-14.
+        if hasattr(self, "drop"):
+            self.drop.set_staged_state(total, breakdown)
 
     def clear_staged(self):
         # Doesn't delete files from folders — just resets the on-screen staging count.
@@ -827,6 +874,104 @@ class MainWindow(QMainWindow):
         self._log("\nStaged list cleared. (Files remain in import folders.)", color=theme.LOG_WARNING)
         self._refresh_status()
 
+    def _build_demo_banner(self):
+        """Yellow/orange banner shown at the top of the main window when the
+        app is in demo mode. Has the Purchase a License CTA. Non-dismissable —
+        the banner is the constant "you're previewing" cue.
+        """
+        banner = QWidget()
+        banner.setObjectName("demoBanner")
+        banner.setStyleSheet(
+            f"#demoBanner {{ "
+            f"  background-color: {theme.ACCENT}; "
+            f"  border-radius: 6px; "
+            f"}}"
+        )
+        row = QHBoxLayout(banner)
+        row.setContentsMargins(14, 10, 14, 10)
+        row.setSpacing(12)
+
+        msg = QLabel(
+            "DEMO MODE — You're previewing Loadscope with sample data. "
+            "Purchase a license to import your own CSVs."
+        )
+        msg_font = QFont()
+        msg_font.setPointSize(12)
+        msg_font.setWeight(QFont.DemiBold)
+        msg.setFont(msg_font)
+        msg.setStyleSheet("color: white;")
+        msg.setWordWrap(True)
+        row.addWidget(msg, stretch=1)
+
+        purchase_btn = QPushButton("Purchase a License")
+        purchase_btn.setMinimumHeight(34)
+        pf = QFont()
+        pf.setPointSize(12)
+        pf.setWeight(QFont.DemiBold)
+        purchase_btn.setFont(pf)
+        purchase_btn.setStyleSheet(
+            "QPushButton { background-color: white; color: " + theme.ACCENT + "; "
+            "border: none; border-radius: 4px; padding: 6px 14px; }"
+            "QPushButton:hover { background-color: #f4f4f4; }"
+        )
+        purchase_btn.clicked.connect(self._open_purchase_page)
+        row.addWidget(purchase_btn)
+
+        return banner
+
+    def _open_purchase_page(self):
+        """Open the loadscope.app purchase page in the default browser."""
+        import webbrowser
+        webbrowser.open(app_license.PURCHASE_URL)
+        self._log("Opened purchase page in browser.", color=theme.LOG_SUCCESS)
+
+    def _show_demo_upgrade_prompt(self, reason="general"):
+        """Modal that gates a real action behind a license purchase.
+
+        `reason` lets us tailor the message slightly:
+            'csv_drop'  — user tried to drop real CSVs in demo mode
+            'general'   — generic "this feature needs a license"
+        """
+        if reason == "csv_drop":
+            title = "Import requires a license"
+            body = (
+                "You're in demo mode. Importing your own Garmin Xero and "
+                "BallisticX CSVs requires a Loadscope license.\n\n"
+                "Want to continue with your own data? Purchase a license — "
+                "your demo workbook stays read-only, and a fresh empty "
+                "workbook takes its place."
+            )
+        else:
+            title = "Feature requires a license"
+            body = (
+                "This feature requires a Loadscope license. You're currently "
+                "in demo mode."
+            )
+
+        box = QMessageBox(self)
+        box.setIcon(QMessageBox.Information)
+        box.setWindowTitle(title)
+        box.setText(body)
+        purchase = box.addButton("Purchase a License", QMessageBox.AcceptRole)
+        enter_key = box.addButton("Enter License Key…", QMessageBox.ActionRole)
+        cancel = box.addButton("Not now", QMessageBox.RejectRole)
+        box.setDefaultButton(purchase)
+        box.exec_()
+        clicked = box.clickedButton()
+        if clicked is purchase:
+            self._open_purchase_page()
+        elif clicked is enter_key:
+            from license_dialog import show_license_dialog
+            if show_license_dialog(parent=self):
+                # Successfully entered key — refresh banner state by warning
+                # the user to restart for full effect.
+                QMessageBox.information(
+                    self,
+                    "License accepted",
+                    "Your license key is saved. Restart Loadscope to "
+                    "exit demo mode and use your own data.",
+                )
+
     def handle_drops(self, paths):
         """Called when the user drops files into the drop zone. Stages but does NOT import.
 
@@ -834,7 +979,15 @@ class MainWindow(QMainWindow):
         handles it. The matching parser's IMPORT_FOLDER determines where the
         file is copied. New parsers added under app/parsers/ work automatically
         without changes here.
+
+        v0.14 demo-mode gating: in demo mode, real CSV drops trigger an upgrade
+        modal instead of staging. The demo tour uses bundled demo CSVs through
+        a different code path that bypasses this gate.
         """
+        if app_license.is_demo_mode():
+            self._show_demo_upgrade_prompt(reason="csv_drop")
+            return
+
         self._log("")
         self._log(f"Staging {len(paths)} dropped item(s)…", color=theme.LOG_SUCCESS)
 
@@ -1080,6 +1233,12 @@ class MainWindow(QMainWindow):
                 f"SUCCESS — wrote {n_g} Garmin rows and {n_b} BallisticX rows.",
                 color=theme.LOG_SUCCESS,
             )
+            # v0.14: SD-only auto-prompt (Chad 2026-05-14). When user
+            # imported seating-depth data without a powder ladder AND no
+            # winning charge has been set yet, ask for the charge so we
+            # can populate Seating Depth!B10 + Charts!B3 automatically.
+            if result.get("needs_sd_charge"):
+                self._prompt_sd_only_charge(workbook_path)
             self._log("Workbook opened in Excel.", color=theme.LOG_SUCCESS)
 
             # macOS notification — useful when the user has switched to Excel
@@ -1506,6 +1665,79 @@ class MainWindow(QMainWindow):
         workbooks = import_data.list_workbooks(project_dir=self.project)
         return workbooks[0] if workbooks else None
 
+    def _prompt_sd_only_charge(self, workbook_path):
+        """v0.14: when user imported seating-depth data without a powder
+        ladder, ask them what charge weight they used. Write it to both
+        Seating Depth!B10 (the visible 'Charge:' cell) and Charts!B3
+        (the source-of-truth winner cell that all other formulas reference).
+        Chad 2026-05-14: "I also like the ability for the auto prompt."
+        """
+        from PyQt5.QtWidgets import QInputDialog
+        charge, ok = QInputDialog.getDouble(
+            self,
+            "What charge weight did you use?",
+            "Loadscope didn't see a powder ladder in this import — only "
+            "seating depth data. To finish setting up the workbook, type the "
+            "powder charge (in grains) you used for your seating depth tests:",
+            value=42.0,        # sensible default for 6.5 CM-class loads
+            min=1.0, max=200.0, decimals=2,
+        )
+        if not ok:
+            self._log(
+                "Skipped seating-depth charge prompt — you can type it "
+                "manually into Seating Depth row 10.",
+                color=theme.LOG_DIM,
+            )
+            # Even if user cancelled, open Excel so they see their data
+            subprocess.run(["open", workbook_path], check=False)
+            return
+        try:
+            from openpyxl import load_workbook
+            wb = load_workbook(workbook_path, data_only=False)
+            if "Seating Depth" in wb.sheetnames:
+                wb["Seating Depth"]["B10"].value = charge
+            if "Charts" in wb.sheetnames:
+                wb["Charts"]["B3"].value = charge
+            wb.save(workbook_path)
+            self._log(
+                f"Set seating-depth charge to {charge} gr.",
+                color=theme.LOG_SUCCESS,
+            )
+        except Exception as e:
+            self._log(
+                f"Couldn't save the charge: {e}. "
+                "Open the workbook and type it into Seating Depth row 10.",
+                color=theme.LOG_ERROR,
+            )
+        # Open Excel after we've written (or attempted to write) the charge.
+        subprocess.run(["open", workbook_path], check=False)
+
+    def _open_import_folder_for_chip(self, chip_label):
+        """DropZone chip click handler — opens the import folder for the
+        named device in Finder. Looks up the IMPORT_FOLDER from the live
+        parser registry so adding a new parser (LabRadar, etc.) means the
+        chip just works without touching this method.
+        """
+        # Build chip-name → IMPORT_FOLDER map dynamically from registry
+        rel = None
+        for p in chronograph_parsers() + group_parsers():
+            if p.NAME == chip_label:
+                rel = p.IMPORT_FOLDER
+                break
+        if not rel:
+            return
+        path = os.path.join(self.project, rel)
+        if not os.path.isdir(path):
+            try:
+                os.makedirs(path, exist_ok=True)
+            except OSError as e:
+                QMessageBox.warning(
+                    self, "Couldn't open folder",
+                    f"Couldn't create or open {rel}: {e}",
+                )
+                return
+        subprocess.run(["open", path], check=False)
+
     def _open_workbook_in_excel(self):
         """Open the currently-active workbook in Excel (or whatever app is
         registered to open .xlsx files). Useful when Excel ends up behind
@@ -1672,10 +1904,27 @@ class MainWindow(QMainWindow):
         )
 
     def _print_pocket_card(self):
-        """Generate + open a printable Pocket Range Card from the
-        Ballistics tab's DOPE data. Opens in the user's default browser
-        so they can print or save as PDF."""
+        """Generate + open a polished printable Pocket Range Card.
+
+        Renders a 4×6 landscape HTML card from the Ballistics tab data and
+        opens it in the user's default browser — user prints to cardstock
+        or saves as PDF. The 'Range Card' worksheet (v0.14+) shows the
+        in-workbook preview, but this menu action produces the polished
+        artifact with proper typography."""
         wb_path = self._selected_workbook()
+        # v0.14: in demo mode, the user is reviewing the bundled demo
+        # workbook (which lives outside the project folder, so the picker
+        # doesn't see it). Force the bundled demo workbook so the demo's
+        # Print Pocket Card button always works, regardless of what
+        # _selected_workbook() returns.
+        if app_license.is_demo_mode():
+            try:
+                from demo_tour import get_bundled_demo_workbook_path
+                bundled = get_bundled_demo_workbook_path()
+                if bundled and os.path.isfile(bundled):
+                    wb_path = bundled
+            except ImportError:
+                pass
         if not wb_path or not os.path.isfile(wb_path):
             QMessageBox.information(
                 self,
@@ -1705,6 +1954,70 @@ class MainWindow(QMainWindow):
             f"Pocket Range Card generated: {os.path.basename(out_path)}",
             color=theme.LOG_SUCCESS,
         )
+
+    def _open_demo_tour(self):
+        """Open the guided demo tour panel beside Excel.
+
+        Walks the user through Load Log, Charts, Seating Depth, Ballistics,
+        Pocket Range Card, and Load Library with timed narration. Used both
+        from the Workbook menu (any user can replay) and from the first-launch
+        trial flow (auto-fires once).
+        """
+        # v0.14: ALWAYS prefer the bundled demo workbook in demo mode.
+        # Chad caught this 2026-05-14: in demo mode the tour was opening
+        # legacy workbooks (e.g., 6.xlsx) from his project folder via
+        # _selected_workbook(), which triggered Excel "found a problem with
+        # content" recovery dialogs. The demo tour is supposed to walk the
+        # CURATED demo workbook, never random project files.
+        wb_path = None
+        try:
+            from demo_tour import get_bundled_demo_workbook_path
+            bundled = get_bundled_demo_workbook_path()
+            if app_license.is_demo_mode():
+                # Demo users → always the bundled workbook
+                wb_path = bundled if (bundled and os.path.isfile(bundled)) else None
+            else:
+                # Licensed users replaying the tour → use their selected
+                # workbook if they have one, fall back to bundled otherwise
+                wb_path = self._selected_workbook()
+                if (not wb_path or not os.path.isfile(wb_path)) and bundled:
+                    wb_path = bundled
+        except ImportError:
+            wb_path = self._selected_workbook()
+        if not wb_path or not os.path.isfile(wb_path):
+            QMessageBox.information(
+                self,
+                "No workbook",
+                "Pick a workbook first so the tour has something to walk you through.",
+            )
+            return
+        try:
+            from demo_tour import DemoTourPanel
+        except ImportError as e:
+            QMessageBox.critical(
+                self,
+                "Couldn't load demo tour",
+                f"demo_tour module is missing or broken:\n\n{e}",
+            )
+            return
+
+        def _on_purchase():
+            # Placeholder until v0.14 commerce ships — opens the marketing site.
+            import webbrowser
+            webbrowser.open("https://loadscope.app/")
+            self._log("Opened purchase page in browser.", color=theme.LOG_SUCCESS)
+
+        self._demo_tour_panel = DemoTourPanel(
+            wb_path,
+            on_purchase=_on_purchase,
+            parent=None,
+        )
+        # Left-half geometry on a 1440-wide screen. The panel itself can be
+        # repositioned by the user; this is just the initial layout.
+        self._demo_tour_panel.setGeometry(0, 25, 720, 875)
+        self._demo_tour_panel.show()
+        self._demo_tour_panel.start()
+        self._log("Demo tour started.", color=theme.LOG_SUCCESS)
 
     def _print_workbook(self):
         """Open the active workbook in Excel and trigger the Print dialog.
@@ -1942,6 +2255,12 @@ class MainWindow(QMainWindow):
     def _show_help(self):
         """Tools → How to Use Loadscope…"""
         show_help(parent=self)
+
+    def _show_faq(self):
+        """Support → Frequently Asked Questions… — opens the categorized
+        FAQ dialog with search."""
+        from faq_dialog import show_faq_dialog
+        show_faq_dialog(parent=self)
 
     def _show_settings(self):
         """Tools → Settings…"""
@@ -2187,16 +2506,18 @@ class MainWindow(QMainWindow):
         QDesktopServices.openUrl(QUrl("https://loadscope.app/"))
 
     def _send_feedback(self):
-        """Tools → Send Feedback — opens the user's default email client with
-        a pre-filled message to support@loadscope.app. Same mailto used inside
-        the About dialog, just promoted to a top-level menu for discoverability."""
+        """Support → Contact Support — opens the user's default email client
+        with a pre-filled message to support@loadscope.app. Covers bugs,
+        feature requests, device support requests, questions — anything.
+        Renamed from "Send Feedback" 2026-05-14 (Chad: broader scope)."""
         from PyQt5.QtCore import QUrl
         from PyQt5.QtGui import QDesktopServices
-        subject = f"{APP_NAME} v{APP_VERSION} feedback"
+        subject = f"{APP_NAME} v{APP_VERSION}"
         body = (
-            "Hi,%0A%0A"
-            "(your message here — bug reports, feature requests, "
-            "device support requests, anything is welcome)%0A%0A"
+            "Hi Loadscope team,%0A%0A"
+            "(Tell us what you need — bug reports, feature requests, "
+            "questions about how something works, requests to support a "
+            "new chronograph or target app, anything is welcome.)%0A%0A"
             "Thanks!"
         )
         display_name = f"{APP_NAME} Support"
@@ -2281,15 +2602,34 @@ def main():
     except ImportError:
         pass  # safe to skip if module isn't available for some reason
 
-    # License gate — beta lockdown. Each tester has a unique key; without
-    # a valid stored key the app refuses to proceed past this point.
-    # Re-validates the stored key on every launch so revocations land
-    # automatically via the auto-updater.
+    # License gate — v0.14 changed from a hard wall to a soft splash. On the
+    # very first launch (no valid key, splash never dismissed) we offer the
+    # user three choices: try the demo, enter a license key, or purchase. On
+    # subsequent launches the user just lands directly in whichever mode they
+    # have — licensed users skip the splash entirely.
     state = app_license.license_state()
-    if state != "valid":
-        if not show_license_dialog(revoked=(state == "invalid")):
-            # User clicked Quit — don't proceed
-            return 0
+    splash_choice = None  # set if the splash fired, used to auto-launch tour
+    if state != "valid" and app_license.should_show_first_launch_splash():
+        from splash_dialog import (
+            FirstLaunchSplash,
+            CHOICE_DEMO,
+            CHOICE_LICENSE,
+            CHOICE_PURCHASE,
+            CHOICE_CANCEL,
+        )
+        splash = FirstLaunchSplash()
+        splash.exec_()
+        splash_choice = splash.choice
+        if splash_choice == CHOICE_LICENSE:
+            # User wants to enter a key — open the existing license dialog.
+            # If they enter a valid key, license_state() becomes 'valid' on
+            # the next call. If they Cancel out, fall through to demo mode.
+            show_license_dialog(revoked=(state == "invalid"))
+        # Whatever they picked (or didn't), mark the splash dismissed so
+        # they don't see it every launch.
+        app_license.mark_first_launch_splash_seen()
+    # No hard quit gate anymore — the app always proceeds, either in
+    # licensed mode or demo mode.
 
     # First-launch disclaimer — must be accepted before the user can use the app.
     # Tracked in config; user only sees it once unless DISCLAIMER_VERSION bumps.
@@ -2336,6 +2676,15 @@ def main():
     # tutorial version yet. Tracked via config; users see it once.
     if needs_tutorial():
         QTimer.singleShot(300, lambda: show_tutorial(parent=win))
+
+    # v0.14: splash → tour auto-launch is DEFERRED to v0.14.x. The
+    # wiring (splash_choice variable, _open_demo_tour method, tour panel)
+    # is all in place — the auto-launch is intentionally not called here
+    # so v0.14 can ship without the brittle Qt+AppleScript+Excel
+    # coordination work needed to make it polished. Users who pick "Try
+    # the Free Demo" land on the demo-mode main window and can launch
+    # the tour from Workbook → Replay the Demo Tour. See
+    # [[loadscope-v014-auto-tour-deferred]] memory for the v0.14.x plan.
 
     # CSVs passed on the command line (e.g., dragged onto the .app icon while
     # it wasn't running — py2app forwards those via sys.argv on launch).
