@@ -67,9 +67,79 @@ def is_well_formed(key):
 
 
 def is_valid_key(key):
-    """True if the key is well-formed AND in the allowed set."""
+    """True if the key is well-formed AND in the local allowed set OR was
+    previously verified against the Worker's /verify endpoint (cached in
+    config). Local-first so the app stays usable offline once a license
+    has been activated.
+    """
     norm = normalize_key(key)
-    return bool(KEY_PATTERN.match(norm)) and norm in VALID_KEYS
+    if not bool(KEY_PATTERN.match(norm)):
+        return False
+    if norm in VALID_KEYS:
+        return True
+    # Commercial key cached after a successful /verify
+    cfg = app_config.load_config()
+    cached = cfg.get("activated_purchased_keys") or []
+    return norm in cached
+
+
+# Lemon Squeezy commerce: when a user pastes a key bought on
+# loadscope.lemonsqueezy.com, the app calls /verify on the Worker. If the
+# Worker says the key is active, we cache it in config so the user can
+# launch offline afterwards.
+VERIFY_ENDPOINT = "https://coldbore-download.cheidt182.workers.dev/verify"
+
+
+def verify_key_remote(key, timeout_seconds=8):
+    """Call the Worker's /verify endpoint. Returns one of:
+        ('active', None)    — commercial purchase, accepted
+        ('beta', None)      — legacy beta key (also acceptable)
+        ('revoked', msg)    — was valid, refunded
+        ('invalid', msg)    — never valid
+        ('offline', msg)    — couldn't reach the server
+    The caller should cache 'active'/'beta' results in config so subsequent
+    launches don't need network.
+    """
+    import json as _json
+    import urllib.request as _ur
+    import urllib.error as _ue
+    norm = normalize_key(key)
+    if not KEY_PATTERN.match(norm):
+        return ("invalid", "Key isn't formatted correctly.")
+    body = _json.dumps({"key": norm}).encode("utf-8")
+    req = _ur.Request(
+        VERIFY_ENDPOINT, data=body,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with _ur.urlopen(req, timeout=timeout_seconds) as resp:
+            data = _json.loads(resp.read().decode("utf-8"))
+    except (_ue.URLError, _ue.HTTPError, TimeoutError, OSError) as e:
+        return ("offline", f"Couldn't reach the license server: {e}")
+    except _json.JSONDecodeError:
+        return ("offline", "Server returned an unexpected response.")
+    if data.get("valid"):
+        return (data.get("status") or "active", None)
+    status = data.get("status") or "invalid"
+    msg = {
+        "revoked": "This key was refunded and is no longer active.",
+        "missing": "No key was provided.",
+        "invalid": "We don't recognize this key.",
+    }.get(status, "Key not accepted.")
+    return (status, msg)
+
+
+def cache_purchased_key(key):
+    """Persist a Worker-verified commercial key to config so future
+    is_valid_key() checks pass without network."""
+    norm = normalize_key(key)
+    cfg = app_config.load_config()
+    cached = list(cfg.get("activated_purchased_keys") or [])
+    if norm not in cached:
+        cached.append(norm)
+        cfg["activated_purchased_keys"] = cached
+        app_config.save_config(cfg)
 
 
 def license_state():
@@ -114,9 +184,11 @@ def save_license(key):
 APP_MODE_LICENSED = "licensed"
 APP_MODE_DEMO = "demo"
 
-# Where the Purchase a License button on the splash + tour panel points.
-# Updated when the Lemon Squeezy product page is live. For now, the marketing
-# site landing page collects emails for the buyer list.
+# During beta the third splash button is "Request Beta Access" and points
+# at the marketing site (which hosts the Request Access modal). When
+# commerce flips on, change this back to the Lemon Squeezy checkout URL
+# (https://loadscope.lemonsqueezy.com/buy/1656422). See
+# [[loadscope-commerce-flip-on]] memory for the full checklist.
 PURCHASE_URL = "https://loadscope.app/"
 
 

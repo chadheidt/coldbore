@@ -69,7 +69,7 @@ sys.path.insert(0, str(HERE / "app"))
 
 APP_DISPLAY_NAME = "Loadscope"
 APP_BUNDLE_ID = "com.chadheidt.loadscope"
-APP_VERSION = "0.13.3"  # keep in sync with app/version.py
+APP_VERSION = "0.14.0"  # keep in sync with app/version.py
 
 # The main entry script
 ENTRY = ["app/main.py"]
@@ -101,6 +101,17 @@ if DEMO_WORKBOOK.exists():
 else:
     print(f"WARNING: demo workbook missing at {DEMO_WORKBOOK} — run "
           f"tools/generate_demo_workbook.py before building the .app")
+
+# v0.14: bundle the Quick Start .docx so setup_wizard can copy it into
+# the user's project folder on first launch (Chad 2026-05-14: the Start
+# Here footer pointed users to "your project folder" but the docx never
+# actually landed there — only in the Downloads ZIP).
+QUICKSTART_DOCX = HERE / "Loadscope — Quick Start.docx"
+if QUICKSTART_DOCX.exists():
+    DATA_FILES.append(str(QUICKSTART_DOCX))
+else:
+    print(f"WARNING: Quick Start docx missing at {QUICKSTART_DOCX} — the "
+          f".app will ship without it.")
 
 # Also bundle import_data.py so the app can call into it
 IMPORT_DATA_PATH = HERE / "import_data.py"

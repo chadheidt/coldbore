@@ -19,6 +19,7 @@ from pathlib import Path
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QFont, QPixmap
 from PyQt5.QtWidgets import (
+    QApplication,
     QDialog,
     QFrame,
     QHBoxLayout,
@@ -204,14 +205,41 @@ class LicenseDialog(QDialog):
 
     def _submit(self):
         key = self.key_edit.text()
+        # 1) Local check first — covers legacy beta keys + any commercial
+        #    key the app has previously verified (cached in config).
         if app_license.is_valid_key(key):
             app_license.save_license(key)
             self.licensed = True
             self.accept()
+            return
+        # 2) Not in the local set → call the Worker /verify endpoint.
+        #    Covers fresh Lemon Squeezy purchases that haven't been seen
+        #    on this Mac yet.
+        self.feedback.setText("Checking with the license server…")
+        QApplication.processEvents()
+        status, err = app_license.verify_key_remote(key)
+        if status in ("active", "beta"):
+            app_license.cache_purchased_key(key)  # so future launches skip the network
+            app_license.save_license(key)
+            self.licensed = True
+            self.accept()
+            return
+        # 3) Still no — show the right error message
+        if status == "offline":
+            self.feedback.setText(
+                "Couldn't reach the license server — check your "
+                "internet connection and try again. (If you're sure "
+                "this is a valid key, email support@loadscope.app.)"
+            )
+        elif status == "revoked":
+            self.feedback.setText(
+                "This key was refunded and is no longer active. "
+                "Contact support@loadscope.app if this looks wrong."
+            )
         else:
             self.feedback.setText(INVALID_KEY_FEEDBACK)
-            self.key_edit.selectAll()
-            self.key_edit.setFocus()
+        self.key_edit.selectAll()
+        self.key_edit.setFocus()
 
 
 def show_license_dialog(parent=None, revoked=False):

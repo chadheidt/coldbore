@@ -56,11 +56,11 @@ TOUR_STOPS = [
         "sheet": "Load Log",
         "select_range": "A1:P25",
         "narration": (
-            "This is the Load Log. You drop your range-day CSVs onto Loadscope "
-            "and it fills in every velocity, group size, and SD from your "
-            "chronograph and target software. The highlighted suggested winner "
-            "shows the charge that scored best across all the metrics — "
-            "no manual math, no spreadsheet wrangling."
+            "This is the Load Log — every powder charge you tested, one row "
+            "each. Loadscope filled in your velocities and group sizes from "
+            "the CSVs you dropped in. The 🥇 medal marks Loadscope's "
+            "suggested winner: the charge that scored best across velocity "
+            "SD, group size, mean radius, and vertical dispersion."
         ),
         "min_dwell_seconds": 8,
         "special": None,
@@ -70,11 +70,11 @@ TOUR_STOPS = [
         "sheet": "Charts",
         "select_range": "A1:Q25",
         "narration": (
-            "Here's where the scoring lives. Every candidate load gets a "
-            "color-coded score for vertical dispersion, velocity, SD, and group "
-            "size — green is best, red is worst. The composite winner at the "
-            "bottom uses adjustable weights you can tune to match your goal "
-            "(group size, low SD, vertical, or a mix)."
+            "Charts shows you HOW Loadscope picked the winner. Each load "
+            "gets graded across four metrics — green is best, red is worst — "
+            "then a composite score combines all four. You can change the "
+            "weights up top if you care more about one metric (say, group "
+            "size for hunting, or SD for long range)."
         ),
         "min_dwell_seconds": 8,
         "special": None,
@@ -84,10 +84,11 @@ TOUR_STOPS = [
         "sheet": "Seating Depth",
         "select_range": "A1:P30",
         "narration": (
-            "Once you've found your charge, this tab helps you find your "
-            "bullet jump — the distance between the bullet and the rifling. "
-            "Same workflow as Load Log: drop in your CSVs and it scores each "
-            "jump distance. The winner becomes your final OAL for the season."
+            "Once you've picked your powder charge, the next test is seating "
+            "depth — how far the bullet sits from the rifling. Same workflow "
+            "as Load Log: each row is a different jump distance, and "
+            "Loadscope ranks them. The winning jump becomes your final "
+            "cartridge length."
         ),
         "min_dwell_seconds": 8,
         "special": None,
@@ -96,11 +97,18 @@ TOUR_STOPS = [
         "title": "Ballistics — your DOPE table",
         "sheet": "Ballistics",
         "select_range": "A1:K30",
+        # ⚠️ PLACEHOLDER NARRATION — UPDATE WHEN v0.15 BALLISTIC SOLVER SHIPS.
+        # Today the user types every DOPE value manually. v0.15
+        # ([[loadscope-ballistic-solver-v015]]) auto-predicts elevation
+        # and wind from BC + atmospherics. Rewrite this stop to mention
+        # the predicted DOPE + the predicted-vs-confirmed visual
+        # distinction. See [[loadscope-tour-narration-v015-update]].
         "narration": (
-            "Your rifle setup and DOPE table lives here. After you've confirmed "
-            "your load, you fill in the elevation and wind values from 100 yards "
-            "all the way out to 1000. Then you get something genuinely cool — "
-            "click 'Next' to see it."
+            "Once you've nailed down your load, the Ballistics tab is where "
+            "you record your DOPE — the elevation and wind clicks at every "
+            "distance. Type in what you dialed at the range; Loadscope "
+            "auto-converts to clicks. Click 'Next' to see what we do with "
+            "all that data."
         ),
         "min_dwell_seconds": 8,
         "special": None,
@@ -110,11 +118,10 @@ TOUR_STOPS = [
         "sheet": "Ballistics",  # stays on Ballistics; opens HTML in browser
         "select_range": None,
         "narration": (
-            "Loadscope generates a printable 4×6 DOPE card from your "
-            "Ballistics data. Look at your browser — that's what just opened. "
-            "Print on cardstock or save as a PDF; it folds into your shirt "
-            "pocket for the firing line. No more squinting at notes on your "
-            "phone in the wind."
+            "Loadscope just generated a printable 4×6 Pocket Range Card — "
+            "check your browser. Print it on cardstock or save it as a PDF; "
+            "it folds into your shirt pocket for the firing line. No more "
+            "squinting at notes on your phone in the wind."
         ),
         "min_dwell_seconds": 10,
         "special": "open_pocket_range_card",
@@ -124,10 +131,10 @@ TOUR_STOPS = [
         "sheet": "Load Library",
         "select_range": "A1:P25",
         "narration": (
-            "Every winning load you confirm gets saved here when you click "
-            "'Save Suggested Load to Library.' Build it up over the years — "
-            "every cartridge, every rifle, every winning recipe in one place. "
-            "Next season starts where this season ended."
+            "Every winning load you confirm gets saved here with one click — "
+            "'Save Suggested Load to Library' on the Charts tab. Build it up "
+            "over the years: every cartridge, every rifle, every winning "
+            "recipe in one place. Next season picks up where this one left off."
         ),
         "min_dwell_seconds": 8,
         "special": None,
@@ -254,12 +261,75 @@ class TourController:
         return False
 
     def position_excel_right_half(self):
-        """Position Excel's main window to the right half of the screen."""
+        """Position Excel's main window to the right half of the screen.
+
+        DEPRECATED 2026-05-14: Chad asked for the tour panel on TOP and
+        the workbook BELOW maximized — see position_excel_bottom_band.
+        Kept for any code path that still calls it.
+        """
         w, h = self._screen
         x = w // 2
         y = MENU_BAR_HEIGHT
         width = w // 2
         height = h - MENU_BAR_HEIGHT
+        self._set_excel_window_geometry(x, y, width, height)
+
+    def position_excel_bottom_band(self, panel_height):
+        """Position Excel below the tour panel — full screen width, takes
+        every pixel below `panel_height` (Chad's preferred layout
+        2026-05-14). Maximizes the workbook real estate."""
+        w, h = self._screen
+        x = 0
+        y = MENU_BAR_HEIGHT + panel_height
+        width = w
+        height = h - MENU_BAR_HEIGHT - panel_height
+        self._set_excel_window_geometry(x, y, width, height)
+
+    def enter_excel_fullscreen_view(self):
+        """Toggle Excel's built-in 'Full Screen' view (Cmd+Ctrl+F equivalent).
+        Hides the ribbon, formula bar, and other chrome — just shows the
+        worksheet. Chad asked 2026-05-14 to maximize the demo experience.
+        Does NOT use macOS fullscreen (that would put Excel in a separate
+        space and break the tour-panel overlay)."""
+        self._run_script('''
+            tell application "Microsoft Excel"
+                try
+                    set display full screen to true
+                end try
+            end tell
+        ''')
+
+    def exit_excel_fullscreen_view(self):
+        """Reverse enter_excel_fullscreen_view — call before quitting Excel
+        so the next launch isn't stuck in fullscreen view."""
+        self._run_script('''
+            tell application "Microsoft Excel"
+                try
+                    set display full screen to false
+                end try
+            end tell
+        ''')
+
+    def close_other_excel_windows(self, keep_basename):
+        """Close every Excel window EXCEPT the one matching keep_basename.
+        Avoids 'Recent files' / 'Excel Start screen' / leftover workbooks
+        cluttering the demo experience."""
+        if not keep_basename:
+            return
+        self._run_script(f'''
+            tell application "Microsoft Excel"
+                try
+                    repeat with wb in workbooks
+                        if (name of wb) is not "{keep_basename}" then
+                            close wb saving no
+                        end if
+                    end repeat
+                end try
+            end tell
+        ''')
+
+    def _set_excel_window_geometry(self, x, y, width, height):
+        """Internal helper — apply position+size to Excel's first real window."""
         script = f'''
             tell application "Microsoft Excel" to activate
             delay 0.3
@@ -350,7 +420,21 @@ if QWidget is not None:
             self._paused = False
 
             self.setWindowTitle("Loadscope — Demo Tour")
-            self.setMinimumSize(620, 720)
+            # v0.14: top-strip layout (Chad 2026-05-14). Narration panel
+            # is a thin horizontal band at the top of the screen, Excel
+            # gets the rest of the height. Iterated 220→140 after first
+            # pass — too much vertical real estate for narration text.
+            self._panel_height = 140
+            # Stay on top so it doesn't get buried behind Excel when the
+            # user clicks into the workbook to look at something.
+            self.setWindowFlag(Qt.WindowStaysOnTopHint, True)
+            # Poll for Excel still-running every 2s; close ourselves if
+            # the user closes Excel mid-tour (otherwise the tour keeps
+            # narrating about a workbook that's gone).
+            self._excel_watch = QTimer(self)
+            self._excel_watch.setInterval(2000)
+            self._excel_watch.timeout.connect(self._check_excel_alive)
+            self._excel_watch.start()
 
             self._build_ui()
             # Don't auto-start; caller invokes start() so they can position
@@ -458,10 +542,39 @@ if QWidget is not None:
 
         # --- public API ---------------------------------------------------------
         def start(self):
-            """Open the workbook, position Excel, render the first stop."""
+            """Open the workbook, position Excel below the tour panel, render
+            the first stop. Layout (Chad 2026-05-14):
+              - Tour panel: top of screen, full width, ~140px tall, on-top
+              - Excel:      below the panel, full width, all remaining height,
+                            in Excel's "Full Screen" view (no ribbon)
+            """
+            # 1. Position the tour panel at the top-strip of the screen
+            screen_w, screen_h = self._controller._screen
+            self.setGeometry(
+                0, MENU_BAR_HEIGHT, screen_w, self._panel_height
+            )
+            # 2. Open the workbook
             ok = self._controller.ensure_workbook_open()
             if ok:
-                self._controller.position_excel_right_half()
+                # 3. Close any OTHER Excel windows (Start screen, recent
+                # files, leftover workbooks) so just our demo workbook is
+                # visible.
+                wb_basename = os.path.basename(
+                    self._controller.workbook_path or ""
+                )
+                self._controller.close_other_excel_windows(wb_basename)
+                # 4. Park Excel below the panel, full width of remaining screen
+                self._controller.position_excel_bottom_band(self._panel_height)
+                # 5. Toggle Excel's Full Screen view to hide the ribbon
+                # (Chad 2026-05-14: maximize the demo experience)
+                self._controller.enter_excel_fullscreen_view()
+                # 6. Re-position after fullscreen toggle (which can resize
+                # the window). Small delay so Excel finishes the toggle.
+                from PyQt5.QtCore import QTimer as _QT
+                _QT.singleShot(
+                    400,
+                    lambda: self._controller.position_excel_bottom_band(self._panel_height)
+                )
             self._render_stop(0)
 
         def next_stop(self):
@@ -536,6 +649,82 @@ if QWidget is not None:
         def _on_purchase_clicked(self):
             if self._on_purchase:
                 self._on_purchase()
+
+        # --- Lifecycle coupling with Excel ---------------------------
+        # The tour panel + Excel are physically separate windows but the
+        # USER experiences them as one demo experience. Couple their
+        # lifecycles so neither lingers while the other is gone.
+
+        def _check_excel_alive(self):
+            """Polled every 2s: if Excel quit or our workbook closed,
+            close the tour panel too. Without this, the tour keeps
+            narrating about an Excel window that no longer exists."""
+            try:
+                result = self._controller._run_script(
+                    'tell application "System Events" to '
+                    '(name of processes) contains "Microsoft Excel"',
+                    timeout=3,
+                )
+                if result.strip().lower() != "true":
+                    self._excel_watch.stop()
+                    self.close()
+                    return
+                # Excel is alive — also check our specific workbook is still open
+                wb_basename = os.path.basename(self._controller.workbook_path or "")
+                if wb_basename:
+                    script = f'''
+                        tell application "Microsoft Excel"
+                            set names_list to ""
+                            try
+                                repeat with wb in workbooks
+                                    set names_list to names_list & (name of wb) & "|"
+                                end repeat
+                            end try
+                            return names_list
+                        end tell
+                    '''
+                    open_books = self._controller._run_script(script, timeout=3)
+                    if wb_basename not in open_books:
+                        self._excel_watch.stop()
+                        self.close()
+            except Exception:
+                pass  # polling errors shouldn't kill the tour
+
+        def closeEvent(self, event):
+            """When the user closes the tour panel, also close the demo
+            workbook in Excel + quit Excel if no other workbooks are open.
+            Avoids leaving the demo workbook open after the tour ends."""
+            try:
+                self._excel_watch.stop()
+            except Exception:
+                pass
+            try:
+                # Exit Excel's full-screen view first so the next launch
+                # isn't stuck in fullscreen if the user reopens Excel.
+                self._controller.exit_excel_fullscreen_view()
+            except Exception:
+                pass
+            try:
+                wb_basename = os.path.basename(self._controller.workbook_path or "")
+                if wb_basename:
+                    self._controller._run_script(f'''
+                        tell application "Microsoft Excel"
+                            try
+                                repeat with wb in workbooks
+                                    if (name of wb) is "{wb_basename}" then
+                                        close wb saving no
+                                        exit repeat
+                                    end if
+                                end repeat
+                                if (count of workbooks) is 0 then
+                                    quit
+                                end if
+                            end try
+                        end tell
+                    ''', timeout=5)
+            except Exception:
+                pass
+            super().closeEvent(event)
 
 
 def show_tour(workbook_path, parent=None, on_purchase=None):

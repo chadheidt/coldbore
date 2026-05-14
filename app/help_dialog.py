@@ -89,8 +89,9 @@ WHAT'S IN THE WORKBOOK
    BallisticX       Same idea for BallisticX CSV imports.
    Import
 
-   After Range Day  A printable single-page cheat sheet covering the basic
-                    workflow.
+   Start Here       The first tab in your workbook — a printable cheat
+                    sheet covering the basic workflow + tab guide +
+                    troubleshooting.
 
 
 MINIMUM DATA REQUIREMENT

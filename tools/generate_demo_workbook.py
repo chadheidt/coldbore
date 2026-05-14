@@ -264,6 +264,14 @@ def main():
     _write_seating_depth_static_values(wb)
     _populate_ballistics_dope(wb)
     _populate_load_library(wb)
+
+    # Re-run the Ballistics polish AFTER _populate_demo_headers has set
+    # Load Log G7 = "0.1 Mil". The first apply_workbook_repairs call ran
+    # before G7 was set, so its auto-hide logic saw an empty G7 and
+    # didn't hide MOA columns. Re-run now to pick up the demo's scope
+    # type and hide the irrelevant click columns.
+    import_data._polish_ballistics_callout(wb)
+
     # Remove legacy Range Card / Load Card tabs from prior builds.
     # Chad picked Option A (2026-05-13): drop the in-Excel preview and let
     # the HTML "Print Pocket Range Card" output be the single source of
@@ -271,6 +279,14 @@ def main():
     for legacy_name in ("Range Card", "Load Card"):
         if legacy_name in wb.sheetnames:
             del wb[legacy_name]
+
+    # v0.14: lock EVERY cell in the demo workbook so demo viewers can't
+    # edit anything (Chad 2026-05-14: "users can mess with the demo
+    # worksheets — we need to eliminate the ability for them to do that").
+    # apply_workbook_repairs leaves input cells unlocked for real users;
+    # for the demo we override and lock the entire workbook tight.
+    print("Locking ALL cells on the demo workbook (read-only for demo viewers)")
+    _lock_demo_workbook_completely(wb)
 
     # Force Excel to do a full recalc when opening this workbook. Without this,
     # Excel may trust the (stale or empty) cached values from openpyxl's save
@@ -835,7 +851,7 @@ def _populate_load_library(wb):
     LL_COL_WIDTHS = {
         "A": 4,   # # (sequential)
         "B": 11,  # Date Added
-        "C": 25,  # Load Name
+        "C": 32,  # Load Name (long composite names like "6.5 CM 140 Berger Hybrid / H4350 42.1 / 0.020 jump" hit 50 chars; wrap on data rows handles overflow)
         "D": 18,  # Rifle
         "E": 15,  # Bullet
         "F": 8,   # Bullet Wt (gr)
@@ -891,6 +907,39 @@ def _populate_load_library(wb):
         )
         # Bump row height for wrapped notes
         ll_lib.row_dimensions[r].height = 32
+
+
+def _lock_demo_workbook_completely(wb):
+    """Demo-only: override apply_workbook_repairs's selective protection
+    and lock every cell on every visible tab. Demo viewers shouldn't be
+    able to edit anything — they're previewing what Loadscope can do, not
+    using it for real data.
+
+    Real-user workbooks keep selective protection (formula cells locked,
+    input cells editable) via _protect_workbook in apply_workbook_repairs.
+    """
+    from openpyxl.styles import Protection
+    locked = Protection(locked=True, hidden=False)
+    for ws in wb.worksheets:
+        if ws.sheet_state != "visible":
+            continue
+        for row in ws.iter_rows():
+            for cell in row:
+                cell.protection = locked
+        # Re-enable sheet protection (apply_workbook_repairs already set
+        # this on user-facing tabs, but Garmin Xero Import + BallisticX
+        # Import are intentionally LEFT UNPROTECTED there for typo-fixing.
+        # In demo mode we want them locked too).
+        ws.protection.sheet = True
+        # Don't set password = None — openpyxl crashes hashing None.
+        # Default (no password) is what we want anyway.
+        ws.protection.sort = False
+        ws.protection.autoFilter = False
+        ws.protection.formatCells = False
+        ws.protection.formatColumns = False
+        ws.protection.formatRows = False
+        ws.protection.selectLockedCells = False
+        ws.protection.selectUnlockedCells = False
 
 
 def _write_seating_depth_static_values(wb):
@@ -1052,6 +1101,7 @@ def _populate_demo_headers(wb):
     brass = "Hornady"
     cbto = 2.224          # base-to-ogive measurement, in
     oal = 2.875           # overall length, in
+    winning_charge = 42.4  # winner of the powder ladder, gr (matches PL row 4)
     temp_f = 68
     notes = "Sunny, light breeze. 1500 ft DA."
 
@@ -1075,8 +1125,16 @@ def _populate_demo_headers(wb):
         # G9 has a formula pulling powder from GarminSessions — leave as-is
         sht["L9"].value = primer
         sht["O9"].value = brass
-        # Row 10 — CBTO / OAL / Distance
-        sht["B10"].value = cbto
+        # Row 10 — different layouts per sheet (template-defined):
+        #   Load Log row 10  = CBTO / OAL / Distance (test-session metadata)
+        #   Seating Depth!A10 = "Charge:" — B10 must be the constant powder
+        #   charge used during the jump test (template formula =Charts!B3
+        #   would resolve to the winner, but we overwrote that formula
+        #   below, so write the static winning charge here).
+        if sheet_name == "Seating Depth":
+            sht["B10"].value = winning_charge  # constant charge for jump test, gr
+        else:
+            sht["B10"].value = cbto            # CBTO measurement, in
         sht["G10"].value = oal
         # L10 is already 100 (set by apply_workbook_repairs)
         # Row 13 — Date / Temp / Notes (LL Date + Notes filled by repairs; SD needs it)

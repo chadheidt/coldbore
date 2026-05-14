@@ -81,6 +81,31 @@ def find_bundled_template():
     return None
 
 
+def find_bundled_quickstart():
+    """Locate the bundled Loadscope — Quick Start.docx for setup-time copy.
+
+    Same search order as find_bundled_template: py2app Resources/, then
+    repo root for dev mode. Returns Path or None.
+    """
+    here = Path(__file__).resolve().parent
+    if getattr(sys, "frozen", False):
+        try:
+            resources_dir = Path(sys.executable).resolve().parent.parent / "Resources"
+            if resources_dir.is_dir():
+                for cand in resources_dir.glob("*Quick Start*.docx"):
+                    return cand
+        except (OSError, ValueError):
+            pass
+    if hasattr(sys, "_MEIPASS"):
+        bundle = Path(sys._MEIPASS)
+        for cand in bundle.glob("*Quick Start*.docx"):
+            return cand
+    repo_root = here.parent
+    for cand in repo_root.glob("*Quick Start*.docx"):
+        return cand
+    return None
+
+
 def setup_project_folder(project_folder, template_path):
     """Create the project folder structure and copy the template in.
 
@@ -96,6 +121,18 @@ def setup_project_folder(project_folder, template_path):
     dest_template = project_folder / "Rifle Loads Template (do not edit).xltx"
     if not dest_template.exists() and template_path and template_path.exists():
         shutil.copy2(template_path, dest_template)
+
+    # v0.14: also copy the Quick Start .docx so the Start Here footer's
+    # "see Loadscope — Quick Start.docx in your project folder" actually
+    # finds it. Idempotent (only copies if not already present).
+    quickstart = find_bundled_quickstart()
+    if quickstart is not None and quickstart.exists():
+        dest_doc = project_folder / quickstart.name
+        if not dest_doc.exists():
+            try:
+                shutil.copy2(quickstart, dest_doc)
+            except OSError:
+                pass  # non-fatal — Start Here footer will be wrong but app still works
 
 
 class SetupWizard(QDialog):

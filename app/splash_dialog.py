@@ -56,7 +56,7 @@ class FirstLaunchSplash(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.choice = CHOICE_CANCEL  # default if user dismisses via Esc/close
-        self.setWindowTitle("Welcome to Loadscope")
+        self.setWindowTitle("Welcome to Loadscope™")
         self.setModal(True)
         self.setMinimumSize(560, 620)
         self.setMaximumWidth(640)
@@ -79,7 +79,7 @@ class FirstLaunchSplash(QDialog):
             layout.addWidget(logo_label, alignment=Qt.AlignCenter)
 
         # Headline
-        title = QLabel("Welcome to Loadscope")
+        title = QLabel("Welcome to Loadscope™")
         tf = QFont()
         tf.setPointSize(26)
         tf.setWeight(QFont.DemiBold)
@@ -143,7 +143,11 @@ class FirstLaunchSplash(QDialog):
         self.license_btn.clicked.connect(self._pick_license)
         row.addWidget(self.license_btn)
 
-        self.purchase_btn = QPushButton("Purchase a License")
+        # v0.14: third button asks for beta access during the beta period
+        # (Chad picked option B 2026-05-14). When commerce flips on, the
+        # label changes back to "Purchase a License" — see
+        # [[loadscope-commerce-flip-on]] memory entry for the full checklist.
+        self.purchase_btn = QPushButton("Request Beta Access")
         self.purchase_btn.setMinimumHeight(44)
         self.purchase_btn.setFont(lf)
         self.purchase_btn.clicked.connect(self._pick_purchase)
