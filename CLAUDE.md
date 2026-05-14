@@ -52,5 +52,5 @@ Chad is a precision rifle shooter, **not** a software developer. The collaborati
 
 - **Don't push to `main` without confirmation** when the change is non-trivial. (Version bumps and breadcrumb updates as part of an explicit release flow are pre-authorized.)
 - **Don't delete or rename project files / folders** without asking. Especially `Rifle Loads Template (do not edit).xltx` and the import folders.
-- **Don't move the project folder out of `~/Projects/Rifle Load Data`.** Config and `.command` launchers have the path baked in.
+- **Don't move the project folder out of `~/Projects/Loadscope`.** Config and `.command` launchers have the path baked in.
 - **Don't put the project folder back into iCloud.** It used to be there; we moved it out specifically because iCloud was breaking the .git/ directory.

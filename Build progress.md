@@ -11,7 +11,7 @@ A single `.app` file Chad can AirDrop or email to friends. Friend opens the app,
 ## Architecture
 
 ```
-Rifle Load Data/
+Loadscope/
 ├── app/                          (NEW — all Python code for the GUI app)
 │   ├── csv_router.py             # auto-detect Garmin vs BallisticX
 │   └── main.py                   # PyQt window with drop zone
@@ -536,7 +536,7 @@ A **locally-validated license key** with a **revocable key list bundled in each 
   - `is_licensed() -> bool` — reads config for stored key, validates it again (in case revoked).
 - New `app/license_dialog.py` — Qt dialog for key entry, similar pattern to `disclaimer.py`.
 - Hook in `app/main.py`: on launch, if `not is_licensed()`, show dialog before proceeding to main window.
-- Tracker file outside the repo: `~/Projects/Rifle Load Data/beta-keys.txt` (gitignored) — Chad's notes mapping each key to the recipient (e.g. `CBORE-LAGE-7N3X-PWQQ → John Smith, given 2026-05-15`).
+- Tracker file outside the repo: `~/Projects/Loadscope/beta-keys.txt` (gitignored) — Chad's notes mapping each key to the recipient (e.g. `CBORE-LAGE-7N3X-PWQQ → John Smith, given 2026-05-15`).
 - Key generator script `tools/generate_license_key.py` — outputs a random 16-char key in groups of four. Chad runs once per tester.
 
 **Revocation:** if Chad sees a key being shared (or wants to cut someone off), remove the key from `VALID_KEYS` in the next app release. Auto-update path delivers the new build; on next launch, the revoked key fails validation and the app reverts to the license-entry dialog. The tester is locked out until Chad gives them a new key.

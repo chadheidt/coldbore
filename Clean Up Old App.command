@@ -10,7 +10,7 @@
 
 set -e
 
-PROJECT="$HOME/Projects/Rifle Load Data"
+PROJECT="$HOME/Projects/Loadscope"
 OLD_APP="/Applications/Rifle Load Importer.app"
 OLD_CONFIG_DIR="$HOME/Library/Application Support/Rifle Load Importer"
 NEW_CONFIG_DIR="$HOME/Library/Application Support/Loadscope"

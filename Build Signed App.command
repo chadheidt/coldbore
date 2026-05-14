@@ -30,7 +30,7 @@
 
 set -e
 
-PROJECT="$HOME/Projects/Rifle Load Data"
+PROJECT="$HOME/Projects/Loadscope"
 cd "$PROJECT"
 
 # Mirror all output to a log file so failures are diagnosable later.

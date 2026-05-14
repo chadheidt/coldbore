@@ -958,7 +958,7 @@ User-level `~/.claude/settings.json` now has an allow list for the commonly-used
 
 2. **Build the v0.8.5 zip locally.** Run from the project folder:
    ```
-   cd "/Users/macbook/Projects/Rifle Load Data"
+   cd "/Users/macbook/Projects/Loadscope"
    rm -rf dist build
    python3 setup.py py2app
    cd dist
@@ -1018,12 +1018,12 @@ User-level `~/.claude/settings.json` now has an allow list for the commonly-used
 Chad set up **VS Code + Claude Code (CLI + extension)** during the CI wait. From now on he can work in VS Code instead of (or in addition to) Cowork. The breadcrumbs are tool-agnostic — Claude Code reads them the same way Cowork does.
 
 How he'd resume in VS Code:
-1. Open VS Code (it should auto-reopen with the `~/Projects/Rifle Load Data` folder)
+1. Open VS Code (it should auto-reopen with the `~/Projects/Loadscope` folder)
 2. Click the Claude icon in the left sidebar (or run `claude` in VS Code's integrated Terminal panel — Ctrl+\` to open it)
 3. Tell Claude: *"Continue True Zero. Read Notes for next session.md to catch up — we're paused waiting on CI for v0.8.5."*
 
 How he'd resume in Cowork:
-- Same as before: open Cowork, point at `~/Projects/Rifle Load Data`, type the same resume prompt.
+- Same as before: open Cowork, point at `~/Projects/Loadscope`, type the same resume prompt.
 
 Either works. Chad indicated VS Code will be his primary going forward but is comfortable using either.
 
@@ -1037,7 +1037,7 @@ Either works. Chad indicated VS Code will be his primary going forward but is co
      a. Cancel the stuck CI run via "Cancel workflow" button on the actions/runs/25608316391 page.
      b. Run in Terminal (or VS Code's integrated terminal):
         ```
-        cd "/Users/macbook/Projects/Rifle Load Data"
+        cd "/Users/macbook/Projects/Loadscope"
         rm -rf dist build
         python3 setup.py py2app
         cd dist
@@ -1076,7 +1076,7 @@ Long version-bump saga today, summarized:
 
 When Chad comes back, walk him through these steps:
 
-1. **First: get True Zero working again on Chad's Mac.** Open Finder → `~/Projects/Rifle Load Data` → double-click `Build App.command`. This locally rebuilds True Zero at v0.8.5 using Chad's Intel Mac's Python and Intel PyQt5 (so the resulting bundle is Intel-only and works fine on his Intel Mac).
+1. **First: get True Zero working again on Chad's Mac.** Open Finder → `~/Projects/Loadscope` → double-click `Build App.command`. This locally rebuilds True Zero at v0.8.5 using Chad's Intel Mac's Python and Intel PyQt5 (so the resulting bundle is Intel-only and works fine on his Intel Mac).
 2. After ~3 minutes, the Finder should auto-open dist/. Drag `dist/True Zero.app` → `/Applications`. Click **Replace** when prompted.
 3. In Terminal: `xattr -dr com.apple.quarantine "/Applications/True Zero.app"`
 4. In Terminal: `open "/Applications/True Zero.app"` — should open. Verify Tools → About says **0.8.5**.
@@ -1247,7 +1247,7 @@ If it's been weeks or months since you worked on True Zero and you're not sure h
 ### How to resume
 
 1. Open **Cowork** (the Claude desktop app).
-2. Make sure it's pointed at your project folder: `~/Projects/Rifle Load Data`.
+2. Make sure it's pointed at your project folder: `~/Projects/Loadscope`.
 3. Type or paste this exact phrase to start:
 
 > **"Continue building True Zero. Read Notes for next session.md and Build progress.md to catch up."**
@@ -1278,7 +1278,7 @@ If any of those fail, that's the first thing to fix. Tell Claude: "this step is 
 
 ### Where things live (refresher)
 
-- **Your project folder**: `~/Projects/Rifle Load Data` — code, workbooks, breadcrumbs
+- **Your project folder**: `~/Projects/Loadscope` — code, workbooks, breadcrumbs
 - **Your config**: `~/Library/Application Support/True Zero/config.json` — auto-update preferences, project folder pointer
 - **GitHub repo**: `https://github.com/chadheidt/coldbore` — public, releases, manifest
 - **Support email**: `coldboreapp@gmail.com` (forwards to your personal Gmail)
@@ -1290,7 +1290,7 @@ The project folder used to live at `~/Documents/Claude/Projects/Rifle Load Data`
 1. iCloud's "Optimize Mac Storage" feature could evict local copies of files we hadn't touched recently, which would silently break builds and tests.
 2. iCloud sometimes scrambled the `.git/` directory (sync conflict files in git's internal metadata), which can corrupt the local repo.
 
-So we moved the folder to `~/Projects/Rifle Load Data` (a non-iCloud location) and updated all the path references:
+So we moved the folder to `~/Projects/Loadscope` (a non-iCloud location) and updated all the path references:
 
 - `import_data.py` `PROJECT` constant
 - `app/config.py` `CANDIDATE_LEGACY_LOCATIONS` list (new path is now first)
