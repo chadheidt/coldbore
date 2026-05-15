@@ -92,6 +92,51 @@ def test_cascade_other_freetext(qapp):
 
 # ---- panel round-trip (headless, temp workbook) -----------------------
 
+TEMPLATE = os.path.join(os.path.dirname(__file__), "..",
+                        "Rifle Loads Template (do not edit).xltx")
+
+
+def test_create_working_workbook_bootstrap(tmp_path):
+    import import_data
+    proj = str(tmp_path)
+    p1 = import_data.create_working_workbook(proj, TEMPLATE, name="My Load")
+    assert os.path.isfile(p1) and p1.endswith(".xlsx")
+    from openpyxl import load_workbook
+    wb = load_workbook(p1)
+    assert "Load Log" in wb.sheetnames and wb.template is False
+    # uniquifies when the name is taken
+    p2 = import_data.create_working_workbook(proj, TEMPLATE, name="My Load")
+    assert p1 != p2 and os.path.isfile(p2)
+
+
+def test_create_working_workbook_needs_template(tmp_path):
+    import import_data
+    with pytest.raises(RuntimeError):
+        import_data.create_working_workbook(str(tmp_path), None)
+
+
+def test_new_load_carryover_keeps_identity_clears_bullet(tmp_path):
+    import import_data
+    from openpyxl import load_workbook
+    # prior workbook with rifle identity + scope click + a bullet
+    prior = import_data.create_working_workbook(str(tmp_path), TEMPLATE,
+                                                name="Prior")
+    pw = load_workbook(prior)
+    ll = pw["Load Log"]
+    ll.cell(5, 2).value = "Tikka 6.5"        # Rifle
+    ll.cell(7, 7).value = "0.1 Mil"          # Scope click
+    ll.cell(9, 2).value = "Hornady 140 ELD-M"  # Bullet (should NOT carry)
+    pw.save(prior)
+    # new template wb, run inherit
+    new_wb = load_workbook(TEMPLATE)
+    inherited = import_data.inherit_rifle_setup(new_wb, str(tmp_path))
+    nl = new_wb["Load Log"]
+    assert nl.cell(5, 2).value == "Tikka 6.5"      # identity carried
+    assert nl.cell(7, 7).value == "0.1 Mil"        # scope click carried
+    assert nl.cell(9, 2).value in (None, "")       # bullet NOT carried
+    assert "Scope click" in inherited and "Bullet" not in inherited
+
+
 def test_panel_smart_fields_save(qapp, tmp_path):
     import rifle_setup_dialog as rs
     wb = str(tmp_path / "wb.xlsx")

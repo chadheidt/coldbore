@@ -881,11 +881,13 @@ class MainWindow(QMainWindow):
                 return lbl
 
             def _panel(panel_cls):
-                wb = self._resolve_demo_action_workbook()
+                # Bootstrap a real workbook if the user has none yet —
+                # setting up the rifle / entering DOPE should just work
+                # (and write to a real file, never the read-only demo).
+                wb = self._resolve_or_bootstrap_workbook()
                 if not wb or not os.path.isfile(wb):
-                    return _ph("No workbook yet — go to Import Data, drop "
-                               "your CSVs, and click Run Import to create "
-                               "one. Then this screen fills in.")
+                    return _ph("Loadscope couldn't create a workbook. "
+                               "Check your project folder in Folders.")
                 return panel_cls(wb, with_save=True)
 
             self._shell = LoadscopeShell()
@@ -1804,6 +1806,37 @@ class MainWindow(QMainWindow):
             bundled = None
         return resolve_demo_action_workbook(self._selected_workbook(), bundled)
 
+    def _resolve_or_bootstrap_workbook(self):
+        """For the WRITE panels (Rifle & Setup / Range & DOPE): always
+        return a REAL working workbook. If the user has none yet,
+        bootstrap one from the template (Smart Setup: set up the rifle
+        FIRST, then import — never edit the read-only bundled demo)."""
+        wb = self._selected_workbook()
+        if wb and os.path.isfile(wb):
+            return wb
+        try:
+            wbs = import_data.list_workbooks(project_dir=self.project)
+            if wbs:
+                return wbs[0]
+        except Exception:
+            pass
+        try:
+            from setup_wizard import find_bundled_template
+            tmpl = find_bundled_template()
+            path = import_data.create_working_workbook(
+                self.project, str(tmpl) if tmpl else None)
+            try:
+                self._refresh_workbooks()
+            except Exception:
+                pass
+            self._log(f"Created a new workbook: {os.path.basename(path)}",
+                      color=theme.LOG_SUCCESS)
+            return path
+        except Exception as e:
+            self._log(f"Couldn't create a workbook: {e}",
+                      color=theme.LOG_ERROR)
+            return self._resolve_demo_action_workbook()
+
     def _prompt_sd_only_charge(self, workbook_path):
         """v0.14: when user imported seating-depth data without a powder
         ladder, ask them what charge weight they used. Write it to both
@@ -1882,13 +1915,15 @@ class MainWindow(QMainWindow):
     def _open_rifle_setup(self):
         """UI-change Phase 1: native Rifle & Setup editor. Demo-aware
         (works for a no-data licensed user / the demo workbook too), so
-        there's always something to edit instead of a dead menu item."""
-        wb_path = self._resolve_demo_action_workbook()
+        there's always something to edit instead of a dead menu item.
+        Bootstraps a real workbook if the user has none yet (set up the
+        rifle first; never edit the read-only bundled demo)."""
+        wb_path = self._resolve_or_bootstrap_workbook()
         if not wb_path or not os.path.isfile(wb_path):
             QMessageBox.information(
                 self, "No workbook",
-                "There's no workbook to edit yet. Drop CSVs and click "
-                "Run Import to create one.")
+                "Loadscope couldn't create a workbook to edit. Check "
+                "your project folder is set in Folders → settings.")
             return
         try:
             from rifle_setup_dialog import show_rifle_setup
@@ -1904,13 +1939,14 @@ class MainWindow(QMainWindow):
     def _open_dope_entry(self):
         """UI-change Phase 2: native Range Session & DOPE editor.
         Demo-aware (works for a no-data licensed user / demo workbook).
-        This is the screen the ballistic solver will pre-fill."""
-        wb_path = self._resolve_demo_action_workbook()
+        This is the screen the ballistic solver will pre-fill.
+        Bootstraps a real workbook if the user has none yet."""
+        wb_path = self._resolve_or_bootstrap_workbook()
         if not wb_path or not os.path.isfile(wb_path):
             QMessageBox.information(
                 self, "No workbook",
-                "There's no workbook to edit yet. Drop CSVs and click "
-                "Run Import to create one.")
+                "Loadscope couldn't create a workbook to edit. Check "
+                "your project folder is set in Folders → settings.")
             return
         try:
             from dope_entry_dialog import show_dope_entry

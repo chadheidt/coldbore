@@ -509,6 +509,11 @@ def inherit_rifle_setup(new_wb, project_dir, exclude_path=None):
 
     # Fields to inherit, by (row, col) coordinate on Load Log
     # Layout: A=label, B=value, F=label, G=value, K=label, L=value (and below)
+    # Chad 2026-05-15: a new load carries over the STABLE rig identity
+    # but starts FRESH on the load itself. Carry: rifle/shooter/
+    # cartridge/barrel/optic/chrono/scope-click + primer/brass (those
+    # are typically reused across loads). Do NOT carry Bullet or Powder
+    # — the whole point of a new cycle is testing a new bullet/powder.
     FIELDS = [
         (5, 2,  "Rifle"),
         (5, 7,  "Shooter"),
@@ -516,8 +521,7 @@ def inherit_rifle_setup(new_wb, project_dir, exclude_path=None):
         (6, 2,  "Barrel"),
         (6, 7,  "Optic"),
         (6, 12, "Chrono"),
-        (9, 2,  "Bullet"),
-        (9, 6,  "Powder"),
+        (7, 7,  "Scope click"),
         (9, 9,  "Primer"),
         (9, 12, "Brass"),
     ]
@@ -549,6 +553,43 @@ def inherit_rifle_setup(new_wb, project_dir, exclude_path=None):
             # Found a prior workbook with usable data — stop scanning
             break
     return inherited
+
+
+def create_working_workbook(project_dir, template_path, name="My Load"):
+    """Bootstrap a real working .xlsx in the project folder from the
+    .xltx template, so a user can set up their rifle FIRST (Smart Setup
+    Q1) instead of being forced to import before anything is editable —
+    and so Setup never edits the read-only bundled demo.
+
+    Mirrors new_cycle_dialog's proven create-from-template path:
+    template=False, stamp the load name, carry over prior rifle setup.
+    Returns the new workbook path, or raises on failure.
+    """
+    import os
+    import re
+    from openpyxl import load_workbook
+
+    if not template_path or not os.path.isfile(template_path):
+        raise RuntimeError("Couldn't find the workbook template.")
+    os.makedirs(project_dir, exist_ok=True)
+    safe = re.sub(r"[^A-Za-z0-9 _-]+", "", str(name)).strip() or "My Load"
+    path = os.path.join(project_dir, f"{safe}.xlsx")
+    n = 2
+    while os.path.exists(path):
+        path = os.path.join(project_dir, f"{safe} {n}.xlsx")
+        n += 1
+    wb = load_workbook(template_path, keep_vba=False)
+    wb.template = False  # critical — same fix as setup_wizard/new_cycle
+    try:
+        stamp_load_name(wb, safe)
+    except Exception:
+        pass
+    try:
+        inherit_rifle_setup(wb, project_dir, exclude_path=path)
+    except Exception:
+        pass
+    wb.save(path)
+    return path
 
 
 def stamp_load_name(wb, load_name):
