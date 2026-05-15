@@ -4,9 +4,29 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🌅 START HERE NEXT SESSION (2026-05-15) — v0.14.3 SHIPPED (demo-tour hotfix), awaiting Chad's retest
+## 🌅 START HERE NEXT SESSION (2026-05-15) — v0.14.4 SHIPPED + self-verified on real Excel
 
-**v0.14.3 is SHIPPED + bundle-verified** (release `--latest`, both .zip+.dmg, `releases/latest`→v0.14.3, live manifest 0.14.3). Tests 126/126. **NOT yet exercised end-to-end on a real install** — Chad still owes the post-install click-tests (built+installable ≠ exercised).
+**v0.14.4 is SHIPPED** (release `--latest`, both .zip+.dmg, `releases/latest`→v0.14.4, live manifest 0.14.4). Tests 132/132.
+
+Chad got frustrated being the tester for buggy ships (rightly — invoked the do-it-yourself rule hard). v0.14.4 was reproduced, fixed, AND **self-verified by Claude driving real Excel for Mac here** (not dev-only, not "go test it Chad"). Two confirmed bugs from his v0.14.3 install:
+- **Bug A:** licensed user clicking the demo's "Print This Workbook" / "Print Pocket Range Card" → "no workbook" (fallback to bundled demo wb only fired in is_demo_mode(); licensed users got nothing). Fix: pure `resolve_demo_action_workbook()` (selected-else-bundled, license-irrelevant) used by both print handlers + `_resolve_demo_action_workbook`.
+- **Bug B:** "Excel can't open two workbooks with the same name" modal that FROZE automation (-1712). `_print_workbook` did an unconditional `open POSIX file`. Fix: pure `build_open_and_print_applescript()` — opens ONLY if not already open (existence via `(name of every workbook) as list contains`; verified on real Excel that `whose` filter AND `repeat with w in workbooks` BOTH throw -50). Self-tested all scenarios incl. Chad's exact sequence → no modal.
+- Both are pure module-level functions in main.py with unit tests. Bundle-verified (fixes present in shipped main.py; demo wb + logo resolve from bundle).
+
+### Self-testing is now the standard (Chad's explicit ask 2026-05-15)
+Claude must reproduce/verify Excel-interaction bugs by DRIVING REAL EXCEL here before any "Chad, test this." See [[loadscope-v014-2-inflight]].
+
+### Latent bug logged (NOT yet fixed)
+`demo_tour.close_other_excel_windows()` uses the same broken `repeat with wb in workbooks` (under a try → silently fails) — likely why leftover/Recent workbooks sometimes clutter the demo. Fix with the `(name of every workbook) as list` pattern when next in demo_tour.
+
+### Queued, in order
+1. **Permission-UX pass (v0.14.5?)** — see [[loadscope-reduce-permission-prompts]]. NOTE: investigation found Excel-native AppleScript can RESIZE its window (width/height work) but CANNOT move it (left/top silently ignored even when not maximized) — so "let Excel position itself" only half-works. Re-think: either graceful-degrade without Accessibility (don't force position; size only), or redesign the panel/Excel layout to not need repositioning, or accept the PNG demo (Path B) as the real fix. Update that memory's plan accordingly.
+2. Website audit + compact "Without/With Loadscope" section ([[loadscope-website-audit-post-v014]]).
+3. PNG demo / Path B ([[loadscope-demo-format-rethink]]).
+4. Final UX test as a NEW unlicensed user ([[loadscope-test-as-new-user]]) — restore key CBORE-DDCX-AEGK-J2FR-2SIB after.
+
+### Chad's optional sanity check (NOT required — mechanics self-verified)
+Auto-update to 0.14.4, click the demo's Print buttons + Pocket Card; should just work. Window-position-below-panel still needs Accessibility (queued item 1) — separate from these fixes.
 
 ### v0.14.3 — why it exists (bug report from Chad's v0.14.2 install)
 Chad installed v0.14.2, granted folder-setup + got the macOS "Loadscope wants to control Excel" prompt (expected/required). Clicking Workbook → Replay the Demo Tour showed **"Pick a workbook first…"** — demo tour fully broken in the installed app.
