@@ -193,6 +193,7 @@ OPTIONS = {
         "csv_router",
         "config",
         "excel_chrome",
+        "rifle_setup_dialog",
         "setup_wizard",
         "updater",
         "installer",
