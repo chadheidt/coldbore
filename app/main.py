@@ -96,6 +96,61 @@ def parse_loadscope_action(url):
     return (url.host() or url.path().strip("/") or "").strip().lower()
 
 
+def resolve_demo_action_workbook(selected_path, bundled_path):
+    """Pick the workbook a DEMO-triggered action should act on.
+
+    Returns `selected_path` if it's a real file, else `bundled_path` if
+    it's a real file, else None. License/demo-mode is irrelevant: the
+    demo's Print / Pocket-Card / Replay-Tour buttons must work even for
+    a LICENSED user who has no imported workbook yet (Chad 2026-05-15:
+    the old code only fell back to the demo workbook in is_demo_mode(),
+    so a licensed user clicking the demo's buttons hit "no workbook").
+
+    Pure function — safe to unit-test without QApplication.
+    """
+    if selected_path and os.path.isfile(selected_path):
+        return selected_path
+    if bundled_path and os.path.isfile(bundled_path):
+        return bundled_path
+    return None
+
+
+def build_open_and_print_applescript(wb_path):
+    """Build the AppleScript that opens `wb_path` in Excel (ONLY if a
+    workbook with that name isn't already open) and prints it.
+
+    The guard prevents Excel's blocking modal "can't open two workbooks
+    with the same name at the same time" — opening a same-named file
+    from another path freezes all automation (Chad hit this 2026-05-15).
+    Verified on real Excel for Mac 16.x that BOTH a `whose` filter and
+    `repeat with w in workbooks` throw an intermittent Parameter error
+    (-50); `(name of every workbook) as list` is the one reliable
+    primitive (`as list` guards the single-workbook bare-string case).
+
+    Pure function — safe to unit-test without QApplication or Excel.
+    """
+    basename = os.path.basename(wb_path)
+    esc_path = wb_path.replace("\\", "\\\\").replace('"', '\\"')
+    esc_name = basename.replace("\\", "\\\\").replace('"', '\\"')
+    return (
+        'tell application "Microsoft Excel"\n'
+        '    activate\n'
+        '    set wbOpen to false\n'
+        '    try\n'
+        f'        if ((name of every workbook) as list) contains "{esc_name}" then set wbOpen to true\n'
+        '    end try\n'
+        '    if wbOpen is false then\n'
+        f'        open POSIX file "{esc_path}"\n'
+        '        delay 1\n'
+        '    end if\n'
+        '    try\n'
+        f'        activate object workbook "{esc_name}"\n'
+        '    end try\n'
+        '    print active workbook\n'
+        'end tell'
+    )
+
+
 class RifleLoadApp(QApplication):
     """Custom QApplication that intercepts macOS QFileOpenEvent so CSVs
     dragged onto the Dock icon (or right-clicked → Open With) are routed
@@ -1667,6 +1722,26 @@ class MainWindow(QMainWindow):
         workbooks = import_data.list_workbooks(project_dir=self.project)
         return workbooks[0] if workbooks else None
 
+    def _resolve_demo_action_workbook(self):
+        """Workbook path for any DEMO-triggered action (Replay Tour,
+        Print This Workbook, Print Pocket Range Card).
+
+        Returns the user's selected workbook if they have one on disk,
+        otherwise the bundled demo workbook. Demo buttons must work even
+        for LICENSED users who have no imported workbook yet (Chad
+        2026-05-15: a licensed user clicking the demo's Print / Pocket
+        Card buttons hit "no workbook" because the old fallback only
+        fired in is_demo_mode()). License/demo-mode is irrelevant here —
+        the demo workbook is always a valid thing to act on.
+        Returns None only if even the bundled demo workbook is missing.
+        """
+        try:
+            from demo_tour import get_bundled_demo_workbook_path
+            bundled = get_bundled_demo_workbook_path()
+        except ImportError:
+            bundled = None
+        return resolve_demo_action_workbook(self._selected_workbook(), bundled)
+
     def _prompt_sd_only_charge(self, workbook_path):
         """v0.14: when user imported seating-depth data without a powder
         ladder, ask them what charge weight they used. Write it to both
@@ -1927,20 +2002,10 @@ class MainWindow(QMainWindow):
         or saves as PDF. The 'Range Card' worksheet (v0.14+) shows the
         in-workbook preview, but this menu action produces the polished
         artifact with proper typography."""
-        wb_path = self._selected_workbook()
-        # v0.14: in demo mode, the user is reviewing the bundled demo
-        # workbook (which lives outside the project folder, so the picker
-        # doesn't see it). Force the bundled demo workbook so the demo's
-        # Print Pocket Card button always works, regardless of what
-        # _selected_workbook() returns.
-        if app_license.is_demo_mode():
-            try:
-                from demo_tour import get_bundled_demo_workbook_path
-                bundled = get_bundled_demo_workbook_path()
-                if bundled and os.path.isfile(bundled):
-                    wb_path = bundled
-            except ImportError:
-                pass
+        # Demo-aware: a licensed user clicking the demo's Print Pocket
+        # Card button has no selected workbook -> fall back to the
+        # bundled demo workbook (not gated on is_demo_mode anymore).
+        wb_path = self._resolve_demo_action_workbook()
         if not wb_path or not os.path.isfile(wb_path):
             QMessageBox.information(
                 self,
@@ -2054,31 +2119,21 @@ class MainWindow(QMainWindow):
         Uses AppleScript to send Excel a print command after opening the file.
         Each user-facing sheet is preconfigured to fit on one landscape page,
         so the user just confirms and prints."""
-        wb_path = self._selected_workbook()
+        # Demo-aware: a licensed user clicking the demo's "Print This
+        # Workbook" button has no selected workbook -> fall back to the
+        # bundled demo workbook.
+        wb_path = self._resolve_demo_action_workbook()
         if not wb_path or not os.path.isfile(wb_path):
             self._log("No workbook to print yet. Drop CSVs and click Run Import to create one.",
                       color=theme.LOG_DIM)
             return
-        # AppleScript: open in Excel + show print dialog
-        osa = (
-            'tell application "Microsoft Excel"\n'
-            '    activate\n'
-            f'    open POSIX file "{wb_path}"\n'
-            '    delay 1\n'
-            '    tell active workbook to print out without print dialog -- show=true makes it interactive\n'
-            'end tell'
-        )
-        # NOTE: "print out without print dialog" actually sends straight to default
-        # printer. To SHOW the dialog (so the user can pick printer, copies, page
-        # range), use "print out" without that clause. We use the latter.
-        osa = (
-            'tell application "Microsoft Excel"\n'
-            '    activate\n'
-            f'    open POSIX file "{wb_path}"\n'
-            '    delay 1\n'
-            '    print active workbook\n'
-            'end tell'
-        )
+        # Open ONLY if a workbook with this name isn't already open.
+        # Re-opening (or opening a same-named file from another path)
+        # makes Excel throw a blocking modal: "Excel can't open two
+        # workbooks with the same name at the same time" — which freezes
+        # all further automation (Chad hit this 2026-05-15). If it's
+        # already open we just activate it, then print.
+        osa = build_open_and_print_applescript(wb_path)
         try:
             subprocess.run(["osascript", "-e", osa], check=False)
             self._minimize_chrome_after_excel_loads()

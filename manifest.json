@@ -1,9 +1,9 @@
 {
-  "app_version": "0.14.3",
+  "app_version": "0.14.4",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.14.3 - Fixes the guided demo tour. In 0.14.2 the installed app couldn't find the bundled demo workbook, so the tour stopped with \"Pick a workbook first\" - now it opens the demo workbook correctly. Also restores the Loadscope logo on the Pocket Range Card and the welcome screen (same underlying cause). Everything from 0.14.2 is included: auto-launching demo tour, the cleaner Excel view that restores when you quit Loadscope, and the \"Print This Workbook\" buttons on the Charts and Ballistics sheets.",
+  "app_release_notes": "v0.14.4 - Fixes the demo's print buttons. The \"Print This Workbook\" and \"Print Pocket Range Card\" buttons now work even before you've imported any data (previously they said \"no workbook\" unless you had your own workbook). Also fixes an Excel error/freeze (\"can't open two workbooks with the same name\") that could happen when printing while the workbook was already open. Includes everything from 0.14.2/0.14.3: auto-launching demo tour, the cleaner Excel view that restores when you quit Loadscope, in-workbook Print buttons, and the bundled-resource fixes.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
