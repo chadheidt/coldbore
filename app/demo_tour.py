@@ -608,7 +608,7 @@ if QWidget is not None:
                     self.activateWindow()
                     self.show()  # in case it was hidden behind Excel's space
                 _QT.singleShot(300, _bring_panel_forward)
-                # 6. Lifecycle watcher temporarily DISABLED for v0.14.2
+                # 7. Lifecycle watcher temporarily DISABLED for v0.14.2
                 # bisection. Was closing the panel prematurely. Re-enable
                 # in v0.14.3 once we've confirmed the panel survives
                 # without it.

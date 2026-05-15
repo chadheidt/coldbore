@@ -2625,6 +2625,17 @@ def main():
     app = RifleLoadApp(sys.argv)
     app.setStyleSheet(theme.application_stylesheet())
 
+    # v0.14.2: Loadscope collapses Excel's ribbon (a GLOBAL, persistent
+    # Excel preference) while a workbook is open. Restore the user's prior
+    # ribbon state when Loadscope quits so we never leave a customer's
+    # Excel permanently altered. The demo tour also restores on its own
+    # close; both paths are idempotent + no-op if nothing was minimized.
+    try:
+        from app.excel_chrome import restore_excel_chrome
+        app.aboutToQuit.connect(restore_excel_chrome)
+    except Exception:
+        pass  # never block startup on the chrome-restore wiring
+
     # Install the opt-in crash reporter so unhandled exceptions show a friendly
     # dialog with copy/email options instead of silent-crash-to-Console-app.
     try:
