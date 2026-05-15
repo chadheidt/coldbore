@@ -178,6 +178,7 @@ OPTIONS = {
     "includes": [
         "csv_router",
         "config",
+        "excel_chrome",
         "setup_wizard",
         "updater",
         "installer",

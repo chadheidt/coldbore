@@ -596,7 +596,7 @@ if QWidget is not None:
                 # 5. Hide Excel chrome so the demo focuses on the worksheet
                 # content (no ribbon, formula bar, status bar, headings).
                 # Restore happens in closeEvent.
-                from app.excel_chrome import minimize_excel_chrome
+                from excel_chrome import minimize_excel_chrome
                 minimize_excel_chrome()
                 # 6. Force the tour panel to the front. Without this on
                 # macOS, the panel can be hidden behind Excel even with
@@ -747,7 +747,7 @@ if QWidget is not None:
                 # Restore Excel chrome (ribbon, formula bar, status bar,
                 # headings) so the next launch isn't stuck in fullscreen
                 # view + missing chrome if the user reopens Excel.
-                from app.excel_chrome import restore_excel_chrome
+                from excel_chrome import restore_excel_chrome
                 restore_excel_chrome()
             except Exception:
                 pass

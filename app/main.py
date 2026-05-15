@@ -1765,7 +1765,7 @@ class MainWindow(QMainWindow):
         See app/excel_chrome.py for the full keep/hide matrix.
         """
         from PyQt5.QtCore import QTimer
-        from app.excel_chrome import minimize_excel_chrome
+        from excel_chrome import minimize_excel_chrome
         QTimer.singleShot(1500, minimize_excel_chrome)
 
     def _update_open_workbook_action_state(self):
@@ -2631,7 +2631,7 @@ def main():
     # Excel permanently altered. The demo tour also restores on its own
     # close; both paths are idempotent + no-op if nothing was minimized.
     try:
-        from app.excel_chrome import restore_excel_chrome
+        from excel_chrome import restore_excel_chrome
         app.aboutToQuit.connect(restore_excel_chrome)
     except Exception:
         pass  # never block startup on the chrome-restore wiring
