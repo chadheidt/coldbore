@@ -15,7 +15,7 @@ Chad reviewed the demo previews and approved. Two fixes:
 
 ### 🧭 PRE-BETA ROADMAP (Chad locked the order 2026-05-15) — [[loadscope-pre-beta-roadmap]]
 Ordered todo; do NOT do the website until the app is in final pre-beta form (else screenshots + web demo get redone):
-1. **Workbook UI change** — Phase 1 (Rifle & Setup) v0.14.7 + Phase 2 (Range Session & DOPE) v0.14.8 SHIPPED, both Chad-reviewed + bundle-verified. PAUSED for a UI/UX strategy review before Phase 3 / solver. [[loadscope-appify-scoping]]
+1. **Workbook UI change** — Phase 1 (Rifle & Setup) v0.14.7 + Phase 2 (Range Session & DOPE) v0.14.8 SHIPPED, both Chad-reviewed + bundle-verified. UX review done: Chad pivoted to build the UNIFIED SINGLE-WINDOW SHELL next (nav: Setup/Import/Results/DOPE/Card; forms become panels; demo-real parity; no-Excel-for-normal-workflow) BEFORE the solver. [[loadscope-pre-beta-roadmap]] sec 1.5
 2. **Ballistic solver** — predicted DOPE; ~2-3 days; major paid selling point; built into the new UI. [[loadscope-ballistic-solver-v015]]
 3. **Website revamp — ONCE, after 1&2**: fix drift + the compact "Without/With Loadscope" section (CONFIRMED captured) + add solver to pitch + the demo as a browser slideshow (reuse Path-B PNGs+narration). Re-render assets AFTER 1&2. [[loadscope-website-audit-post-v014]]
 4. **Update app descriptions EVERYWHERE + all social bios** — one coordinated launch with the website (solver = bigger pitch). Then → beta.
