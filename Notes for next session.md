@@ -4,11 +4,28 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🌅 START HERE NEXT SESSION (2026-05-15) — v0.14.2 SHIPPED, awaiting Chad's post-install exercise
+## 🌅 START HERE NEXT SESSION (2026-05-15) — v0.14.3 SHIPPED (demo-tour hotfix), awaiting Chad's retest
 
-**v0.14.2 is SHIPPED end-to-end on the infra side** (release published `--latest`, both .zip+.dmg, `releases/latest`→v0.14.2, live manifest app_version=0.14.2, Worker auto-update path alive, `print-workbook` whitelist live on loadscope.app). `main` HEAD pushed. Tests 123/123. **NOT yet exercised end-to-end** — Chad still owes the 3 post-install click-tests below (built+installable ≠ exercised).
+**v0.14.3 is SHIPPED + bundle-verified** (release `--latest`, both .zip+.dmg, `releases/latest`→v0.14.3, live manifest 0.14.3). Tests 126/126. **NOT yet exercised end-to-end on a real install** — Chad still owes the post-install click-tests (built+installable ≠ exercised).
 
-### What shipped in v0.14.2
+### v0.14.3 — why it exists (bug report from Chad's v0.14.2 install)
+Chad installed v0.14.2, granted folder-setup + got the macOS "Loadscope wants to control Excel" prompt (expected/required). Clicking Workbook → Replay the Demo Tour showed **"Pick a workbook first…"** — demo tour fully broken in the installed app.
+- Root cause: `get_bundled_demo_workbook_path()` + pocket-card/splash logo lookups resolved resources via `__file__`. In a py2app bundle, modules load from `Contents/Resources/lib/python39.zip`, so `dirname(__file__)` is INSIDE the zip and every candidate misses the real `Contents/Resources/`. Worked in dev, failed only in the .app — same class as the v0.14.2 `excel_chrome` bundling fix; this analogous site was outside that audit's scope.
+- Fix: when `getattr(sys,'frozen',False)`, resolve via `sys.executable` (`Contents/MacOS/<exe>` → `../Resources/`) — the proven pattern from `setup_wizard.find_bundled_template`. Applied to demo_tour (BLOCKING), pocket_card logo, splash logo. +3 tests. **Verified by loading demo_tour from the SHIPPED python39.zip with the real .app layout — resolves correctly.**
+- **LESSON (general):** any `__file__`-relative resource path is suspect in the bundle. The only proven resolver is `sys.executable`-relative (`setup_wizard` pattern). Audit ALL such sites if touching resource loading.
+
+### Still expected/correct (not bugs — told Chad)
+- Folder setup created `~/Documents/Loadscope Loads/{Garmin Imports,BallisticX Imports,Completed Loads}` + template + Quick Start docx. Worked.
+- No "Try the Free Demo" splash for Chad = **correct**: he's a licensed user (valid key in config); splash only shows when license state != "valid". Licensed users reach the tour via Workbook → "Replay the Demo Tour…".
+- The "Loadscope wants to control Microsoft Excel" prompt is the macOS Automation/TCC gate — required for tour/chrome/print; Chad must click Allow (or enable in System Settings → Privacy & Security → Automation).
+
+### Chad's pending retest (on v0.14.3, from /Applications, after auto-update + granting Excel control)
+1. Workbook → Replay the Demo Tour opens (no "Pick a workbook" message).
+2. Demo Charts/Ballistics → "Print This Workbook" button → Excel print dialog.
+3. Demo Ballistics → "Print Pocket Range Card" → 4×6 card in browser, WITH the Loadscope logo.
+4. Open demo → quit Loadscope → Excel ribbon/chrome back to normal.
+
+### What shipped in v0.14.2 (all still in 0.14.3)
 - Splash "Try the Free Demo" auto-launches the guided tour (0.14.0 had it disabled).
 - Excel chrome hide: ribbon collapsed + formula bar/status/headings hidden when Loadscope opens a workbook; **restored to the user's prior state on quit/tour-close**.
 - In-workbook "Print This Workbook" buttons at Charts!A14 + Ballistics!A3 → `loadscope://print-workbook`.
