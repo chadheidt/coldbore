@@ -15,7 +15,7 @@ Chad reviewed the demo previews and approved. Two fixes:
 
 ### 🧭 PRE-BETA ROADMAP (Chad locked the order 2026-05-15) — [[loadscope-pre-beta-roadmap]]
 Ordered todo; do NOT do the website until the app is in final pre-beta form (else screenshots + web demo get redone):
-1. **Workbook UI change / app-ify** (native input forms, Excel as hidden engine) — Chad: sooner than later, BEFORE beta. Biggest + least-scoped → **first action = a design/scoping pass** to confirm it fits the beta window. [[loadscope-appify-workbook]]
+1. **Workbook UI change** — SCOPED 2026-05-15: phaseable. Phase 1 = native Rifle/Shooter/Setup form (contained, the visible win, fits pre-beta) → Phase 2 = session+DOPE (solver plugs in here) → Phase 3 = live views (deferred). [[loadscope-appify-scoping]]
 2. **Ballistic solver** — predicted DOPE; ~2-3 days; major paid selling point; built into the new UI. [[loadscope-ballistic-solver-v015]]
 3. **Website revamp — ONCE, after 1&2**: fix drift + the compact "Without/With Loadscope" section (CONFIRMED captured) + add solver to pitch + the demo as a browser slideshow (reuse Path-B PNGs+narration). Re-render assets AFTER 1&2. [[loadscope-website-audit-post-v014]]
 4. **Update app descriptions EVERYWHERE + all social bios** — one coordinated launch with the website (solver = bigger pitch). Then → beta.
