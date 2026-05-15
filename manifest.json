@@ -1,9 +1,9 @@
 {
-  "app_version": "0.14.7",
+  "app_version": "0.14.8",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.14.7 - New Rifle & Setup screen. Edit your rifle, shooter, components, and test-session info in a clean Loadscope form (Workbook menu -> Rifle & Setup) instead of hunting for cells in the Excel grid - it saves straight into your workbook. This is the first step of bringing Loadscope's clean format to the working app, not just the demo. Includes all 0.14.2-0.14.6 fixes.",
+  "app_release_notes": "v0.14.8 - New Range Session & DOPE screen. Enter the elevation and wind you dialed at each distance in a clean Loadscope form (Workbook menu -> Range Session & DOPE) - it shows only your scope's unit (Mil or MOA), saves into your workbook, and the click-count columns keep auto-filling. Second step of bringing Loadscope's clean format to the working app. Includes all prior 0.14.x fixes.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

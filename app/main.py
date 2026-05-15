@@ -611,6 +611,12 @@ class MainWindow(QMainWindow):
         wb_menu.addAction(rifle_setup_action)
         self._rifle_setup_action = rifle_setup_action
 
+        dope_action = QAction("Range Session && DOPE…", self)
+        dope_action.setMenuRole(QAction.NoRole)
+        dope_action.triggered.connect(self._open_dope_entry)
+        wb_menu.addAction(dope_action)
+        self._dope_action = dope_action
+
         open_wb_action = QAction("Open Workbook in Excel", self)
         open_wb_action.setMenuRole(QAction.NoRole)
         open_wb_action.triggered.connect(self._open_workbook_in_excel)
@@ -1843,6 +1849,28 @@ class MainWindow(QMainWindow):
             return
         if show_rifle_setup(wb_path, parent=self):
             self._log("Saved Rifle & Setup changes to the workbook.",
+                      color=theme.LOG_SUCCESS)
+
+    def _open_dope_entry(self):
+        """UI-change Phase 2: native Range Session & DOPE editor.
+        Demo-aware (works for a no-data licensed user / demo workbook).
+        This is the screen the ballistic solver will pre-fill."""
+        wb_path = self._resolve_demo_action_workbook()
+        if not wb_path or not os.path.isfile(wb_path):
+            QMessageBox.information(
+                self, "No workbook",
+                "There's no workbook to edit yet. Drop CSVs and click "
+                "Run Import to create one.")
+            return
+        try:
+            from dope_entry_dialog import show_dope_entry
+        except ImportError as e:
+            QMessageBox.critical(
+                self, "Couldn't open Range Session & DOPE",
+                f"dope_entry_dialog module missing or broken:\n\n{e}")
+            return
+        if show_dope_entry(wb_path, parent=self):
+            self._log("Saved DOPE / session changes to the workbook.",
                       color=theme.LOG_SUCCESS)
 
     def _open_workbook_in_excel(self):
