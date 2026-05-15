@@ -2,6 +2,28 @@
 
 A handoff note so any future Claude session can pick up where we left off without re-deriving everything.
 
+---
+
+## 🌅 START HERE NEXT SESSION (2026-05-14 end-of-day)
+
+**Tomorrow's first task** (Chad's explicit ask): rework EVERY Excel workbook Loadscope opens so the user sees ONLY the worksheet content — no ribbon, no formula bar, no row/column headers, no sheet tab strip if avoidable. Applies to real-user workbooks AND the demo workbook. See memory `loadscope-demo-excel-chrome` for full context + AppleScript snippets.
+
+**Auto-tour fix is on a feature branch `v0.14.2-wip` (commit `0bdfc73`), NOT shipped.** When the Excel-chrome-hiding work is ready, bundle both and ship as v0.14.2 (or v0.14.3 if a v0.14.2 has already gone out for some other reason).
+
+To resume:
+```
+git checkout v0.14.2-wip
+# read the WIP commit message for full context
+git log -1
+```
+
+The auto-tour wiring works end-to-end (verified 2026-05-14 evening):
+- Splash → Try the Free Demo → main window hides → tour panel appears at top-strip → Excel opens demo workbook below → Next/Previous advance through stops with tab switching
+- Panel: 180px tall, orange title text + orange left-edge stripe, dark gray surface
+- Lifecycle watchdog currently DISABLED (commented out in start()) — was closing panel prematurely. Re-enable in v0.14.3 with proper cold-launch handling.
+
+---
+
 **Also read `Build progress.md`** — it tracks the in-progress GUI app build (phases 1–6).
 
 ---

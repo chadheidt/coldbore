@@ -1,9 +1,9 @@
 {
-  "app_version": "0.14.1",
+  "app_version": "0.14.2",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.14.1 hotfix \u2014 Print Pocket Range Card now works when launched from the bundled demo workbook (was failing with permission denied because the demo workbook lives inside the read-only /Applications/Loadscope.app bundle). The card now writes to ~/Documents/Loadscope Range Cards/ when its normal location isn't writable.",
+  "app_release_notes": "v0.14.2 - The guided demo tour now launches automatically when you click \"Try the Free Demo\" on the welcome screen (v0.14.0 had it wired up but disabled). The Excel workbook now opens with a cleaner, less cluttered view: the big toolbar icon strip is collapsed so you see more of your actual data, and the formula bar and row/column headers are hidden. New \"Print This Workbook\" buttons were added right on the Charts and Ballistics sheets, so printing is always one click away even with the toolbar tucked away. Plus a more compact tour panel with refreshed Loadscope colors.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

@@ -1053,6 +1053,8 @@ class MainWindow(QMainWindow):
             self._save_suggested_load()
         elif action == "print-pocket-card":
             self._print_pocket_card()
+        elif action == "print-workbook":
+            self._print_workbook()
         else:
             self._log(f"Unknown loadscope:// action: {action!r}",
                       color=theme.LOG_DIM)
@@ -1690,6 +1692,7 @@ class MainWindow(QMainWindow):
             )
             # Even if user cancelled, open Excel so they see their data
             subprocess.run(["open", workbook_path], check=False)
+            self._minimize_chrome_after_excel_loads()
             return
         try:
             from openpyxl import load_workbook
@@ -1711,6 +1714,7 @@ class MainWindow(QMainWindow):
             )
         # Open Excel after we've written (or attempted to write) the charge.
         subprocess.run(["open", workbook_path], check=False)
+        self._minimize_chrome_after_excel_loads()
 
     def _open_import_folder_for_chip(self, chip_label):
         """DropZone chip click handler — opens the import folder for the
@@ -1749,8 +1753,20 @@ class MainWindow(QMainWindow):
             return
         try:
             subprocess.run(["open", wb_path], check=False)
+            self._minimize_chrome_after_excel_loads()
         except Exception as e:
             self._log(f"Couldn't open workbook: {e}", color=theme.LOG_ERROR)
+
+    def _minimize_chrome_after_excel_loads(self):
+        """After triggering Excel to open a workbook, give it ~1.5s to launch
+        and render the workbook, then hide the Excel chrome (ribbon, formula
+        bar, status bar, row/column headings). Best-effort and deferred via
+        QTimer so it doesn't block the UI thread.
+        See app/excel_chrome.py for the full keep/hide matrix.
+        """
+        from PyQt5.QtCore import QTimer
+        from app.excel_chrome import minimize_excel_chrome
+        QTimer.singleShot(1500, minimize_excel_chrome)
 
     def _update_open_workbook_action_state(self):
         """Enable the 'Open Workbook in Excel' menu item only when there's
@@ -2012,9 +2028,23 @@ class MainWindow(QMainWindow):
             on_purchase=_on_purchase,
             parent=None,
         )
-        # Left-half geometry on a 1440-wide screen. The panel itself can be
-        # repositioned by the user; this is just the initial layout.
-        self._demo_tour_panel.setGeometry(0, 25, 720, 875)
+        # v0.14.2: hide the main Loadscope window during the tour so it
+        # doesn't compete with the tour panel for screen real estate at
+        # the top of the screen. Tour panel + Excel are the two visible
+        # windows during the tour. Main window comes back when the tour
+        # panel is destroyed.
+        self.hide()
+        # Defensive re-show: when the user quits Loadscope while the tour
+        # is open, the tour panel's destroyed signal fires AFTER the
+        # MainWindow's C++ object is already gone. Catch the
+        # "wrapped C/C++ object has been deleted" RuntimeError so the
+        # crash reporter doesn't fire a misleading bug report.
+        def _safe_reshow_main(*_args):
+            try:
+                self.show()
+            except RuntimeError:
+                pass  # MainWindow was destroyed during app shutdown
+        self._demo_tour_panel.destroyed.connect(_safe_reshow_main)
         self._demo_tour_panel.show()
         self._demo_tour_panel.start()
         self._log("Demo tour started.", color=theme.LOG_SUCCESS)
@@ -2051,6 +2081,7 @@ class MainWindow(QMainWindow):
         )
         try:
             subprocess.run(["osascript", "-e", osa], check=False)
+            self._minimize_chrome_after_excel_loads()
         except Exception as e:
             self._log(f"Couldn't trigger print: {e}", color=theme.LOG_ERROR)
 
@@ -2677,14 +2708,19 @@ def main():
     if needs_tutorial():
         QTimer.singleShot(300, lambda: show_tutorial(parent=win))
 
-    # v0.14: splash → tour auto-launch is DEFERRED to v0.14.x. The
-    # wiring (splash_choice variable, _open_demo_tour method, tour panel)
-    # is all in place — the auto-launch is intentionally not called here
-    # so v0.14 can ship without the brittle Qt+AppleScript+Excel
-    # coordination work needed to make it polished. Users who pick "Try
-    # the Free Demo" land on the demo-mode main window and can launch
-    # the tour from Workbook → Replay the Demo Tour. See
-    # [[loadscope-v014-auto-tour-deferred]] memory for the v0.14.x plan.
+    # v0.14.2: splash → tour auto-launch. When the user picks "Try the
+    # Free Demo" on the first-launch splash, automatically open the demo
+    # tour after the main window finishes painting. Without this the
+    # splash captures the choice but nothing visibly happens — user
+    # lands on the drop-zone in demo mode wondering where the tour is.
+    if splash_choice is not None:
+        try:
+            from splash_dialog import CHOICE_DEMO as _CHOICE_DEMO
+            if splash_choice == _CHOICE_DEMO:
+                # 800ms delay so the main window paints first
+                QTimer.singleShot(800, lambda: win._open_demo_tour())
+        except Exception:
+            pass  # never block the app on a tour-launch failure
 
     # CSVs passed on the command line (e.g., dragged onto the .app icon while
     # it wasn't running — py2app forwards those via sys.argv on launch).
