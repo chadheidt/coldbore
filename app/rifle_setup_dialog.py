@@ -169,9 +169,18 @@ if QWidget is not None:
                 current = {c: "" for _s, _l, c, _k in RIFLE_SETUP_FIELDS}
                 self.read_error = str(e)
 
+            # ONE shared form for every section so the input column
+            # lines up across Rifle & Shooter / Load Components / Test
+            # Session. (Each section having its own QFormLayout sized its
+            # label column independently -> fields offset per section.)
+            # Section headers are full-width spanning rows.
             self._edits = {}
+            form = QFormLayout()
+            form.setVerticalSpacing(10)
+            form.setHorizontalSpacing(16)
+            form.setFieldGrowthPolicy(QFormLayout.AllNonFixedFieldsGrow)
+            layout.addLayout(form)
             last_section = None
-            form = None
             for section, label, cell, _kind in RIFLE_SETUP_FIELDS:
                 if section != last_section:
                     hdr = QLabel(section.upper())
@@ -181,15 +190,7 @@ if QWidget is not None:
                             f"font-size: {self._t.FONT_SIZE_TINY}px; "
                             f"text-transform: uppercase; letter-spacing: 1px; "
                             f"font-weight: bold; padding-top: 8px;")
-                    layout.addWidget(hdr)
-                    form = QFormLayout()
-                    form.setVerticalSpacing(10)
-                    form.setHorizontalSpacing(16)
-                    # Make the input fields take the full available
-                    # width instead of staying short/cramped.
-                    form.setFieldGrowthPolicy(
-                        QFormLayout.AllNonFixedFieldsGrow)
-                    layout.addLayout(form)
+                    form.addRow(hdr)  # spans both columns
                     last_section = section
                 edit = QLineEdit(current.get(cell, ""))
                 edit.setMinimumHeight(34)
