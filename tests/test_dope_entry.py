@@ -101,6 +101,19 @@ def test_session_date_parsed_and_written(wb):
     assert isinstance(v, datetime) and v.strftime("%Y-%m-%d") == "2026-05-20"
 
 
+def test_date_displayed_mm_dd_yy(wb):
+    # Demo session date is 2026-04-12 -> must read back as 04/12/26.
+    assert read_dope(wb)["date"] == "04/12/26"
+
+
+def test_mm_dd_yy_input_roundtrips(wb):
+    write_dope(wb, "mil", [], date_str="06/01/26")
+    from datetime import datetime
+    v = load_workbook(wb)["Load Log"]["B13"].value
+    assert isinstance(v, datetime) and v.strftime("%m/%d/%y") == "06/01/26"
+    assert read_dope(wb)["date"] == "06/01/26"
+
+
 def test_bad_date_does_not_corrupt(wb):
     before = load_workbook(wb)["Load Log"]["B13"].value
     write_dope(wb, "mil", [], date_str="not a date")

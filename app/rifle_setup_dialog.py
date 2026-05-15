@@ -183,10 +183,18 @@ if QWidget is not None:
                             f"font-weight: bold; padding-top: 8px;")
                     layout.addWidget(hdr)
                     form = QFormLayout()
-                    form.setSpacing(8)
+                    form.setVerticalSpacing(10)
+                    form.setHorizontalSpacing(16)
+                    # Make the input fields take the full available
+                    # width instead of staying short/cramped.
+                    form.setFieldGrowthPolicy(
+                        QFormLayout.AllNonFixedFieldsGrow)
                     layout.addLayout(form)
                     last_section = section
                 edit = QLineEdit(current.get(cell, ""))
+                edit.setMinimumHeight(34)
+                edit.setStyleSheet("QLineEdit { padding: 6px 10px; "
+                                   "font-size: 14px; }")
                 self._edits[cell] = edit
                 form.addRow(label + ":", edit)
             layout.addStretch(1)

@@ -44,7 +44,10 @@ _NOTES_COL = "K"
 _CLICK_CELL = ("Load Log", "G7")  # decides Mil vs MOA
 _DATE_CELL = ("Load Log", "B13")
 _BAL = "Ballistics"
-_DATE_FORMATS = ("%Y-%m-%d", "%m/%d/%Y", "%m/%d/%y", "%Y/%m/%d")
+# MM/DD/YY is the displayed + preferred input format (Chad 2026-05-15);
+# the others are still accepted on input so a typed Y-M-D won't error.
+_DATE_FORMATS = ("%m/%d/%y", "%m/%d/%Y", "%Y-%m-%d", "%Y/%m/%d")
+_DATE_DISPLAY = "%m/%d/%y"
 
 
 def dope_unit(workbook_path):
@@ -64,7 +67,7 @@ def _unit_cols(unit):
 
 def _date_str(v):
     if isinstance(v, datetime):
-        return v.strftime("%Y-%m-%d")
+        return v.strftime(_DATE_DISPLAY)
     return "" if v is None else str(v)
 
 
@@ -221,7 +224,7 @@ if QWidget is not None:
                 layout.addWidget(intro)
 
             date_row = QGridLayout()
-            date_row.addWidget(QLabel("Session date (YYYY-MM-DD):"), 0, 0)
+            date_row.addWidget(QLabel("Session date (MM/DD/YY):"), 0, 0)
             self._date_edit = QLineEdit(data.get("date", ""))
             self._date_edit.setMaximumWidth(160)
             date_row.addWidget(self._date_edit, 0, 1)
