@@ -3,7 +3,7 @@
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.14.2 hotfix \u2014 splash \"Try the Free Demo\" button now actually launches the guided tour. v0.14.0 had the wiring in place but disabled because the panel was disappearing during testing. Root cause: the Excel-running watchdog timer started in the panel constructor and fired before Excel finished cold-launching, closing the panel prematurely. The main Loadscope window also competed with the tour panel for screen space at the top. Fix: defer the watchdog until Excel is confirmed up, and hide the main window while the tour is active.",
+  "app_release_notes": "v0.14.2 - The guided demo tour now launches automatically when you click \"Try the Free Demo\" on the welcome screen (v0.14.0 had it wired up but disabled). The Excel workbook now opens with a cleaner, less cluttered view: the big toolbar icon strip is collapsed so you see more of your actual data, and the formula bar and row/column headers are hidden. New \"Print This Workbook\" buttons were added right on the Charts and Ballistics sheets, so printing is always one click away even with the toolbar tucked away. Plus a more compact tour panel with refreshed Loadscope colors.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

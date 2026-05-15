@@ -593,7 +593,12 @@ if QWidget is not None:
                 self._controller.close_other_excel_windows(wb_basename)
                 # 4. Park Excel below the panel, full width of remaining screen
                 self._controller.position_excel_bottom_band(self._panel_height)
-                # 5. Force the tour panel to the front. Without this on
+                # 5. Hide Excel chrome so the demo focuses on the worksheet
+                # content (no ribbon, formula bar, status bar, headings).
+                # Restore happens in closeEvent.
+                from app.excel_chrome import minimize_excel_chrome
+                minimize_excel_chrome()
+                # 6. Force the tour panel to the front. Without this on
                 # macOS, the panel can be hidden behind Excel even with
                 # WindowStaysOnTopHint set (the activate-Excel-window in
                 # position_excel_bottom_band brings Excel forward).
@@ -739,9 +744,11 @@ if QWidget is not None:
             except Exception:
                 pass
             try:
-                # Exit Excel's full-screen view first so the next launch
-                # isn't stuck in fullscreen if the user reopens Excel.
-                self._controller.exit_excel_fullscreen_view()
+                # Restore Excel chrome (ribbon, formula bar, status bar,
+                # headings) so the next launch isn't stuck in fullscreen
+                # view + missing chrome if the user reopens Excel.
+                from app.excel_chrome import restore_excel_chrome
+                restore_excel_chrome()
             except Exception:
                 pass
             try:

@@ -1007,6 +1007,38 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
             c.border = Border(left=gray_side, right=gray_side, top=gray_side, bottom=gray_side)
             fixes.append(f"{sheet_name}!{coord}: button styling (yellow fill + bold blue + border)")
 
+    # v0.14.2 — Now that Excel's ribbon is hidden when Loadscope opens a
+    # workbook, users can't reach the standard Print button anymore. Add
+    # in-workbook "Print This Workbook" buttons on Charts (the analysis
+    # hub) and Ballistics (alongside the existing Pocket Range Card
+    # button) so printing is always one click away. Routes through the
+    # loadscope://print-workbook URL handler.
+    PRINT_BUTTON_CELLS = [
+        ("Charts", "A14"),       # Below existing Save / Reset buttons
+        ("Ballistics", "A3"),    # Below the Pocket Range Card button
+    ]
+    print_button_label = "→  Print This Workbook  ←"
+    print_button_url = "https://loadscope.app/launch?action=print-workbook"
+    for sheet_name, coord in PRINT_BUTTON_CELLS:
+        if sheet_name not in wb.sheetnames:
+            continue
+        ws = wb[sheet_name]
+        c = ws[coord]
+        # Skip if the cell was already populated (e.g., by a future
+        # template version that added a different button there) so we
+        # don't clobber unrelated content.
+        if c.value not in (None, "") and c.value != print_button_label:
+            continue
+        c.value = print_button_label
+        c.hyperlink = print_button_url
+        c.fill = button_fill
+        c.font = button_font
+        c.border = Border(left=gray_side, right=gray_side, top=gray_side, bottom=gray_side)
+        c.alignment = Alignment(horizontal="center", vertical="center")
+        # Match neighboring button row heights for visual consistency.
+        ws.row_dimensions[c.row].height = 22
+        fixes.append(f"{sheet_name}!{coord}: added 'Print This Workbook' button")
+
     # v0.14 fix — SD!A28 "Reset weights" cell shares row 28 with the
     # weight VALUE cells (B28-L28), so column A can't merge wider for the
     # long instruction text. Inserting a new dedicated row would shift the

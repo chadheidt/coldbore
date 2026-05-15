@@ -1053,6 +1053,8 @@ class MainWindow(QMainWindow):
             self._save_suggested_load()
         elif action == "print-pocket-card":
             self._print_pocket_card()
+        elif action == "print-workbook":
+            self._print_workbook()
         else:
             self._log(f"Unknown loadscope:// action: {action!r}",
                       color=theme.LOG_DIM)
@@ -1690,6 +1692,7 @@ class MainWindow(QMainWindow):
             )
             # Even if user cancelled, open Excel so they see their data
             subprocess.run(["open", workbook_path], check=False)
+            self._minimize_chrome_after_excel_loads()
             return
         try:
             from openpyxl import load_workbook
@@ -1711,6 +1714,7 @@ class MainWindow(QMainWindow):
             )
         # Open Excel after we've written (or attempted to write) the charge.
         subprocess.run(["open", workbook_path], check=False)
+        self._minimize_chrome_after_excel_loads()
 
     def _open_import_folder_for_chip(self, chip_label):
         """DropZone chip click handler — opens the import folder for the
@@ -1749,8 +1753,20 @@ class MainWindow(QMainWindow):
             return
         try:
             subprocess.run(["open", wb_path], check=False)
+            self._minimize_chrome_after_excel_loads()
         except Exception as e:
             self._log(f"Couldn't open workbook: {e}", color=theme.LOG_ERROR)
+
+    def _minimize_chrome_after_excel_loads(self):
+        """After triggering Excel to open a workbook, give it ~1.5s to launch
+        and render the workbook, then hide the Excel chrome (ribbon, formula
+        bar, status bar, row/column headings). Best-effort and deferred via
+        QTimer so it doesn't block the UI thread.
+        See app/excel_chrome.py for the full keep/hide matrix.
+        """
+        from PyQt5.QtCore import QTimer
+        from app.excel_chrome import minimize_excel_chrome
+        QTimer.singleShot(1500, minimize_excel_chrome)
 
     def _update_open_workbook_action_state(self):
         """Enable the 'Open Workbook in Excel' menu item only when there's
@@ -2065,6 +2081,7 @@ class MainWindow(QMainWindow):
         )
         try:
             subprocess.run(["osascript", "-e", osa], check=False)
+            self._minimize_chrome_after_excel_loads()
         except Exception as e:
             self._log(f"Couldn't trigger print: {e}", color=theme.LOG_ERROR)
 
