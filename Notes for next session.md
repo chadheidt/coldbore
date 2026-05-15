@@ -4,9 +4,30 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🌅 START HERE NEXT SESSION (2026-05-15) — v0.14.4 SHIPPED + self-verified on real Excel
+## 🌅 START HERE NEXT SESSION (2026-05-15) — v0.14.5 SHIPPED: Path B image demo (no Excel)
 
-**v0.14.4 is SHIPPED** (release `--latest`, both .zip+.dmg, `releases/latest`→v0.14.4, live manifest 0.14.4). Tests 132/132.
+**v0.14.5 is SHIPPED + bundle-verified** (`releases/latest`→v0.14.5, manifest 0.14.5, both assets). Tests 132/132.
+
+### v0.14.5 — Path B pre-rendered demo (Chad-approved pivot)
+The Excel-driven demo kept producing bugs (cut-off pocket card, Load Library showing the Range Card, "not the pretty card", 4 permission prompts, Excel can't position its own window). Chad chose **Path B**. Done + self-verified by Claude (no "go test it Chad"):
+- `tools/render_demo_screenshots.py` (build-time, dev Mac w/ Excel): whole-workbook → 1 PDF via Excel → Quartz renders each demo sheet's page (page index from openpyxl visible-sheet order) → autocrop (Pillow). Pretty card via qlmanage WebKit. Zero shipped deps. Outputs `app/resources/demo_screenshots/*.png` (6, all visually verified by Claude).
+- `DemoTourPanel` rebuilt: ONE window, narration band + scaled image per stop, `resizeEvent` re-fit. No Excel/TourController/browser/permission prompts. `get_demo_screenshot()` uses the sys.executable bundle pattern ([[reference-bundled-resource-resolution]]).
+- `_open_demo_tour`: no workbook needed; preflights bundled images.
+- setup.py bundles `demo_screenshots/` → `Contents/Resources/demo_screenshots/`. **Bundle-verified in the real .app: all 6 resolve.**
+- Fixes Chad's #1/#2/#4 by construction; folds in #5 (unit-aware Pocket Card — Mil OR MOA, no blank cols, applies to the REAL printed card too) + #3 (demo-aware Open Workbook/print for no-data users).
+- Headless self-verify: all 6 stops correct image+title+narration, panel has NO `_controller`. Stop-5 narration fixed ("check your browser" → shown inline).
+
+### Known / queued (NOT bugs in 0.14.5)
+- **Charts demo image** shows the scoring table; the heat-map chart objects sit below the sheet's print area (A1:L25). Acceptable; possible polish = widen the Charts capture (edit print area or render a 2nd region) and re-run the render tool.
+- **Permission prompts still exist for the REAL-workbook path** (opening a real workbook / chrome-hide / print still drive Excel). The DEMO path is now prompt-free. The Accessibility-window-position issue ([[loadscope-reduce-permission-prompts]]) only affected the old Excel demo — largely moot now; revisit if the real-workbook prompts bother users.
+- `demo_tour.TourController` + `goto_stop` + `close_other_excel_windows` are now DEAD (kept to avoid breaking their tests / because `get_bundled_demo_workbook_path` is still used by main.py print path). Cleanup pass someday.
+- Website audit + "Without/With Loadscope" section ([[loadscope-website-audit-post-v014]]); final new-user UX test ([[loadscope-test-as-new-user]], restore key CBORE-DDCX-AEGK-J2FR-2SIB after).
+
+### Chad's optional sanity glance (NOT required — Claude self+bundle-verified)
+Auto-update to 0.14.5 → Workbook → Replay the Demo Tour → one clean window, Next through 6 stops incl. the pretty card; no Excel, no prompts.
+
+---
+(Prior: v0.14.4 SHIPPED — Bug A demo-print-fallback + Bug B two-workbooks-freeze, self-verified on real Excel.)
 
 Chad got frustrated being the tester for buggy ships (rightly — invoked the do-it-yourself rule hard). v0.14.4 was reproduced, fixed, AND **self-verified by Claude driving real Excel for Mac here** (not dev-only, not "go test it Chad"). Two confirmed bugs from his v0.14.3 install:
 - **Bug A:** licensed user clicking the demo's "Print This Workbook" / "Print Pocket Range Card" → "no workbook" (fallback to bundled demo wb only fired in is_demo_mode(); licensed users got nothing). Fix: pure `resolve_demo_action_workbook()` (selected-else-bundled, license-irrelevant) used by both print handlers + `_resolve_demo_action_workbook`.
