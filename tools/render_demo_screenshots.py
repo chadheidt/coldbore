@@ -64,12 +64,35 @@ def _visible_sheet_pages():
     return {name: i + 1 for i, name in enumerate(vis)}, len(vis)
 
 
+def _prepped_workbook():
+    """Copy the demo workbook and strip print headers/footers from every
+    sheet. Load Log / Charts / Seating Depth carry a footer ("Rifle Load
+    Development Log / Page N") that pins the rendered content's bounding
+    box to the page bottom — so autocrop keeps a big white band and the
+    image displays small. Ballistics / Load Library have NO footer, which
+    is exactly why they already look right. Removing header+footer makes
+    every demo image crop tight and display large + consistent."""
+    from openpyxl import load_workbook
+    wb = load_workbook(DEMO_WB)
+    for name in wb.sheetnames:
+        ws = wb[name]
+        for hf in (ws.oddHeader, ws.oddFooter, ws.evenHeader,
+                   ws.evenFooter, ws.firstHeader, ws.firstFooter):
+            hf.left.text = hf.center.text = hf.right.text = None
+        ws.HeaderFooter.differentFirst = False
+        ws.HeaderFooter.differentOddEven = False
+    out = os.path.join(TMP, "_demo_noheader.xlsx")
+    wb.save(out)
+    return out
+
+
 def _export_workbook_pdf(pdf_path):
+    src = _prepped_workbook()
     _osa('tell application "Microsoft Excel" to try\n'
          'close every workbook saving no\nend try')
-    r = _osa(f'tell application "Microsoft Excel" to open POSIX file "{DEMO_WB}"')
+    r = _osa(f'tell application "Microsoft Excel" to open POSIX file "{src}"')
     if r.returncode != 0:
-        raise SystemExit(f"Could not open demo workbook in Excel:\n{r.stderr}")
+        raise SystemExit(f"Could not open prepped workbook in Excel:\n{r.stderr}")
     time.sleep(2.5)
     if os.path.exists(pdf_path):
         os.remove(pdf_path)

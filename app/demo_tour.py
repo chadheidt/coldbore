@@ -479,6 +479,7 @@ if QWidget is not None:
             self._dwell_timer.setSingleShot(True)
             self._dwell_timer.timeout.connect(self._on_dwell_complete)
             self._paused = False
+            self._ended = False  # True once end-of-tour shown -> Close
 
             self.setWindowTitle("Loadscope — Demo Tour")
             self._build_ui()
@@ -645,6 +646,12 @@ if QWidget is not None:
                 self._render_stop(self._index - 1)
 
         def skip(self):
+            # The same button is "Skip tour" mid-tour and "Close" on the
+            # end screen. Once ended, it must actually close the window
+            # (previously it re-ran _show_end_of_tour and did nothing).
+            if self._ended:
+                self.close()
+                return
             self._dwell_timer.stop()
             self._show_end_of_tour()
 
@@ -718,6 +725,7 @@ if QWidget is not None:
                 self.next_btn.setText(f"Next → (wait {stop['min_dwell_seconds']}s)")
 
         def _show_end_of_tour(self):
+            self._ended = True
             self.title_label.setText("Tour complete")
             self.progress_label.setText(f"Step {len(self._stops)} of {len(self._stops)}")
             self.progress_bar.setValue(len(self._stops))

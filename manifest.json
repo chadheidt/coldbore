@@ -1,9 +1,9 @@
 {
-  "app_version": "0.14.5",
+  "app_version": "0.14.6",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.14.5 - The free demo is rebuilt. It's now one clean Loadscope window that walks through every tab and your printable Pocket Range Card as polished images - no Excel windows popping up, no browser, and no macOS permission pop-ups. The Pocket Range Card now shows only the unit you actually dial (Mil or MOA) with no blank columns - this also applies to the real card you print. Plus: the demo's Print / Open Workbook buttons work even before you've imported any data. Includes the 0.14.2-0.14.4 fixes.",
+  "app_release_notes": "v0.14.6 - Demo polish. The Load Log, Charts, and Seating Depth pages in the demo now fill the window like the Ballistics and Load Library pages did - the big blank white area below them (an Excel print footer) is gone, so the actual content is much larger and easier to read. Also fixed the 'Close' button on the final demo screen, which previously did nothing.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
