@@ -2050,41 +2050,26 @@ class MainWindow(QMainWindow):
         from the Workbook menu (any user can replay) and from the first-launch
         trial flow (auto-fires once).
         """
-        # v0.14: ALWAYS prefer the bundled demo workbook in demo mode.
-        # Chad caught this 2026-05-14: in demo mode the tour was opening
-        # legacy workbooks (e.g., 6.xlsx) from his project folder via
-        # _selected_workbook(), which triggered Excel "found a problem with
-        # content" recovery dialogs. The demo tour is supposed to walk the
-        # CURATED demo workbook, never random project files.
-        wb_path = None
+        # v0.14.5 Path B: the demo is a single self-contained window
+        # showing pre-rendered images — no Excel, no workbook, no
+        # browser, no macOS permission prompts. Works for any user
+        # (licensed or not, data or not). Preflight the bundled images
+        # so we fail with a helpful message rather than a blank panel.
         try:
-            from demo_tour import get_bundled_demo_workbook_path
-            bundled = get_bundled_demo_workbook_path()
-            if app_license.is_demo_mode():
-                # Demo users → always the bundled workbook
-                wb_path = bundled if (bundled and os.path.isfile(bundled)) else None
-            else:
-                # Licensed users replaying the tour → use their selected
-                # workbook if they have one, fall back to bundled otherwise
-                wb_path = self._selected_workbook()
-                if (not wb_path or not os.path.isfile(wb_path)) and bundled:
-                    wb_path = bundled
-        except ImportError:
-            wb_path = self._selected_workbook()
-        if not wb_path or not os.path.isfile(wb_path):
-            QMessageBox.information(
-                self,
-                "No workbook",
-                "Pick a workbook first so the tour has something to walk you through.",
-            )
-            return
-        try:
-            from demo_tour import DemoTourPanel
+            from demo_tour import DemoTourPanel, get_demo_screenshot
         except ImportError as e:
             QMessageBox.critical(
                 self,
                 "Couldn't load demo tour",
                 f"demo_tour module is missing or broken:\n\n{e}",
+            )
+            return
+        if not get_demo_screenshot("01-load-log.png"):
+            QMessageBox.information(
+                self,
+                "Demo unavailable",
+                "The demo images are missing from this install. "
+                "Reinstall Loadscope to restore the guided demo.",
             )
             return
 
@@ -2095,7 +2080,6 @@ class MainWindow(QMainWindow):
             self._log("Opened purchase page in browser.", color=theme.LOG_SUCCESS)
 
         self._demo_tour_panel = DemoTourPanel(
-            wb_path,
             on_purchase=_on_purchase,
             parent=None,
         )

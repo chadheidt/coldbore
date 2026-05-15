@@ -1,9 +1,9 @@
 {
-  "app_version": "0.14.4",
+  "app_version": "0.14.5",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.14.4 - Fixes the demo's print buttons. The \"Print This Workbook\" and \"Print Pocket Range Card\" buttons now work even before you've imported any data (previously they said \"no workbook\" unless you had your own workbook). Also fixes an Excel error/freeze (\"can't open two workbooks with the same name\") that could happen when printing while the workbook was already open. Includes everything from 0.14.2/0.14.3: auto-launching demo tour, the cleaner Excel view that restores when you quit Loadscope, in-workbook Print buttons, and the bundled-resource fixes.",
+  "app_release_notes": "v0.14.5 - The free demo is rebuilt. It's now one clean Loadscope window that walks through every tab and your printable Pocket Range Card as polished images - no Excel windows popping up, no browser, and no macOS permission pop-ups. The Pocket Range Card now shows only the unit you actually dial (Mil or MOA) with no blank columns - this also applies to the real card you print. Plus: the demo's Print / Open Workbook buttons work even before you've imported any data. Includes the 0.14.2-0.14.4 fixes.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

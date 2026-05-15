@@ -1,20 +1,23 @@
-"""Demo tour — guided walk-through that drives Excel via AppleScript while
-Loadscope shows a narration panel beside it.
+"""Demo tour — a single self-contained guided walk-through window.
 
-User clicks "Replay the Demo Tour" (from the Workbook menu, or auto-fires once
-on first launch in demo mode). Loadscope positions itself on the left half of
-the screen, positions Excel on the right half with the demo workbook open,
-then steps through six tour stops. Each stop activates a sheet, scrolls to an
-interesting range, and shows a paragraph of narration in the panel. User
-controls pacing via Next / Previous / Pause / Skip buttons.
+v0.14.5 (Path B): the demo is now ONE Loadscope window that shows a
+narration band on top and a pre-rendered, pixel-perfect image of each
+workbook tab / the pretty Pocket Range Card below it. There is NO Excel,
+NO browser, NO window positioning, and NO macOS permission prompt at
+runtime — the demo works even if the user doesn't have Excel installed.
+The images are produced at build time by tools/render_demo_screenshots.py
+(developer Mac with Excel) and shipped in Contents/Resources/
+demo_screenshots/.
 
-The Pocket Range Card stop is special: it generates the printable HTML card
-via pocket_card.py and opens it in the browser so the user sees the real
-printable artifact rather than a workbook tab.
+User reaches it via "Replay the Demo Tour" (Workbook menu) or the
+first-launch splash. DemoTourPanel steps through TOUR_STOPS with
+Next / Previous / Pause / Skip and a min-dwell timer.
 
-Module is self-contained: subclass-free QWidget + a TourController that wraps
-osascript subprocess calls. No PyQt5 dependency on the controller, so it's
-unit-testable.
+The old Excel-driven path (TourController + get_bundled_demo_workbook_path
++ goto_stop) is retained below only because get_bundled_demo_workbook_path
+is still used by main.py for the in-app Print / Pocket-Card actions.
+TourController itself is now DEAD for the demo (kept to avoid churn /
+breaking its unit tests; remove in a dedicated cleanup pass).
 """
 
 import os
@@ -23,7 +26,7 @@ import sys
 
 try:
     from PyQt5.QtCore import Qt, QTimer
-    from PyQt5.QtGui import QFont
+    from PyQt5.QtGui import QFont, QPixmap
     from PyQt5.QtWidgets import (
         QHBoxLayout,
         QLabel,
@@ -35,7 +38,7 @@ try:
     )
 except ImportError:
     # Allow module import for unit tests without PyQt5
-    Qt = QTimer = QFont = None
+    Qt = QTimer = QFont = QPixmap = None
     QHBoxLayout = QLabel = QProgressBar = QPushButton = QSizePolicy = QVBoxLayout = QWidget = None
 
 try:
@@ -53,6 +56,7 @@ except ImportError:
 TOUR_STOPS = [
     {
         "title": "Load Log — your powder ladder",
+        "image": "01-load-log.png",
         "sheet": "Load Log",
         "select_range": "A1:P25",
         "narration": (
@@ -67,6 +71,7 @@ TOUR_STOPS = [
     },
     {
         "title": "Charts — heat-mapped scoring",
+        "image": "02-charts.png",
         "sheet": "Charts",
         "select_range": "A1:Q25",
         "narration": (
@@ -81,6 +86,7 @@ TOUR_STOPS = [
     },
     {
         "title": "Seating Depth — find your jump",
+        "image": "03-seating-depth.png",
         "sheet": "Seating Depth",
         "select_range": "A1:P30",
         "narration": (
@@ -95,6 +101,7 @@ TOUR_STOPS = [
     },
     {
         "title": "Ballistics — your DOPE table",
+        "image": "04-ballistics.png",
         "sheet": "Ballistics",
         "select_range": "A1:K30",
         # ⚠️ PLACEHOLDER NARRATION — UPDATE WHEN v0.15 BALLISTIC SOLVER SHIPS.
@@ -115,19 +122,22 @@ TOUR_STOPS = [
     },
     {
         "title": "Pocket Range Card — printable DOPE",
+        "image": "05-pocket-card.png",
         "sheet": "Ballistics",  # stays on Ballistics; opens HTML in browser
         "select_range": None,
         "narration": (
-            "Loadscope just generated a printable 4×6 Pocket Range Card — "
-            "check your browser. Print it on cardstock or save it as a PDF; "
-            "it folds into your shirt pocket for the firing line. No more "
-            "squinting at notes on your phone in the wind."
+            "This is your Pocket Range Card — a clean 4×6 DOPE card "
+            "Loadscope builds straight from your load. In the full app one "
+            "click prints it to cardstock or saves it as a PDF; it folds "
+            "into your shirt pocket for the firing line. No more squinting "
+            "at notes on your phone in the wind."
         ),
         "min_dwell_seconds": 10,
-        "special": "open_pocket_range_card",
+        "special": None,
     },
     {
         "title": "Load Library — your winners over time",
+        "image": "06-load-library.png",
         "sheet": "Load Library",
         "select_range": "A1:P25",
         "narration": (
@@ -177,6 +187,37 @@ def get_bundled_demo_workbook_path():
         os.path.join(here, "resources", fname),                          # dev tree
         os.path.normpath(os.path.join(here, "..", "Resources", fname)),   # legacy
         os.path.normpath(os.path.join(here, "..", "..", "Resources", fname)),
+    ]
+    for path in candidates:
+        if os.path.isfile(path):
+            return path
+    return None
+
+
+def get_demo_screenshot(filename):
+    """Absolute path to a bundled demo screenshot (Path B), or None.
+
+    Same py2app pitfall as get_bundled_demo_workbook_path: __file__ is
+    inside Contents/Resources/lib/pythonXX.zip in the .app, so resolve
+    the real Contents/Resources/demo_screenshots/ via sys.executable.
+    Build-time tool: tools/render_demo_screenshots.py.
+    """
+    here = os.path.dirname(os.path.abspath(__file__))
+    if getattr(sys, "frozen", False):
+        try:
+            exe = os.path.abspath(sys.executable)
+            res = os.path.join(os.path.dirname(os.path.dirname(exe)),
+                               "Resources", "demo_screenshots", filename)
+            if os.path.isfile(res):
+                return res
+        except (OSError, ValueError):
+            pass
+    candidates = [
+        os.path.join(here, "resources", "demo_screenshots", filename),
+        os.path.normpath(os.path.join(here, "..", "Resources",
+                                      "demo_screenshots", filename)),
+        os.path.normpath(os.path.join(here, "..", "..", "Resources",
+                                      "demo_screenshots", filename)),
     ]
     for path in candidates:
         if os.path.isfile(path):
@@ -423,42 +464,26 @@ if QWidget is not None:
         CTA prominent enough to convert.
         """
 
-        def __init__(self, workbook_path, on_purchase=None, parent=None):
+        def __init__(self, workbook_path=None, on_purchase=None, parent=None):
             super().__init__(parent)
+            # v0.14.5 Path B: the demo is now a single self-contained
+            # window showing pre-rendered images of each tab + the pretty
+            # pocket card. NO Excel, NO browser, NO TourController, NO
+            # macOS permission prompts. workbook_path is accepted for
+            # call-site compatibility but unused.
             self._stops = TOUR_STOPS
             self._index = 0
-            self._controller = TourController(workbook_path)
             self._on_purchase = on_purchase  # callback when user clicks Purchase
+            self._current_pixmap = None      # original (unscaled) stop image
             self._dwell_timer = QTimer(self)
             self._dwell_timer.setSingleShot(True)
             self._dwell_timer.timeout.connect(self._on_dwell_complete)
             self._paused = False
 
             self.setWindowTitle("Loadscope — Demo Tour")
-            # v0.14: top-strip layout (Chad 2026-05-14). Narration panel
-            # is a thin horizontal band at the top of the screen, Excel
-            # gets the rest of the height. v0.14.2: compact layout —
-            # title+step on one row, smaller fonts, less padding.
-            # 180px = enough room for ~4 lines of narration without truncation.
-            self._panel_height = 180
-            # Stay on top so it doesn't get buried behind Excel when the
-            # user clicks into the workbook to look at something.
-            self.setWindowFlag(Qt.WindowStaysOnTopHint, True)
-            # Poll for Excel still-running every 2s; close ourselves if
-            # the user closes Excel mid-tour (otherwise the tour keeps
-            # narrating about a workbook that's gone).
-            # IMPORTANT: do NOT start the timer here. Excel may take 3-5s
-            # to cold-launch when start() runs ensure_workbook_open(). If
-            # the poll fires while Excel is still launching, it sees "not
-            # running" and closes the panel. Started in start() instead,
-            # AFTER Excel is confirmed up.
-            self._excel_watch = QTimer(self)
-            self._excel_watch.setInterval(2000)
-            self._excel_watch.timeout.connect(self._check_excel_alive)
-
             self._build_ui()
-            # Don't auto-start; caller invokes start() so they can position
-            # both windows first.
+            # Don't auto-start; caller invokes start() so it can hide the
+            # main window first.
 
         # --- UI construction ----------------------------------------------------
         def _build_ui(self):
@@ -510,13 +535,13 @@ if QWidget is not None:
             self.narration_label.setFont(nf)
             self.narration_label.setWordWrap(True)
             self.narration_label.setAlignment(Qt.AlignTop | Qt.AlignLeft)
+            # v0.14.5: narration is a compact band at the top; the big
+            # pre-rendered tab image gets the rest of the window.
             self.narration_label.setSizePolicy(
-                QSizePolicy.Expanding, QSizePolicy.Expanding
+                QSizePolicy.Expanding, QSizePolicy.Minimum
             )
             if _theme:
                 # v0.14.2: orange left-edge stripe + dark gray surface.
-                # Branded look without sacrificing legibility (Chad
-                # picked option A 2026-05-14).
                 self.narration_label.setStyleSheet(
                     f"color: {_theme.TEXT_PRIMARY}; "
                     f"background-color: {_theme.BG_ELEVATED}; "
@@ -525,7 +550,23 @@ if QWidget is not None:
                     f"border-top-right-radius: 6px; "
                     f"border-bottom-right-radius: 6px;"
                 )
-            layout.addWidget(self.narration_label, stretch=1)
+            layout.addWidget(self.narration_label)
+
+            # v0.14.5 Path B: the star of the demo — a pre-rendered,
+            # pixel-perfect image of the actual workbook tab / pretty
+            # pocket card. Scaled to fit, aspect preserved. No Excel.
+            self.image_label = QLabel("")
+            self.image_label.setAlignment(Qt.AlignCenter)
+            self.image_label.setSizePolicy(
+                QSizePolicy.Expanding, QSizePolicy.Expanding
+            )
+            self.image_label.setMinimumHeight(360)
+            if _theme:
+                self.image_label.setStyleSheet(
+                    f"background-color: {_theme.BG_ELEVATED}; "
+                    f"border-radius: 6px;"
+                )
+            layout.addWidget(self.image_label, stretch=1)
 
             # End-of-tour CTA (hidden until last step done)
             self.cta_label = QLabel(
@@ -581,53 +622,16 @@ if QWidget is not None:
 
         # --- public API ---------------------------------------------------------
         def start(self):
-            """Open the workbook, position Excel below the tour panel, render
-            the first stop. Layout (Chad 2026-05-14):
-              - Tour panel: top of screen, full width, ~140-230px tall, on-top
-              - Excel:      below the panel, full width, all remaining height
-            """
-            # 1. Position the tour panel at the top-strip of the screen
-            screen_w, screen_h = self._controller._screen
-            self.setGeometry(
-                0, MENU_BAR_HEIGHT, screen_w, self._panel_height
-            )
-            # Force show + raise + activate to ensure visibility before
-            # Excel comes up and fights for focus.
+            """Path B: a single self-contained full-window demo. No Excel,
+            no browser, no positioning, no permission prompts."""
+            try:
+                scr = self.screen().availableGeometry()
+                self.setGeometry(scr)
+            except Exception:
+                self.resize(1280, 820)
             self.show()
             self.raise_()
             self.activateWindow()
-            # 2. Open the workbook
-            ok = self._controller.ensure_workbook_open()
-            if ok:
-                # 3. Close any OTHER Excel windows (Start screen, recent
-                # files, leftover workbooks) so just our demo workbook is
-                # visible.
-                wb_basename = os.path.basename(
-                    self._controller.workbook_path or ""
-                )
-                self._controller.close_other_excel_windows(wb_basename)
-                # 4. Park Excel below the panel, full width of remaining screen
-                self._controller.position_excel_bottom_band(self._panel_height)
-                # 5. Hide Excel chrome so the demo focuses on the worksheet
-                # content (no ribbon, formula bar, status bar, headings).
-                # Restore happens in closeEvent.
-                from excel_chrome import minimize_excel_chrome
-                minimize_excel_chrome()
-                # 6. Force the tour panel to the front. Without this on
-                # macOS, the panel can be hidden behind Excel even with
-                # WindowStaysOnTopHint set (the activate-Excel-window in
-                # position_excel_bottom_band brings Excel forward).
-                from PyQt5.QtCore import QTimer as _QT
-                def _bring_panel_forward():
-                    self.raise_()
-                    self.activateWindow()
-                    self.show()  # in case it was hidden behind Excel's space
-                _QT.singleShot(300, _bring_panel_forward)
-                # 7. Lifecycle watcher temporarily DISABLED for v0.14.2
-                # bisection. Was closing the panel prematurely. Re-enable
-                # in v0.14.3 once we've confirmed the panel survives
-                # without it.
-                # self._excel_watch.start()
             self._render_stop(0)
 
         def next_stop(self):
@@ -653,8 +657,8 @@ if QWidget is not None:
             self.progress_bar.setValue(index + 1)
             self.narration_label.setText(stop["narration"])
 
-            # Drive Excel to this stop
-            self._controller.goto_stop(stop)
+            # Path B: show the pre-rendered image for this stop.
+            self._load_stop_image(stop)
 
             # Enforce min dwell — disable Next until timer fires
             self.next_btn.setEnabled(False)
@@ -663,6 +667,37 @@ if QWidget is not None:
 
             # Previous always available except on first stop
             self.prev_btn.setEnabled(index > 0)
+
+        def _load_stop_image(self, stop):
+            """Load this stop's pre-rendered PNG into the image label."""
+            self._current_pixmap = None
+            name = stop.get("image")
+            path = get_demo_screenshot(name) if name else None
+            if path and QPixmap is not None:
+                pm = QPixmap(path)
+                if not pm.isNull():
+                    self._current_pixmap = pm
+            if self._current_pixmap is None:
+                self.image_label.setText(
+                    "(demo image unavailable — reinstall Loadscope)")
+            else:
+                self.image_label.setText("")
+                self._apply_pixmap()
+
+        def _apply_pixmap(self):
+            """Scale the current stop image to fit the label, preserving
+            aspect ratio. Re-run on every resize for crisp rendering."""
+            if self._current_pixmap is None:
+                return
+            sz = self.image_label.size()
+            if sz.width() < 10 or sz.height() < 10:
+                return
+            self.image_label.setPixmap(self._current_pixmap.scaled(
+                sz, Qt.KeepAspectRatio, Qt.SmoothTransformation))
+
+        def resizeEvent(self, event):
+            super().resizeEvent(event)
+            self._apply_pixmap()
 
         def _on_dwell_complete(self):
             self.next_btn.setEnabled(True)
@@ -703,87 +738,12 @@ if QWidget is not None:
             if self._on_purchase:
                 self._on_purchase()
 
-        # --- Lifecycle coupling with Excel ---------------------------
-        # The tour panel + Excel are physically separate windows but the
-        # USER experiences them as one demo experience. Couple their
-        # lifecycles so neither lingers while the other is gone.
-
-        def _check_excel_alive(self):
-            """Polled every 2s: if Excel quit or our workbook closed,
-            close the tour panel too. Without this, the tour keeps
-            narrating about an Excel window that no longer exists."""
-            try:
-                result = self._controller._run_script(
-                    'tell application "System Events" to '
-                    '(name of processes) contains "Microsoft Excel"',
-                    timeout=3,
-                )
-                if result.strip().lower() != "true":
-                    self._excel_watch.stop()
-                    self.close()
-                    return
-                # Excel is alive — also check our specific workbook is still open.
-                # v0.14.2 fix: Excel sometimes returns workbook names WITHOUT
-                # the .xlsx extension. Compare against the STEM (no extension)
-                # so the substring check doesn't false-negative and close the
-                # panel when the workbook is actually open. Earlier code did
-                # `wb_basename` (with .xlsx) `in` open_books_string and the
-                # comparison failed -> panel closed prematurely.
-                wb_basename = os.path.basename(self._controller.workbook_path or "")
-                wb_stem = os.path.splitext(wb_basename)[0]
-                if wb_stem:
-                    script = f'''
-                        tell application "Microsoft Excel"
-                            set names_list to ""
-                            try
-                                repeat with wb in workbooks
-                                    set names_list to names_list & (name of wb) & "|"
-                                end repeat
-                            end try
-                            return names_list
-                        end tell
-                    '''
-                    open_books = self._controller._run_script(script, timeout=3)
-                    if wb_stem not in open_books:
-                        self._excel_watch.stop()
-                        self.close()
-            except Exception:
-                pass  # polling errors shouldn't kill the tour
-
         def closeEvent(self, event):
-            """When the user closes the tour panel, also close the demo
-            workbook in Excel + quit Excel if no other workbooks are open.
-            Avoids leaving the demo workbook open after the tour ends."""
+            """Path B: the demo never launched Excel, so there's nothing
+            to tear down. The main window re-shows itself via the panel's
+            destroyed signal (wired in main.py _open_demo_tour)."""
             try:
-                self._excel_watch.stop()
-            except Exception:
-                pass
-            try:
-                # Restore Excel chrome (ribbon, formula bar, status bar,
-                # headings) so the next launch isn't stuck in fullscreen
-                # view + missing chrome if the user reopens Excel.
-                from excel_chrome import restore_excel_chrome
-                restore_excel_chrome()
-            except Exception:
-                pass
-            try:
-                wb_basename = os.path.basename(self._controller.workbook_path or "")
-                if wb_basename:
-                    self._controller._run_script(f'''
-                        tell application "Microsoft Excel"
-                            try
-                                repeat with wb in workbooks
-                                    if (name of wb) is "{wb_basename}" then
-                                        close wb saving no
-                                        exit repeat
-                                    end if
-                                end repeat
-                                if (count of workbooks) is 0 then
-                                    quit
-                                end if
-                            end try
-                        end tell
-                    ''', timeout=5)
+                self._dwell_timer.stop()
             except Exception:
                 pass
             super().closeEvent(event)
