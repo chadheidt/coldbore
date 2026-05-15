@@ -487,7 +487,9 @@ class MainWindow(QMainWindow):
         # disabled for now — Chad wants a flat graphite background while
         # we finish the rest. We'll re-enable carbon during final polish.
         central = QWidget()
-        self.setCentralWidget(central)
+        # v0.14.9: the shell wraps `central` as the "Import" panel and
+        # becomes the central widget at the end of __init__ (see the
+        # LoadscopeShell block after the activity log is built).
         layout = QVBoxLayout(central)
         layout.setContentsMargins(theme.PAD_WINDOW, theme.PAD_WINDOW,
                                   theme.PAD_WINDOW, theme.PAD_WINDOW)
@@ -859,6 +861,54 @@ class MainWindow(QMainWindow):
         mono.setPointSize(11)
         self.log.setFont(mono)
         layout.addWidget(self.log, stretch=1)
+
+        # v0.14.9 unified shell: the whole UI built above becomes the
+        # "Import" panel; Setup/DOPE are embedded panels rebuilt against
+        # the CURRENT workbook on navigation; Results/Card are
+        # placeholders for now. If anything here fails, fall back to the
+        # original central widget so the app always launches.
+        try:
+            from shell import LoadscopeShell
+            from rifle_setup_dialog import RifleSetupPanel
+            from dope_entry_dialog import DopeEntryPanel
+
+            def _ph(t):
+                lbl = QLabel(t)
+                lbl.setWordWrap(True)
+                lbl.setAlignment(Qt.AlignCenter)
+                if hasattr(theme, "TEXT_SECONDARY"):
+                    lbl.setStyleSheet(f"color: {theme.TEXT_SECONDARY};")
+                return lbl
+
+            def _panel(panel_cls):
+                wb = self._resolve_demo_action_workbook()
+                if not wb or not os.path.isfile(wb):
+                    return _ph("No workbook yet — go to Import Data, drop "
+                               "your CSVs, and click Run Import to create "
+                               "one. Then this screen fills in.")
+                return panel_cls(wb, with_save=True)
+
+            self._shell = LoadscopeShell()
+            self._shell.add_panel("import", "Import Data", central)
+            self._shell.add_lazy_panel(
+                "setup", "Rifle & Setup",
+                lambda: _panel(RifleSetupPanel))
+            self._shell.add_lazy_panel(
+                "dope", "Range & DOPE",
+                lambda: _panel(DopeEntryPanel))
+            self._shell.add_panel(
+                "results", "Results",
+                _ph("Results — live Charts & suggested-load view is "
+                    "coming here next (no Excel needed)."))
+            self._shell.add_panel(
+                "card", "Pocket Card",
+                _ph("Pocket Card — preview & print. For now use "
+                    "Workbook → Print Pocket Range Card."))
+            self._shell.switch_to("import")
+            self.setCentralWidget(self._shell)
+        except Exception:
+            # Never let the shell break launch.
+            self.setCentralWidget(central)
 
         self._log("Ready. Drop CSV files into the box above.", color=theme.LOG_INFO)
         self._log("New here? Tools → How to Use Loadscope… walks you through "

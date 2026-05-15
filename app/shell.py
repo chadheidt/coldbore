@@ -54,6 +54,7 @@ if QWidget is not None:
             self._labels = {}               # key -> base label text
             self._complete = {}             # key -> bool
             self._pages = {}                # key -> stack index
+            self._builders = {}             # key -> (container, fn)
 
             root = QHBoxLayout(self)
             root.setContentsMargins(0, 0, 0, 0)
@@ -115,9 +116,37 @@ if QWidget is not None:
                 self.switch_to(key)
             return widget
 
+        def add_lazy_panel(self, key, label, builder, complete=False):
+            """Like add_panel, but `builder()` is called to (re)build the
+            panel content every time the nav item is selected — so an
+            embedded form always reflects the CURRENT workbook, not
+            whatever existed at startup."""
+            container = QWidget()
+            box = QVBoxLayout(container)
+            box.setContentsMargins(0, 0, 0, 0)
+            self._builders[key] = (container, box, builder)
+            self.add_panel(key, label, container, complete=complete)
+            return container
+
+        def _rebuild(self, key):
+            container, box, builder = self._builders[key]
+            while box.count():
+                item = box.takeAt(0)
+                w = item.widget()
+                if w is not None:
+                    w.setParent(None)
+                    w.deleteLater()
+            try:
+                box.addWidget(builder())
+            except Exception as e:
+                from PyQt5.QtWidgets import QLabel as _QL
+                box.addWidget(_QL(f"Couldn't open this panel:\n\n{e}"))
+
         def switch_to(self, key):
             if key not in self._pages:
                 return
+            if key in self._builders:
+                self._rebuild(key)
             self._stack.setCurrentIndex(self._pages[key])
             for k, b in self._buttons.items():
                 sel = (k == key)

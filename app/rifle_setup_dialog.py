@@ -29,12 +29,13 @@ try:
         QLabel,
         QLineEdit,
         QMessageBox,
+        QPushButton,
         QVBoxLayout,
         QWidget,
     )
 except ImportError:  # allow import for unit tests without PyQt5
     QDialog = QDialogButtonBox = QFormLayout = QLabel = QLineEdit = None
-    QMessageBox = QVBoxLayout = QFont = QWidget = None
+    QMessageBox = QVBoxLayout = QFont = QWidget = QPushButton = None
 
 from openpyxl import load_workbook
 
@@ -127,7 +128,8 @@ if QWidget is not None:
         caller decides how to surface success/errors (no QMessageBox
         here -> testable + embeddable)."""
 
-        def __init__(self, workbook_path, parent=None, show_intro=True):
+        def __init__(self, workbook_path, parent=None, show_intro=True,
+                     with_save=False):
             super().__init__(parent)
             self._wb_path = workbook_path
             try:
@@ -188,6 +190,37 @@ if QWidget is not None:
                 self._edits[cell] = edit
                 form.addRow(label + ":", edit)
             layout.addStretch(1)
+
+            # When embedded in the shell there's no dialog OK button, so
+            # the panel carries its own Save + inline status.
+            self._status = None
+            if with_save:
+                row = QVBoxLayout()
+                self._status = QLabel("")
+                self._status.setWordWrap(True)
+                row.addWidget(self._status)
+                btn = QPushButton("Save")
+                btn.setObjectName("primary")
+                btn.clicked.connect(self._on_save_clicked)
+                row.addWidget(btn)
+                layout.addLayout(row)
+
+        def _on_save_clicked(self):
+            status, payload = self.save()
+            if not self._status:
+                return
+            if status == "ok":
+                msg = ("Saved." if payload else "No changes to save.")
+                col = self._t.LOG_SUCCESS if self._t else "green"
+            elif status == "locked":
+                msg = ("The workbook is open in Excel — close it and "
+                       "click Save again.")
+                col = self._t.LOG_ERROR if self._t else "red"
+            else:
+                msg = f"Couldn't save: {payload}"
+                col = self._t.LOG_ERROR if self._t else "red"
+            self._status.setText(msg)
+            self._status.setStyleSheet(f"color: {col};")
 
         def save(self):
             """Returns (status, payload): ("ok", changed_list) |
