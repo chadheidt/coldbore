@@ -13,9 +13,14 @@ Chad reviewed the demo previews and approved. Two fixes:
 - White band under Load Log/Charts/Seating Depth = Excel print FOOTER pinning the bbox to page bottom (Ballistics/Load Library had none → already fine). `render_demo_screenshots.py` now strips headers/footers (openpyxl temp copy) before export → all 6 crop tight + display large. Re-rendered, visually verified.
 - End-screen "Close" button did nothing (same btn = "Skip tour"→skip() mid-tour, "Close" at end, but skip() re-ran end screen). Added `_ended` flag; skip() now self.close()s when ended. Verified headless (window closes).
 
-### NEW future items (Chad asked 2026-05-15, both saved to memory)
-- **Put the demo tour on the website** — Path B made it ~free (same PNGs + narration). High-value top-of-funnel. See [[loadscope-website-audit-post-v014]] (added section).
-- **App-ify the workbook** — bring the clean Path-B format to the REAL app: native input forms (rifle/shooter info + typed data) writing into the .xlsx, Excel as hidden engine. Substantial roadmap effort, design at polish/commerce phase. See [[loadscope-appify-workbook]].
+### 🧭 PRE-BETA ROADMAP (Chad locked the order 2026-05-15) — [[loadscope-pre-beta-roadmap]]
+Ordered todo; do NOT do the website until the app is in final pre-beta form (else screenshots + web demo get redone):
+1. **Workbook UI change / app-ify** (native input forms, Excel as hidden engine) — Chad: sooner than later, BEFORE beta. Biggest + least-scoped → **first action = a design/scoping pass** to confirm it fits the beta window. [[loadscope-appify-workbook]]
+2. **Ballistic solver** — predicted DOPE; ~2-3 days; major paid selling point; built into the new UI. [[loadscope-ballistic-solver-v015]]
+3. **Website revamp — ONCE, after 1&2**: fix drift + the compact "Without/With Loadscope" section (CONFIRMED captured) + add solver to pitch + the demo as a browser slideshow (reuse Path-B PNGs+narration). Re-render assets AFTER 1&2. [[loadscope-website-audit-post-v014]]
+4. **Update app descriptions EVERYWHERE + all social bios** — one coordinated launch with the website (solver = bigger pitch). Then → beta.
+
+Open decision: UI-first vs solver-first. Rec: scope the UI change first; if contained → UI→solver→site; if large → solver first→UI→site. Both precede the website regardless.
 
 ### v0.14.5 is SHIPPED + bundle-verified (Path B rebuild — detail below)
 
