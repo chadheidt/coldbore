@@ -4,23 +4,30 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🌅 START HERE NEXT SESSION (2026-05-14 end-of-day)
+## 🌅 START HERE NEXT SESSION (2026-05-15) — v0.14.2 SHIPPED, awaiting Chad's post-install exercise
 
-**Tomorrow's first task** (Chad's explicit ask): rework EVERY Excel workbook Loadscope opens so the user sees ONLY the worksheet content — no ribbon, no formula bar, no row/column headers, no sheet tab strip if avoidable. Applies to real-user workbooks AND the demo workbook. See memory `loadscope-demo-excel-chrome` for full context + AppleScript snippets.
+**v0.14.2 is SHIPPED end-to-end on the infra side** (release published `--latest`, both .zip+.dmg, `releases/latest`→v0.14.2, live manifest app_version=0.14.2, Worker auto-update path alive, `print-workbook` whitelist live on loadscope.app). `main` HEAD pushed. Tests 123/123. **NOT yet exercised end-to-end** — Chad still owes the 3 post-install click-tests below (built+installable ≠ exercised).
 
-**Auto-tour fix is on a feature branch `v0.14.2-wip` (commit `0bdfc73`), NOT shipped.** When the Excel-chrome-hiding work is ready, bundle both and ship as v0.14.2 (or v0.14.3 if a v0.14.2 has already gone out for some other reason).
+### What shipped in v0.14.2
+- Splash "Try the Free Demo" auto-launches the guided tour (0.14.0 had it disabled).
+- Excel chrome hide: ribbon collapsed + formula bar/status/headings hidden when Loadscope opens a workbook; **restored to the user's prior state on quit/tour-close**.
+- In-workbook "Print This Workbook" buttons at Charts!A14 + Ballistics!A3 → `loadscope://print-workbook`.
+- Compact tour panel + refreshed brand colors (from WIP commit 0bdfc73).
 
-To resume:
-```
-git checkout v0.14.2-wip
-# read the WIP commit message for full context
-git log -1
-```
+### 3 critical pre-ship audit fixes (Chad paused the ship for an audit — it caught these; all would have shipped broken)
+1. **Chrome pref never restored** — `kOUIRibbonDefaultCollapse` is a GLOBAL persistent Excel pref; original code set it forever with no undo. Now captured to config + restored on quit (`app.aboutToQuit`) / tour close. Crash-resilient (marker persists). `excel_chrome.py` rewritten; live round-trip verified.
+2. **`docs/launch.html` whitelist missing `print-workbook`** — the new button was DEAD for every user (page rejected the unknown action). Added the mapping; verified live.
+3. **`excel_chrome` bundling** — was the lone `from app.X import` (bundle is FLAT: `excel_chrome.pyc`, `demo_tour.pyc` at zip root) AND absent from setup.py `includes` → ImportError in the real .app. Switched 4 call sites to flat `from excel_chrome import` + added to includes. Verified `excel_chrome.pyc` is in the shipped `python39.zip`.
 
-The auto-tour wiring works end-to-end (verified 2026-05-14 evening):
-- Splash → Try the Free Demo → main window hides → tour panel appears at top-strip → Excel opens demo workbook below → Next/Previous advance through stops with tab switching
-- Panel: 180px tall, orange title text + orange left-edge stripe, dark gray surface
-- Lifecycle watchdog currently DISABLED (commented out in start()) — was closing panel prematurely. Re-enable in v0.14.3 with proper cold-launch handling.
+### ⚠️ Chad's pending post-install exercise (do NOT delete the related memories until he confirms)
+From `/Applications` after auto-update to 0.14.2: (1) demo Ballistics "Print Pocket Range Card" works (the v0.14 retest he deferred — memory `loadscope-v014-test-pocket-card-after-install`); (2) new "Print This Workbook" button works; (3) open demo → quit Loadscope → Excel ribbon/chrome returns to normal.
+
+### Next up (agreed): marketing website audit/refresh
+loadscope.app drifted since v0.14.0 and v0.14.2 makes it staler (new Print buttons, hidden chrome). PLUS Chad's new ask: add a compact **"Without Loadscope → With Loadscope"** value-prop section — tight, NOT busy (he raised crowding). Full spec in memory `loadscope-website-audit-post-v014`. `docs/` deploys via Pages on main push.
+
+### v0.14.3 queue
+- Re-enable the tour lifecycle watchdog with proper cold-launch handling (currently commented out in `demo_tour.py` start() — naive enable closed the panel prematurely).
+- Possibly Path B (pre-rendered PNG demo) — Chad's locked decision: A shipped as v0.14.2, B is a separate later ship (v0.14.3 or v0.15). See memory `loadscope-demo-format-rethink`.
 
 ---
 
