@@ -1,9 +1,9 @@
 {
-  "app_version": "0.14.6",
+  "app_version": "0.14.7",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.14.6 - Demo polish. The Load Log, Charts, and Seating Depth pages in the demo now fill the window like the Ballistics and Load Library pages did - the big blank white area below them (an Excel print footer) is gone, so the actual content is much larger and easier to read. Also fixed the 'Close' button on the final demo screen, which previously did nothing.",
+  "app_release_notes": "v0.14.7 - New Rifle & Setup screen. Edit your rifle, shooter, components, and test-session info in a clean Loadscope form (Workbook menu -> Rifle & Setup) instead of hunting for cells in the Excel grid - it saves straight into your workbook. This is the first step of bringing Loadscope's clean format to the working app, not just the demo. Includes all 0.14.2-0.14.6 fixes.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
