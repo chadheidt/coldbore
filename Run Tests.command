@@ -4,7 +4,7 @@
 
 set -e
 
-PROJECT="$HOME/Projects/Rifle Load Data"
+PROJECT="$HOME/Projects/Loadscope"
 cd "$PROJECT"
 
 echo "============================================================"

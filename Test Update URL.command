@@ -7,7 +7,7 @@
 
 set -e
 
-PROJECT="$HOME/Projects/Rifle Load Data"
+PROJECT="$HOME/Projects/Loadscope"
 cd "$PROJECT"
 
 URL="https://raw.githubusercontent.com/chadheidt/coldbore/main/manifest.json"
