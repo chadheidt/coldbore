@@ -15,6 +15,7 @@ Workbook → Print Pocket Range Card… in the app launches this.
 import base64
 import os
 import subprocess
+import sys
 from datetime import datetime
 
 from openpyxl import load_workbook
@@ -27,10 +28,20 @@ def _logo_data_uri():
     # Look up the icon in the package's resources. Two location candidates
     # depending on whether we're in dev or in the .app bundle:
     here = os.path.dirname(os.path.abspath(__file__))
-    candidates = [
+    candidates = []
+    # py2app: __file__ is inside Contents/Resources/lib/pythonXX.zip, so
+    # resolve the real Contents/Resources/ via sys.executable first
+    # (proven-good pattern from setup_wizard.find_bundled_template()).
+    if getattr(sys, "frozen", False):
+        try:
+            exe = os.path.abspath(sys.executable)
+            candidates.append(os.path.join(
+                os.path.dirname(os.path.dirname(exe)), "Resources", "icon.png"))
+        except (OSError, ValueError):
+            pass
+    candidates += [
         os.path.normpath(os.path.join(here, "..", "docs", "assets", "icon.png")),
         os.path.normpath(os.path.join(here, "resources", "icon.png")),
-        # py2app Resources dir
         os.path.normpath(os.path.join(here, "..", "Resources", "icon.png")),
     ]
     for path in candidates:

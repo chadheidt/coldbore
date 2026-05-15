@@ -1,9 +1,9 @@
 {
-  "app_version": "0.14.2",
+  "app_version": "0.14.3",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.14.2 - The guided demo tour now launches automatically when you click \"Try the Free Demo\" on the welcome screen (v0.14.0 had it wired up but disabled). The Excel workbook now opens with a cleaner, less cluttered view: the big toolbar icon strip is collapsed so you see more of your actual data, and the formula bar and row/column headers are hidden. Your Excel returns to its normal layout automatically when you close Loadscope. New \"Print This Workbook\" buttons were added right on the Charts and Ballistics sheets, so printing is always one click away even with the toolbar tucked away. Plus a more compact tour panel with refreshed Loadscope colors.",
+  "app_release_notes": "v0.14.3 - Fixes the guided demo tour. In 0.14.2 the installed app couldn't find the bundled demo workbook, so the tour stopped with \"Pick a workbook first\" - now it opens the demo workbook correctly. Also restores the Loadscope logo on the Pocket Range Card and the welcome screen (same underlying cause). Everything from 0.14.2 is included: auto-launching demo tour, the cleaner Excel view that restores when you quit Loadscope, and the \"Print This Workbook\" buttons on the Charts and Ballistics sheets.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""

@@ -157,11 +157,26 @@ def get_bundled_demo_workbook_path():
         2. Contents/Resources/Loadscope - Demo Workbook.xlsx (py2app .app bundle)
         3. ../Resources/Loadscope - Demo Workbook.xlsx (alt py2app layout)
     """
+    fname = "Loadscope - Demo Workbook.xlsx"
     here = os.path.dirname(os.path.abspath(__file__))
+    # py2app loads modules from Contents/Resources/lib/pythonXX.zip, so
+    # __file__-relative paths land INSIDE the zip and miss the real
+    # Contents/Resources/ where DATA_FILES live. Resolve via sys.executable
+    # (Contents/MacOS/<exe> -> ../Resources/) — the proven-good pattern
+    # from setup_wizard.find_bundled_template().
+    if getattr(sys, "frozen", False):
+        try:
+            exe = os.path.abspath(sys.executable)
+            res = os.path.join(os.path.dirname(os.path.dirname(exe)),
+                               "Resources", fname)
+            if os.path.isfile(res):
+                return res
+        except (OSError, ValueError):
+            pass
     candidates = [
-        os.path.join(here, "resources", "Loadscope - Demo Workbook.xlsx"),
-        os.path.normpath(os.path.join(here, "..", "Resources",
-                                       "Loadscope - Demo Workbook.xlsx")),
+        os.path.join(here, "resources", fname),                          # dev tree
+        os.path.normpath(os.path.join(here, "..", "Resources", fname)),   # legacy
+        os.path.normpath(os.path.join(here, "..", "..", "Resources", fname)),
     ]
     for path in candidates:
         if os.path.isfile(path):

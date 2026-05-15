@@ -174,8 +174,20 @@ class FirstLaunchSplash(QDialog):
     def _build_logo(self):
         """Return a QLabel containing the Loadscope icon, or None if not found."""
         import os
+        import sys
         here = os.path.dirname(os.path.abspath(__file__))
-        candidates = [
+        candidates = []
+        # py2app: __file__ is inside Contents/Resources/lib/pythonXX.zip;
+        # resolve the real Contents/Resources/ via sys.executable first
+        # (proven-good pattern from setup_wizard.find_bundled_template()).
+        if getattr(sys, "frozen", False):
+            try:
+                exe = os.path.abspath(sys.executable)
+                candidates.append(os.path.join(
+                    os.path.dirname(os.path.dirname(exe)), "Resources", "icon.png"))
+            except (OSError, ValueError):
+                pass
+        candidates += [
             os.path.join(here, "resources", "icon.png"),
             os.path.normpath(os.path.join(here, "..", "docs", "assets", "icon.png")),
             os.path.normpath(os.path.join(here, "..", "Resources", "icon.png")),
