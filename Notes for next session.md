@@ -4,18 +4,28 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🌅 START HERE NEXT SESSION (2026-05-15) — v0.14.6 SHIPPED: Path B image demo + polish
+## 🌅 START HERE NEXT SESSION — END OF DAY 2026-05-15
 
-**v0.14.6 is SHIPPED + bundle-verified + Chad-reviewed** (`releases/latest`→v0.14.6, manifest 0.14.6, both assets). Tests 132/132.
+**MORNING RESUME PROMPT (Chad: paste this to start):**
+> Continue Loadscope. Read `Notes for next session.md` top section. v0.14.10 (Smart Setup) is shipped. Per the pre-beta roadmap the next item is the ballistic solver — its `app/ballistics.py` scaffold is a KNOWN-BROKEN draft (integrator constant wrong; needs correct McCoy/GNU-Ballistics G7-BC formula + the pro-solver-validation + disclaimer ship-gates). Pick up the solver there, or tell me a different priority. Operate in the hands-off daily cadence (`feedback-hands-off-daily-cadence`).
 
-### v0.14.6 (on top of the v0.14.5 Path B rebuild below)
-Chad reviewed the demo previews and approved. Two fixes:
-- White band under Load Log/Charts/Seating Depth = Excel print FOOTER pinning the bbox to page bottom (Ballistics/Load Library had none → already fine). `render_demo_screenshots.py` now strips headers/footers (openpyxl temp copy) before export → all 6 crop tight + display large. Re-rendered, visually verified.
-- End-screen "Close" button did nothing (same btn = "Skip tour"→skip() mid-tour, "Close" at end, but skip() re-ran end screen). Added `_ended` flag; skip() now self.close()s when ended. Verified headless (window closes).
+### Today shipped: v0.14.2 → v0.14.10 (huge day, all Chad-approved)
+Arc: pre-ship audits & hotfixes (0.14.2–0.14.4) → Path-B image demo, no Excel/no prompts (0.14.5) → demo polish (0.14.6) → unified single-window **shell** (0.14.7 Rifle&Setup panel, 0.14.8 Range&DOPE panel, **0.14.9 shell wired in**) → **0.14.10 Smart Setup** (cascading bullet/primer, locked turret safeguard, history dropdowns, new-load carry-over, Setup-bootstraps-workbook + folded field/date/alignment polish). `releases/latest`→**v0.14.10**, manifest 0.14.10, both assets, installed to /Applications & Chad-clicked. Tests **164**.
+
+### Ballistic solver — STATUS (next roadmap item)
+- **Path-B locked**: own zero-dep G7 point-mass solver (NOT pyballistics — scipy not bundled / dep-fragility). [[loadscope-ballistic-solver-v015]]
+- `app/ballistics.py` exists but is a **BROKEN-DRAFT scaffold, not wired, not shipped** (nothing imports it; safe no-op). Correct & reusable: module API, published G7 drag table, `air_density_ratio()` (self-verified ≈1.000 ICAO). **WRONG: the trajectory retardation constant (~7 orders off — caught by sanity test).** Needs the correct standard G7-BC point-mass formula (McCoy / GNU Ballistics) — this is safety-critical, NOT autonomous-guess work.
+- Ship-gates before the solver ships: (1) validate vs Hornady 4DOF / GeoBallistics / Applied Ballistics on the reference loads; (2) BC database = authoritative manufacturer-sourced values (do NOT fabricate — `component_data.json` has the maker-organized bullet/primer SEED, no BC values yet); (3) signed-disclaimer predicted-DOPE language + `DISCLAIMER_VERSION` bump (re-prompt all users); (4) predicted-vs-confirmed DOPE UX in the Range&DOPE panel + Chad review.
+
+### Other pre-beta items queued (see memories)
+Phase-3 live Results/Card panels + surface Save-to-Library / Print / Save-PDF / **Load Card** (already exists, menu-buried) + new Load-Library/history print ([[loadscope-appify-scoping]]). Website revamp + web demo + the FAQ-on-site idea + the full docs/onboarding overhaul ([[loadscope-docs-overhaul]], [[loadscope-website-audit-post-v014]]) — one shared pass before beta. Then descriptions/social → beta. Final new-user test ([[loadscope-test-as-new-user]]).
+
+### Operating mode
+Hands-off daily cadence is now the STANDING default — [[feedback-hands-off-daily-cadence]] (read first). Chad decides/reviews at the 3 hold gates; Claude drives everything else end-to-end + emails the morning prompt when Chad's offline.
 
 ### 🧭 PRE-BETA ROADMAP (Chad locked the order 2026-05-15) — [[loadscope-pre-beta-roadmap]]
 Ordered todo; do NOT do the website until the app is in final pre-beta form (else screenshots + web demo get redone):
-1. **Workbook UI change** — Phase 1 (Rifle & Setup) v0.14.7 + Phase 2 (Range Session & DOPE) v0.14.8 SHIPPED, both Chad-reviewed + bundle-verified. UNIFIED SHELL SHIPPED v0.14.9. Smart Setup BUILT+verified (cascading bullet/primer, turret safeguard, history, new-load carry-over, Setup-bootstraps-workbook) — checkpoints pushed, AWAITING Chad preview review then ship v0.14.10. [[loadscope-smart-setup]]
+1. **Workbook UI change — ✅ DONE/SHIPPED.** Phase 1 (Rifle&Setup) v0.14.7, Phase 2 (Range&DOPE) v0.14.8, unified SHELL v0.14.9, **Smart Setup v0.14.10** — all Chad-reviewed + bundle-verified + live. [[loadscope-smart-setup]] [[loadscope-shell-scoping]]
 2. **Ballistic solver** — predicted DOPE; ~2-3 days; major paid selling point; built into the new UI. [[loadscope-ballistic-solver-v015]]
 3. **Website revamp — ONCE, after 1&2**: fix drift + the compact "Without/With Loadscope" section (CONFIRMED captured) + add solver to pitch + the demo as a browser slideshow (reuse Path-B PNGs+narration). Re-render assets AFTER 1&2. [[loadscope-website-audit-post-v014]]
 4. **Update app descriptions EVERYWHERE + all social bios** — one coordinated launch with the website (solver = bigger pitch). Then → beta.
