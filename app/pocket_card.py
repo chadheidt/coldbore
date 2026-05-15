@@ -135,6 +135,21 @@ def _gather(workbook_path):
             "a Pocket Range Card."
         )
 
+    # v0.14.5 (Chad): the printed card should show ONLY the unit the
+    # shooter actually dials (Mil OR MOA), not both with the other half
+    # blank. Derive it from the scope click value (e.g. "0.1 Mil",
+    # "0.25 MOA"). Default to Mil for anything ambiguous/unknown.
+    click_str = str(data["header"].get("click") or "").lower()
+    data["unit"] = "moa" if "moa" in click_str else "mil"
+    elev_clk_k = "moa_clk" if data["unit"] == "moa" else "mils_clk"
+    wind_clk_k = "wind_moa_clk" if data["unit"] == "moa" else "wind_mils_clk"
+    # Only show a click-count column if it actually has values — an
+    # all-"—" column is just noise on a pocket card.
+    data["show_elev_clk"] = any(
+        r.get(elev_clk_k) not in (None, "") for r in data["dope"])
+    data["show_wind_clk"] = any(
+        r.get(wind_clk_k) not in (None, "") for r in data["dope"])
+
     data["workbook_name"] = os.path.splitext(os.path.basename(workbook_path))[0]
     data["generated_at"] = datetime.now().strftime("%b %d, %Y")
     return data
@@ -151,27 +166,51 @@ def _build_html(d):
         if logo_uri else ''
     )
 
+    # v0.14.5: render ONLY the shooter's unit (Mil or MOA), and only
+    # include click-count columns that actually have data.
+    unit = d.get("unit", "mil")
+    show_elev_clk = d.get("show_elev_clk", False)
+    show_wind_clk = d.get("show_wind_clk", False)
+    if unit == "moa":
+        elev_k, elev_clk_k = "moa_elev", "moa_clk"
+        wind_k, wind_clk_k = "wind_moa", "wind_moa_clk"
+        unit_lbl = "MOA"
+    else:
+        elev_k, elev_clk_k = "mils_elev", "mils_clk"
+        wind_k, wind_clk_k = "wind_mils", "wind_mils_clk"
+        unit_lbl = "Mils"
+
     # DOPE table rows
     dope_rows_html = []
     for row in d["dope"]:
         # Skip rows where range is empty (shouldn't happen — A9..A18 are 100..1000)
         if row.get("range") in (None, ""):
             continue
-        dope_rows_html.append(
-            "<tr>"
-            f"<td class='r'>{_fmt(row.get('range'))}</td>"
-            f"<td>{_fmt(row.get('mils_elev'))}</td>"
-            f"<td class='clk'>{_fmt(row.get('mils_clk'))}</td>"
-            f"<td>{_fmt(row.get('moa_elev'))}</td>"
-            f"<td class='clk'>{_fmt(row.get('moa_clk'))}</td>"
-            f"<td>{_fmt(row.get('wind_mils'))}</td>"
-            f"<td class='clk'>{_fmt(row.get('wind_mils_clk'))}</td>"
-            f"<td>{_fmt(row.get('wind_moa'))}</td>"
-            f"<td class='clk'>{_fmt(row.get('wind_moa_clk'))}</td>"
-            f"<td class='tof'>{_fmt(row.get('tof'))}</td>"
-            "</tr>"
-        )
+        cells = [f"<td class='r'>{_fmt(row.get('range'))}</td>",
+                 f"<td>{_fmt(row.get(elev_k))}</td>"]
+        if show_elev_clk:
+            cells.append(f"<td class='clk'>{_fmt(row.get(elev_clk_k))}</td>")
+        cells.append(f"<td>{_fmt(row.get(wind_k))}</td>")
+        if show_wind_clk:
+            cells.append(f"<td class='clk'>{_fmt(row.get(wind_clk_k))}</td>")
+        cells.append(f"<td class='tof'>{_fmt(row.get('tof'))}</td>")
+        dope_rows_html.append("<tr>" + "".join(cells) + "</tr>")
     dope_rows_str = "\n".join(dope_rows_html)
+
+    # Dynamic header matching the columns we actually render.
+    elev_span = 2 if show_elev_clk else 1
+    wind_span = 2 if show_wind_clk else 1
+    thead_html = (
+        '<tr>'
+        '<th rowspan="2">Range<br>(yd)</th>'
+        f'<th class="spanner" colspan="{elev_span}">Elev — {unit_lbl}</th>'
+        f'<th class="spanner" colspan="{wind_span}">Wind 10 mph ({unit_lbl})</th>'
+        '<th rowspan="2">TOF<br>(s)</th>'
+        '</tr><tr>'
+        f'<th>{unit_lbl}</th>{"<th>clk</th>" if show_elev_clk else ""}'
+        f'<th>{unit_lbl}</th>{"<th>clk</th>" if show_wind_clk else ""}'
+        '</tr>'
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -318,20 +357,7 @@ def _build_html(d):
   </div>
   <table>
     <thead>
-      <tr>
-        <th rowspan="2">Range<br>(yd)</th>
-        <th class="spanner" colspan="2">Elev — Mils</th>
-        <th class="spanner" colspan="2">Elev — MOA</th>
-        <th class="spanner" colspan="2">Wind 10 mph (Mils)</th>
-        <th class="spanner" colspan="2">Wind 10 mph (MOA)</th>
-        <th rowspan="2">TOF<br>(s)</th>
-      </tr>
-      <tr>
-        <th>Mils</th><th>clk</th>
-        <th>MOA</th><th>clk</th>
-        <th>Mils</th><th>clk</th>
-        <th>MOA</th><th>clk</th>
-      </tr>
+      {thead_html}
     </thead>
     <tbody>
       {dope_rows_str}

@@ -1821,7 +1821,10 @@ class MainWindow(QMainWindow):
         """Open the currently-active workbook in Excel (or whatever app is
         registered to open .xlsx files). Useful when Excel ends up behind
         the Loadscope window and the user can't find their workbook."""
-        wb_path = self._selected_workbook()
+        # Demo-aware: a licensed user with no imported workbook yet still
+        # gets something to look at (the bundled demo workbook) instead
+        # of a dead, greyed-out menu item (Chad 2026-05-15).
+        wb_path = self._resolve_demo_action_workbook()
         if not wb_path or not os.path.isfile(wb_path):
             self._log("No workbook to open yet. Drop CSVs and click Run Import to create one.",
                       color=theme.LOG_DIM)
@@ -1847,7 +1850,10 @@ class MainWindow(QMainWindow):
         """Enable the 'Open Workbook in Excel' menu item only when there's
         actually a workbook to open. Called on startup and whenever the
         workbook picker selection changes."""
-        wb = self._selected_workbook()
+        # Demo-aware: enabled if the user has a workbook OR the bundled
+        # demo workbook is available, so a no-data licensed user can
+        # still open/print the demo (not a permanently-greyed menu).
+        wb = self._resolve_demo_action_workbook()
         enabled = bool(wb and os.path.isfile(wb))
         for attr in ("_open_wb_action", "_print_wb_action"):
             action = getattr(self, attr, None)
