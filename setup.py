@@ -116,6 +116,15 @@ else:
     print(f"WARNING: demo screenshots missing at {DEMO_SHOTS_DIR} — run "
           f"tools/render_demo_screenshots.py before building the .app")
 
+# v0.14.10 Smart Setup: component data (bullets/primers by maker,
+# turret-click safeguard list, chrono/brass) — also the solver BC DB
+# seed. component_data.get_component_data() resolves it in Resources/.
+COMPONENT_DATA = HERE / "app" / "resources" / "component_data.json"
+if COMPONENT_DATA.exists():
+    DATA_FILES.append(str(COMPONENT_DATA))
+else:
+    print(f"WARNING: component_data.json missing at {COMPONENT_DATA}")
+
 # v0.14: bundle the Quick Start .docx so setup_wizard can copy it into
 # the user's project folder on first launch (Chad 2026-05-14: the Start
 # Here footer pointed users to "your project folder" but the docx never
@@ -194,6 +203,8 @@ OPTIONS = {
         "config",
         "excel_chrome",
         "shell",
+        "component_data",
+        "smart_fields",
         "rifle_setup_dialog",
         "dope_entry_dialog",
         "setup_wizard",

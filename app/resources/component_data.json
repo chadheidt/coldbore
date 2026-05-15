@@ -1,0 +1,111 @@
+{
+  "_comment": "Curated component data for Smart Setup dropdowns. Bullets/primers are manufacturer-organized for the cascading pickers AND are the SEED of the ballistic-solver BC database (the solver adds g7/g1/bc fields + grows the bullet list to 500+; do NOT restructure, only grow). turret_clicks MUST exactly match the Ballistics click-count formula strings.",
+  "schema_version": 1,
+  "turret_clicks": ["0.1 Mil", "0.05 Mil", "1/4 MOA", "1/8 MOA"],
+  "chronographs": [
+    "Garmin Xero C1 Pro",
+    "Garmin Xero C1",
+    "LabRadar",
+    "LabRadar LX",
+    "MagnetoSpeed V3",
+    "MagnetoSpeed Sporter",
+    "Caldwell VelociRadar",
+    "Caldwell Chronograph G2",
+    "Competition Electronics ProChrono DLX",
+    "Athlon Rangecraft"
+  ],
+  "brass": [
+    "Lapua", "Hornady", "Peterson", "Alpha Munitions", "ADG",
+    "Norma", "Starline", "Winchester", "Remington", "Nosler",
+    "Federal", "Sako"
+  ],
+  "primers": {
+    "CCI": ["BR-2", "BR-4", "200", "250", "400", "450", "#34", "#41", "550"],
+    "Federal": ["210", "210M (GM210M)", "205", "205M (GM205M)", "215", "215M (GM215M)"],
+    "Winchester": ["WLR", "WLRM", "WSR", "WSRM", "WLP", "WLPM"],
+    "Remington": ["9 1/2", "9 1/2M", "7 1/2 BR", "6 1/2"],
+    "Sellier & Bellot": ["LR", "SR", "LRM"],
+    "Murom (Wolf/Tula)": ["KVB-7", "KVB-223", "Small Rifle", "Small Rifle Magnum"],
+    "RWS": ["5341 LR", "4033 SR"],
+    "Ginex": ["Large Rifle", "Small Rifle"]
+  },
+  "bullets": {
+    "Hornady": [
+      {"name": "ELD-M", "weight": 140, "cal": "6.5mm"},
+      {"name": "ELD-M", "weight": 147, "cal": "6.5mm"},
+      {"name": "ELD-M", "weight": 153, "cal": "6.5mm"},
+      {"name": "ELD-M", "weight": 178, "cal": ".308"},
+      {"name": "ELD-M", "weight": 168, "cal": ".308"},
+      {"name": "ELD-M", "weight": 225, "cal": ".30"},
+      {"name": "ELD-M", "weight": 109, "cal": "6mm"},
+      {"name": "ELD-X", "weight": 143, "cal": "6.5mm"},
+      {"name": "ELD-X", "weight": 178, "cal": ".308"},
+      {"name": "ELD-X", "weight": 212, "cal": ".30"},
+      {"name": "A-Tip", "weight": 135, "cal": "6.5mm"},
+      {"name": "A-Tip", "weight": 153, "cal": "6.5mm"},
+      {"name": "A-Tip", "weight": 230, "cal": ".30"},
+      {"name": "BTHP Match", "weight": 168, "cal": ".308"},
+      {"name": "BTHP Match", "weight": 75, "cal": ".224"}
+    ],
+    "Berger": [
+      {"name": "Hybrid Target", "weight": 140, "cal": "6.5mm"},
+      {"name": "Hybrid Target", "weight": 144, "cal": "6.5mm"},
+      {"name": "Hybrid Target", "weight": 156, "cal": "6.5mm"},
+      {"name": "Hybrid Target", "weight": 185, "cal": ".308"},
+      {"name": "Hybrid Target", "weight": 215, "cal": ".30"},
+      {"name": "VLD Target", "weight": 140, "cal": "6.5mm"},
+      {"name": "VLD Target", "weight": 175, "cal": ".308"},
+      {"name": "Elite Hunter", "weight": 156, "cal": "6.5mm"},
+      {"name": "Elite Hunter", "weight": 168, "cal": ".308"},
+      {"name": "Long Range HT", "weight": 245, "cal": ".30"},
+      {"name": "Hybrid Target", "weight": 105, "cal": "6mm"},
+      {"name": "Flat Base Target", "weight": 73, "cal": ".224"}
+    ],
+    "Sierra": [
+      {"name": "MatchKing", "weight": 142, "cal": "6.5mm"},
+      {"name": "MatchKing", "weight": 168, "cal": ".308"},
+      {"name": "MatchKing", "weight": 175, "cal": ".308"},
+      {"name": "MatchKing", "weight": 220, "cal": ".30"},
+      {"name": "Tipped MatchKing", "weight": 150, "cal": "6.5mm"},
+      {"name": "Tipped MatchKing", "weight": 175, "cal": ".308"},
+      {"name": "Tipped MatchKing", "weight": 77, "cal": ".224"},
+      {"name": "MatchKing", "weight": 107, "cal": "6mm"},
+      {"name": "GameKing", "weight": 140, "cal": "6.5mm"}
+    ],
+    "Lapua": [
+      {"name": "Scenar-L", "weight": 136, "cal": "6.5mm"},
+      {"name": "Scenar-L", "weight": 150, "cal": "6.5mm"},
+      {"name": "Scenar-L", "weight": 167, "cal": ".308"},
+      {"name": "Scenar-L", "weight": 175, "cal": ".308"},
+      {"name": "Scenar", "weight": 139, "cal": "6.5mm"},
+      {"name": "Scenar", "weight": 185, "cal": ".308"},
+      {"name": "Naturalis", "weight": 155, "cal": ".308"}
+    ],
+    "Nosler": [
+      {"name": "RDF", "weight": 140, "cal": "6.5mm"},
+      {"name": "RDF", "weight": 175, "cal": ".308"},
+      {"name": "RDF", "weight": 70, "cal": ".224"},
+      {"name": "Custom Competition", "weight": 142, "cal": "6.5mm"},
+      {"name": "AccuBond Long Range", "weight": 142, "cal": "6.5mm"},
+      {"name": "AccuBond Long Range", "weight": 190, "cal": ".308"},
+      {"name": "Ballistic Tip", "weight": 140, "cal": "6.5mm"}
+    ],
+    "Barnes": [
+      {"name": "LRX", "weight": 127, "cal": "6.5mm"},
+      {"name": "LRX", "weight": 175, "cal": ".308"},
+      {"name": "TTSX", "weight": 130, "cal": "6.5mm"},
+      {"name": "TTSX", "weight": 168, "cal": ".308"},
+      {"name": "Match Burner", "weight": 140, "cal": "6.5mm"}
+    ],
+    "Cutting Edge": [
+      {"name": "Lazer", "weight": 140, "cal": "6.5mm"},
+      {"name": "Lazer", "weight": 195, "cal": ".308"},
+      {"name": "MTH", "weight": 140, "cal": "6.5mm"},
+      {"name": "MTH", "weight": 200, "cal": ".308"}
+    ],
+    "Lehigh Defense": [
+      {"name": "Controlled Chaos", "weight": 127, "cal": "6.5mm"},
+      {"name": "Match Solid", "weight": 145, "cal": "6.5mm"}
+    ]
+  }
+}

@@ -69,6 +69,40 @@ def save_config(cfg):
         json.dump(cfg, f, indent=2)
 
 
+# --- Smart Setup: per-field remembered history -------------------------
+# "Loadscope remembers your stuff" — shooter names, custom brass, etc.
+# the user typed before, surfaced as dropdown suggestions.
+
+_HISTORY_CAP = 25
+
+
+def get_field_history(field):
+    """Most-recent-first list of values the user previously entered for
+    this Smart Setup field. Never raises."""
+    try:
+        return list(load_config().get("field_history", {}).get(field, []))
+    except Exception:
+        return []
+
+
+def add_field_history(field, value):
+    """Remember `value` for `field` (most-recent-first, deduped
+    case-insensitively, capped). No-op for blanks. Never raises."""
+    v = (value or "").strip()
+    if not v:
+        return
+    try:
+        cfg = load_config()
+        hist = cfg.setdefault("field_history", {})
+        cur = [x for x in hist.get(field, [])
+               if x.strip().lower() != v.lower()]
+        cur.insert(0, v)
+        hist[field] = cur[:_HISTORY_CAP]
+        save_config(cfg)
+    except Exception:
+        pass
+
+
 # Generic locations a returning user might already have a project folder in.
 # Intentionally does NOT include any developer-specific paths — those would
 # silently auto-adopt on a beta tester's machine if they happen to have a

@@ -33,7 +33,9 @@ def test_field_map_is_sane():
     # Powder G9 (formula) and Date B13 (typed) are intentionally excluded.
     assert "G9" not in cells
     assert "B13" not in cells
-    assert all(k in ("text", "number") for *_x, k in RIFLE_SETUP_FIELDS)
+    valid_kinds = {"text", "number", "turret", "bullet", "primer",
+                   "brass", "chrono", "shooter", "distance"}
+    assert all(k in valid_kinds for *_x, k in RIFLE_SETUP_FIELDS)
 
 
 def test_read_returns_every_field(wb):

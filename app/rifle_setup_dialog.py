@@ -39,25 +39,37 @@ except ImportError:  # allow import for unit tests without PyQt5
 
 from openpyxl import load_workbook
 
-# (section, label, Load Log value-cell, kind). kind: "text" | "number".
+import component_data as _cd
+import smart_fields as _sf
+
+# (section, label, Load Log value-cell, kind). kind drives the widget:
+#   text|number  -> QLineEdit (number coerces to float on save)
+#   turret       -> LockedCombo (exact accepted strings — safeguard)
+#   bullet|primer-> CascadeField (manufacturer -> item, + Other)
+#   brass|chrono|shooter -> HistoryCombo (curated + remembered history)
+#   distance     -> HistoryCombo (presets + free) ; saved numeric
 # Verified against the demo workbook's Load Log header layout.
 RIFLE_SETUP_FIELDS = [
     ("Rifle & Shooter", "Rifle",     "B5",  "text"),
-    ("Rifle & Shooter", "Shooter",   "G5",  "text"),
+    ("Rifle & Shooter", "Shooter",   "G5",  "shooter"),
     ("Rifle & Shooter", "Cartridge", "L5",  "text"),
     ("Rifle & Shooter", "Barrel",    "B6",  "text"),
     ("Rifle & Shooter", "Optic",     "G6",  "text"),
-    ("Rifle & Shooter", "Chrono",    "L6",  "text"),
-    ("Rifle & Shooter", "Scope click (turret)", "G7", "text"),
-    ("Load Components", "Bullet",    "B9",  "text"),
-    ("Load Components", "Primer",    "L9",  "text"),
-    ("Load Components", "Brass",     "O9",  "text"),
+    ("Rifle & Shooter", "Chrono",    "L6",  "chrono"),
+    ("Rifle & Shooter", "Scope click (turret)", "G7", "turret"),
+    ("Load Components", "Bullet",    "B9",  "bullet"),
+    ("Load Components", "Primer",    "L9",  "primer"),
+    ("Load Components", "Brass",     "O9",  "brass"),
     ("Load Components", "CBTO (in)", "B10", "number"),
     ("Load Components", "OAL (in)",  "G10", "number"),
-    ("Load Components", "Distance (yd)", "L10", "number"),
+    ("Load Components", "Distance (yd)", "L10", "distance"),
     ("Test Session",    "Temp (°F)", "G13", "number"),
     ("Test Session",    "Conditions / notes", "L13", "text"),
 ]
+
+# kinds whose value is written to the cell as a float (keeps the
+# workbook's numeric formulas working).
+_NUMERIC_KINDS = ("number", "distance")
 
 _SHEET = "Load Log"
 
@@ -92,7 +104,7 @@ def write_rifle_setup(workbook_path, values):
         if cell not in kinds:
             continue
         new = raw.strip()
-        if kinds[cell] == "number":
+        if kinds[cell] in _NUMERIC_KINDS:
             if new == "":
                 continue
             try:
@@ -119,6 +131,37 @@ def _as_float(v):
 
 
 if QWidget is not None:
+
+    class _LineField(QLineEdit):
+        """Plain text/number field with the smart-widget interface so
+        the panel + save() treat every field uniformly."""
+
+        def value(self):
+            return self.text().strip()
+
+        def set_value(self, s):
+            self.setText(s or "")
+
+        def commit(self):
+            pass
+
+    def _build_field(kind):
+        if kind == "turret":
+            return _sf.LockedCombo(_cd.turret_clicks())
+        if kind == "bullet":
+            return _sf.CascadeField("bullet")
+        if kind == "primer":
+            return _sf.CascadeField("primer")
+        if kind == "brass":
+            return _sf.HistoryCombo("brass", _cd.brass_options())
+        if kind == "chrono":
+            return _sf.HistoryCombo("chrono", _cd.chronographs())
+        if kind == "shooter":
+            return _sf.HistoryCombo("shooter", [])
+        if kind == "distance":
+            return _sf.HistoryCombo("distance",
+                                    ["50", "100", "200", "300"])
+        return _LineField()
 
     class RifleSetupPanel(QWidget):
         """Embeddable Rifle & Setup form (title + intro + fields). No
@@ -181,7 +224,7 @@ if QWidget is not None:
             form.setFieldGrowthPolicy(QFormLayout.AllNonFixedFieldsGrow)
             layout.addLayout(form)
             last_section = None
-            for section, label, cell, _kind in RIFLE_SETUP_FIELDS:
+            for section, label, cell, kind in RIFLE_SETUP_FIELDS:
                 if section != last_section:
                     hdr = QLabel(section.upper())
                     if self._t:
@@ -192,12 +235,14 @@ if QWidget is not None:
                             f"font-weight: bold; padding-top: 8px;")
                     form.addRow(hdr)  # spans both columns
                     last_section = section
-                edit = QLineEdit(current.get(cell, ""))
-                edit.setMinimumHeight(34)
-                edit.setStyleSheet("QLineEdit { padding: 6px 10px; "
-                                   "font-size: 14px; }")
-                self._edits[cell] = edit
-                form.addRow(label + ":", edit)
+                w = _build_field(kind)
+                w.set_value(current.get(cell, ""))
+                w.setMinimumHeight(34)
+                if isinstance(w, _LineField):
+                    w.setStyleSheet("QLineEdit { padding: 6px 10px; "
+                                    "font-size: 14px; }")
+                self._edits[cell] = w
+                form.addRow(label + ":", w)
             layout.addStretch(1)
 
             # When embedded in the shell there's no dialog OK button, so
@@ -234,13 +279,20 @@ if QWidget is not None:
         def save(self):
             """Returns (status, payload): ("ok", changed_list) |
             ("locked", None) | ("error", message)."""
-            values = {c: e.text() for c, e in self._edits.items()}
+            values = {c: w.value() for c, w in self._edits.items()}
             try:
-                return ("ok", write_rifle_setup(self._wb_path, values))
+                changed = write_rifle_setup(self._wb_path, values)
             except PermissionError:
                 return ("locked", None)
             except Exception as e:
                 return ("error", str(e))
+            # Remember history-backed entries only after a clean save.
+            for w in self._edits.values():
+                try:
+                    w.commit()
+                except Exception:
+                    pass
+            return ("ok", changed)
 
 
 if QDialog is not None:
