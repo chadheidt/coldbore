@@ -30,10 +30,11 @@ try:
         QLineEdit,
         QMessageBox,
         QVBoxLayout,
+        QWidget,
     )
 except ImportError:  # allow import for unit tests without PyQt5
     QDialog = QDialogButtonBox = QFormLayout = QLabel = QLineEdit = None
-    QMessageBox = QVBoxLayout = QFont = None
+    QMessageBox = QVBoxLayout = QFont = QWidget = None
 
 from openpyxl import load_workbook
 
@@ -116,25 +117,24 @@ def _as_float(v):
         return None
 
 
-if QDialog is not None:
+if QWidget is not None:
 
-    class RifleSetupDialog(QDialog):
-        """Themed Rifle & Setup editor. Mirrors new_cycle_dialog's
-        QDialog + theme + QFormLayout + Ok/Cancel pattern."""
+    class RifleSetupPanel(QWidget):
+        """Embeddable Rifle & Setup form (title + intro + fields). No
+        dialog chrome — the shell embeds this directly; RifleSetupDialog
+        wraps it with Save/Cancel for the menu flow. save() does the
+        write via the pure helpers and returns a result tuple so the
+        caller decides how to surface success/errors (no QMessageBox
+        here -> testable + embeddable)."""
 
-        def __init__(self, workbook_path, parent=None):
+        def __init__(self, workbook_path, parent=None, show_intro=True):
             super().__init__(parent)
             self._wb_path = workbook_path
-            self.saved = False
             try:
                 import theme
                 self._t = theme
             except ImportError:
                 self._t = None
-
-            self.setWindowTitle("Loadscope — Rifle & Setup")
-            self.setModal(True)
-            self.setMinimumWidth(560)
 
             layout = QVBoxLayout(self)
             layout.setContentsMargins(24, 20, 24, 16)
@@ -149,22 +149,23 @@ if QDialog is not None:
                 title.setStyleSheet(f"color: {self._t.TEXT_PRIMARY};")
             layout.addWidget(title)
 
-            intro = QLabel(
-                "Edit your rifle, shooter, components, and session info "
-                "here — Loadscope writes it straight into your workbook."
-            )
-            intro.setWordWrap(True)
-            if self._t:
-                intro.setStyleSheet(f"color: {self._t.TEXT_SECONDARY};")
-            layout.addWidget(intro)
+            if show_intro:
+                intro = QLabel(
+                    "Edit your rifle, shooter, components, and session "
+                    "info here — Loadscope writes it straight into your "
+                    "workbook.")
+                intro.setWordWrap(True)
+                if self._t:
+                    intro.setStyleSheet(
+                        f"color: {self._t.TEXT_SECONDARY};")
+                layout.addWidget(intro)
 
             try:
                 current = read_rifle_setup(workbook_path)
+                self.read_error = None
             except Exception as e:
-                QMessageBox.critical(
-                    self, "Couldn't read workbook",
-                    f"Loadscope couldn't read the workbook:\n\n{e}")
                 current = {c: "" for _s, _l, c, _k in RIFLE_SETUP_FIELDS}
+                self.read_error = str(e)
 
             self._edits = {}
             last_section = None
@@ -186,6 +187,42 @@ if QDialog is not None:
                 edit = QLineEdit(current.get(cell, ""))
                 self._edits[cell] = edit
                 form.addRow(label + ":", edit)
+            layout.addStretch(1)
+
+        def save(self):
+            """Returns (status, payload): ("ok", changed_list) |
+            ("locked", None) | ("error", message)."""
+            values = {c: e.text() for c, e in self._edits.items()}
+            try:
+                return ("ok", write_rifle_setup(self._wb_path, values))
+            except PermissionError:
+                return ("locked", None)
+            except Exception as e:
+                return ("error", str(e))
+
+
+if QDialog is not None:
+
+    class RifleSetupDialog(QDialog):
+        """Thin modal wrapper around RifleSetupPanel — preserves the
+        exact menu-launched flow (Workbook → Rifle & Setup)."""
+
+        def __init__(self, workbook_path, parent=None):
+            super().__init__(parent)
+            self.saved = False
+            self.setWindowTitle("Loadscope — Rifle & Setup")
+            self.setModal(True)
+            self.setMinimumWidth(560)
+
+            layout = QVBoxLayout(self)
+            layout.setContentsMargins(0, 0, 0, 0)
+            self._panel = RifleSetupPanel(workbook_path, parent=self)
+            layout.addWidget(self._panel)
+            if self._panel.read_error:
+                QMessageBox.critical(
+                    self, "Couldn't read workbook",
+                    "Loadscope couldn't read the workbook:\n\n"
+                    f"{self._panel.read_error}")
 
             btns = QDialogButtonBox(
                 QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
@@ -195,24 +232,25 @@ if QDialog is not None:
                 ok.setText("Save")
             btns.accepted.connect(self._save)
             btns.rejected.connect(self.reject)
-            layout.addWidget(btns)
+            cont = QVBoxLayout()
+            cont.setContentsMargins(24, 0, 24, 16)
+            cont.addWidget(btns)
+            layout.addLayout(cont)
 
         def _save(self):
-            values = {c: e.text() for c, e in self._edits.items()}
-            try:
-                changed = write_rifle_setup(self._wb_path, values)
-            except PermissionError:
+            status, payload = self._panel.save()
+            if status == "locked":
                 QMessageBox.warning(
                     self, "Workbook is open",
                     "Close the workbook in Excel and try again so "
                     "Loadscope can save your changes.")
                 return
-            except Exception as e:
+            if status == "error":
                 QMessageBox.critical(
                     self, "Couldn't save",
-                    f"Loadscope couldn't write to the workbook:\n\n{e}")
+                    f"Loadscope couldn't write to the workbook:\n\n{payload}")
                 return
-            self.saved = bool(changed)
+            self.saved = bool(payload)
             self.accept()
 
 

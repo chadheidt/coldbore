@@ -167,33 +167,29 @@ def write_dope(workbook_path, unit, rows, date_str=None):
     return changed
 
 
-if QDialog is not None:
+if QWidget is not None:
 
-    class DopeEntryDialog(QDialog):
-        """Themed Range Session editor: session date + unit-aware DOPE
-        grid. Mirrors rifle_setup_dialog's structure."""
+    class DopeEntryPanel(QWidget):
+        """Embeddable Range Session & DOPE form. No dialog chrome — the
+        shell embeds this; DopeEntryDialog wraps it for the menu flow.
+        save() returns a result tuple (no QMessageBox here -> testable
+        + embeddable)."""
 
-        def __init__(self, workbook_path, parent=None):
+        def __init__(self, workbook_path, parent=None, show_intro=True):
             super().__init__(parent)
             self._wb_path = workbook_path
-            self.saved = False
             try:
                 import theme
                 self._t = theme
             except ImportError:
                 self._t = None
 
-            self.setWindowTitle("Loadscope — Range Session & DOPE")
-            self.setModal(True)
-            self.setMinimumWidth(620)
-
             try:
                 data = read_dope(workbook_path)
+                self.read_error = None
             except Exception as e:
-                QMessageBox.critical(
-                    self, "Couldn't read workbook",
-                    f"Loadscope couldn't read the workbook:\n\n{e}")
                 data = {"unit": "mil", "date": "", "rows": []}
+                self.read_error = str(e)
             self._unit = data["unit"]
             ulabel = "MOA" if self._unit == "moa" else "Mils"
 
@@ -210,14 +206,16 @@ if QDialog is not None:
                 title.setStyleSheet(f"color: {self._t.TEXT_PRIMARY};")
             layout.addWidget(title)
 
-            intro = QLabel(
-                f"Enter what you dialed at the range, in {ulabel} "
-                "(your scope's unit). Click counts auto-fill in the "
-                "workbook. Leave a row blank if you didn't shoot it.")
-            intro.setWordWrap(True)
-            if self._t:
-                intro.setStyleSheet(f"color: {self._t.TEXT_SECONDARY};")
-            layout.addWidget(intro)
+            if show_intro:
+                intro = QLabel(
+                    f"Enter what you dialed at the range, in {ulabel} "
+                    "(your scope's unit). Click counts auto-fill in the "
+                    "workbook. Leave a row blank if you didn't shoot it.")
+                intro.setWordWrap(True)
+                if self._t:
+                    intro.setStyleSheet(
+                        f"color: {self._t.TEXT_SECONDARY};")
+                layout.addWidget(intro)
 
             date_row = QGridLayout()
             date_row.addWidget(QLabel("Session date (YYYY-MM-DD):"), 0, 0)
@@ -257,10 +255,6 @@ if QDialog is not None:
                 grid.addWidget(e_nt, i, 3)
                 self._row_edits[rnum] = (e_el, e_wd, e_nt)
 
-            # Pool any extra vertical space BELOW the last row so the
-            # header + rows stay packed together at the top (otherwise
-            # the QScrollArea stretches the grid and leaves a big gap
-            # between the headers and the first row).
             grid.setRowStretch(len(data["rows"]) + 2, 1)
 
             holder = QWidget()
@@ -270,6 +264,46 @@ if QDialog is not None:
             scroll.setWidget(holder)
             layout.addWidget(scroll, stretch=1)
 
+        def save(self):
+            """Returns (status, payload): ("ok", changed) |
+            ("locked", None) | ("error", message)."""
+            rows = [{"row": rn,
+                     "elev": el.text(),
+                     "wind": wd.text(),
+                     "notes": nt.text()}
+                    for rn, (el, wd, nt) in self._row_edits.items()]
+            try:
+                return ("ok", write_dope(self._wb_path, self._unit, rows,
+                                         self._date_edit.text()))
+            except PermissionError:
+                return ("locked", None)
+            except Exception as e:
+                return ("error", str(e))
+
+
+if QDialog is not None:
+
+    class DopeEntryDialog(QDialog):
+        """Thin modal wrapper around DopeEntryPanel — preserves the
+        menu-launched flow (Workbook → Range Session & DOPE)."""
+
+        def __init__(self, workbook_path, parent=None):
+            super().__init__(parent)
+            self.saved = False
+            self.setWindowTitle("Loadscope — Range Session & DOPE")
+            self.setModal(True)
+            self.setMinimumWidth(620)
+
+            layout = QVBoxLayout(self)
+            layout.setContentsMargins(0, 0, 0, 0)
+            self._panel = DopeEntryPanel(workbook_path, parent=self)
+            layout.addWidget(self._panel)
+            if self._panel.read_error:
+                QMessageBox.critical(
+                    self, "Couldn't read workbook",
+                    "Loadscope couldn't read the workbook:\n\n"
+                    f"{self._panel.read_error}")
+
             btns = QDialogButtonBox(
                 QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
             ok = btns.button(QDialogButtonBox.Ok)
@@ -278,29 +312,25 @@ if QDialog is not None:
                 ok.setText("Save")
             btns.accepted.connect(self._save)
             btns.rejected.connect(self.reject)
-            layout.addWidget(btns)
+            cont = QVBoxLayout()
+            cont.setContentsMargins(24, 0, 24, 16)
+            cont.addWidget(btns)
+            layout.addLayout(cont)
 
         def _save(self):
-            rows = [{"row": rn,
-                     "elev": el.text(),
-                     "wind": wd.text(),
-                     "notes": nt.text()}
-                    for rn, (el, wd, nt) in self._row_edits.items()]
-            try:
-                changed = write_dope(self._wb_path, self._unit, rows,
-                                     self._date_edit.text())
-            except PermissionError:
+            status, payload = self._panel.save()
+            if status == "locked":
                 QMessageBox.warning(
                     self, "Workbook is open",
                     "Close the workbook in Excel and try again so "
                     "Loadscope can save your DOPE.")
                 return
-            except Exception as e:
+            if status == "error":
                 QMessageBox.critical(
                     self, "Couldn't save",
-                    f"Loadscope couldn't write to the workbook:\n\n{e}")
+                    f"Loadscope couldn't write to the workbook:\n\n{payload}")
                 return
-            self.saved = bool(changed)
+            self.saved = bool(payload)
             self.accept()
 
 
