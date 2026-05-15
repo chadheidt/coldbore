@@ -4,9 +4,20 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🌅 START HERE NEXT SESSION (2026-05-15) — v0.14.5 SHIPPED: Path B image demo (no Excel)
+## 🌅 START HERE NEXT SESSION (2026-05-15) — v0.14.6 SHIPPED: Path B image demo + polish
 
-**v0.14.5 is SHIPPED + bundle-verified** (`releases/latest`→v0.14.5, manifest 0.14.5, both assets). Tests 132/132.
+**v0.14.6 is SHIPPED + bundle-verified + Chad-reviewed** (`releases/latest`→v0.14.6, manifest 0.14.6, both assets). Tests 132/132.
+
+### v0.14.6 (on top of the v0.14.5 Path B rebuild below)
+Chad reviewed the demo previews and approved. Two fixes:
+- White band under Load Log/Charts/Seating Depth = Excel print FOOTER pinning the bbox to page bottom (Ballistics/Load Library had none → already fine). `render_demo_screenshots.py` now strips headers/footers (openpyxl temp copy) before export → all 6 crop tight + display large. Re-rendered, visually verified.
+- End-screen "Close" button did nothing (same btn = "Skip tour"→skip() mid-tour, "Close" at end, but skip() re-ran end screen). Added `_ended` flag; skip() now self.close()s when ended. Verified headless (window closes).
+
+### NEW future items (Chad asked 2026-05-15, both saved to memory)
+- **Put the demo tour on the website** — Path B made it ~free (same PNGs + narration). High-value top-of-funnel. See [[loadscope-website-audit-post-v014]] (added section).
+- **App-ify the workbook** — bring the clean Path-B format to the REAL app: native input forms (rifle/shooter info + typed data) writing into the .xlsx, Excel as hidden engine. Substantial roadmap effort, design at polish/commerce phase. See [[loadscope-appify-workbook]].
+
+### v0.14.5 is SHIPPED + bundle-verified (Path B rebuild — detail below)
 
 ### v0.14.5 — Path B pre-rendered demo (Chad-approved pivot)
 The Excel-driven demo kept producing bugs (cut-off pocket card, Load Library showing the Range Card, "not the pretty card", 4 permission prompts, Excel can't position its own window). Chad chose **Path B**. Done + self-verified by Claude (no "go test it Chad"):
