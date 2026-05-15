@@ -1,9 +1,9 @@
 {
-  "app_version": "0.14.9",
+  "app_version": "0.14.10",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.14.9 - Loadscope is now ONE window. A new left-side menu (Import Data / Rifle & Setup / Range & DOPE / Results / Pocket Card) replaces hunting through menus - your import screen, the Rifle & Setup form, and the Range & DOPE form all live in one place with Save built in. The Workbook menu items still work too. Foundation for the polished single-window app; more panels (live Results, Card) coming next.",
+  "app_release_notes": "v0.14.10 - Smart Setup. Rifle & Setup and Range & DOPE are reworked: cascading Bullet and Primer pickers (choose maker, then the bullet/primer), a locked Scope-click dropdown so click math can't break, dropdowns for Chronograph/Brass/Shooter/Distance that remember what you've used, a new load carries over your rifle setup (fresh components), and you can set up your rifle BEFORE importing (Loadscope creates the workbook for you). Plus bigger input fields, MM/DD/YY dates, and aligned columns.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
