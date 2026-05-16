@@ -171,6 +171,15 @@ pairs (Lapua, Nosler, Barnes — like Berger) should dual-source more
 cleanly. Coverage climbs post-launch via data-only `bc_database_version`
 bumps; it never blocks a ship.
 
+
+## TOLERANCE POLICY — 2026-05-16 (Chad decision: independent-source ΔG7 ≤ 0.010)
+
+Corroboration tolerance, applied UNIFORMLY + documented per-bullet (Δ in `bc_src`):
+- **Two INDEPENDENT authoritative measurements** (e.g. maker's own lab G7 vs Litz-measured G7): agree if **ΔG7 ≤ 0.010 (≈4%)**. Catches wrong-bullet/gross errors (those are 0.03–0.10+) without blanking correctly-identified bullets over normal lab-vs-lab spread.
+- **Same number copied** (manufacturer page vs JBM that transcribed it): keep strict **ΔG7 ≤ 0.006** (deltas there are ~0.000).
+- Ratio sanity (G1/G7 ≈ 1.9–2.15) still used where only cross-model values exist.
+Retroactive effect: .308 175 SMK (Sierra-own 0.250 / Litz 0.243, Δ0.007) and Lapua .308 167 (cat 0.223 / Litz 0.216, Δ0.007) now CORROBORATE.
+
 ## 61-SEED FIRST PASS COMPLETE — 24/61 dual-corroborated (2026-05-16)
 
 | Maker | Curated | Notes |

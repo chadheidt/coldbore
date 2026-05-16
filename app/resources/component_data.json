@@ -266,22 +266,30 @@
       {
         "name": "MatchKing",
         "weight": 142,
-        "cal": "6.5mm"
+        "cal": "6.5mm",
+        "g7": 0.303,
+        "bc_src": "Sierra published G7 (sierrabullets.com); xLitz G7 0.301 (\u03940.002)"
       },
       {
         "name": "MatchKing",
         "weight": 168,
-        "cal": ".308"
+        "cal": ".308",
+        "g7": 0.224,
+        "bc_src": "Sierra published G7 (sierrabullets.com); xLitz G7 0.218 (\u03940.006)"
       },
       {
         "name": "MatchKing",
         "weight": 175,
-        "cal": ".308"
+        "cal": ".308",
+        "g7": 0.25,
+        "bc_src": "Sierra published G7 (sierrabullets.com); xLitz G7 0.243 (\u03940.007 \u22640.010 indep-source)"
       },
       {
         "name": "MatchKing",
         "weight": 220,
-        "cal": ".30"
+        "cal": ".30",
+        "g7": 0.313,
+        "bc_src": "Sierra published G7 (sierrabullets.com); xLitz G7 0.310 (\u03940.003)"
       },
       {
         "name": "Tipped MatchKing",
@@ -301,7 +309,9 @@
       {
         "name": "MatchKing",
         "weight": 107,
-        "cal": "6mm"
+        "cal": "6mm",
+        "g7": 0.262,
+        "bc_src": "Sierra published G7 (sierrabullets.com); xLitz G7 0.260 (\u03940.002)"
       },
       {
         "name": "GameKing",
@@ -323,7 +333,9 @@
       {
         "name": "Scenar-L",
         "weight": 167,
-        "cal": ".308"
+        "cal": ".308",
+        "g7": 0.223,
+        "bc_src": "Lapua catalog G7 (JBM 748); xLitz 0.216 (\u03940.007 \u22640.010 indep-source); NOTE seed name should be 'Scenar' (no 167 Scenar-L exists; identity unambiguous)"
       },
       {
         "name": "Scenar-L",
