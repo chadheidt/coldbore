@@ -1,6 +1,7 @@
 {
   "_comment": "Curated component data for Smart Setup dropdowns. Bullets/primers are manufacturer-organized for the cascading pickers AND are the SEED of the ballistic-solver BC database (the solver adds g7/g1/bc fields + grows the bullet list to 500+; do NOT restructure, only grow). turret_clicks MUST exactly match the Ballistics click-count formula strings.",
   "schema_version": 1,
+  "bc_database_version": 0,
   "turret_clicks": ["0.1 Mil", "0.05 Mil", "1/4 MOA", "1/8 MOA"],
   "chronographs": [
     "Garmin Xero C1 Pro",

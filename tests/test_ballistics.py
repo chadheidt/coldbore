@@ -29,7 +29,10 @@ automated here. See app/ballistics.py module docstring.
 
 import math
 
+import pytest
+
 import ballistics
+import component_data as cd
 
 
 # --------------------------------------------------------------------------
@@ -162,3 +165,95 @@ def test_ballpark_matches_published_640_eldm_dope():
     assert 27.0 <= moa_1000 <= 40.0, f"1000yd come-up {moa_1000} MOA out of ballpark"
     # MOA->Mil internal consistency (1 mil = 3.438 MOA)
     assert abs(mil_1000 - moa_1000 / 3.438) < 0.2, (mil_1000, moa_1000)
+
+
+# --------------------------------------------------------------------------
+# Tier 1b — numerical-hardening regression guards (2026-05-16 audit)
+# These lock in the autonomous numerics work so a future change can't
+# silently regress it. They are pure numerics (no external reference).
+# --------------------------------------------------------------------------
+def test_zero_comeup_is_tight_not_just_under_half_moa():
+    """The bisection zeroing is actually tight (~0.0 MOA at the zero),
+    far better than the loose <0.5 ballpark guard above. Lock it in."""
+    sol = _solve()
+    assert abs(sol[100]["elev_moa"]) < 0.05, sol[100]["elev_moa"]
+
+
+def test_result_is_dt_independent_after_target_interpolation():
+    """The target-range interpolation fix makes the come-up effectively
+    dt-independent down to true integration error: the default dt and a
+    4x-finer dt must agree well inside the gate tolerance (0.5 MOA)."""
+    coarse = ballistics.solve_trajectory(dt=0.0005, **REF)
+    fine = ballistics.solve_trajectory(dt=0.000125, **REF)
+    for r in (300, 500, 1000):
+        d_moa = abs(coarse[r]["elev_moa"] - fine[r]["elev_moa"])
+        assert d_moa < 0.05, f"{r}yd come-up dt-sensitive: {d_moa} MOA"
+        d_mil = abs(coarse[r]["elev_mil"] - fine[r]["elev_mil"])
+        assert d_mil < 0.02, f"{r}yd come-up dt-sensitive: {d_mil} mil"
+
+
+def test_integrated_crosswind_matches_textbook_lag_rule():
+    """The full point-mass crosswind integration must reduce to the
+    closed-form lag rule  drift = Wcross*(TOF - range/MV)  to within a
+    few percent through 1000 yd (it captures higher-order curvature the
+    lag rule misses, but must not diverge from it in this regime)."""
+    sol = _solve()
+    cross_fps = REF["wind_mph"] * 1.46667  # 3-o'clock = full value
+    for r in (300, 500, 1000):
+        tof = sol[r]["tof_s"]
+        lag_in = cross_fps * (tof - (r * 3.0) / REF["muzzle_velocity_fps"]) \
+            * 12.0
+        got_in = sol[r]["wind_in"]
+        assert abs(got_in - lag_in) < max(0.5, 0.03 * abs(lag_in)), \
+            f"{r}yd wind {got_in}\" vs lag-rule {lag_in:.2f}\""
+
+
+# --------------------------------------------------------------------------
+# BC-database infrastructure (ship-gate (2) plumbing; NO real BC values)
+# --------------------------------------------------------------------------
+def test_bc_database_version_is_zero_no_authoritative_data_yet():
+    """0 means no authoritative manufacturer BCs are bundled. If real
+    curated data is ever added it MUST bump this AND update this test —
+    a deliberate tripwire against fabricated BCs slipping in silently."""
+    v = cd.bc_database_version()
+    assert isinstance(v, int) and v == 0, v
+
+
+def test_shipped_bullet_seed_carries_no_fabricated_bc():
+    """Every bundled seed bullet must currently expose g7=None,g1=None.
+    Guards the ship-gate-(2) rule: do NOT fabricate BC values."""
+    for mfr in cd.bullet_manufacturers():
+        for e in cd.bullets_for(mfr):
+            bc = cd.bullet_bc(e)
+            assert bc == {"g7": None, "g1": None}, (mfr, e, bc)
+
+
+def test_bullet_bc_reads_native_model_fields_when_present():
+    assert cd.bullet_bc({"name": "X", "g7": "0.310"}) == \
+        {"g7": 0.310, "g1": None}
+    assert cd.bullet_bc({"name": "X", "g1": 0.62}) == \
+        {"g7": None, "g1": 0.62}
+    assert cd.bullet_bc({"name": "X"}) == {"g7": None, "g1": None}
+    assert cd.bullet_bc("not a dict") == {"g7": None, "g1": None}
+
+
+def test_resolve_g7_bc_manual_override_wins_over_db():
+    assert ballistics.resolve_g7_bc(manual_bc=0.290, db_g7=0.315) == 0.290
+
+
+def test_resolve_g7_bc_uses_db_g7_when_no_override():
+    assert ballistics.resolve_g7_bc(db_g7=0.315) == 0.315
+
+
+def test_resolve_g7_bc_refuses_to_convert_g1():
+    # manual G1 -> refuse (no silent conversion)
+    with pytest.raises(ballistics.BcModelUnsupported):
+        ballistics.resolve_g7_bc(manual_bc=0.62, manual_model="G1")
+    # only G1 curated -> refuse
+    with pytest.raises(ballistics.BcModelUnsupported):
+        ballistics.resolve_g7_bc(db_g1=0.62)
+
+
+def test_resolve_g7_bc_raises_when_nothing_available():
+    with pytest.raises(ballistics.BcUnavailable):
+        ballistics.resolve_g7_bc()

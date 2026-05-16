@@ -79,6 +79,38 @@ def primers_for(manufacturer):
         manufacturer, []))
 
 
+def bc_database_version():
+    """Version of the bundled BC dataset. 0 == NO authoritative BC values
+    populated yet (the bullet entries carry no g7/g1 fields). Bumps
+    independently of schema_version when authoritative manufacturer BCs
+    are added/grown, so the dataset can ship as a data-only update with
+    no app rebuild. [[loadscope-ballistic-solver-v015]] ship-gate (2)."""
+    try:
+        return int(load_component_data().get("bc_database_version", 0))
+    except (TypeError, ValueError):
+        return 0
+
+
+def bullet_bc(entry):
+    """Authoritative ballistic coefficients for a bullet entry, as
+    published by the manufacturer in its NATIVE drag model. Returns
+    ``{"g7": float|None, "g1": float|None}``. Both None == this bullet
+    has no curated BC yet (the common case until ship-gate (2) lands);
+    the solver then requires a user-supplied manual BC. We store the
+    native model and NEVER force-convert G1<->G7 (conversion adds error)
+    — the solver picks the matching drag curve per entry."""
+    if not isinstance(entry, dict):
+        return {"g7": None, "g1": None}
+
+    def _num(v):
+        try:
+            return float(v) if v is not None else None
+        except (TypeError, ValueError):
+            return None
+
+    return {"g7": _num(entry.get("g7")), "g1": _num(entry.get("g1"))}
+
+
 def bullet_manufacturers():
     return list(load_component_data().get("bullets", {}).keys())
 

@@ -122,6 +122,54 @@ def air_density_ratio(temp_f=59.0, pressure_inhg=29.92, altitude_ft=0.0,
     return dry_ratio * humidity_corr
 
 
+# --- BC resolution (manual override vs curated DB) --------------------
+# The solver is G7-only (it carries the standard G7 drag curve). Per the
+# project rule we NEVER convert a G1 BC to G7 (force-conversion injects
+# error and burns the customer). The resolver therefore REFUSES loudly
+# rather than guessing — the caller/UI decides what to do.
+
+class BcUnavailable(Exception):
+    """No usable BC: none supplied and none curated for this bullet.
+    The UI should prompt the shooter to enter a measured/published BC."""
+
+
+class BcModelUnsupported(Exception):
+    """A G1-native BC was the only thing available. The G7 solver will
+    NOT force-convert it. Resolved at ship-gate (2) (G1 drag-curve
+    support / authoritative G7 values), not by silent conversion."""
+
+
+def resolve_g7_bc(manual_bc=None, manual_model="G7",
+                   db_g7=None, db_g1=None):
+    """Decide which G7 BC feeds solve_trajectory.
+
+    Precedence: an explicit user override wins over the curated DB.
+      * manual_bc + manual_model "G7"  -> use it
+      * manual_bc + manual_model "G1"  -> BcModelUnsupported (no convert)
+      * else curated db_g7             -> use it
+      * else only db_g1 curated        -> BcModelUnsupported
+      * else                           -> BcUnavailable
+
+    Returns a float G7 BC. Never fabricates or converts.
+    """
+    if manual_bc is not None:
+        model = (manual_model or "G7").strip().upper()
+        if model == "G7":
+            return float(manual_bc)
+        raise BcModelUnsupported(
+            f"Manual BC given as {model}; the solver is G7-only and will "
+            f"not convert. Enter a G7 BC or wait for {model} support.")
+    if db_g7 is not None:
+        return float(db_g7)
+    if db_g1 is not None:
+        raise BcModelUnsupported(
+            "Only a G1 BC is curated for this bullet; the G7 solver will "
+            "not convert it. Enter a G7 BC manually for now.")
+    raise BcUnavailable(
+        "No ballistic coefficient available for this bullet. Enter the "
+        "manufacturer's published or your measured G7 BC.")
+
+
 def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
                      sight_height_in=1.75, ranges_yd=None,
                      temp_f=59.0, pressure_inhg=29.92, altitude_ft=0.0,
@@ -150,6 +198,7 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
         # state in feet; x downrange, y vertical (line of bore at 0)
         vx = muzzle_velocity_fps * math.cos(launch_angle_rad)
         vy = muzzle_velocity_fps * math.sin(launch_angle_rad)
+        vz = 0.0         # horizontal (cross-range) velocity, ft/s
         x = 0.0
         y = 0.0
         z = 0.0          # horizontal wind drift (ft)
@@ -160,6 +209,9 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
         out = {}
         targets = [r * 3.0 for r in ranges_yd]   # yd -> ft
         ti = 0
+        # previous-step state, for interpolating exactly to each target
+        # range (muzzle = origin at rest-time 0)
+        x0 = y0 = z0 = t0 = 0.0
         while ti < len(targets) and t < 12.0:
             v = math.sqrt(vx * vx + vy * vy)
             mach = v / speed_sound
@@ -172,13 +224,33 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
             vy += ay * dt
             x += vx * dt
             y += vy * dt
-            if want_wind:
-                # bullet lags the wind -> drift ≈ cross*(t - x/V0)
-                z = cross * (t - x / muzzle_velocity_fps)
             t += dt
+            if want_wind:
+                # Full point-mass crosswind: drag acts on the air-
+                # relative cross velocity (vz - cross). The bullet starts
+                # at vz=0 and is dragged toward wind speed; the integral
+                # of the lag IS the drift. Same scalar decel as the in-
+                # plane axes (the ~15 fps cross component is negligible
+                # to Mach/drag). Reduces to the textbook lag rule
+                # cross*(t - x/V0) at first order but captures the
+                # long-range curvature that the lag rule under-predicts.
+                az = -decel * (vz - cross)
+                vz += az * dt
+                z += vz * dt
+            # Record each crossed target by LINEAR-INTERPOLATING the
+            # just-stepped segment to the exact target range, rather than
+            # snapping to the first step past it. The snap added a
+            # sub-yard, dt-dependent overshoot bias (~0.04 MOA at
+            # dt=2e-3); interpolation makes the result effectively
+            # dt-independent down to true integration error.
             while ti < len(targets) and x >= targets[ti]:
-                out[ranges_yd[ti]] = (y, z, t)
+                tx = targets[ti]
+                f = (tx - x0) / (x - x0) if x != x0 else 0.0
+                out[ranges_yd[ti]] = (y0 + f * (y - y0),
+                                      z0 + f * (z - z0),
+                                      t0 + f * (t - t0))
                 ti += 1
+            x0, y0, z0, t0 = x, y, z, t
         return out
 
     # Solve launch angle so the path crosses line-of-sight at zero_yd.
