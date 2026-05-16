@@ -1,5 +1,5 @@
 {
- "_meta": "JBM jbmtraj-5.1 G7 point-mass, level scope (Elevation 0.00 MOA), ICAO std 59F/29.92inHg/0%RH/0ft, 10mph @90deg(3-oclock), sight 1.75in. Apply 100yd zero analytically: corr=drop_in - drop_in[100]*R/100. Captured 2026-05-16 for ballistic-solver gate 1.",
+ "_meta": "JBM jbmtraj-5.1 G7 point-mass, level scope (Elevation 0.00 MOA), ICAO std 59F/29.92inHg/0%RH/0ft, 10mph @90deg(3-oclock), sight 1.75in. Apply 100yd zero analytically: corr=drop_in - drop_in[100]*R/100. Captured 2026-05-16 for ballistic-solver gate 1. + 2 G1-model cross-checks (d_f=0) added 2026-05-16.",
  "6.5CM 140 ELD-M": {
   "mv": 2710,
   "g7_bc": 0.315,
@@ -293,6 +293,156 @@
     "wind_in": 63.2,
     "vel_fps": 1545.1,
     "tof_s": 1.469
+   }
+  }
+ },
+ "G1 .308-class (G1 BC 0.500)": {
+  "mv": 2650,
+  "g7_bc": 0.5,
+  "drag_model": "G1",
+  "cal_in": 0.308,
+  "wt_gr": 175,
+  "rows": {
+   "0": {
+    "drop_in": -1.8,
+    "wind_in": 0.0,
+    "vel_fps": 2656.1,
+    "tof_s": 0.0
+   },
+   "100": {
+    "drop_in": -4.3,
+    "wind_in": 0.7,
+    "vel_fps": 2477.0,
+    "tof_s": 0.117
+   },
+   "200": {
+    "drop_in": -12.6,
+    "wind_in": 2.9,
+    "vel_fps": 2304.9,
+    "tof_s": 0.243
+   },
+   "300": {
+    "drop_in": -27.4,
+    "wind_in": 6.8,
+    "vel_fps": 2139.6,
+    "tof_s": 0.378
+   },
+   "400": {
+    "drop_in": -49.8,
+    "wind_in": 12.6,
+    "vel_fps": 1981.2,
+    "tof_s": 0.523
+   },
+   "500": {
+    "drop_in": -81.1,
+    "wind_in": 20.4,
+    "vel_fps": 1830.2,
+    "tof_s": 0.681
+   },
+   "600": {
+    "drop_in": -122.8,
+    "wind_in": 30.6,
+    "vel_fps": 1687.3,
+    "tof_s": 0.852
+   },
+   "700": {
+    "drop_in": -176.7,
+    "wind_in": 43.4,
+    "vel_fps": 1553.6,
+    "tof_s": 1.037
+   },
+   "800": {
+    "drop_in": -245.1,
+    "wind_in": 58.9,
+    "vel_fps": 1430.4,
+    "tof_s": 1.238
+   },
+   "900": {
+    "drop_in": -330.5,
+    "wind_in": 77.5,
+    "vel_fps": 1319.5,
+    "tof_s": 1.457
+   },
+   "1000": {
+    "drop_in": -435.9,
+    "wind_in": 99.3,
+    "vel_fps": 1222.6,
+    "tof_s": 1.693
+   }
+  }
+ },
+ "G1 6.5-class (G1 BC 0.560)": {
+  "mv": 2800,
+  "g7_bc": 0.56,
+  "drag_model": "G1",
+  "cal_in": 0.264,
+  "wt_gr": 140,
+  "rows": {
+   "0": {
+    "drop_in": -1.8,
+    "wind_in": 0.0,
+    "vel_fps": 2805.6,
+    "tof_s": 0.0
+   },
+   "100": {
+    "drop_in": -4.0,
+    "wind_in": 0.6,
+    "vel_fps": 2639.9,
+    "tof_s": 0.11
+   },
+   "200": {
+    "drop_in": -11.3,
+    "wind_in": 2.4,
+    "vel_fps": 2480.2,
+    "tof_s": 0.227
+   },
+   "300": {
+    "drop_in": -24.3,
+    "wind_in": 5.6,
+    "vel_fps": 2326.1,
+    "tof_s": 0.352
+   },
+   "400": {
+    "drop_in": -43.7,
+    "wind_in": 10.2,
+    "vel_fps": 2177.5,
+    "tof_s": 0.486
+   },
+   "500": {
+    "drop_in": -70.4,
+    "wind_in": 16.5,
+    "vel_fps": 2034.2,
+    "tof_s": 0.628
+   },
+   "600": {
+    "drop_in": -105.5,
+    "wind_in": 24.5,
+    "vel_fps": 1896.8,
+    "tof_s": 0.781
+   },
+   "700": {
+    "drop_in": -150.4,
+    "wind_in": 34.6,
+    "vel_fps": 1765.5,
+    "tof_s": 0.945
+   },
+   "800": {
+    "drop_in": -206.3,
+    "wind_in": 46.8,
+    "vel_fps": 1641.0,
+    "tof_s": 1.121
+   },
+   "900": {
+    "drop_in": -275.3,
+    "wind_in": 61.4,
+    "vel_fps": 1524.2,
+    "tof_s": 1.311
+   },
+   "1000": {
+    "drop_in": -359.2,
+    "wind_in": 78.5,
+    "vel_fps": 1416.0,
+    "tof_s": 1.515
    }
   }
  }

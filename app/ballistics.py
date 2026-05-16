@@ -81,6 +81,33 @@ _G7_CD = [
     0.1793, 0.1730, 0.1672, 0.1618,
 ]
 
+# --- Standard G1 reference drag table (Cd vs Mach) --------------------
+# THE authoritative standard G1 (Ingalls/McCoy) drag function, verbatim
+# from JBM Ballistics' published table (.../downloads/text/mcg1.txt),
+# the same authoritative source as the G7 table above. Needed because
+# many makers (Sierra, Nosler, Barnes, older Lapua) publish G1 BCs;
+# we store the maker's NATIVE model and never force-convert G1<->G7.
+_G1_MACH = [
+    0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
+    0.5, 0.55, 0.6, 0.7, 0.725, 0.75, 0.775, 0.8, 0.825, 0.85,
+    0.875, 0.9, 0.925, 0.95, 0.975, 1, 1.025, 1.05, 1.075, 1.1,
+    1.125, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.45, 1.5, 1.55,
+    1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2, 2.05,
+    2.1, 2.15, 2.2, 2.25, 2.3, 2.35, 2.4, 2.45, 2.5, 2.6,
+    2.7, 2.8, 2.9, 3, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6,
+    3.7, 3.8, 3.9, 4, 4.2, 4.4, 4.6, 4.8, 5,
+]
+_G1_CD = [
+    0.2629, 0.2558, 0.2487, 0.2413, 0.2344, 0.2278, 0.2214, 0.2155, 0.2104, 0.2061,
+    0.2032, 0.2020, 0.2034, 0.2165, 0.2230, 0.2313, 0.2417, 0.2546, 0.2706, 0.2901,
+    0.3136, 0.3415, 0.3734, 0.4084, 0.4448, 0.4805, 0.5136, 0.5427, 0.5677, 0.5883,
+    0.6053, 0.6191, 0.6393, 0.6518, 0.6589, 0.6621, 0.6625, 0.6607, 0.6573, 0.6528,
+    0.6474, 0.6413, 0.6347, 0.6280, 0.6210, 0.6141, 0.6072, 0.6003, 0.5934, 0.5867,
+    0.5804, 0.5743, 0.5685, 0.5630, 0.5577, 0.5527, 0.5481, 0.5438, 0.5397, 0.5325,
+    0.5264, 0.5211, 0.5168, 0.5133, 0.5105, 0.5084, 0.5067, 0.5054, 0.5040, 0.5030,
+    0.5022, 0.5016, 0.5010, 0.5006, 0.4998, 0.4995, 0.4992, 0.4990, 0.4988,
+]
+
 _RHO0 = 0.0764742          # ICAO sea-level standard air density, lb/ft^3
 _SPEED_SOUND_STD = 1116.45  # fps at ICAO 59F sea level
 _G = 32.174                # ft/s^2
@@ -112,17 +139,40 @@ _G = 32.174                # ft/s^2
 _RETARD_K = math.pi * _RHO0 / 1152.0   # ~= 2.0856e-04
 
 
-def _g7_cd(mach):
-    if mach <= _G7_MACH[0]:
-        return _G7_CD[0]
-    if mach >= _G7_MACH[-1]:
-        return _G7_CD[-1]
-    for i in range(1, len(_G7_MACH)):
-        if mach <= _G7_MACH[i]:
-            m0, m1 = _G7_MACH[i - 1], _G7_MACH[i]
-            c0, c1 = _G7_CD[i - 1], _G7_CD[i]
+def _interp_cd(mach, mach_tbl, cd_tbl):
+    if mach <= mach_tbl[0]:
+        return cd_tbl[0]
+    if mach >= mach_tbl[-1]:
+        return cd_tbl[-1]
+    for i in range(1, len(mach_tbl)):
+        if mach <= mach_tbl[i]:
+            m0, m1 = mach_tbl[i - 1], mach_tbl[i]
+            c0, c1 = cd_tbl[i - 1], cd_tbl[i]
             return c0 + (c1 - c0) * (mach - m0) / (m1 - m0)
-    return _G7_CD[-1]
+    return cd_tbl[-1]
+
+
+def _g7_cd(mach):
+    return _interp_cd(mach, _G7_MACH, _G7_CD)
+
+
+def _g1_cd(mach):
+    return _interp_cd(mach, _G1_MACH, _G1_CD)
+
+
+# Drag-curve dispatch by the BC's native model. Same retardation
+# formula and _RETARD_K for both (the BC is defined the same way
+# relative to each model's standard projectile); only the Cd(M) curve
+# differs. We NEVER convert between models.
+_DRAG_TABLES = {"G7": (_G7_MACH, _G7_CD), "G1": (_G1_MACH, _G1_CD)}
+
+
+def _drag_cd(mach, model):
+    tbl = _DRAG_TABLES.get((model or "G7").strip().upper())
+    if tbl is None:
+        raise BcModelUnsupported(
+            "Unknown drag model %r; supported: G7, G1." % (model,))
+    return _interp_cd(mach, tbl[0], tbl[1])
 
 
 def air_density_ratio(temp_f=59.0, pressure_inhg=29.92, altitude_ft=0.0,
@@ -143,10 +193,10 @@ def air_density_ratio(temp_f=59.0, pressure_inhg=29.92, altitude_ft=0.0,
 
 
 # --- BC resolution (manual override vs curated DB) --------------------
-# The solver is G7-only (it carries the standard G7 drag curve). Per the
-# project rule we NEVER convert a G1 BC to G7 (force-conversion injects
-# error and burns the customer). The resolver therefore REFUSES loudly
-# rather than guessing — the caller/UI decides what to do.
+# The solver carries BOTH the standard G7 and G1 drag curves and solves
+# in whichever model the BC is published. Per the project rule we NEVER
+# convert a BC between models (force-conversion injects error and burns
+# the customer) — the BC's native model selects its matching curve.
 
 class BcUnavailable(Exception):
     """No usable BC: none supplied and none curated for this bullet.
@@ -154,50 +204,54 @@ class BcUnavailable(Exception):
 
 
 class BcModelUnsupported(Exception):
-    """A G1-native BC was the only thing available. The G7 solver will
-    NOT force-convert it. Resolved at ship-gate (2) (G1 drag-curve
-    support / authoritative G7 values), not by silent conversion."""
+    """A BC was tagged with a drag model the solver doesn't carry
+    (only G7 and G1 are supported). Never silently converted."""
 
 
-def resolve_g7_bc(manual_bc=None, manual_model="G7",
-                   db_g7=None, db_g1=None):
-    """Decide which G7 BC feeds solve_trajectory.
+def resolve_bc(manual_bc=None, manual_model="G7", db_g7=None, db_g1=None):
+    """Decide which (BC, model) pair feeds solve_trajectory.
 
-    Precedence: an explicit user override wins over the curated DB.
-      * manual_bc + manual_model "G7"  -> use it
-      * manual_bc + manual_model "G1"  -> BcModelUnsupported (no convert)
-      * else curated db_g7             -> use it
-      * else only db_g1 curated        -> BcModelUnsupported
+    Precedence: an explicit user override wins over the curated DB; a
+    curated native-G7 wins over native-G1 when a bullet has both
+    published (G7 is less velocity-band sensitive for modern match
+    bullets). Returns ``(bc_value: float, model: 'G7'|'G1')``.
+
+      * manual_bc + manual_model G7/G1 -> use it in that model
+      * manual_bc + other model        -> BcModelUnsupported
+      * else curated db_g7             -> (db_g7, 'G7')
+      * else curated db_g1             -> (db_g1, 'G1')
       * else                           -> BcUnavailable
 
-    Returns a float G7 BC. Never fabricates or converts.
+    Never fabricates and never converts between models.
     """
     if manual_bc is not None:
         model = (manual_model or "G7").strip().upper()
-        if model == "G7":
-            return float(manual_bc)
+        if model in _DRAG_TABLES:
+            return (float(manual_bc), model)
         raise BcModelUnsupported(
-            f"Manual BC given as {model}; the solver is G7-only and will "
-            f"not convert. Enter a G7 BC or wait for {model} support.")
+            "Manual BC given as %r; supported drag models are G7 and "
+            "G1 (no conversion)." % (manual_model,))
     if db_g7 is not None:
-        return float(db_g7)
+        return (float(db_g7), "G7")
     if db_g1 is not None:
-        raise BcModelUnsupported(
-            "Only a G1 BC is curated for this bullet; the G7 solver will "
-            "not convert it. Enter a G7 BC manually for now.")
+        return (float(db_g1), "G1")
     raise BcUnavailable(
         "No ballistic coefficient available for this bullet. Enter the "
-        "manufacturer's published or your measured G7 BC.")
+        "manufacturer's published or your measured BC.")
 
 
 def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
                      sight_height_in=1.75, ranges_yd=None,
                      temp_f=59.0, pressure_inhg=29.92, altitude_ft=0.0,
                      humidity_pct=50.0, wind_mph=10.0,
-                     wind_angle_clock=3.0, dt=0.0005):
+                     wind_angle_clock=3.0, dt=0.0005, drag_model="G7"):
     """Return {range_yd: {'drop_in','elev_moa','elev_mil','wind_in',
     'wind_moa','wind_mil','tof_s'}}. Point-mass RK-free Euler at small
-    dt; G7 drag scaled by BC; gravity; constant crosswind.
+    dt; standard drag curve scaled by BC; gravity; constant crosswind.
+
+    ``g7_bc`` is the ballistic coefficient in ``drag_model``'s reference
+    ('G7' default, or 'G1'); the matching standard curve is used. The
+    name is kept for backward compatibility. Never converts models.
 
     DRAFT — see module docstring ship-gate before any reliance/ship.
     """
@@ -207,6 +261,13 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
                               humidity_pct)
     speed_sound = _SPEED_SOUND_STD * math.sqrt(
         (temp_f + 459.67) / 518.67)
+    # Resolve the BC's native standard drag curve ONCE (validate the
+    # model up front; no per-step dict/normalise cost). Never converted.
+    _dm = _DRAG_TABLES.get((drag_model or "G7").strip().upper())
+    if _dm is None:
+        raise BcModelUnsupported(
+            "Unknown drag model %r; supported: G7, G1." % (drag_model,))
+    _dm_mach, _dm_cd = _dm
     # Standard G7-BC point-mass retardation (see _RETARD_K derivation):
     #   a_drag = _RETARD_K * sigma * Cd_std(M) * V^2 / BC
     # The integrator below works with E = a_drag / V (a per-second rate),
@@ -240,7 +301,7 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
         while ti < len(targets) and t < 12.0:
             v = math.sqrt(vx * vx + vy * vy)
             mach = v / speed_sound
-            cd = _g7_cd(mach)
+            cd = _interp_cd(mach, _dm_mach, _dm_cd)
             # E = a_drag / V = _RETARD_K * sigma * Cd(M) * V / BC  (1/s)
             decel = _RETARD_K * sigma * cd * v / g7_bc
             ax = -decel * vx

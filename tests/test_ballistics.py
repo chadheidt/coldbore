@@ -79,6 +79,18 @@ def test_g7_cd_clamps_and_interpolates():
     assert min(lo, hi) <= mid <= max(lo, hi)
 
 
+def test_g1_cd_is_authoritative_standard():
+    # authoritative standard G1 (JBM mcg1.txt): M0=0.2629, peak at
+    # M1.2=0.6393, M1.0=0.4805, M3.0=0.5133. G1 Cd is much higher and
+    # peaks sharper than G7 — sanity that the right curve is wired.
+    assert abs(ballistics._g1_cd(0.00) - 0.2629) < 1e-9
+    assert abs(ballistics._g1_cd(1.00) - 0.4805) < 1e-9
+    assert abs(ballistics._g1_cd(1.20) - 0.6393) < 1e-9
+    assert ballistics._g1_cd(1.20) > ballistics._g7_cd(1.20)
+    assert ballistics._g1_cd(-1.0) == ballistics._G1_CD[0]
+    assert ballistics._g1_cd(99.0) == ballistics._G1_CD[-1]
+
+
 # --------------------------------------------------------------------------
 # Reference load used for both tiers
 #   Hornady 6.5 Creedmoor 140gr ELD-M factory (24" bbl):
@@ -241,26 +253,33 @@ def test_bullet_bc_reads_native_model_fields_when_present():
     assert cd.bullet_bc("not a dict") == {"g7": None, "g1": None}
 
 
-def test_resolve_g7_bc_manual_override_wins_over_db():
-    assert ballistics.resolve_g7_bc(manual_bc=0.290, db_g7=0.315) == 0.290
+def test_resolve_bc_manual_override_wins_over_db():
+    assert ballistics.resolve_bc(manual_bc=0.290, db_g7=0.315) == (0.290,
+                                                                   "G7")
 
 
-def test_resolve_g7_bc_uses_db_g7_when_no_override():
-    assert ballistics.resolve_g7_bc(db_g7=0.315) == 0.315
+def test_resolve_bc_uses_db_g7_then_g1():
+    assert ballistics.resolve_bc(db_g7=0.315) == (0.315, "G7")
+    assert ballistics.resolve_bc(db_g1=0.62) == (0.62, "G1")
+    # native G7 preferred when a bullet publishes both
+    assert ballistics.resolve_bc(db_g7=0.31, db_g1=0.62) == (0.31, "G7")
 
 
-def test_resolve_g7_bc_refuses_to_convert_g1():
-    # manual G1 -> refuse (no silent conversion)
+def test_resolve_bc_supports_g1_native_no_conversion():
+    # a G1 manual BC now resolves IN G1 (solver carries the G1 curve);
+    # it is NOT converted to a G7 number.
+    val, model = ballistics.resolve_bc(manual_bc=0.62, manual_model="G1")
+    assert (val, model) == (0.62, "G1")
+
+
+def test_resolve_bc_rejects_unknown_model():
     with pytest.raises(ballistics.BcModelUnsupported):
-        ballistics.resolve_g7_bc(manual_bc=0.62, manual_model="G1")
-    # only G1 curated -> refuse
-    with pytest.raises(ballistics.BcModelUnsupported):
-        ballistics.resolve_g7_bc(db_g1=0.62)
+        ballistics.resolve_bc(manual_bc=0.5, manual_model="G5")
 
 
-def test_resolve_g7_bc_raises_when_nothing_available():
+def test_resolve_bc_raises_when_nothing_available():
     with pytest.raises(ballistics.BcUnavailable):
-        ballistics.resolve_g7_bc()
+        ballistics.resolve_bc()
 
 
 # --------------------------------------------------------------------------
@@ -298,7 +317,8 @@ def test_matches_jbm_reference_within_gate1_tolerance():
             zero_yd=100.0, sight_height_in=1.75,
             ranges_yd=list(range(100, 1100, 100)),
             temp_f=59.0, pressure_inhg=29.92, altitude_ft=0.0,
-            humidity_pct=0.0, wind_mph=10.0, wind_angle_clock=3.0)
+            humidity_pct=0.0, wind_mph=10.0, wind_angle_clock=3.0,
+            drag_model=load.get("drag_model", "G7"))
         for R in (200, 300, 400, 500, 600, 700, 800, 900, 1000):
             jr = rows[str(R)]
             rin = R * 36.0
