@@ -100,24 +100,25 @@ TOUR_STOPS = [
         "special": None,
     },
     {
-        "title": "Ballistics — your DOPE table",
-        "image": "04-ballistics.png",
+        "title": "Predicted DOPE — your range card before you leave",
+        # Real render of the Range & DOPE panel (gate-4 solver), from
+        # tools/render_dope_preview.py — NOT an Excel sheet capture.
+        "image": "dope-preview-1-predicted.png",
         "sheet": "Ballistics",
         "select_range": "A1:K30",
-        # ⚠️ PLACEHOLDER NARRATION — UPDATE WHEN v0.15 BALLISTIC SOLVER SHIPS.
-        # Today the user types every DOPE value manually. v0.15
-        # ([[loadscope-ballistic-solver-v015]]) auto-predicts elevation
-        # and wind from BC + atmospherics. Rewrite this stop to mention
-        # the predicted DOPE + the predicted-vs-confirmed visual
-        # distinction. See [[loadscope-tour-narration-v015-update]].
         "narration": (
-            "Once you've nailed down your load, the Ballistics tab is where "
-            "you record your DOPE — the elevation and wind clicks at every "
-            "distance. Type in what you dialed at the range; Loadscope "
-            "auto-converts to clicks. Click 'Next' to see what we do with "
-            "all that data."
+            "This is the part shooters love. The moment you've set your "
+            "bullet and muzzle velocity, Loadscope predicts your whole "
+            "DOPE table — every elevation and wind hold, 100 to 1000 "
+            "yards — using a ballistic solver validated against JBM. "
+            "The grey italic numbers are PREDICTED, so you have a real "
+            "range card before you ever leave the truck. At the range "
+            "you type what you actually dialed; that cell turns solid "
+            "white = confirmed, and your printed Pocket Card carries a "
+            "'verify at the range' note until you've confirmed it. "
+            "Click 'Next' to see the printable card."
         ),
-        "min_dwell_seconds": 8,
+        "min_dwell_seconds": 10,
         "special": None,
     },
     {
