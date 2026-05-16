@@ -4,6 +4,22 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## 🚀 LATEST — v0.15.0 BALLISTIC SOLVER **SHIPPED** 2026-05-16 (read this first)
+
+**Status:** v0.15.0 (Predicted DOPE solver) is BUILT, RELEASED, and auto-update verified end-to-end. Gates 1/3/4 done; Gate 2 = 34/75 (principled blanks, non-blocking, grows post-launch data-only). 206 tests green. Demo = 7-stop tour w/ solver beat + regenerated PREDICTED-banner pocket card.
+
+**Done & verified (Chad said "ship"):** version bump 3 files → committed+pushed `main`; `.app` built; `Loadscope.zip` in R2; GitHub release v0.15.0 = Latest; **full chain verified**: manifest raw=0.15.0 → Worker `/authorize` → `/get` → HTTP 200 valid 71MB v0.15 zip.
+
+**⚠️ ONLY ONE THING LEFT — CHAD'S HANDS-ON STEP (pending):** open Loadscope from **/Applications** → yellow banner → Install Update → Quit and Install → confirm Tools→About shows **0.15** and Range & DOPE shows grey predicted DOPE. (Auto-update can't be self-tested from dev — `can_self_install()` is False in dev mode.)
+
+**🔑 TWO DURABLE OPS LESSONS (do not relearn the hard way):**
+1. **The build IS self-drivable.** `open "Build App.command"` (LaunchServices = exactly a Finder double-click) escapes the sandbox `com.apple.provenance` EPERM that kills `bash`/`python3 setup.py py2app`. Claude builds autonomously now — do NOT delegate the build to Chad. Verified 2026-05-16.
+2. **CLAUDE.md's release procedure is INCOMPLETE — it omits the R2 upload.** The auto-updater downloads from the **R2 bucket `coldbore-releases`** via the Worker, NOT from the GitHub release. Required step after building the zip: `npx wrangler r2 object put "coldbore-releases/Loadscope.zip" --file=dist/Loadscope.zip --remote` (wrangler OAuth already set up). Also upload `.dmg` for the website fresh-install path (not done this ship — see open item). **ALWAYS** verify the full chain (raw manifest → POST /authorize w/ test key `CBORE-DDCX-AEGK-J2FR-2SIB` → GET signed URL = 200 + ~71MB zip) before declaring shipped; there's a brief R2→Worker propagation lag so re-test if first GET 404s.
+
+**Open follow-ups (not blocking):** (a) `Loadscope.dmg` not rebuilt/uploaded to R2 this ship — website "request access" fresh-install still serves old .dmg; rebuild via create-dmg + `wrangler r2 object put coldbore-releases/Loadscope.dmg` when convenient. (b) `RELEASE_NOTES_v0.15.draft.md` untracked at root (can delete). (c) Worker git-vs-live drift task still open (separate chip). (d) push of `main` done through the release commits.
+
+---
+
 ## 🌅 START HERE NEXT SESSION — END OF DAY 2026-05-15
 
 **MORNING RESUME PROMPT (Chad: paste this to start):**
