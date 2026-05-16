@@ -225,23 +225,39 @@ def test_integrated_crosswind_matches_textbook_lag_rule():
 
 
 # --------------------------------------------------------------------------
-# BC-database infrastructure (ship-gate (2) plumbing; NO real BC values)
+# BC-database curation integrity (ship-gate (2))
 # --------------------------------------------------------------------------
-def test_bc_database_version_is_zero_no_authoritative_data_yet():
-    """0 means no authoritative manufacturer BCs are bundled. If real
-    curated data is ever added it MUST bump this AND update this test —
-    a deliberate tripwire against fabricated BCs slipping in silently."""
+def test_bc_database_version_bumps_once_data_is_curated():
+    """0 = no curated BCs; >=1 once authoritative values are added. It
+    must be >=1 iff at least one bullet carries a curated BC, so the
+    version can never silently disagree with the data."""
     v = cd.bc_database_version()
-    assert isinstance(v, int) and v == 0, v
+    assert isinstance(v, int) and v >= 0
+    any_bc = any(
+        (cd.bullet_bc(e)["g7"] is not None
+         or cd.bullet_bc(e)["g1"] is not None)
+        for mfr in cd.bullet_manufacturers()
+        for e in cd.bullets_for(mfr))
+    assert (v >= 1) == any_bc, (v, any_bc)
 
 
-def test_shipped_bullet_seed_carries_no_fabricated_bc():
-    """Every bundled seed bullet must currently expose g7=None,g1=None.
-    Guards the ship-gate-(2) rule: do NOT fabricate BC values."""
+def test_no_bc_value_without_authoritative_provenance():
+    """THE no-fabrication guard (replaces the old 'no data yet'
+    tripwire, which has done its job). Every curated BC MUST carry a
+    non-empty bc_src provenance string and be a physically plausible
+    coefficient. A value without recorded provenance = fabrication and
+    fails the build."""
     for mfr in cd.bullet_manufacturers():
         for e in cd.bullets_for(mfr):
             bc = cd.bullet_bc(e)
-            assert bc == {"g7": None, "g1": None}, (mfr, e, bc)
+            for model in ("g7", "g1"):
+                v = bc[model]
+                if v is None:
+                    continue
+                assert isinstance(v, float) and 0.05 < v < 1.5, \
+                    (mfr, e, model, v)
+                assert str(e.get("bc_src", "")).strip(), \
+                    f"{mfr} {e} has {model}={v} but NO bc_src provenance"
 
 
 def test_bullet_bc_reads_native_model_fields_when_present():
