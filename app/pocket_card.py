@@ -20,6 +20,8 @@ from datetime import datetime
 
 from openpyxl import load_workbook
 
+import dope_solver
+
 
 def _logo_data_uri():
     """Read the Loadscope icon and return a base64 data URI so the
@@ -128,19 +130,51 @@ def _gather(workbook_path):
             rows_filled += 1
         data["dope"].append(row)
 
-    if rows_filled == 0:
-        raise ValueError(
-            "Ballistics tab has no DOPE data yet. Fill in the elevation and "
-            "wind values for at least one range (rows 9–18) before generating "
-            "a Pocket Range Card."
-        )
-
     # v0.14.5 (Chad): the printed card should show ONLY the unit the
     # shooter actually dials (Mil OR MOA), not both with the other half
     # blank. Derive it from the scope click value (e.g. "0.1 Mil",
     # "0.25 MOA"). Default to Mil for anything ambiguous/unknown.
     click_str = str(data["header"].get("click") or "").lower()
     data["unit"] = "moa" if "moa" in click_str else "mil"
+
+    # Gate-4: fill rows the shooter hasn't confirmed yet with the LIVE
+    # solver prediction so the card is useful before the first range
+    # trip ("range card ready before you leave the truck"). Predicted
+    # rows are flagged so the card carries the verify-at-range banner.
+    # The workbook is NOT modified — predictions are display-only.
+    elev_k = "moa_elev" if data["unit"] == "moa" else "mils_elev"
+    wind_k = "wind_moa" if data["unit"] == "moa" else "wind_mils"
+    data["has_predicted"] = False
+    try:
+        pred = dope_solver.predicted_dope(workbook_path)
+    except Exception:
+        pred = {"status": "error", "rows": {}}
+    if pred.get("status") == dope_solver.OK:
+        prows = pred.get("rows", {})
+        for row in data["dope"]:
+            r = row["row_num"]
+            confirmed = (row.get(elev_k) not in (None, "")
+                         or row.get(wind_k) not in (None, ""))
+            if confirmed or r not in prows:
+                continue
+            try:
+                row[elev_k] = float(prows[r]["elev"])
+                row[wind_k] = float(prows[r]["wind"])
+            except (TypeError, ValueError, KeyError):
+                continue
+            row["predicted"] = True
+            data["has_predicted"] = True
+
+    if rows_filled == 0 and not data["has_predicted"]:
+        hint = ("Fill in the elevation and wind values for at least one "
+                "range (rows 9-18) before generating a Pocket Range "
+                "Card.")
+        if pred.get("status") == dope_solver.NO_BC:
+            hint = ("Enter this bullet's G7 (or G1) ballistic "
+                    "coefficient on the Range & DOPE screen and Loadscope "
+                    "can predict a starting card for you.")
+        raise ValueError(
+            "Ballistics tab has no DOPE data yet. " + hint)
     elev_clk_k = "moa_clk" if data["unit"] == "moa" else "mils_clk"
     wind_clk_k = "wind_moa_clk" if data["unit"] == "moa" else "wind_mils_clk"
     # Only show a click-count column if it actually has values — an
@@ -194,8 +228,14 @@ def _build_html(d):
         if show_wind_clk:
             cells.append(f"<td class='clk'>{_fmt(row.get(wind_clk_k))}</td>")
         cells.append(f"<td class='tof'>{_fmt(row.get('tof'))}</td>")
-        dope_rows_html.append("<tr>" + "".join(cells) + "</tr>")
+        tr_cls = " class='pred'" if row.get("predicted") else ""
+        dope_rows_html.append(f"<tr{tr_cls}>" + "".join(cells) + "</tr>")
     dope_rows_str = "\n".join(dope_rows_html)
+    pred_banner = (
+        '<div class="pred-banner">PREDICTED DOPE (italic rows) - '
+        'estimated from your bullet, velocity &amp; atmosphere. '
+        'VERIFY AT THE RANGE before relying on these values.</div>'
+        if d.get("has_predicted") else "")
 
     # Dynamic header matching the columns we actually render.
     elev_span = 2 if show_elev_clk else 1
@@ -330,6 +370,20 @@ def _build_html(d):
     color: #555;
     font-size: 6.5pt;
   }}
+  tr.pred td {{
+    font-style: italic;
+    color: #444;
+  }}
+  .pred-banner {{
+    margin: 2pt 0 3pt;
+    padding: 2pt 4pt;
+    border: 0.8pt solid #000;
+    background: #f3efe6;
+    font-size: 6pt;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.15;
+  }}
   .footer {{
     margin-top: 3pt;
     font-size: 6pt;
@@ -355,6 +409,7 @@ def _build_html(d):
     <div class="field"><span class="label">Sight Ht:</span><span>{_fmt(h.get('sight_ht'))} in</span></div>
     <div class="field"><span class="label">Twist:</span><span>{_fmt(h.get('twist'))}</span></div>
   </div>
+  {pred_banner}
   <table>
     <thead>
       {thead_html}

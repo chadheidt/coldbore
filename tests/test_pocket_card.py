@@ -141,3 +141,54 @@ def test_url_dispatcher_recognizes_print_pocket_card():
     from PyQt5.QtCore import QUrl
     from main import parse_loadscope_action
     assert parse_loadscope_action(QUrl("loadscope://print-pocket-card")) == "print-pocket-card"
+
+
+# ---------- Gate-4: predicted-DOPE watermark ----------
+
+import shutil as _sh
+from openpyxl import load_workbook as _lw
+
+_DEMO = os.path.join(os.path.dirname(__file__), "..", "app", "resources",
+                     "Loadscope - Demo Workbook.xlsx")
+
+
+@pytest.fixture
+def fresh_demo(tmp_path):
+    """Demo with DOPE cleared = pre-range state -> solver predicts."""
+    dst = tmp_path / "fresh.xlsx"
+    _sh.copy(_DEMO, dst)
+    wb = _lw(dst)
+    bal = wb["Ballistics"]
+    for r in range(9, 19):
+        for c in ("B", "D", "F", "H"):
+            bal[f"{c}{r}"] = None
+    wb.save(dst)
+    return str(dst)
+
+
+def test_pre_range_card_is_predicted_with_banner(fresh_demo):
+    d = pocket_card._gather(fresh_demo)
+    assert d["has_predicted"] is True
+    assert sum(1 for r in d["dope"] if r.get("predicted")) == 10
+    html = pocket_card._build_html(d)
+    assert "VERIFY AT THE RANGE" in html          # rendered banner
+    assert "tr class='pred'" in html              # predicted rows italic
+
+
+def test_confirmed_card_has_no_predicted_banner():
+    # demo ships fully confirmed -> behaviour unchanged, no banner
+    import tempfile
+    dst = os.path.join(tempfile.mkdtemp(), "conf.xlsx")
+    _sh.copy(_DEMO, dst)
+    d = pocket_card._gather(dst)
+    assert d["has_predicted"] is False
+    assert "VERIFY AT THE RANGE" not in pocket_card._build_html(d)
+
+
+def test_no_dope_no_bc_raises_with_bc_hint(fresh_demo):
+    wb = _lw(fresh_demo)
+    wb["Load Log"]["B9"] = "Acme 999gr Unobtainium"
+    wb.save(fresh_demo)
+    with pytest.raises(ValueError) as ei:
+        pocket_card._gather(fresh_demo)
+    assert "ballistic coefficient" in str(ei.value).lower()
