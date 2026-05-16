@@ -93,7 +93,9 @@
       {
         "name": "ELD-M",
         "weight": 140,
-        "cal": "6.5mm"
+        "cal": "6.5mm",
+        "g7": 0.326,
+        "bc_src": "Hornady hornady.com/bc current (Doppler G7); Chad-confirmed source of record; JBM historical 0.305"
       },
       {
         "name": "ELD-M",
@@ -131,7 +133,9 @@
       {
         "name": "ELD-M",
         "weight": 109,
-        "cal": "6mm"
+        "cal": "6mm",
+        "g7": 0.27,
+        "bc_src": "Hornady hornady.com/bc (Doppler G7, 6mm 108gr ELD-M); xJBM 0.270 (\u03940.000); NOTE seed weight 109 should be 108"
       },
       {
         "name": "ELD-X",
@@ -157,17 +161,23 @@
       {
         "name": "A-Tip",
         "weight": 135,
-        "cal": "6.5mm"
+        "cal": "6.5mm",
+        "g7": 0.321,
+        "bc_src": "Hornady hornady.com/bc Doppler G7; xJBM G1 0.637 (ratio 1.98, consistent)"
       },
       {
         "name": "A-Tip",
         "weight": 153,
-        "cal": "6.5mm"
+        "cal": "6.5mm",
+        "g7": 0.355,
+        "bc_src": "Hornady hornady.com/bc Doppler G7; xJBM G1 0.704 (ratio 1.98, consistent)"
       },
       {
         "name": "A-Tip",
         "weight": 230,
-        "cal": ".30"
+        "cal": ".30",
+        "g7": 0.414,
+        "bc_src": "Hornady hornady.com/bc Doppler G7; xJBM G1 0.823 (ratio 1.99, consistent)"
       },
       {
         "name": "BTHP Match",
@@ -184,12 +194,16 @@
       {
         "name": "Hybrid Target",
         "weight": 140,
-        "cal": "6.5mm"
+        "cal": "6.5mm",
+        "g7": 0.311,
+        "bc_src": "Berger bergerbullets.com 0.311 (Litz G7); xJBM 0.311 (\u03940.000)"
       },
       {
         "name": "Hybrid Target",
         "weight": 144,
-        "cal": "6.5mm"
+        "cal": "6.5mm",
+        "g7": 0.336,
+        "bc_src": "Berger official 0.336 (Doppler G7, 144 LRHT); xJBM 0.336 (\u03940.000); NOTE seed name should be 'Long Range Hybrid Target'"
       },
       {
         "name": "Hybrid Target",
@@ -209,12 +223,16 @@
       {
         "name": "VLD Target",
         "weight": 140,
-        "cal": "6.5mm"
+        "cal": "6.5mm",
+        "g7": 0.313,
+        "bc_src": "Berger Litz G7 (JBM 289)=0.313 == JBM catalog (285)=0.313 (\u03940.000)"
       },
       {
         "name": "VLD Target",
         "weight": 175,
-        "cal": ".308"
+        "cal": ".308",
+        "g7": 0.255,
+        "bc_src": "Berger Litz G7 (JBM 331)=0.255; JBM catalog G1 0.498 ratio 1.95 (consistent)"
       },
       {
         "name": "Elite Hunter",
@@ -239,7 +257,9 @@
       {
         "name": "Flat Base Target",
         "weight": 73,
-        "cal": ".224"
+        "cal": ".224",
+        "g7": 0.176,
+        "bc_src": "Berger Litz G7 (JBM 214)=0.176; JBM catalog (216)=0.178 (\u03940.002); NOTE seed 'Flat Base' is a boat-tail Match BT Target"
       }
     ],
     "Sierra": [

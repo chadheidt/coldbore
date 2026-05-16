@@ -90,5 +90,43 @@ versioned and grows via data-only updates with no app rebuild — so
 coverage can keep climbing toward the 500+ goal post-launch without
 ever blocking a release.
 
+## Progress update — 2026-05-16 late
+
+**Curated & shipped: 17 / 61** (all dual-corroborated, provenance
+recorded; build guard `test_no_bc_value_without_authoritative_provenance`
+enforces no value without a source).
+
+- **Hornady — 12/15** populated (ELD-M/ELD-X 147/168/178/225/143/178/212
+  + 140 ELD-M @0.326 your call + A-Tip 135/153/230 via Doppler-G7 with
+  JBM-G1 ratio-1.98 cross-check + 6mm ELD-M 0.270). 3 blank: phantom
+  6.5 153 ELD-M (seed bug), 2 legacy BTHP Match (no current maker
+  source).
+- **Berger — 5/12** populated (140 Hybrid Target 0.311, 144 LRHT 0.336,
+  140 VLD Target 0.313, .308 175 VLD Target 0.255, .224 73 BT 0.176 —
+  each corroborated by TWO authoritative sources: JBM Litz⇔catalog or
+  JBM⇔bergerbullets.com). 7 blank: single-JBM-source only (156 EOL,
+  .308 185/215 Target Hybrid, 6mm 105) or ambiguous seed identity
+  (.308 168 "Elite Hunter" — not a Berger product; .30 245 "Long Range
+  HT" — JBM only has EOL Elite Hunter; 156 "Hybrid Target" — seed dup
+  of the EOL).
+
+**Method note:** manufacturer sites/PDFs are NOT cleanly machine-
+readable here (JS calculators, column-mangled PDFs). The reliable
+rule-compliant path proved to be: JBM library exact-entry value (it
+encodes manufacturer vs Litz provenance) **plus** a second independent
+authoritative confirmation (JBM Litz⇔catalog pair, the G1/G7 ratio
+sanity, or a clean manufacturer search snippet). **Single-source =
+blank.** This keeps the "burned customer" risk at zero at the cost of
+slower coverage — correct trade for a paid product.
+
+**Remaining: 44 across Sierra/Lapua/Nosler/Barnes/Cutting Edge/Lehigh.**
+Same method, same bar. This is genuine careful per-bullet work (each
+maker ≈ a focused pass); coverage will keep climbing via data-only
+`bc_database_version` bumps with no app rebuild, so it never blocks a
+release. Sierra needs banded-G1 judgement; Lapua Scenar vs Scenar-L are
+different bullets (seed mixes them); Nosler several are G1-only;
+Barnes TTSX/LRX are hunting bullets (G1). Expect a meaningful number of
+principled blanks — that is the rule working, not a gap to paper over.
+
 *Updated 2026-05-16. Solver still NOT wired / NOT shipped (gates 3 & 4
 drafts pending your review; wiring after).*
