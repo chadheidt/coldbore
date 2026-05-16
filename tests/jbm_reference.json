@@ -1,0 +1,299 @@
+{
+ "_meta": "JBM jbmtraj-5.1 G7 point-mass, level scope (Elevation 0.00 MOA), ICAO std 59F/29.92inHg/0%RH/0ft, 10mph @90deg(3-oclock), sight 1.75in. Apply 100yd zero analytically: corr=drop_in - drop_in[100]*R/100. Captured 2026-05-16 for ballistic-solver gate 1.",
+ "6.5CM 140 ELD-M": {
+  "mv": 2710,
+  "g7_bc": 0.315,
+  "cal_in": 0.264,
+  "wt_gr": 140,
+  "rows": {
+   "0": {
+    "drop_in": -1.8,
+    "wind_in": 0.0,
+    "vel_fps": 2714.9,
+    "tof_s": 0.0
+   },
+   "100": {
+    "drop_in": -4.2,
+    "wind_in": 0.5,
+    "vel_fps": 2569.6,
+    "tof_s": 0.114
+   },
+   "200": {
+    "drop_in": -11.9,
+    "wind_in": 2.2,
+    "vel_fps": 2428.5,
+    "tof_s": 0.234
+   },
+   "300": {
+    "drop_in": -25.5,
+    "wind_in": 5.2,
+    "vel_fps": 2292.0,
+    "tof_s": 0.361
+   },
+   "400": {
+    "drop_in": -45.8,
+    "wind_in": 9.4,
+    "vel_fps": 2160.1,
+    "tof_s": 0.496
+   },
+   "500": {
+    "drop_in": -73.5,
+    "wind_in": 15.2,
+    "vel_fps": 2032.8,
+    "tof_s": 0.639
+   },
+   "600": {
+    "drop_in": -109.6,
+    "wind_in": 22.5,
+    "vel_fps": 1909.7,
+    "tof_s": 0.791
+   },
+   "700": {
+    "drop_in": -155.2,
+    "wind_in": 31.7,
+    "vel_fps": 1790.2,
+    "tof_s": 0.953
+   },
+   "800": {
+    "drop_in": -211.8,
+    "wind_in": 42.7,
+    "vel_fps": 1674.2,
+    "tof_s": 1.127
+   },
+   "900": {
+    "drop_in": -280.7,
+    "wind_in": 55.9,
+    "vel_fps": 1561.5,
+    "tof_s": 1.312
+   },
+   "1000": {
+    "drop_in": -364.0,
+    "wind_in": 71.5,
+    "vel_fps": 1452.2,
+    "tof_s": 1.512
+   }
+  }
+ },
+ ".308 175 SMK": {
+  "mv": 2650,
+  "g7_bc": 0.243,
+  "cal_in": 0.308,
+  "wt_gr": 175,
+  "rows": {
+   "0": {
+    "drop_in": -1.8,
+    "wind_in": 0.0,
+    "vel_fps": 2656.3,
+    "tof_s": 0.0
+   },
+   "100": {
+    "drop_in": -4.3,
+    "wind_in": 0.7,
+    "vel_fps": 2470.9,
+    "tof_s": 0.117
+   },
+   "200": {
+    "drop_in": -12.6,
+    "wind_in": 3.0,
+    "vel_fps": 2293.0,
+    "tof_s": 0.243
+   },
+   "300": {
+    "drop_in": -27.5,
+    "wind_in": 7.1,
+    "vel_fps": 2122.9,
+    "tof_s": 0.379
+   },
+   "400": {
+    "drop_in": -50.2,
+    "wind_in": 13.1,
+    "vel_fps": 1960.3,
+    "tof_s": 0.526
+   },
+   "500": {
+    "drop_in": -81.9,
+    "wind_in": 21.3,
+    "vel_fps": 1804.2,
+    "tof_s": 0.686
+   },
+   "600": {
+    "drop_in": -124.3,
+    "wind_in": 32.0,
+    "vel_fps": 1653.9,
+    "tof_s": 0.859
+   },
+   "700": {
+    "drop_in": -179.5,
+    "wind_in": 45.5,
+    "vel_fps": 1509.2,
+    "tof_s": 1.049
+   },
+   "800": {
+    "drop_in": -250.0,
+    "wind_in": 62.4,
+    "vel_fps": 1370.4,
+    "tof_s": 1.258
+   },
+   "900": {
+    "drop_in": -339.0,
+    "wind_in": 83.0,
+    "vel_fps": 1238.7,
+    "tof_s": 1.488
+   },
+   "1000": {
+    "drop_in": -450.9,
+    "wind_in": 108.1,
+    "vel_fps": 1117.7,
+    "tof_s": 1.744
+   }
+  }
+ },
+ ".300 PRC 225 ELD-M": {
+  "mv": 2810,
+  "g7_bc": 0.391,
+  "cal_in": 0.308,
+  "wt_gr": 225,
+  "rows": {
+   "0": {
+    "drop_in": -1.8,
+    "wind_in": 0.0,
+    "vel_fps": 2814.0,
+    "tof_s": 0.0
+   },
+   "100": {
+    "drop_in": -4.0,
+    "wind_in": 0.4,
+    "vel_fps": 2694.4,
+    "tof_s": 0.109
+   },
+   "200": {
+    "drop_in": -11.1,
+    "wind_in": 1.7,
+    "vel_fps": 2577.4,
+    "tof_s": 0.223
+   },
+   "300": {
+    "drop_in": -23.3,
+    "wind_in": 3.9,
+    "vel_fps": 2463.3,
+    "tof_s": 0.342
+   },
+   "400": {
+    "drop_in": -41.4,
+    "wind_in": 7.1,
+    "vel_fps": 2352.0,
+    "tof_s": 0.466
+   },
+   "500": {
+    "drop_in": -65.7,
+    "wind_in": 11.3,
+    "vel_fps": 2243.8,
+    "tof_s": 0.597
+   },
+   "600": {
+    "drop_in": -96.9,
+    "wind_in": 16.6,
+    "vel_fps": 2138.5,
+    "tof_s": 0.734
+   },
+   "700": {
+    "drop_in": -135.7,
+    "wind_in": 23.2,
+    "vel_fps": 2036.3,
+    "tof_s": 0.878
+   },
+   "800": {
+    "drop_in": -182.9,
+    "wind_in": 31.0,
+    "vel_fps": 1936.7,
+    "tof_s": 1.029
+   },
+   "900": {
+    "drop_in": -239.4,
+    "wind_in": 40.2,
+    "vel_fps": 1839.5,
+    "tof_s": 1.188
+   },
+   "1000": {
+    "drop_in": -306.1,
+    "wind_in": 50.9,
+    "vel_fps": 1744.7,
+    "tof_s": 1.355
+   }
+  }
+ },
+ "6 ARC 108 ELD-M": {
+  "mv": 2700,
+  "g7_bc": 0.347,
+  "cal_in": 0.243,
+  "wt_gr": 108,
+  "rows": {
+   "0": {
+    "drop_in": -1.8,
+    "wind_in": 0.0,
+    "vel_fps": 2704.5,
+    "tof_s": 0.0
+   },
+   "100": {
+    "drop_in": -4.2,
+    "wind_in": 0.5,
+    "vel_fps": 2572.6,
+    "tof_s": 0.114
+   },
+   "200": {
+    "drop_in": -11.9,
+    "wind_in": 2.0,
+    "vel_fps": 2444.3,
+    "tof_s": 0.233
+   },
+   "300": {
+    "drop_in": -25.5,
+    "wind_in": 4.7,
+    "vel_fps": 2319.7,
+    "tof_s": 0.359
+   },
+   "400": {
+    "drop_in": -45.5,
+    "wind_in": 8.5,
+    "vel_fps": 2198.9,
+    "tof_s": 0.492
+   },
+   "500": {
+    "drop_in": -72.6,
+    "wind_in": 13.7,
+    "vel_fps": 2082.0,
+    "tof_s": 0.632
+   },
+   "600": {
+    "drop_in": -107.9,
+    "wind_in": 20.2,
+    "vel_fps": 1968.6,
+    "tof_s": 0.781
+   },
+   "700": {
+    "drop_in": -152.1,
+    "wind_in": 28.3,
+    "vel_fps": 1858.4,
+    "tof_s": 0.937
+   },
+   "800": {
+    "drop_in": -206.3,
+    "wind_in": 38.1,
+    "vel_fps": 1751.2,
+    "tof_s": 1.104
+   },
+   "900": {
+    "drop_in": -272.0,
+    "wind_in": 49.6,
+    "vel_fps": 1646.8,
+    "tof_s": 1.28
+   },
+   "1000": {
+    "drop_in": -350.4,
+    "wind_in": 63.2,
+    "vel_fps": 1545.1,
+    "tof_s": 1.469
+   }
+  }
+ }
+}

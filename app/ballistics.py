@@ -48,17 +48,37 @@ Units: yards / feet / inches / fps / grains, US convention.
 import math
 
 # --- Standard G7 reference drag table (Cd vs Mach) ---------------------
-# Published G7 standard-projectile drag coefficients. Source: the
-# standard G7 drag function (Ballistic Resource Library / Litz tables) —
-# a fixed published standard, not estimated. Linear-interpolated.
+# THE authoritative standard G7 (McCoy) drag function, verbatim from
+# JBM Ballistics' published table (jbmballistics.com/.../text/mcg7.txt),
+# the exact 84-point Mach->Cd standard JBM's own solver integrates. This
+# is a FIXED published reference, not estimated.
+#
+# History: a prior hand-truncated 20-point version had supersonic Cd
+# values 5-15% LOW (e.g. M2.0 was 0.2604 vs the standard 0.2980), which
+# made the solver retain ~8% too much velocity at 1000 yd and under-
+# predict come-up/wind. Gate-1 validation vs JBM caught it; replaced
+# with the full authoritative table. Linear-interpolated.
 _G7_MACH = [
-    0.00, 0.50, 0.70, 0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.20,
-    1.30, 1.40, 1.50, 1.75, 2.00, 2.25, 2.50, 3.00, 3.50, 4.00,
+    0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45,
+    0.5, 0.55, 0.6, 0.65, 0.7, 0.725, 0.75, 0.775, 0.8, 0.825,
+    0.85, 0.875, 0.9, 0.925, 0.95, 0.975, 1, 1.025, 1.05, 1.075,
+    1.1, 1.125, 1.15, 1.2, 1.25, 1.3, 1.35, 1.4, 1.5, 1.55,
+    1.6, 1.65, 1.7, 1.75, 1.8, 1.85, 1.9, 1.95, 2, 2.05,
+    2.1, 2.15, 2.2, 2.25, 2.3, 2.35, 2.4, 2.45, 2.5, 2.55,
+    2.6, 2.65, 2.7, 2.75, 2.8, 2.85, 2.9, 2.95, 3, 3.1,
+    3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 4, 4.2,
+    4.4, 4.6, 4.8, 5,
 ]
 _G7_CD = [
-    0.1198, 0.1197, 0.1196, 0.1393, 0.1722, 0.2999, 0.3884, 0.4055,
-    0.4084, 0.3923, 0.3678, 0.3454, 0.3260, 0.2887, 0.2604, 0.2380,
-    0.2200, 0.1925, 0.1714, 0.1551,
+    0.1198, 0.1197, 0.1196, 0.1194, 0.1193, 0.1194, 0.1194, 0.1194, 0.1193, 0.1193,
+    0.1194, 0.1193, 0.1194, 0.1197, 0.1202, 0.1207, 0.1215, 0.1226, 0.1242, 0.1266,
+    0.1306, 0.1368, 0.1464, 0.1660, 0.2054, 0.2993, 0.3803, 0.4015, 0.4043, 0.4034,
+    0.4014, 0.3987, 0.3955, 0.3884, 0.3810, 0.3732, 0.3657, 0.3580, 0.3440, 0.3376,
+    0.3315, 0.3260, 0.3209, 0.3160, 0.3117, 0.3078, 0.3042, 0.3010, 0.2980, 0.2951,
+    0.2922, 0.2892, 0.2864, 0.2835, 0.2807, 0.2779, 0.2752, 0.2725, 0.2697, 0.2670,
+    0.2643, 0.2615, 0.2588, 0.2561, 0.2533, 0.2506, 0.2479, 0.2451, 0.2424, 0.2368,
+    0.2313, 0.2258, 0.2205, 0.2154, 0.2106, 0.2060, 0.2017, 0.1975, 0.1935, 0.1861,
+    0.1793, 0.1730, 0.1672, 0.1618,
 ]
 
 _RHO0 = 0.0764742          # ICAO sea-level standard air density, lb/ft^3
@@ -194,6 +214,11 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
     # deceleration opposite the velocity vector. Hence E carries ONE
     # power of v here and the second comes from the *vx / *vy below.
 
+    # Integrate to every requested range AND the zero range (the zero
+    # range is needed to re-zero the sight line analytically below).
+    zint = int(round(zero_yd))
+    fly_ranges = sorted(set(int(r) for r in ranges_yd) | {zint})
+
     def _fly(launch_angle_rad, want_wind=False):
         # state in feet; x downrange, y vertical (line of bore at 0)
         vx = muzzle_velocity_fps * math.cos(launch_angle_rad)
@@ -207,7 +232,7 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
         # crosswind component from clock angle (3 o'clock = full value)
         cross = wind_fps * math.sin(wind_angle_clock / 12.0 * 2 * math.pi)
         out = {}
-        targets = [r * 3.0 for r in ranges_yd]   # yd -> ft
+        targets = [r * 3.0 for r in fly_ranges]   # yd -> ft
         ti = 0
         # previous-step state, for interpolating exactly to each target
         # range (muzzle = origin at rest-time 0)
@@ -246,48 +271,49 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
             while ti < len(targets) and x >= targets[ti]:
                 tx = targets[ti]
                 f = (tx - x0) / (x - x0) if x != x0 else 0.0
-                out[ranges_yd[ti]] = (y0 + f * (y - y0),
-                                      z0 + f * (z - z0),
-                                      t0 + f * (t - t0))
+                out[fly_ranges[ti]] = (y0 + f * (y - y0),
+                                       z0 + f * (z - z0),
+                                       t0 + f * (t - t0))
                 ti += 1
             x0, y0, z0, t0 = x, y, z, t
         return out
 
-    # Solve launch angle so the path crosses line-of-sight at zero_yd.
-    # Line of sight starts sight_height below bore and is ~flat; find
-    # angle by secant iteration on drop@zero.
+    # Fire ALONG THE BORE (launch angle 0) and re-zero the sight line
+    # analytically. This is the standard exterior-ballistics method (and
+    # exactly how a professional solver's level-scope output is zeroed):
+    #
+    #   * The scope sits sight_height ABOVE the bore. With the scope
+    #     level, the line of sight is the horizontal line at +sh_ft;
+    #     the bullet's drop below that level LoS is  dLOS(x) = y(x) - sh.
+    #   * Zeroing at range Z dials the scope so the (straight) sight
+    #     line passes through the bullet at Z. Because the sight line is
+    #     straight, the come-up to dial at range R is simply the level-
+    #     scope drop with the linear sight-line rotation removed:
+    #         comeup_in(R) = -[ dLOS(R) - dLOS(Z) * (R / Z) ] * 12
+    #     which is identically 0 at R=Z.
+    #
+    # The previous code instead bisected a launch angle to put the
+    # bullet sight_height BELOW the bore at the zero and measured drop
+    # from a flat line at -sh_ft. That mis-modelled the sight geometry
+    # and inflated come-up by ~0.5-0.9 mil (load-independent); gate-1
+    # validation vs JBM caught it. The come-up is differential, so the
+    # actual bore launch angle cancels and firing flat is exact.
     sh_ft = sight_height_in / 12.0
-    lo, hi = -0.02, 0.06
-    for _ in range(60):
-        mid = (lo + hi) / 2.0
-        res = _fly(mid)
-        yz = res.get(int(zero_yd))
-        if yz is None:
-            # zero not in range list — fly explicitly to zero
-            r2 = _fly(mid, False)
-            yz = r2.get(int(zero_yd), (None, None, None))
-        y_at_zero = yz[0]
-        # want bullet path = line of sight height (-sh_ft) at zero
-        if y_at_zero is None:
-            break
-        if y_at_zero + sh_ft > 0:
-            hi = mid
-        else:
-            lo = mid
-    launch = (lo + hi) / 2.0
-
-    flight = _fly(launch, want_wind=True)
+    flight = _fly(0.0, want_wind=True)
+    y_zero, _, _ = flight[zint]
+    dlos_zero_ft = y_zero - sh_ft               # level-scope drop at zero
     result = {}
     for r in ranges_yd:
+        r = int(r)
         if r not in flight:
             continue
         y, z, t = flight[r]
-        # bullet position relative to line of sight (which sits sh_ft
-        # below bore). Drop below LoS (inches), positive = come up.
-        path_in = (y + sh_ft) * 12.0
         rng_in = r * 36.0
-        drop_below_los_in = -path_in
-        # angular come-up: inches at range -> MOA / Mil
+        dlos_r_ft = y - sh_ft                   # level-scope drop at R
+        # remove the straight sight-line rotation that zeroes at zero_yd
+        corr_ft = dlos_r_ft - dlos_zero_ft * (r / float(zint))
+        come_up_in = -corr_ft * 12.0            # +ve = dial UP
+        drop_below_los_in = come_up_in
         elev_moa = (drop_below_los_in / rng_in) * (180.0 / math.pi) * 60.0
         elev_mil = (drop_below_los_in / rng_in) * 1000.0
         wind_in = z * 12.0

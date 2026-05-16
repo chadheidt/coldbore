@@ -67,8 +67,12 @@ def test_g7_cd_clamps_and_interpolates():
     # clamps below/above the table
     assert ballistics._g7_cd(-1.0) == ballistics._G7_CD[0]
     assert ballistics._g7_cd(99.0) == ballistics._G7_CD[-1]
-    # exact node returns that node
-    assert abs(ballistics._g7_cd(1.00) - 0.3884) < 1e-9
+    # exact node returns that node — value is from the AUTHORITATIVE
+    # standard G7 (McCoy) drag function (JBM mcg7.txt): Cd(M1.0)=0.3803.
+    # (The prior 0.3884 was a wrong hand-truncated-table value that
+    # gate-1 validation against JBM exposed.)
+    assert abs(ballistics._g7_cd(1.00) - 0.3803) < 1e-9
+    assert abs(ballistics._g7_cd(2.00) - 0.2980) < 1e-9
     # midpoint between two nodes is between their Cds
     lo, hi = ballistics._g7_cd(2.00), ballistics._g7_cd(2.50)
     mid = ballistics._g7_cd(2.25)
@@ -257,3 +261,56 @@ def test_resolve_g7_bc_refuses_to_convert_g1():
 def test_resolve_g7_bc_raises_when_nothing_available():
     with pytest.raises(ballistics.BcUnavailable):
         ballistics.resolve_g7_bc()
+
+
+# --------------------------------------------------------------------------
+# Tier 3 — AUTHORITATIVE regression vs JBM Ballistics
+#
+# tests/jbm_reference.json was captured 2026-05-16 by driving JBM's
+# jbmtraj-5.1 (THE standard free G7 point-mass solver) for 4 reference
+# loads. JBM outputs a level-scope trajectory (Elevation 0.00 MOA); a
+# 100 yd zero is applied analytically by removing the straight sight-
+# line rotation (corr = drop - drop[100]*R/100), then converting to
+# mil. Loadscope must match JBM within the project's stated gate-1
+# tolerance (0.1 mil at 1000 yd) for elevation AND wind, across every
+# load and range. This caught two real bugs (a hand-truncated G7 table
+# 5-15% low in the supersonic regime, and a mis-modelled sight
+# geometry); it is the strong replacement for the old training-
+# knowledge ballpark band.
+# --------------------------------------------------------------------------
+import json as _json   # noqa: E402
+import os as _os       # noqa: E402
+
+_JBM = _os.path.join(_os.path.dirname(__file__), "jbm_reference.json")
+
+
+def test_matches_jbm_reference_within_gate1_tolerance():
+    ref = _json.load(open(_JBM))
+    worst = 0.0
+    worst_where = None
+    for name, load in ref.items():
+        if name.startswith("_"):
+            continue
+        rows = load["rows"]
+        d100 = rows["100"]["drop_in"]
+        sol = ballistics.solve_trajectory(
+            muzzle_velocity_fps=float(load["mv"]), g7_bc=load["g7_bc"],
+            zero_yd=100.0, sight_height_in=1.75,
+            ranges_yd=list(range(100, 1100, 100)),
+            temp_f=59.0, pressure_inhg=29.92, altitude_ft=0.0,
+            humidity_pct=0.0, wind_mph=10.0, wind_angle_clock=3.0)
+        for R in (200, 300, 400, 500, 600, 700, 800, 900, 1000):
+            jr = rows[str(R)]
+            rin = R * 36.0
+            jbm_elev = -(jr["drop_in"] - d100 * (R / 100.0)) / rin * 1000.0
+            jbm_wind = jr["wind_in"] / rin * 1000.0
+            de = abs(sol[R]["elev_mil"] - jbm_elev)
+            dw = abs(sol[R]["wind_mil"] - jbm_wind)
+            if max(de, dw) > worst:
+                worst = max(de, dw)
+                worst_where = (name, R, round(de, 3), round(dw, 3))
+            assert de < 0.10, f"{name} {R}yd elev off {de:.3f} mil vs JBM"
+            assert dw < 0.10, f"{name} {R}yd wind off {dw:.3f} mil vs JBM"
+    # tightest single point is the .308 going transonic at 1000 yd;
+    # everything supersonic is ~0.00-0.03 mil. Guard the headroom.
+    assert worst < 0.08, f"worst delta {worst:.3f} mil at {worst_where}"
