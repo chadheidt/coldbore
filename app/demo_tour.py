@@ -114,9 +114,27 @@ TOUR_STOPS = [
             "The grey italic numbers are PREDICTED, so you have a real "
             "range card before you ever leave the truck. At the range "
             "you type what you actually dialed; that cell turns solid "
-            "white = confirmed, and your printed Pocket Card carries a "
-            "'verify at the range' note until you've confirmed it. "
-            "Click 'Next' to see the printable card."
+            "white = confirmed. Click 'Next' to watch a row get confirmed."
+        ),
+        "min_dwell_seconds": 10,
+        "special": None,
+    },
+    {
+        "title": "Confirmed at the range — predictions become truth",
+        # Real render of the SAME Range & DOPE panel after the shooter
+        # typed confirmed values; from tools/render_dope_preview.py.
+        "image": "dope-preview-2-confirmed.png",
+        "sheet": "Ballistics",
+        "select_range": "A1:K30",
+        "narration": (
+            "Back from the range. You type what you actually dialed at "
+            "100 and 500 yards — and those cells snap from grey PREDICTED "
+            "to solid white CONFIRMED, the 'predicted' tag gone. Your "
+            "card is now part hard-won real data, part trusted prediction "
+            "for the distances you haven't shot yet — and it never leaves "
+            "you without a number. That's the whole pitch: a real range "
+            "card on day one, that only gets truer every trip. Click "
+            "'Next' to see it on the printable card."
         ),
         "min_dwell_seconds": 10,
         "special": None,
@@ -128,10 +146,11 @@ TOUR_STOPS = [
         "select_range": None,
         "narration": (
             "This is your Pocket Range Card — a clean 4×6 DOPE card "
-            "Loadscope builds straight from your load. In the full app one "
-            "click prints it to cardstock or saves it as a PDF; it folds "
-            "into your shirt pocket for the firing line. No more squinting "
-            "at notes on your phone in the wind."
+            "Loadscope builds straight from your load. Rows you haven't "
+            "confirmed yet print in italic under a 'PREDICTED — verify at "
+            "the range' banner, so you always know measured vs. predicted "
+            "at a glance. One click prints it to cardstock or saves a PDF; "
+            "it folds into your shirt pocket for the firing line."
         ),
         "min_dwell_seconds": 10,
         "special": None,
