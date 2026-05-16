@@ -299,7 +299,9 @@
       {
         "name": "Tipped MatchKing",
         "weight": 175,
-        "cal": ".308"
+        "cal": ".308",
+        "g7": 0.267,
+        "bc_src": "Sierra published G7 (sierrabullets.com TMK); xLitz G7 0.267 (\u03940.000)"
       },
       {
         "name": "Tipped MatchKing",
@@ -368,12 +370,16 @@
       {
         "name": "RDF",
         "weight": 140,
-        "cal": "6.5mm"
+        "cal": "6.5mm",
+        "g7": 0.33,
+        "bc_src": "Nosler published G7 (nosler.com); xJBM 0.330 (\u03940.000)"
       },
       {
         "name": "RDF",
         "weight": 175,
-        "cal": ".308"
+        "cal": ".308",
+        "g7": 0.27,
+        "bc_src": "Nosler published G7 (nosler.com); xJBM 0.270 (\u03940.000)"
       },
       {
         "name": "RDF",
