@@ -10,20 +10,37 @@ and adding a sci dep is the fragility class that's bitten us). Standard
 table scaled by the bullet's G7 BC — the same model class as Strelok /
 GeoBallistics / the free Hornady & Berger web calculators.
 
-⚠️⚠️ STATUS: BROKEN-DRAFT SCAFFOLD — DO NOT USE / DO NOT WIRE / DO NOT
-SHIP. A 2026-05-15 sanity test proved the trajectory integrator's
-retardation constant/formula (`K` + `decel`) is WRONG by ~7 orders of
-magnitude (TOF≈0.001s @ 1000yd, absurd outputs). What IS correct and
-reusable: the module shape/API, the published G7 drag table
-(_G7_MACH/_G7_CD — a fixed standard, fine), and air_density_ratio()
-(self-verified ≈1.000 at ICAO standard). The trajectory math needs the
-CORRECT standard G7-BC point-mass retardation (per McCoy "Modern
-Exterior Ballistics" / GNU Ballistics reference), implemented carefully,
-then the solver-memory ship-gates: validate vs professional solvers
-(Hornady 4DOF / GeoBallistics / Applied Ballistics) on the reference
-loads, AND the signed-disclaimer predicted-DOPE language +
-DISCLAIMER_VERSION bump. NOT autonomous-guess territory — safety
-critical (wrong DOPE = blown shot / liability). Nothing imports this.
+STATUS (2026-05-16): RETARDATION MATH FIXED + SELF-VALIDATED, STILL
+SHIP-GATED. DO NOT WIRE / DO NOT SHIP until the gates below clear.
+
+What was wrong (2026-05-15 broken-draft): the integrator divided by the
+retardation coefficient instead of multiplying by it
+(`decel = sigma*cd*v / (g7_bc*K)`), a ~1/K^2 ≈ 2.3e7 error — the
+"~7 orders of magnitude" the sanity test caught (TOF≈0.001s @ 1000yd).
+
+What is fixed (2026-05-16): the standard McCoy / GNU-Ballistics G7-BC
+point-mass retardation is now derived from first principles inline and
+applied correctly (see `_RETARD_K` derivation + `_fly`). The drag
+table, air_density_ratio(), and module API were already correct.
+
+Self-validation (tests/test_ballistics.py): physically-sane checks
+(monotonic come-up, plausible TOF, sane drift) PLUS a ballpark match to
+published reference DOPE for a known 6.5 Creedmoor 140 ELD-M load. A
+self-check confirms the math is no longer broken and is in the right
+regime — it is NECESSARY BUT NOT SUFFICIENT.
+
+REMAINING SHIP-GATES (require Chad — do NOT bypass):
+  (1) Validate vs a LIVE professional solver (Hornady 4DOF /
+      GeoBallistics / Applied Ballistics) on the reference loads.
+      Self-validation here is from training-knowledge reference
+      numbers, not an authoritative live query.
+  (2) BC database = authoritative manufacturer-sourced G7 values.
+      Do NOT fabricate. No BC values are bundled yet.
+  (3) Signed-disclaimer predicted-DOPE language + DISCLAIMER_VERSION
+      bump (re-prompt all users).
+  (4) Predicted-vs-confirmed DOPE UX in the Range&DOPE panel +
+      Chad review.
+Nothing imports this module; it remains a safe no-op until gates clear.
 
 Units: yards / feet / inches / fps / grains, US convention.
 """
@@ -47,6 +64,32 @@ _G7_CD = [
 _RHO0 = 0.0764742          # ICAO sea-level standard air density, lb/ft^3
 _SPEED_SOUND_STD = 1116.45  # fps at ICAO 59F sea level
 _G = 32.174                # ft/s^2
+
+# --- Standard G7-BC point-mass retardation coefficient ----------------
+# Derivation (McCoy "Modern Exterior Ballistics" Ch.5 / the same model
+# JBM & GNU Ballistics use):
+#
+#   Drag deceleration of the actual bullet:
+#       a_drag = F_d / m = (rho * V^2 * Cd * A) / (2 * m)
+#   BC method: actual Cd = i * Cd_std(M); G7 BC = m / (d^2 * i)
+#   [BC in lb/in^2, m bullet weight in lb, d in inches]. Substitute
+#   i = m / (d^2 * BC) and A = pi*d^2/4 — the d^2 cancels:
+#       a_drag = (pi/8) * rho * Cd_std(M) * V^2 / BC          (1)
+#
+#   US-unit reconciliation: rho here is WEIGHT density (lb/ft^3) and BC
+#   uses bullet WEIGHT, so a 1/g appears in mass-density and a g in the
+#   weight-based sectional density — they cancel. The in^2 -> ft^2 area
+#   conversion contributes a factor 144. Folding constants:
+#       a_drag = (pi / (8*144)) * rho0 * sigma * Cd_std(M) * V^2 / BC
+#              =  _RETARD_K       * sigma * Cd_std(M) * V^2 / BC
+#   where sigma = rho/rho0 (air-density ratio) and
+#       _RETARD_K = pi * rho0 / 1152
+#
+# Sanity: pi*0.0764742/1152 = 2.0856e-4 — matches the value the original
+# scaffold *intended* (it had 2.08551e-4 but then DIVIDED by it; the bug
+# was the operator/structure, not the magnitude). Computed exactly here
+# so it is self-documenting and not a magic literal.
+_RETARD_K = math.pi * _RHO0 / 1152.0   # ~= 2.0856e-04
 
 
 def _g7_cd(mach):
@@ -96,10 +139,12 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
                               humidity_pct)
     speed_sound = _SPEED_SOUND_STD * math.sqrt(
         (temp_f + 459.67) / 518.67)
-    # Drag constant for the G7-BC method (standard form): the bullet's
-    # retardation = sigma * Cd_G7(M) * V^2 / (BC * K), K chosen so a
-    # G7-BC bullet matches the reference. Standard constant:
-    K = 2.08551e-04  # ft, standard G7 retardation coefficient
+    # Standard G7-BC point-mass retardation (see _RETARD_K derivation):
+    #   a_drag = _RETARD_K * sigma * Cd_std(M) * V^2 / BC
+    # The integrator below works with E = a_drag / V (a per-second rate),
+    # so that ax = -E*vx, ay = -E*vy reproduces the vector drag
+    # deceleration opposite the velocity vector. Hence E carries ONE
+    # power of v here and the second comes from the *vx / *vy below.
 
     def _fly(launch_angle_rad, want_wind=False):
         # state in feet; x downrange, y vertical (line of bore at 0)
@@ -119,7 +164,8 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
             v = math.sqrt(vx * vx + vy * vy)
             mach = v / speed_sound
             cd = _g7_cd(mach)
-            decel = sigma * cd * v / (g7_bc * K)   # 1/s (×v below)
+            # E = a_drag / V = _RETARD_K * sigma * Cd(M) * V / BC  (1/s)
+            decel = _RETARD_K * sigma * cd * v / g7_bc
             ax = -decel * vx
             ay = -decel * vy - _G
             vx += ax * dt
