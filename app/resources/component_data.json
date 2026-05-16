@@ -106,7 +106,7 @@
       },
       {
         "name": "ELD-M",
-        "weight": 153,
+        "weight": 120,
         "cal": "6.5mm"
       },
       {
@@ -206,8 +206,8 @@
         "bc_src": "Berger official Doppler G7 0.336 (144 LRHT); xJBM 0.336 (\u03940.000)"
       },
       {
-        "name": "Hybrid Target",
-        "weight": 156,
+        "name": "Long Range Hybrid Target",
+        "weight": 153.5,
         "cal": "6.5mm"
       },
       {
@@ -329,7 +329,7 @@
       },
       {
         "name": "Scenar-L",
-        "weight": 150,
+        "weight": 144,
         "cal": "6.5mm"
       },
       {
@@ -476,6 +476,78 @@
         "name": "Match Solid",
         "weight": 145,
         "cal": "6.5mm"
+      }
+    ],
+    "Hammer": [
+      {
+        "name": "Absolute Hammer",
+        "weight": 87,
+        "cal": "6mm"
+      },
+      {
+        "name": "Hammer Hunter",
+        "weight": 80,
+        "cal": "6mm"
+      },
+      {
+        "name": "Absolute Hammer",
+        "weight": 109,
+        "cal": "6.5mm"
+      },
+      {
+        "name": "Absolute Hammer",
+        "weight": 123,
+        "cal": "6.5mm"
+      },
+      {
+        "name": "Hammer Hunter",
+        "weight": 131,
+        "cal": "6.5mm"
+      },
+      {
+        "name": "Hammer Hunter",
+        "weight": 99,
+        "cal": "6.5mm"
+      },
+      {
+        "name": "Absolute Hammer",
+        "weight": 151,
+        "cal": ".308"
+      },
+      {
+        "name": "Absolute Hammer",
+        "weight": 162,
+        "cal": ".308"
+      },
+      {
+        "name": "Absolute Hammer",
+        "weight": 178,
+        "cal": ".308"
+      },
+      {
+        "name": "Hammer Hunter",
+        "weight": 196,
+        "cal": ".308"
+      },
+      {
+        "name": "Absolute Hammer",
+        "weight": 119,
+        "cal": "7mm"
+      },
+      {
+        "name": "Absolute Hammer",
+        "weight": 140,
+        "cal": "7mm"
+      },
+      {
+        "name": "Absolute Hammer",
+        "weight": 155,
+        "cal": "7mm"
+      },
+      {
+        "name": "Hammer Hunter",
+        "weight": 169,
+        "cal": "7mm"
       }
     ]
   }
