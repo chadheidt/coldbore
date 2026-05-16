@@ -17,14 +17,20 @@ TEMPLATE_VERSION = "1.0"
 # Disclaimer version — bump this if the disclaimer text changes substantively.
 # When this number is newer than what the user has accepted (config field
 # disclaimer_accepted_version), they get re-prompted on next launch.
-DISCLAIMER_VERSION = 2
+DISCLAIMER_VERSION = 3
 
 
 DISCLAIMER_TEXT = """\
 Loadscope is a tool for organizing and analyzing data you collect during \
-precision rifle load development. It is NOT a source of load data and does \
-not recommend specific charge weights, bullet types, or seating depths to \
-use in your firearm.
+precision rifle load development. It is NOT a source of published load \
+data - it does not supply start or maximum charges, cartridge overall \
+lengths, or load recipes; obtain those only from current reloading \
+manuals published by your powder, bullet, and cartridge makers.
+
+Loadscope does highlight a "suggested" winning charge or seating depth. \
+That is only a statistical ranking of the loads you personally tested \
+and entered - not a safety-vetted recommendation of what is safe to \
+load or fire.
 
 By using this app, you acknowledge that:
 
@@ -33,14 +39,17 @@ gunpowder, primers, and components can result in severe injury, death, \
 and property damage.
 
 2. Loadscope analyzes data you provide, but is not a substitute for safe \
-handloading practice. Always cross-reference loads against published \
-reloading manuals from powder, bullet, and cartridge manufacturers. Watch \
-for pressure signs. Start below maximum loads and work up.
+handloading practice. Always cross-reference every load against current \
+published reloading manuals from powder, bullet, and cartridge \
+manufacturers. Watch for pressure signs. Start below maximum loads and \
+work up.
 
-3. No warranty is provided. Loadscope is provided "as is" without any \
-warranty of accuracy, fitness for a particular purpose, or freedom from \
-defects. Computed scores and rankings are statistical analyses of your \
-inputs, not load recommendations.
+3. We have no control over your components, equipment, measurements, or \
+how you use this app, and assume no responsibility for results obtained \
+through its use. Computed scores and rankings are statistical analyses \
+of your inputs, not load recommendations. No warranty is provided; \
+Loadscope is provided "as is" without any warranty of accuracy, fitness \
+for a particular purpose, or freedom from defects.
 
 4. Predicted ballistic data is an ESTIMATE, not a measurement. When \
 Loadscope displays a predicted DOPE, come-up, or wind table, those \
@@ -53,8 +62,8 @@ based on predicted values you have not verified at the range.
 
 5. The developer is not liable for any damage, injury, or loss \
 resulting from use of this app or actions taken based on its analyses. \
-This includes any damage, injury, or loss arising from reliance on \
-predicted ballistic values that were not verified at the range.
+This includes reliance on a suggested load, and reliance on predicted \
+ballistic values that were not verified at the range.
 
 6. You assume all risk associated with handloading and shooting.
 

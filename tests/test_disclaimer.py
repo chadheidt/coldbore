@@ -45,3 +45,19 @@ def test_disclaimer_text_is_pure_ascii():
     # Project hard rule: no em-dashes/curly quotes/non-ASCII in text
     # that gets written by the Py3.9 ASCII-default build path.
     version.DISCLAIMER_TEXT.encode("ascii")
+
+
+def test_disclaimer_no_longer_contradicts_the_suggested_winner():
+    # 2026-05-16: the old opening flatly said the app "does not recommend
+    # specific charge weights ... or seating depths" -- directly
+    # contradicted by the in-app SUGGESTED CHARGE / SUGGESTED JUMP winner.
+    # The accurate, more-defensible framing must be present and the
+    # contradictory phrasing must stay gone. Substantive => version >= 3.
+    t = version.DISCLAIMER_TEXT
+    assert "does not recommend specific charge weights" not in t
+    assert "NOT a source of published load data" in t
+    assert "statistical ranking of the loads you personally tested" in t
+    # QuickLOAD/GRT-standard "no control over your components" liability
+    # anchor folded into clause 3.
+    assert "no control over your components" in t
+    assert version.DISCLAIMER_VERSION >= 3
