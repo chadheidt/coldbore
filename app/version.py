@@ -17,7 +17,7 @@ TEMPLATE_VERSION = "1.0"
 # Disclaimer version — bump this if the disclaimer text changes substantively.
 # When this number is newer than what the user has accepted (config field
 # disclaimer_accepted_version), they get re-prompted on next launch.
-DISCLAIMER_VERSION = 1
+DISCLAIMER_VERSION = 2
 
 
 DISCLAIMER_TEXT = """\
@@ -42,10 +42,21 @@ warranty of accuracy, fitness for a particular purpose, or freedom from \
 defects. Computed scores and rankings are statistical analyses of your \
 inputs, not load recommendations.
 
-4. The developer is not liable for any damage, injury, or loss resulting \
-from use of this app or actions taken based on its analyses.
+4. Predicted ballistic data is an ESTIMATE, not a measurement. When \
+Loadscope displays a predicted DOPE, come-up, or wind table, those \
+values are calculated by a ballistic model from the bullet, muzzle \
+velocity, and atmospheric data you enter. The output is only as \
+accurate as those inputs and carries inherent modeling error. \
+Predicted values MUST be confirmed by live fire at known distances \
+before you rely on them for any shot. Do not take a shot that matters \
+based on predicted values you have not verified at the range.
 
-5. You assume all risk associated with handloading and shooting.
+5. The developer is not liable for any damage, injury, or loss \
+resulting from use of this app or actions taken based on its analyses. \
+This includes any damage, injury, or loss arising from reliance on \
+predicted ballistic values that were not verified at the range.
+
+6. You assume all risk associated with handloading and shooting.
 
 If you do not agree with these terms, do not use this app."""
 
