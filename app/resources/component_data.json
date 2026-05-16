@@ -366,7 +366,9 @@
       {
         "name": "RDF",
         "weight": 70,
-        "cal": ".224"
+        "cal": ".224",
+        "g7": 0.211,
+        "bc_src": "Nosler 2021 Product Guide G7 0.211; xJBM 0.211 (\u03940.000)"
       },
       {
         "name": "Custom Competition",
@@ -376,12 +378,16 @@
       {
         "name": "AccuBond Long Range",
         "weight": 142,
-        "cal": "6.5mm"
+        "cal": "6.5mm",
+        "g7": 0.315,
+        "bc_src": "Nosler published G7 (JBM 2819); xNosler G1 0.625 (ratio 1.98 consistent)"
       },
       {
         "name": "AccuBond Long Range",
         "weight": 190,
-        "cal": ".308"
+        "cal": ".308",
+        "g7": 0.325,
+        "bc_src": "Nosler published G7 (JBM 2580); xNosler G1 0.64 (ratio 1.97 consistent)"
       },
       {
         "name": "Ballistic Tip",
@@ -408,7 +414,9 @@
       {
         "name": "TTSX",
         "weight": 168,
-        "cal": ".308"
+        "cal": ".308",
+        "g7": 0.222,
+        "bc_src": "Barnes/Litz-measured G7 (JBM 86); xBarnes catalog G1 0.47 (ratio 2.12, consistent for monolithic TTSX)"
       },
       {
         "name": "Match Burner",

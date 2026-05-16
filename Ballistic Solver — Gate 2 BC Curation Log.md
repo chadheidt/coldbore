@@ -171,5 +171,32 @@ pairs (Lapua, Nosler, Barnes — like Berger) should dual-source more
 cleanly. Coverage climbs post-launch via data-only `bc_database_version`
 bumps; it never blocks a ship.
 
-*Updated 2026-05-16. Solver still NOT wired / NOT shipped (gates 3 & 4
-drafts pending your review; wiring after).*
+## 61-SEED FIRST PASS COMPLETE — 24/61 dual-corroborated (2026-05-16)
+
+| Maker | Curated | Notes |
+|---|---|---|
+| Hornady | 12/15 | ELD-M/ELD-X + A-Tip (Doppler G7, JBM-G1 ratio xchk). Blank: phantom 153 ELD-M, 2 legacy BTHP Match |
+| Berger | 5/12 | Litz⇔catalog / bergerbullets.com. Blank: single-source or ambiguous seed identity |
+| Lapua | 3/7 | Scenar-L G7/G1 + Scenar cat/Litz. Blank: Scenar≠Scenar-L, Naturalis, 167 Δ0.007 |
+| Nosler | 3/7 | ABLR G7/G1 pair + RDF (Nosler guide=JBM). Blank: single-source RDF, identity |
+| Barnes | 1/5 | .308 168 TTSX (Litz+catalog ratio). Blank: single-G1 LRX/MatchBurner, TSX≠TTSX |
+| Sierra | 0/9 | Litz G7 known but no reliable independent 2nd source here (banded-G1). #1 fill target |
+| Cutting Edge | 0/4 | single-G1 MTH / Lazer mismatch — no independent 2nd |
+| Lehigh | 0/2 | not in JBM |
+| **Total** | **24/61** | **37 principled blanks** |
+
+**This is the no-fabrication policy working, not a failure.** Every
+populated BC has two independent authoritative sources + provenance;
+the solver safely prompts the user for any blank; the DB is
+independently versioned so all 37 blanks are fillable post-launch via
+data-only `bc_database_version` bumps with NO app rebuild and NO
+release block. Highest-value future fills (clean sources known/likely):
+Sierra match line (Litz G7 already recorded above), Berger single-
+source Hybrids, Barnes LRX/Match Burner, Nosler RDF, Hornady A-Tip
+re-confirm. Seed-list bugs (phantom 153 ELD-M, 6mm wt, Berger/Lapua/
+Sierra/Nosler name drift, Scenar vs Scenar-L) to fix in the pre-beta
+seed-list cleanup pass — along with ADDING Hammer Bullets (Chad
+approved). 191 tests green; no-fabrication build guard enforced.
+
+*Updated 2026-05-16. Solver still NOT wired / NOT shipped (gate 3 DONE;
+gate 4 approved + queued incl. demo; wiring after).*
