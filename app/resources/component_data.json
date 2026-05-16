@@ -328,17 +328,23 @@
       {
         "name": "Scenar-L",
         "weight": 175,
-        "cal": ".308"
+        "cal": ".308",
+        "g7": 0.247,
+        "bc_src": "Lapua published G7 (JBM 3007); xLapua G1 0.49 (ratio 1.98 consistent)"
       },
       {
         "name": "Scenar",
         "weight": 139,
-        "cal": "6.5mm"
+        "cal": "6.5mm",
+        "g7": 0.29,
+        "bc_src": "Lapua catalog G7 (JBM 728); xLitz 0.285 (\u03940.005)"
       },
       {
         "name": "Scenar",
         "weight": 185,
-        "cal": ".308"
+        "cal": ".308",
+        "g7": 0.242,
+        "bc_src": "Lapua catalog G7 (JBM 762); xLitz 0.247 (\u03940.005)"
       },
       {
         "name": "Naturalis",

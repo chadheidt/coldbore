@@ -90,6 +90,23 @@ versioned and grows via data-only updates with no app rebuild — so
 coverage can keep climbing toward the 500+ goal post-launch without
 ever blocking a release.
 
+
+## POLICY UPDATE — 2026-05-16 (Chad decision: generalized cross-check)
+
+The cross-check is no longer JBM-specific (JBM lacks Sierra single-G7,
+Hammer entirely, etc.). New rule, same rigor:
+- **Source of record** = the maker's own published BC, NATIVE model,
+  never converted.
+- **Cross-check** = ANY independent authoritative source: JBM, Applied
+  Ballistics / Litz published measured data, or a second reputable
+  independent publication of that maker's value.
+- Populate ONLY when two independent authoritative sources agree
+  (direct, or G1/G7 ratio-consistent as a sanity check WITHOUT storing
+  a converted number). Blank when no independent corroboration exists.
+- Chad also granted blanket "search/fetch any query/URL" authorization.
+Same no-fabrication / no-single-source / no-conversion guarantees;
+just not brittle to JBM's coverage gaps.
+
 ## Progress update — 2026-05-16 late
 
 **Curated & shipped: 17 / 61** (all dual-corroborated, provenance
@@ -127,6 +144,32 @@ release. Sierra needs banded-G1 judgement; Lapua Scenar vs Scenar-L are
 different bullets (seed mixes them); Nosler several are G1-only;
 Barnes TTSX/LRX are hunting bullets (G1). Expect a meaningful number of
 principled blanks — that is the rule working, not a gap to paper over.
+
+## Sierra — 0/9 populated (principled blank under Policy 1)
+
+Clean **Litz-measured G7** obtained from JBM for the match bullets
+(6.5 142 SMK 0.301, .308 168 SMK 0.218, .308 175 SMK 0.243, .30 220
+SMK 0.31, .308 175 TMK 0.267, .224 77 SMK 0.19, 6mm 107 SMK 0.26) —
+but that is ONE authoritative source. Sierra's own data is
+velocity-banded G1; their product pages are JS-rendered (no static
+BC) and the official banded-BC PDF extracts column-scrambled (numbers
+not reliably pairable to bullets — misparse risk). No *reliable*
+independent second authoritative source obtainable here, so Policy 1 ⇒
+**blank, not guess.** Sierra is the #1 future-fill candidate the
+moment a clean second source is in hand (Sierra is the most popular
+match brand) — DB is independently-versioned so this is a data-only
+top-up later, never a release blocker. Litz G7 values are recorded
+here so the fill is fast once corroborated. GameKing (hunting, banded
+G1) and the ambiguous 6.5 150 / .224 77 "Tipped MatchKing" seed
+identities: blank regardless.
+
+**Realistic expectation going forward:** makers that publish only
+banded-G1 or aren't in JBM (Sierra, likely Cutting Edge, Lehigh, and
+the new Hammer add) will be largely principled-blank under Policy 1
+until clean second sources are sourced. Makers with JBM Litz+catalog
+pairs (Lapua, Nosler, Barnes — like Berger) should dual-source more
+cleanly. Coverage climbs post-launch via data-only `bc_database_version`
+bumps; it never blocks a ship.
 
 *Updated 2026-05-16. Solver still NOT wired / NOT shipped (gates 3 & 4
 drafts pending your review; wiring after).*
