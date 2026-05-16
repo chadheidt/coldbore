@@ -132,10 +132,10 @@
       },
       {
         "name": "ELD-M",
-        "weight": 109,
+        "weight": 108,
         "cal": "6mm",
         "g7": 0.27,
-        "bc_src": "Hornady hornady.com/bc (Doppler G7, 6mm 108gr ELD-M); xJBM 0.270 (\u03940.000); NOTE seed weight 109 should be 108"
+        "bc_src": "Hornady hornady.com/bc (Doppler G7, 6mm 108gr ELD-M); xJBM 0.270 (\u03940.000)"
       },
       {
         "name": "ELD-X",
@@ -199,11 +199,11 @@
         "bc_src": "Berger bergerbullets.com 0.311 (Litz G7); xJBM 0.311 (\u03940.000)"
       },
       {
-        "name": "Hybrid Target",
+        "name": "Long Range Hybrid Target",
         "weight": 144,
         "cal": "6.5mm",
         "g7": 0.336,
-        "bc_src": "Berger official 0.336 (Doppler G7, 144 LRHT); xJBM 0.336 (\u03940.000); NOTE seed name should be 'Long Range Hybrid Target'"
+        "bc_src": "Berger official Doppler G7 0.336 (144 LRHT); xJBM 0.336 (\u03940.000)"
       },
       {
         "name": "Hybrid Target",
@@ -235,17 +235,17 @@
         "bc_src": "Berger Litz G7 (JBM 331)=0.255; JBM catalog G1 0.498 ratio 1.95 (consistent)"
       },
       {
-        "name": "Elite Hunter",
+        "name": "EOL Elite Hunter",
         "weight": 156,
         "cal": "6.5mm"
       },
       {
-        "name": "Elite Hunter",
+        "name": "Classic Hunter",
         "weight": 168,
         "cal": ".308"
       },
       {
-        "name": "Long Range HT",
+        "name": "Long Range Hybrid Target",
         "weight": 245,
         "cal": ".30"
       },
@@ -255,11 +255,11 @@
         "cal": "6mm"
       },
       {
-        "name": "Flat Base Target",
+        "name": "Match BT Target",
         "weight": 73,
         "cal": ".224",
         "g7": 0.176,
-        "bc_src": "Berger Litz G7 (JBM 214)=0.176; JBM catalog (216)=0.178 (\u03940.002); NOTE seed 'Flat Base' is a boat-tail Match BT Target"
+        "bc_src": "Berger Litz G7 (JBM 214)=0.176; JBM catalog (216)=0.178 (\u03940.002)"
       }
     ],
     "Sierra": [
@@ -292,7 +292,7 @@
         "bc_src": "Sierra published G7 (sierrabullets.com); xLitz G7 0.310 (\u03940.003)"
       },
       {
-        "name": "Tipped MatchKing",
+        "name": "MatchKing",
         "weight": 150,
         "cal": "6.5mm"
       },
@@ -333,11 +333,11 @@
         "cal": "6.5mm"
       },
       {
-        "name": "Scenar-L",
+        "name": "Scenar",
         "weight": 167,
         "cal": ".308",
         "g7": 0.223,
-        "bc_src": "Lapua catalog G7 (JBM 748); xLitz 0.216 (\u03940.007 \u22640.010 indep-source); NOTE seed name should be 'Scenar' (no 167 Scenar-L exists; identity unambiguous)"
+        "bc_src": "Lapua catalog G7 (JBM 748)=0.223; xLitz 0.216 (\u03940.007 \u22640.010 indep-source)"
       },
       {
         "name": "Scenar-L",
@@ -390,8 +390,10 @@
       },
       {
         "name": "Custom Competition",
-        "weight": 142,
-        "cal": "6.5mm"
+        "weight": 140,
+        "cal": "6.5mm",
+        "g7": 0.281,
+        "bc_src": "Litz-measured G7 (JBM 853)=0.281; xNosler catalog G1 (JBM 1604) 0.529 (ratio 1.88, consistent for tangent-ogive CC)"
       },
       {
         "name": "AccuBond Long Range",
