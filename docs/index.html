@@ -10,7 +10,7 @@
 <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <meta property="og:title" content="Loadscope">
-<meta property="og:description" content="Precision rifle load development for Mac. Auto-import your chronograph and target data. Find your node faster.">
+<meta property="og:description" content="Precision rifle load development for Mac. Auto-import your chronograph and target data, see which load shot best, and predict your DOPE.">
 <meta property="og:image" content="assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <style>
@@ -77,23 +77,23 @@ nav .container { display: flex; justify-content: space-between; align-items: cen
 }
 .btn-outline:hover { background: var(--bg-light); }
 header.hero {
-  padding: 80px 0 40px;
+  padding: 52px 0 28px;
   text-align: center;
   border-bottom: 1px solid var(--border);
 }
 header.hero h1 {
-  font-size: 56px;
+  font-size: 44px;
   font-weight: 800;
-  letter-spacing: -1.5px;
-  margin-bottom: 24px;
+  letter-spacing: -1px;
+  margin-bottom: 0;
   line-height: 1.1;
 }
 header.hero h1 .accent { color: var(--orange); }
 header.hero .tagline {
-  font-size: 22px;
+  font-size: 18px;
   color: var(--text-dim);
-  margin-bottom: 36px;
-  max-width: 720px;
+  margin-bottom: 24px;
+  max-width: 680px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -104,12 +104,12 @@ header.hero .platform-note {
   color: var(--text-muted);
 }
 .screenshot-wrap {
-  margin: 64px auto 0;
-  max-width: 940px;
-  border-radius: 16px;
+  margin: 24px auto 0;
+  max-width: 740px;
+  border-radius: 14px;
   overflow: hidden;
   border: 1px solid var(--border);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
 }
 .screenshot-wrap img { display: block; width: 100%; height: auto; }
 .screenshot-placeholder {
@@ -122,21 +122,21 @@ header.hero .platform-note {
   font-size: 18px;
   font-style: italic;
 }
-section { padding: 80px 0; }
+section { padding: 44px 0; }
 section h2 {
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 700;
   letter-spacing: -0.5px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   text-align: center;
 }
 section h2 .accent { color: var(--orange); }
 section .section-sub {
   text-align: center;
   color: var(--text-dim);
-  font-size: 18px;
-  max-width: 640px;
-  margin: 0 auto 48px;
+  font-size: 16px;
+  max-width: 620px;
+  margin: 0 auto 24px;
 }
 .features {
   display: grid;
@@ -163,11 +163,11 @@ section .section-sub {
   margin-bottom: 16px;
 }
 .feature h3 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   margin-bottom: 8px;
 }
-.feature p { color: var(--text-dim); font-size: 15px; }
+.feature p { color: var(--text-dim); font-size: 14px; }
 .install {
   background: var(--bg-mid);
   border-top: 1px solid var(--border);
@@ -213,14 +213,53 @@ section .section-sub {
   background: var(--bg-mid);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 20px 24px;
+  overflow: hidden;
 }
-.faq-item h3 {
+.faq-item summary {
+  list-style: none;
+  cursor: pointer;
   font-size: 17px;
   font-weight: 600;
-  margin-bottom: 8px;
+  padding: 18px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
 }
-.faq-item p { color: var(--text-dim); font-size: 15px; }
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+";
+  color: var(--orange);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+  flex: none;
+}
+.faq-item[open] summary::after { content: "\2013"; }
+.faq-item summary:hover { color: var(--orange); }
+.faq-item p {
+  color: var(--text-dim);
+  font-size: 15px;
+  padding: 0 24px 20px;
+  margin: 0;
+}
+.faq-toggle { max-width: 800px; margin: 0 auto; }
+.faq-toggle > summary {
+  list-style: none;
+  cursor: pointer;
+  text-align: center;
+  color: var(--orange);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-mid);
+}
+.faq-toggle > summary::-webkit-details-marker { display: none; }
+.faq-toggle > summary::after { content: " \25BE"; }
+.faq-toggle[open] > summary { margin-bottom: 16px; }
+.faq-toggle[open] > summary::after { content: " \25B4"; }
 footer {
   border-top: 1px solid var(--border);
   padding: 40px 0;
@@ -231,15 +270,15 @@ footer {
 footer a { color: var(--orange); text-decoration: none; }
 footer p { margin-bottom: 8px; }
 .disclaimer {
-  margin-top: 16px;
-  padding: 16px;
+  margin: 16px auto 0;
+  padding: 12px 16px;
   background: var(--bg-mid);
   border: 1px solid var(--border);
   border-radius: 8px;
-  font-size: 13px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--text-muted);
   max-width: 760px;
-  margin-left: auto;
-  margin-right: auto;
   text-align: left;
 }
 @media (max-width: 720px) {
@@ -248,6 +287,94 @@ footer p { margin-bottom: 8px; }
   section h2 { font-size: 28px; }
   .nav-links a:not(.btn) { display: none; }
 }
+header.hero h1 .em { color: var(--orange); font-style: italic; }
+header.hero .line2 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--orange);
+  letter-spacing: -0.4px;
+  line-height: 1.15;
+  margin: 0 0 22px;
+}
+@media (max-width: 720px) { header.hero .line2 { font-size: 21px; } }
+.ww-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 860px;
+  margin: 40px auto 0;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.ww-grid .ww-head {
+  padding: 11px 18px;
+  font-weight: 700;
+  font-size: 12.5px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+}
+.ww-grid .ww-head.without { background: var(--bg-light); color: var(--text-dim); }
+.ww-grid .ww-head.with { background: rgba(217,119,6,0.14); color: var(--orange); }
+.ww-grid .ww-cell {
+  padding: 9px 18px;
+  font-size: 13px;
+  line-height: 1.45;
+  border-top: 1px solid var(--border);
+}
+.ww-grid .ww-cell.without { color: var(--text-dim); }
+.ww-grid .ww-cell.with { color: var(--text); border-left: 1px solid var(--border); }
+@media (max-width: 620px) { .ww-grid { grid-template-columns: 1fr; }
+  .ww-grid .ww-cell.with { border-left: 0; } }
+.demo {
+  max-width: 760px;
+  margin: 28px auto 0;
+}
+.demo-stage {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg-mid);
+}
+.demo-stage img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 44vh;
+  height: auto;
+  margin: 0 auto;
+  object-fit: contain;
+}
+#demo { padding: 30px 0; }
+#demo .section-sub { margin-bottom: 18px; }
+.demo-ctl { margin-top: 12px; }
+#ballistic .screenshot-wrap { max-width: 520px; }
+.demo-cap {
+  background: var(--bg-light);
+  padding: 12px 18px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--text-dim);
+  border-top: 1px solid var(--border);
+}
+.demo-cap b { color: var(--text); }
+.demo-ctl {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+.demo-ctl .dots { display: flex; gap: 8px; }
+.demo-ctl .dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--border); border: 0; padding: 0; cursor: pointer;
+}
+.demo-ctl .dot.on { background: var(--orange); }
+.demo-ctl .navbtn {
+  background: var(--bg-light); color: var(--text);
+  border: 1px solid var(--border); border-radius: 8px;
+  padding: 9px 18px; font-size: 14px; font-weight: 600; cursor: pointer;
+}
+.demo-ctl .navbtn:hover { border-color: var(--orange); }
 .download-modal {
   display: none;
   position: fixed;
@@ -383,63 +510,108 @@ footer p { margin-bottom: 8px; }
     <div class="hero-logo">
       <img src="assets/icon.png" alt="Loadscope™ logo">
     </div>
-    <h1>Precision rifle load development<br>for <span class="accent">Mac</span>.</h1>
+    <h1>Loadscope finds your <span class="accent">best load</span>.</h1>
+    <div class="line2">scored from your <span class="em">chronograph</span> and <span class="em">group</span> data.</div>
     <p class="tagline">
-      Drop your Garmin Xero and BallisticX CSV exports onto Loadscope™. It auto-imports velocity, SD, group size, mean radius, and more — straight into a structured load development workbook with built-in scoring. Find your node faster.
+      Drop your chronograph and target CSVs. Loadscope scores every load and tells you which charge and seating depth shot best — then predicts your full DOPE, 100 to 1000 yards.
     </p>
     <div class="cta-row">
       <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Download Loadscope™</a>
-      <a href="#install" class="btn btn-large btn-outline">How to Install</a>
+      <a href="#demo" class="btn btn-large btn-outline">See it in action</a>
     </div>
     <div class="platform-note">macOS 10.13+ &middot; Intel and Apple Silicon &middot; Free during beta</div>
 
     <div class="screenshot-wrap">
-      <img src="assets/workbook.png" alt="Loadscope Load Log showing a 7 SAUM powder ladder with the SUGGESTED CHARGE bar populated">
+      <img src="assets/workbook.png" alt="Loadscope Load Log: a powder ladder scored across velocity SD, group size, mean radius and vertical dispersion, with the suggested winning charge tagged at the top">
     </div>
   </div>
 </header>
 
 <section style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
   <div class="container">
-    <h2>The output speaks for itself.</h2>
-    <p class="section-sub">Loadscope turns your CSV exports into a structured load development workbook with composite scoring across SD, mean radius, and vertical dispersion. The suggested winner shows up at the top of the Load Log automatically.</p>
+    <h2>Stop guessing which load is <span class="accent">best</span>.</h2>
+    <p class="section-sub">The way most of us still do load development — and what Loadscope replaces.</p>
+    <div class="ww-grid">
+      <div class="ww-head without">Without Loadscope</div>
+      <div class="ww-head with">With Loadscope™</div>
+
+      <div class="ww-cell without">Re-type every shot velocity from your Xero into a spreadsheet after each range trip.</div>
+      <div class="ww-cell with">Drop your Xero and BallisticX CSVs on the window — velocities, SD, group size, mean radius fill themselves in.</div>
+
+      <div class="ww-cell without">Eyeball the numbers and <em>guess</em> which charge and seating depth actually shot best.</div>
+      <div class="ww-cell with">Composite scoring ranks every load across SD, group size, mean radius and vertical, and tags the winner.</div>
+
+      <div class="ww-cell without">No dope until you've burned barrel life walking rounds onto steel at every distance.</div>
+      <div class="ww-cell with">A full predicted DOPE table, 100–1000 yd, from the velocity Loadscope already measured — validated against JBM.</div>
+
+      <div class="ww-cell without">DOPE scrawled in a notebook that gets rained on, left in the truck, or lost.</div>
+      <div class="ww-cell with">A printed 4×6 Pocket Range Card — predicted to start, then confirmed with your real results.</div>
+    </div>
   </div>
 </section>
 
 <section>
   <div class="container">
     <h2>Drag. Click. <span class="accent">Done.</span></h2>
-    <p class="section-sub">Drop your range-trip CSVs onto the window. Loadscope figures out which ones are Garmin Xero (chronograph) and which are BallisticX (target groups), routes them automatically, and writes everything into your workbook. Excel opens with the data ready to read.</p>
+    <p class="section-sub">Drag your chronograph and target CSVs onto the window. Loadscope sorts out which is which — Garmin Xero velocities, BallisticX groups — files every shot in the right place, and your workbook is ready. No retyping.</p>
     <div class="screenshot-wrap" style="margin-top: 32px;">
       <img src="assets/screenshot.png" alt="Loadscope application window showing the precision-rifle reticle drop zone, workbook picker, Run Import button, and activity log with successful Garmin and BallisticX import messages">
     </div>
   </div>
 </section>
 
+<section id="ballistic">
+  <div class="container">
+    <h2>Built-in <span class="accent">ballistic calculator</span>.</h2>
+    <p class="section-sub">From your load and the muzzle velocity measured from your chronograph data, Loadscope predicts your full DOPE — elevation, wind, drop, velocity and energy, 100 to 1000 yards — with a solver validated against the industry-standard JBM. Confirm it at the range, then print a 4×6 Pocket Range Card.</p>
+    <div class="screenshot-wrap" style="margin-top: 32px;">
+      <img src="assets/pocket-card-hero.png" alt="Loadscope Pocket Range Card: predicted elevation, wind, drop, velocity and energy from 100 to 1000 yards, validated against JBM">
+    </div>
+  </div>
+</section>
+
+<section id="demo" style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <h2>See it in <span class="accent">action</span>.</h2>
+    <p class="section-sub">The same guided tour that's built into the app — no download required.</p>
+    <div class="demo">
+      <div class="demo-stage">
+        <img id="demoImg" src="assets/demo/01-load-log.png" alt="">
+        <div class="demo-cap"><b id="demoTitle"></b> — <span id="demoText"></span></div>
+      </div>
+      <div class="demo-ctl">
+        <button class="navbtn" onclick="demoStep(-1)">‹ Back</button>
+        <div class="dots" id="demoDots"></div>
+        <button class="navbtn" onclick="demoStep(1)">Next ›</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section id="features">
   <div class="container">
-    <h2>Built by a <span class="accent">precision shooter</span>, for precision shooters.</h2>
-    <p class="section-sub">No more retyping shot velocities into Excel after every range trip. Loadscope does the data entry; you focus on finding the node.</p>
+    <h2>Built by precision <span class="accent">shooters</span>, for precision shooters.</h2>
+    <p class="section-sub">No more retyping shot velocities into Excel after every range trip. Loadscope does the data entry; you focus on finding the load that shoots.</p>
     <div class="features">
       <div class="feature">
         <div class="icon">→</div>
         <h3>Drag-and-drop import</h3>
-        <p>Drop CSVs from Garmin Xero (chronograph) and BallisticX (target groups) onto the window or the Dock icon. Loadscope figures out which is which and routes them to the right place.</p>
+        <p>Drop CSVs from Garmin Xero (chronograph) and BallisticX (target groups) onto the window. A simple label (<code>P1 45.5 H4350</code>) tells Loadscope which test each one is — it routes them automatically.</p>
       </div>
       <div class="feature">
         <div class="icon">📊</div>
-        <h3>Composite node scoring</h3>
-        <p>Every load gets a score combining SD, group size, and vertical dispersion. The suggested winner shows up at the top of your Load Log automatically.</p>
-      </div>
-      <div class="feature">
-        <div class="icon">📁</div>
-        <h3>Structured workbook</h3>
-        <p>Powder ladder, seating depth, confirmation groups, DOPE table, charts — all on one workbook with consistent labeling. Includes a one-page printable cheat sheet.</p>
+        <h3>Composite load scoring</h3>
+        <p>Every load is ranked across velocity SD, group size, mean radius and vertical dispersion. The suggested winner is tagged at the top of your Load Log — and the same workflow finds your seating depth.</p>
       </div>
       <div class="feature">
         <div class="icon">🎯</div>
-        <h3>Label-driven workflow</h3>
-        <p>Use a simple label format (<code>P1 45.5 H4350</code>) on your CSVs and Loadscope routes everything correctly. Works with the test types you already run: powder ladder, seating depth, confirmation.</p>
+        <h3>Predicted DOPE &amp; Pocket Card</h3>
+        <p>A built-in ballistic solver predicts elevation, wind, drop, velocity and energy, 100–1000 yd, validated against JBM. Confirm at the range; print a 4×6 Pocket Range Card.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📚</div>
+        <h3>Load Library</h3>
+        <p>Every winning load saved in one place — across cartridges, rifles and seasons. Next season picks up where this one left off, no re-deriving what already worked.</p>
       </div>
       <div class="feature">
         <div class="icon">↻</div>
@@ -487,36 +659,51 @@ footer p { margin-bottom: 8px; }
   <div class="container">
     <h2>Common <span class="accent">questions</span>.</h2>
     <p class="section-sub">If you don't see your question here, email <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a>.</p>
-    <div class="faq-grid">
-      <div class="faq-item">
-        <h3>How do I get an access code?</h3>
+    <details class="faq-toggle">
+      <summary>Show the questions</summary>
+      <div class="faq-grid">
+      <details class="faq-item">
+        <summary>How do I get an access code?</summary>
         <p>Loadscope is in private beta. Email <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a> to request access. You'll receive a unique code that unlocks both the download and the app itself.</p>
-      </div>
-      <div class="faq-item">
-        <h3>What's the workflow look like in practice?</h3>
-        <p>Range trip → CSV from your Xero, CSV from BallisticX → drop both onto Loadscope → workbook opens in Excel with all the velocity, SD, ES, group size, mean radius numbers filled in. You add notes, save, done.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Does it work with [other chronograph]?</h3>
+      </details>
+      <details class="faq-item">
+        <summary>How accurate is the predicted DOPE?</summary>
+        <p>Loadscope uses a G7/G1 point-mass ballistic solver — the same model class as Strelok, GeoBallistics and the free Hornady/Berger calculators — validated against the industry-standard JBM solver (within ~0.07&nbsp;mil with good inputs). Measured-drag solvers like Applied Ballistics and Hornady 4DOF pull ahead deep in the transonic. <strong>Predicted values are an estimate, not a measurement</strong> — always confirm by live fire at known distances before relying on them for a shot that matters.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What's "predicted" vs "confirmed"?</summary>
+        <p>Grey italic numbers are predicted by the solver from your bullet, muzzle velocity and conditions. At the range you type what you actually dialed — that row turns solid white = confirmed. Predictions never overwrite confirmed data, and your printed Pocket Card carries a "verify at the range" banner until a row is confirmed.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do I have to enter a ballistic coefficient?</summary>
+        <p>34 of the most popular match bullets have BCs built in. For any other bullet, type its BC off the box or the maker's site once. It's not a source of published load data — you still cross-reference charges against current reloading manuals. The bullet database grows over time with no app update needed.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What's the workflow look like in practice?</summary>
+        <p>Range trip → CSV from your Xero, CSV from BallisticX → drop both onto Loadscope → it scores every load, predicts your DOPE, and you print a Pocket Range Card. Next trip you confirm the predictions, and they give way to your real results.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Does it work with [other chronograph]?</summary>
         <p>Currently supports Garmin Xero (ShotView CSVs) and BallisticX. The architecture is pluggable — adding LabRadar, MagnetoSpeed, Athlon Rangecraft, etc. is straightforward. If you'd like one added, send a sample CSV to support@loadscope.app.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Is my data going to the cloud?</h3>
+      </details>
+      <details class="faq-item">
+        <summary>Is my data going to the cloud?</summary>
         <p>No. Loadscope writes to a regular .xlsx file on your Mac. No account, no sync, no telemetry. Your loads stay on your machine.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Is Loadscope code-signed by Apple?</h3>
+      </details>
+      <details class="faq-item">
+        <summary>Is Loadscope code-signed by Apple?</summary>
         <p>Yes. Loadscope is signed with a Developer ID Application certificate and notarized by Apple. macOS will open it without security warnings on the first launch — the same as any commercial Mac app.</p>
-      </div>
-      <div class="faq-item">
-        <h3>Does it work on Apple Silicon?</h3>
+      </details>
+      <details class="faq-item">
+        <summary>Does it work on Apple Silicon?</summary>
         <p>Yes — runs natively on Intel Macs and via Rosetta 2 on M-series. Performance is fine; Loadscope is a small app.</p>
-      </div>
-      <div class="faq-item">
-        <h3>What about Windows / iOS?</h3>
+      </details>
+      <details class="faq-item">
+        <summary>What about Windows / iOS?</summary>
         <p>Both ports are planned. Mac is the current focus; Windows is next on the roadmap. iOS is a longer-term project.</p>
+      </details>
       </div>
-    </div>
+    </details>
   </div>
 </section>
 
@@ -525,7 +712,7 @@ footer p { margin-bottom: 8px; }
     <p><strong>Loadscope™</strong> &middot; <a href="mailto:support@loadscope.app">support@loadscope.app</a></p>
     <p>&copy; 2026 Loadscope™. All rights reserved.</p>
     <div class="disclaimer">
-      <strong>Reloading safety disclaimer:</strong> Loadscope is a tool for organizing data you collect during precision rifle load development. It is NOT a source of load data and does not recommend specific charge weights, bullet types, or seating depths for your firearm. Always cross-reference loads against published reloading manuals from powder, bullet, and cartridge manufacturers. Watch for pressure signs. Start below maximum loads and work up. The developer is not liable for any damage, injury, or loss resulting from use of this app.
+      <strong>Reloading safety disclaimer:</strong> Loadscope is a tool for organizing and analyzing data you collect during precision rifle load development. It is NOT a source of published load data — it does not supply start or maximum charges, cartridge overall lengths, or load recipes; obtain those only from current reloading manuals. When Loadscope highlights a "suggested" winning charge or seating depth, that is a statistical ranking of the loads you personally tested — not a safety-vetted recommendation of what is safe to load or fire. Predicted ballistic data is an estimate, not a measurement; confirm it by live fire at known distances before relying on it for any shot. Always cross-reference loads against published manuals from powder, bullet, and cartridge manufacturers, watch for pressure signs, and start below maximum and work up. The developer is not liable for any damage, injury, or loss resulting from use of this app. You assume all risk associated with handloading and shooting.
     </div>
   </div>
 </footer>
@@ -715,6 +902,54 @@ document.getElementById("accessCodeInput").addEventListener("keydown", (e) => {
   if (e.key === "Enter") submitAccessCode();
   else if (e.key === "Escape") closeDownloadModal();
 });
+
+/* ---- "See it in action" demo slideshow (independent of the
+   download/worker code above; reuses the in-app guided-tour copy) ---- */
+(function () {
+  var STOPS = [
+    { img: "assets/demo/01-load-log.png", title: "Load Log — your powder ladder",
+      text: "Every charge you tested, scored across velocity SD, group size, mean radius and vertical — the 🥇 marks the winner." },
+    { img: "assets/demo/02-charts.png", title: "Charts — heat-mapped scoring",
+      text: "How it picked the winner — each load scored across four metrics, combined into one. Reweight to taste." },
+    { img: "assets/demo/03-seating-depth.png", title: "Seating Depth — find your jump",
+      text: "Same workflow for seating depth — each jump ranked; the winner becomes your final cartridge length." },
+    { img: "assets/demo/dope-preview-1-predicted.png", title: "Predicted DOPE — your starting range card",
+      text: "From your load and measured muzzle velocity, a full predicted DOPE table — 100 to 1000 yards, validated against JBM." },
+    { img: "assets/demo/dope-preview-2-confirmed.png", title: "Confirmed at the range",
+      text: "Type what you actually dialed; predicted cells turn solid white = confirmed. Your real results replace the predictions." },
+    { img: "assets/demo/05-pocket-card.png", title: "Pocket Range Card — printable DOPE",
+      text: "A clean 4×6 card — elevation, wind, drop, velocity, energy. Two per sheet; cut and go." },
+    { img: "assets/demo/06-load-library.png", title: "Load Library — your winners over time",
+      text: "Every winning load saved in one place — across cartridges, rifles and seasons." }
+  ];
+  var i = 0;
+  var imgEl = document.getElementById("demoImg");
+  if (!imgEl) return;
+  var titleEl = document.getElementById("demoTitle");
+  var textEl = document.getElementById("demoText");
+  var dotsEl = document.getElementById("demoDots");
+  STOPS.forEach(function (_, k) {
+    var b = document.createElement("button");
+    b.className = "dot";
+    b.setAttribute("aria-label", "Go to slide " + (k + 1));
+    b.onclick = function () { i = k; render(); };
+    dotsEl.appendChild(b);
+  });
+  function render() {
+    var s = STOPS[i];
+    imgEl.src = s.img;
+    imgEl.alt = s.title;
+    titleEl.textContent = s.title;
+    textEl.textContent = s.text;
+    var ds = dotsEl.children;
+    for (var k = 0; k < ds.length; k++) ds[k].className = "dot" + (k === i ? " on" : "");
+  }
+  window.demoStep = function (d) {
+    i = (i + d + STOPS.length) % STOPS.length;
+    render();
+  };
+  render();
+})();
 </script>
 
 </body>
