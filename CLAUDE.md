@@ -1,5 +1,18 @@
 # Loadscope — context for Claude
 
+## 🔴 OBEY EVERY TURN — the rules that get "saved but not read" (do NOT skip)
+
+1. **Box every ask.** Anything you need from Chad (decision/answer/choice/approval/action) goes in a `> ⚠️ **YOUR TO-DO**` blockquote, every line bold — it fires his phone. No box = no ask. Never a soft "let me know".
+2. **Do it yourself, end-to-end.** Incl. the build (`open "Build App.command"`), R2 upload, and install self-test. Don't delegate what a tool can do; no mid-flow "go check this".
+3. **Investigate → recommend → act once.** Find the existing mechanism before building a new one; audit your own output before sending; never lead Chad through a chain of pivots.
+4. **No per-fix releases pre-beta.** Website work stays on a branch off `main` until Chad explicitly says "publish" (`docs/` publishes from `main`).
+5. **Marketing/website copy:** precision-rifle vernacular, never corny. Banned: *node, "before you leave the truck", truer, come-ups, graded*. Lead with **best-load**. Offer options. Chad reviews in the **browser** (not the preview panel).
+6. **Always recommend** when offering choices; explanations for Chad's steps at a 5th-grade level; end work with an explicit "done / ready" signal.
+
+Full rationale: the `READ EVERY SESSION` memories in MEMORY.md + the sections below. If these conflict with old prose below, **these win**.
+
+---
+
 You're working on **Loadscope**, Chad Heidt's PyQt5 Mac desktop app for precision rifle load development. CSV imports from Garmin Xero (chronograph) and BallisticX (target groups) feed an Excel workbook with scoring formulas. Distributed as a single .app bundle to a small group of friends. In-app auto-updates via custom Python+bash installer.
 
 ## Read these first (every session)
