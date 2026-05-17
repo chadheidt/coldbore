@@ -81,9 +81,60 @@ def _prepped_workbook():
             hf.left.text = hf.center.text = hf.right.text = None
         ws.HeaderFooter.differentFirst = False
         ws.HeaderFooter.differentOddEven = False
+        # Force every sheet to exactly one print page. Excel happened to
+        # render the demo sheets 1-page each; LibreOffice (the headless
+        # renderer used when Excel-for-Mac's AppleScript PDF export is
+        # broken — confirmed dead in 16.109) honors the xlsx pageSetup,
+        # so pin fit-to-1-page to keep the "1 visible sheet = 1 PDF page"
+        # mapping in _visible_sheet_pages() bulletproof under either path.
+        from openpyxl.worksheet.properties import PageSetupProperties
+        ws.sheet_properties.pageSetUpPr = PageSetupProperties(fitToPage=True)
+        ws.page_setup.fitToWidth = 1
+        ws.page_setup.fitToHeight = 1
     out = os.path.join(TMP, "_demo_noheader.xlsx")
     wb.save(out)
     return out
+
+
+def _soffice_bin():
+    """Locate the LibreOffice headless binary, or None."""
+    for p in ("/Applications/LibreOffice.app/Contents/MacOS/soffice",
+              shutil.which("soffice") or "",
+              shutil.which("libreoffice") or ""):
+        if p and os.path.isfile(p):
+            return p
+    return None
+
+
+def _export_workbook_pdf_libreoffice(pdf_path):
+    """Headless LibreOffice xlsx->PDF. Used because Microsoft broke
+    Excel-for-Mac's AppleScript `save … as PDF` in 16.109 (silent no-op /
+    parameter error) and its print/save dialogs don't present under
+    automation. LibreOffice reads the same xlsx pageSetup, so with
+    _prepped_workbook()'s fit-to-1-page it emits one page per visible
+    sheet — same contract _visible_sheet_pages() relies on. An isolated
+    -env user profile avoids clashing with any running LibreOffice."""
+    soffice = _soffice_bin()
+    if not soffice:
+        raise RuntimeError("LibreOffice not found")
+    src = _prepped_workbook()
+    outdir = os.path.join(TMP, "_lo_out")
+    if os.path.isdir(outdir):
+        shutil.rmtree(outdir)
+    os.makedirs(outdir)
+    profile = os.path.join(TMP, "_lo_profile")
+    r = subprocess.run(
+        [soffice, "-env:UserInstallation=file://" + profile,
+         "--headless", "--norestore", "--convert-to",
+         "pdf:calc_pdf_Export", "--outdir", outdir, src],
+        capture_output=True, text=True, timeout=180)
+    produced = glob.glob(os.path.join(outdir, "*.pdf"))
+    if not produced:
+        raise RuntimeError(
+            f"LibreOffice produced no PDF.\nstdout:{r.stdout}\nstderr:{r.stderr}")
+    if os.path.exists(pdf_path):
+        os.remove(pdf_path)
+    shutil.move(produced[0], pdf_path)
 
 
 def _export_workbook_pdf(pdf_path):
@@ -190,8 +241,23 @@ def main():
     print(f"Visible sheets ({nvis}): " +
           ", ".join(f"{n}=p{p}" for n, p in pages.items()))
     wb_pdf = os.path.join(TMP, "_workbook.pdf")
-    print("Exporting whole workbook to PDF via Excel…")
-    _export_workbook_pdf(wb_pdf)
+    if _soffice_bin():
+        print("Exporting whole workbook to PDF via LibreOffice (headless)…")
+        _export_workbook_pdf_libreoffice(wb_pdf)
+    else:
+        print("Exporting whole workbook to PDF via Excel…")
+        _export_workbook_pdf(wb_pdf)
+    # The contract: one PDF page per visible sheet. Verify it (the demo
+    # workbook is small + every sheet is pinned fit-to-1-page) so a
+    # renderer pagination change can never silently mis-map sheets.
+    _ndoc = Quartz.CGPDFDocumentGetNumberOfPages(
+        Quartz.CGPDFDocumentCreateWithURL(
+            Quartz.CFURLCreateWithFileSystemPathRelativeToBase(
+                None, wb_pdf, Quartz.kCFURLPOSIXPathStyle, False, None)))
+    if _ndoc != nvis:
+        raise SystemExit(
+            f"PDF has {_ndoc} pages but {nvis} visible sheets — page "
+            f"mapping unsafe. Check fit-to-page / print areas.")
     for fname, kind, target in STOPS:
         out = os.path.join(OUT_DIR, fname)
         if kind == "sheet":
