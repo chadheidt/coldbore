@@ -12,14 +12,15 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 **To PUBLISH when Chad says "publish":** `git checkout main && git merge website-revamp && git push origin main` (GitHub Pages auto-deploys `docs/`). Until then DO NOT merge/push the branch.
 
-**Open questions for Chad (pending his call — do NOT delete on guess):**
-1. `/Users/macbook/Projects/Loadscope/6.xlsx` — stray 104KB workbook at project root; looks like a stale review copy but it's data. Trash it?
-2. `~/Desktop/Load Dev Program/` and `~/Desktop/Loadscope app/` — ambiguous folders (possibly old copies / the installed app). Leave or Trash?
+**Cleanup RESOLVED 2026-05-16 (Chad answered):** `6.xlsx` trashed; `~/Desktop/Load Dev Program/` trashed; `~/Desktop/Loadscope app/` KEPT (Chad's installed-app reference). Earlier same-day cleanup (all recoverable in ~/.Trash): `build/` + `dist/` (~276MB), `.DS_Store`×2, `.pytest_cache/`, `.wrangler/`; /tmp scratch deleted. Source, in-progress work, import/output folders, `.backups`, `.claude` untouched. Nothing pending here.
 
-**Cleanup done 2026-05-16 (all recoverable in ~/.Trash):** `build/` + `dist/` (~276MB), `.DS_Store`×2, `.pytest_cache/`, `.wrangler/`; /tmp scratch deleted. Source, in-progress work, import/output folders, `.backups`, `.claude` untouched.
+**Preference-enforcement work done 2026-05-16 (active NEXT session):**
+- `CLAUDE.md` corrected: added a top **"🔴 OBEY EVERY TURN"** 6-rule block (box-every-ask, do-it-end-to-end incl. build/R2/install, investigate→recommend→act-once, no per-fix releases pre-beta, marketing-voice banned words, always-recommend); fixed the build/release procedure (self-drive build via `open "Build App.command"`, **mandatory R2 upload**, full-chain verify with test key, optional install self-test); added the no-per-fix-pre-beta + docs-publishes-from-main rules.
+- New memory `project_loadscope_marketing_voice.md` (brand voice + banned words + working style — read before any website/copy work).
+- **3 enforcement hooks wired** into local `.claude/settings.json` (gitignored; .bak made): a 2nd SessionStart command that cats the 7 rule-memory files verbatim into context; a UserPromptSubmit one-line reminder; a PreToolUse Bash guard `~/.claude/hooks/guard_docs_publish.py` that asks for confirmation before any `git push` that would change `docs/` on `main` (publish-safety). These solve the "saved but not read" gap — they take effect at the START of the next session.
 
 **Tomorrow's resume prompt (paste to start):**
-> Continue Loadscope. Read `Notes for next session.md` top. `git checkout website-revamp` — the website revamp WIP is there (commit 8c8d16a), main is clean/publish-safe. Reopen `docs/index.html` in the browser. Pending: my answers on `6.xlsx` + the two Desktop folders, then any final website tweaks, then I say "publish" → merge website-revamp to main + push. v0.15.0 solver already shipped; cadence = no per-fix releases, batch to beta.
+> Continue Loadscope. Read `Notes for next session.md` top. `git checkout website-revamp` — the website revamp WIP is there (commit 8c8d16a), main is clean/publish-safe. Reopen `docs/index.html` in the browser for final tweaks. When I say "publish" → merge website-revamp to main + push (GitHub Pages auto-deploys). v0.15.0 solver already shipped; cadence = no per-fix releases, batch to beta. Cleanup is done; nothing pending from me except the website review.
 
 ---
 
