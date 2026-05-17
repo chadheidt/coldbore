@@ -4,7 +4,15 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🚀 LATEST — v0.15.0 BALLISTIC SOLVER **SHIPPED** 2026-05-16 (read this first)
+## 🛠️ IN PROGRESS — WEBSITE REVAMP (2026-05-16, pre-beta roadmap step 3)
+
+**NOT shipped/released** (per `project_release_review_cadence` — batch into beta; commit/push main + tests green only).
+
+- **Pocket Card upgraded + committed/pushed `609973c` (main):** solver now exposes retained velocity; energy=grains·v²/450240 (grains parsed from bullet label, blank if unparseable). Card has Drop(in)/Vel(fps)/Energy(ft-lb) columns + a bold tinted box around Elev/Wind. `pocket_card._build_html(d, layout=)`: **"card"** = bare 6×4 (website/demo hero — used by `tools/render_predicted_pocket_card.py` & `render_demo_screenshots.py`), **"field"** = DEFAULT, US Letter, two true-4×6 cards top-left + cut guides (prints 1:1 — fixed the old 6×4 page home printers shrank/floated), **"large"** = one big card/sheet. Card is auto-height (9pt table font won't clip). Chad approved layout **A** (one page, two 4×6). 207 tests green.
+- **HERO LOCKED for the site:** Option **A** layout + **T1** headline — `Know your DOPE.` (DOPE orange) / second line `*your* data, *your* range card` (the "your" italic+orange) + tagline (CSV scoring → solver predicts DOPE, validated vs JBM, confirm at range) + the corrected Pocket Card as the hero image. Mockup builders in `/tmp/mkhl3.py` etc. (throwaway).
+- **NEXT: build the full website revamp** in `docs/index.html` (Explore audit done — see `project_loadscope_website_audit_post_v014`): new hero (T1), "Without/With Loadscope" section, embedded web-demo slideshow (reuse the 8 `app/resources/demo_screenshots/*.png` + the 7-stop `demo_tour.TOUR_STOPS` narration), updated features+FAQ (solver/predicted-vs-confirmed/Load Library), footer disclaimer aligned to the new in-app wording. Keep beta framing; do NOT touch the download-modal/Cloudflare-worker JS. Then render a full-site preview + Chad review BEFORE any GitHub Pages publish (publish = hold gate + his website review checkpoint).
+
+## 🚀 v0.15.0 BALLISTIC SOLVER **SHIPPED** 2026-05-16 (prior milestone)
 
 **Status:** v0.15.0 (Predicted DOPE solver) is BUILT, RELEASED, and auto-update verified end-to-end. Gates 1/3/4 done; Gate 2 = 34/75 (principled blanks, non-blocking, grows post-launch data-only). 206 tests green. Demo = 7-stop tour w/ solver beat + regenerated PREDICTED-banner pocket card.
 
