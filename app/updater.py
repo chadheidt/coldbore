@@ -24,7 +24,7 @@ Manifest format (host this anywhere — GitHub Releases, Dropbox, S3, etc.):
         "app_release_notes": "Added charge weight scaling. Fixed bug X.",
         "template_version": "1.1",
         "template_download_url": "https://...",
-        "template_release_notes": "Added new column on Load Log."
+        "template_release_notes": "Added new column on Powder Charge Log."
     }
 """
 

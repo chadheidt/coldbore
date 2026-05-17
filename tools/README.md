@@ -7,7 +7,7 @@ for the project (regenerating landing-page images, etc.).
 
 ### `render_workbook.py`
 
-Generates `docs/assets/workbook.png` — the Load Log hero image on the landing
+Generates `docs/assets/workbook.png` — the Powder Charge Log hero image on the landing
 page. Renders programmatically via Pillow rather than screen-capturing Excel,
 which avoids macOS Screen Recording permission and Spaces issues. The 7 SAUM
 ladder data and the composite scoring values are baked in.

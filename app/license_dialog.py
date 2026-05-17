@@ -47,7 +47,8 @@ REVOKED_TEXT = (
 DESCRIPTION_TEXT = (
     "Loadscope turns Garmin Xero (chronograph) and BallisticX (target group) "
     "CSV exports into a structured load development workbook with composite "
-    "scoring across SD, mean radius, and vertical dispersion. Drop the CSVs "
+    "scoring across velocity flat-spot, velocity SD, mean radius and "
+    "vertical SD. Drop the CSVs "
     "onto the app; Excel opens with the data ready to read."
 )
 

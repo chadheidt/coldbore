@@ -10,7 +10,7 @@
 <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <meta property="og:title" content="Loadscope">
-<meta property="og:description" content="Precision rifle load development for Mac. Auto-import your chronograph and target data, see which load shot best, and predict your DOPE.">
+<meta property="og:description" content="Precision rifle load development for Mac. Drop your chronograph and target CSVs; Loadscope finds your best powder charge and seating depth.">
 <meta property="og:image" content="assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <style>
@@ -69,7 +69,7 @@ nav .container { display: flex; justify-content: space-between; align-items: cen
   transition: background 0.15s;
 }
 .btn:hover { background: var(--orange-dark); }
-.btn-large { padding: 16px 36px; font-size: 17px; }
+.btn-large { padding: 10px 26px; font-size: 14.5px; }
 .btn-outline {
   background: transparent;
   border: 1px solid var(--border);
@@ -97,7 +97,7 @@ header.hero .tagline {
   margin-left: auto;
   margin-right: auto;
 }
-header.hero .cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+header.hero .cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 48px; }
 header.hero .platform-note {
   margin-top: 20px;
   font-size: 14px;
@@ -122,7 +122,7 @@ header.hero .platform-note {
   font-size: 18px;
   font-style: italic;
 }
-section { padding: 44px 0; }
+section { padding: 30px 0; }
 section h2 {
   font-size: 28px;
   font-weight: 700;
@@ -136,7 +136,7 @@ section .section-sub {
   color: var(--text-dim);
   font-size: 16px;
   max-width: 620px;
-  margin: 0 auto 24px;
+  margin: 0 auto 16px;
 }
 .features {
   display: grid;
@@ -176,27 +176,27 @@ section .section-sub {
 .steps {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
-  margin-top: 48px;
+  gap: 20px;
+  margin-top: 22px;
 }
 .step {
   text-align: center;
-  padding: 24px;
+  padding: 10px 16px;
 }
 .step .num {
   display: inline-block;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: var(--orange);
   color: white;
   text-align: center;
-  line-height: 48px;
-  font-size: 22px;
+  line-height: 40px;
+  font-size: 19px;
   font-weight: 700;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
-.step h3 { font-size: 17px; margin-bottom: 8px; }
+.step h3 { font-size: 17px; margin-bottom: 6px; }
 .step p { color: var(--text-dim); font-size: 14.5px; }
 .beta-callout {
   margin: 48px auto 0;
@@ -510,42 +510,42 @@ header.hero .line2 {
     <div class="hero-logo">
       <img src="assets/icon.png" alt="Loadscope™ logo">
     </div>
-    <h1>Loadscope finds your <span class="accent">best load</span>.</h1>
-    <div class="line2">scored from your <span class="em">chronograph</span> and <span class="em">group</span> data.</div>
-    <p class="tagline">
-      Drop your chronograph and target CSVs. Loadscope scores every load and tells you which charge and seating depth shot best — then predicts your full DOPE, 100 to 1000 yards.
-    </p>
+    <h1>Precision rifle load development<br>for <span class="accent">Mac</span>.</h1>
+    <div class="line2">Loadscope finds your best <span class="em">powder charge</span> and <span class="em">seating depth</span>.</div>
+    <p class="tagline">Plus a built-in <strong>ballistic calculator</strong> — your full DOPE, 100 to 1000 yards.</p>
     <div class="cta-row">
       <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Download Loadscope™</a>
       <a href="#demo" class="btn btn-large btn-outline">See it in action</a>
     </div>
     <div class="platform-note">macOS 10.13+ &middot; Intel and Apple Silicon &middot; Free during beta</div>
-
-    <div class="screenshot-wrap">
-      <img src="assets/workbook.png" alt="Loadscope Load Log: a powder ladder scored across velocity SD, group size, mean radius and vertical dispersion, with the suggested winning charge tagged at the top">
-    </div>
   </div>
 </header>
 
 <section style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
   <div class="container">
-    <h2>Stop guessing which load is <span class="accent">best</span>.</h2>
-    <p class="section-sub">The way most of us still do load development — and what Loadscope replaces.</p>
-    <div class="ww-grid">
-      <div class="ww-head without">Without Loadscope</div>
-      <div class="ww-head with">With Loadscope™</div>
-
-      <div class="ww-cell without">Re-type every shot velocity from your Xero into a spreadsheet after each range trip.</div>
-      <div class="ww-cell with">Drop your Xero and BallisticX CSVs on the window — velocities, SD, group size, mean radius fill themselves in.</div>
-
-      <div class="ww-cell without">Eyeball the numbers and <em>guess</em> which charge and seating depth actually shot best.</div>
-      <div class="ww-cell with">Composite scoring ranks every load across SD, group size, mean radius and vertical, and tags the winner.</div>
-
-      <div class="ww-cell without">No dope until you've burned barrel life walking rounds onto steel at every distance.</div>
-      <div class="ww-cell with">A full predicted DOPE table, 100–1000 yd, from the velocity Loadscope already measured — validated against JBM.</div>
-
-      <div class="ww-cell without">DOPE scrawled in a notebook that gets rained on, left in the truck, or lost.</div>
-      <div class="ww-cell with">A printed 4×6 Pocket Range Card — predicted to start, then confirmed with your real results.</div>
+    <h2>How <span class="accent">Loadscope</span> works.</h2>
+    <p class="section-sub">Loadscope works from the data you collect at the range. Four things decide your best load: velocity flat-spot and shot-to-shot SD from your chronograph; mean radius (or group size), plus vertical SD, from your target app. Here's the whole process:</p>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>Drop your CSVs</h3>
+        <p>Drag your CSV exports onto the window and everything fills itself in — no retyping. (Currently supported: Garmin Xero and BallisticX.) Using other gear? Send a sample CSV and we'll add it.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>Your best powder charge and seating depth</h3>
+        <p>Loadscope scores every load you tested across those metrics and determines your best powder charge and seating depth — tagged at the top of your Powder Charge Log.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>Built-in ballistic calculator</h3>
+        <p>From your winning load and the muzzle velocity measured by your chronograph, Loadscope's solver predicts elevation, wind, drop, velocity and energy at every distance — validated against the industry-standard JBM.</p>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <h3>Predicted DOPE &amp; Pocket Card</h3>
+        <p>It prints on a 4&times;6 Pocket Range Card: predicted to start, then you confirm each distance by live fire and your real numbers replace the predictions.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -553,9 +553,29 @@ header.hero .line2 {
 <section>
   <div class="container">
     <h2>Drag. Click. <span class="accent">Done.</span></h2>
-    <p class="section-sub">Drag your chronograph and target CSVs onto the window. Loadscope sorts out which is which — Garmin Xero velocities, BallisticX groups — files every shot in the right place, and your workbook is ready. No retyping.</p>
+    <p class="section-sub">That's the whole app — a drop zone, your workbook, and a Run button.</p>
     <div class="screenshot-wrap" style="margin-top: 32px;">
       <img src="assets/screenshot.png" alt="Loadscope application window showing the precision-rifle reticle drop zone, workbook picker, Run Import button, and activity log with successful Garmin and BallisticX import messages">
+    </div>
+  </div>
+</section>
+
+<section style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <h2>The <span class="accent">Powder Charge Log</span>.</h2>
+    <p class="section-sub">Every charge you tested, scored and ranked — your best one tagged at the top.</p>
+    <div class="screenshot-wrap" style="margin-top: 28px;">
+      <img src="assets/demo/01-load-log.png" alt="Loadscope Powder Charge Log for a 6.5 Creedmoor load: each powder charge scored across velocity flat-spot, shot-to-shot SD, mean radius (or group size) and vertical SD, with the winning charge tagged at the top">
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>The <span class="accent">Seating Depth Log</span>.</h2>
+    <p class="section-sub">Same workflow for seating depth — each jump distance scored and ranked, your best one tagged at the top.</p>
+    <div class="screenshot-wrap" style="margin-top: 28px;">
+      <img src="assets/demo/03-seating-depth.png" alt="Loadscope Seating Depth Log for a 6.5 Creedmoor load: each bullet jump distance scored and ranked, with the winning seating depth tagged at the top">
     </div>
   </div>
 </section>
@@ -563,7 +583,7 @@ header.hero .line2 {
 <section id="ballistic">
   <div class="container">
     <h2>Built-in <span class="accent">ballistic calculator</span>.</h2>
-    <p class="section-sub">From your load and the muzzle velocity measured from your chronograph data, Loadscope predicts your full DOPE — elevation, wind, drop, velocity and energy, 100 to 1000 yards — with a solver validated against the industry-standard JBM. Confirm it at the range, then print a 4×6 Pocket Range Card.</p>
+    <p class="section-sub">Elevation, wind, drop, velocity and energy — 100 to 1000 yards, on a card that fits your pocket.</p>
     <div class="screenshot-wrap" style="margin-top: 32px;">
       <img src="assets/pocket-card-hero.png" alt="Loadscope Pocket Range Card: predicted elevation, wind, drop, velocity and energy from 100 to 1000 yards, validated against JBM">
     </div>
@@ -591,23 +611,8 @@ header.hero .line2 {
 <section id="features">
   <div class="container">
     <h2>Built by precision <span class="accent">shooters</span>, for precision shooters.</h2>
-    <p class="section-sub">No more retyping shot velocities into Excel after every range trip. Loadscope does the data entry; you focus on finding the load that shoots.</p>
+    <p class="section-sub">The rest of what Loadscope gives you.</p>
     <div class="features">
-      <div class="feature">
-        <div class="icon">→</div>
-        <h3>Drag-and-drop import</h3>
-        <p>Drop CSVs from Garmin Xero (chronograph) and BallisticX (target groups) onto the window. A simple label (<code>P1 45.5 H4350</code>) tells Loadscope which test each one is — it routes them automatically.</p>
-      </div>
-      <div class="feature">
-        <div class="icon">📊</div>
-        <h3>Composite load scoring</h3>
-        <p>Every load is ranked across velocity SD, group size, mean radius and vertical dispersion. The suggested winner is tagged at the top of your Load Log — and the same workflow finds your seating depth.</p>
-      </div>
-      <div class="feature">
-        <div class="icon">🎯</div>
-        <h3>Predicted DOPE &amp; Pocket Card</h3>
-        <p>A built-in ballistic solver predicts elevation, wind, drop, velocity and energy, 100–1000 yd, validated against JBM. Confirm at the range; print a 4×6 Pocket Range Card.</p>
-      </div>
       <div class="feature">
         <div class="icon">📚</div>
         <h3>Load Library</h3>
@@ -677,10 +682,6 @@ header.hero .line2 {
       <details class="faq-item">
         <summary>Do I have to enter a ballistic coefficient?</summary>
         <p>34 of the most popular match bullets have BCs built in. For any other bullet, type its BC off the box or the maker's site once. It's not a source of published load data — you still cross-reference charges against current reloading manuals. The bullet database grows over time with no app update needed.</p>
-      </details>
-      <details class="faq-item">
-        <summary>What's the workflow look like in practice?</summary>
-        <p>Range trip → CSV from your Xero, CSV from BallisticX → drop both onto Loadscope → it scores every load, predicts your DOPE, and you print a Pocket Range Card. Next trip you confirm the predictions, and they give way to your real results.</p>
       </details>
       <details class="faq-item">
         <summary>Does it work with [other chronograph]?</summary>
@@ -907,11 +908,11 @@ document.getElementById("accessCodeInput").addEventListener("keydown", (e) => {
    download/worker code above; reuses the in-app guided-tour copy) ---- */
 (function () {
   var STOPS = [
-    { img: "assets/demo/01-load-log.png", title: "Load Log — your powder ladder",
+    { img: "assets/demo/01-load-log.png", title: "Powder Charge Log — your powder ladder",
       text: "Every charge you tested, scored across velocity SD, group size, mean radius and vertical — the 🥇 marks the winner." },
     { img: "assets/demo/02-charts.png", title: "Charts — heat-mapped scoring",
       text: "How it picked the winner — each load scored across four metrics, combined into one. Reweight to taste." },
-    { img: "assets/demo/03-seating-depth.png", title: "Seating Depth — find your jump",
+    { img: "assets/demo/03-seating-depth.png", title: "Seating Depth Log — find your jump",
       text: "Same workflow for seating depth — each jump ranked; the winner becomes your final cartridge length." },
     { img: "assets/demo/dope-preview-1-predicted.png", title: "Predicted DOPE — your starting range card",
       text: "From your load and measured muzzle velocity, a full predicted DOPE table — 100 to 1000 yards, validated against JBM." },

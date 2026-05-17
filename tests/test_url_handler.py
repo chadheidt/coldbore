@@ -1,7 +1,7 @@
 """Regression tests for the loadscope:// URL handler.
 
 The action-extraction logic is what routes clickable workbook hyperlinks
-(Charts!A10, Seating Depth!A28) to in-app handlers. Keep it tight.
+(Charts!A10, Seating Depth Log!A28) to in-app handlers. Keep it tight.
 """
 import os
 import sys

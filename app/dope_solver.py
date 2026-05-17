@@ -23,14 +23,14 @@ from openpyxl import load_workbook
 import ballistics
 import component_data as _cd
 
-# Workbook cells (Ballistics sheet derives these from Load Log).
+# Workbook cells (Ballistics sheet derives these from Powder Charge Log).
 _BAL = "Ballistics"
 _MV_CELL = "K5"          # muzzle velocity (fps)
 _ZERO_CELL = "E6"        # zero range (yd)
 _SIGHT_CELL = "H6"       # sight height (in)
-_BULLET_CELL = ("Load Log", "B9")
-_CLICK_CELL = ("Load Log", "G7")     # "0.1 Mil" / "0.25 MOA" -> unit
-_TEMP_CELL = ("Load Log", "G13")     # temperature (deg F), optional
+_BULLET_CELL = ("Powder Charge Log", "B9")
+_CLICK_CELL = ("Powder Charge Log", "G7")     # "0.1 Mil" / "0.25 MOA" -> unit
+_TEMP_CELL = ("Powder Charge Log", "G13")     # temperature (deg F), optional
 _DOPE_ROWS = range(9, 19)            # Ballistics rows 9..18
 _RANGE_COL = "A"
 
@@ -75,7 +75,7 @@ def read_solver_inputs(workbook_path):
 
 def resolve_bullet_bc(bullet_str, manual_bc=None, manual_model="G7"):
     """(bc, model, source) using the manual override else the curated
-    DB keyed off the Load Log bullet string. Raises ballistics.
+    DB keyed off the Powder Charge Log bullet string. Raises ballistics.
     BcUnavailable / BcModelUnsupported exactly like ballistics.resolve_bc
     (never fabricates, never converts models)."""
     if manual_bc is not None:

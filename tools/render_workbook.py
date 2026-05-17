@@ -1,5 +1,5 @@
 """
-Render the Load Log section of the demo workbook as a clean PNG image,
+Render the Powder Charge Log section of the demo workbook as a clean PNG image,
 without going through Excel's screen-capture pipeline. Uses Pillow.
 
 Output: /Users/macbook/Desktop/workbook.png

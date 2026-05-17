@@ -42,9 +42,9 @@ TMP = "/tmp/loadscope_demo_render"
 
 # (output filename, kind, target). Mirrors TOUR_STOPS in app/demo_tour.py.
 STOPS = [
-    ("01-load-log.png",      "sheet", "Load Log"),
+    ("01-load-log.png",      "sheet", "Powder Charge Log"),
     ("02-charts.png",        "sheet", "Charts"),
-    ("03-seating-depth.png", "sheet", "Seating Depth"),
+    ("03-seating-depth.png", "sheet", "Seating Depth Log"),
     ("04-ballistics.png",    "sheet", "Ballistics"),
     ("05-pocket-card.png",   "card",  None),
     ("06-load-library.png",  "sheet", "Load Library"),
@@ -66,7 +66,7 @@ def _visible_sheet_pages():
 
 def _prepped_workbook():
     """Copy the demo workbook and strip print headers/footers from every
-    sheet. Load Log / Charts / Seating Depth carry a footer ("Rifle Load
+    sheet. Powder Charge Log / Charts / Seating Depth Log carry a footer ("Rifle Load
     Development Log / Page N") that pins the rendered content's bounding
     box to the page bottom — so autocrop keeps a big white band and the
     image displays small. Ballistics / Load Library have NO footer, which
@@ -98,8 +98,17 @@ def _export_workbook_pdf(pdf_path):
         os.remove(pdf_path)
     # Excel emits the WHOLE workbook here (one page per visible sheet) —
     # verified. We rely on that and split by page below.
-    r = _osa(f'tell application "Microsoft Excel" to save active sheet '
+    #
+    # Excel-for-Mac PDF export: the workbook understands `save`, a sheet
+    # does NOT (Excel 16.16 raises -1708 "active sheet doesn't understand
+    # the save message" for the old `save active sheet ...` form). Use
+    # the workbook form (verified working); keep the legacy sheet form as
+    # a fallback so this is a strict superset of prior behavior.
+    r = _osa('tell application "Microsoft Excel" to save active workbook '
              f'in POSIX file "{pdf_path}" as PDF file format')
+    if not os.path.isfile(pdf_path):
+        r = _osa(f'tell application "Microsoft Excel" to save active sheet '
+                 f'in POSIX file "{pdf_path}" as PDF file format')
     _osa('tell application "Microsoft Excel" to try\n'
          'close every workbook saving no\nend try')
     if not os.path.isfile(pdf_path):

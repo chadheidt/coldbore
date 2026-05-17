@@ -55,16 +55,16 @@ except ImportError:
 # Next button stays disabled to enforce a comprehension floor.
 TOUR_STOPS = [
     {
-        "title": "Load Log — your powder ladder",
+        "title": "Powder Charge Log — your powder ladder",
         "image": "01-load-log.png",
-        "sheet": "Load Log",
+        "sheet": "Powder Charge Log",
         "select_range": "A1:P25",
         "narration": (
-            "This is the Load Log — every powder charge you tested, one row "
+            "This is the Powder Charge Log — every powder charge you tested, one row "
             "each. Loadscope filled in your velocities and group sizes from "
             "the CSVs you dropped in. The 🥇 medal marks Loadscope's "
             "suggested winner: the charge that scored best across velocity "
-            "SD, group size, mean radius, and vertical dispersion."
+            "flat-spot, velocity SD, mean radius and vertical SD."
         ),
         "min_dwell_seconds": 8,
         "special": None,
@@ -85,14 +85,14 @@ TOUR_STOPS = [
         "special": None,
     },
     {
-        "title": "Seating Depth — find your jump",
+        "title": "Seating Depth Log — find your jump",
         "image": "03-seating-depth.png",
-        "sheet": "Seating Depth",
+        "sheet": "Seating Depth Log",
         "select_range": "A1:P30",
         "narration": (
             "Once you've picked your powder charge, the next test is seating "
             "depth — how far the bullet sits from the rifling. Same workflow "
-            "as Load Log: each row is a different jump distance, and "
+            "as Powder Charge Log: each row is a different jump distance, and "
             "Loadscope ranks them. The winning jump becomes your final "
             "cartridge length."
         ),
