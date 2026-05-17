@@ -16,6 +16,8 @@ fresh workbook). This module NEVER raises for expected conditions — it
 returns a status so the UI can show the right message.
 """
 
+import re
+
 from openpyxl import load_workbook
 
 import ballistics
@@ -100,7 +102,8 @@ def predicted_dope(workbook_path, manual_bc=None, manual_model="G7",
     """Live predicted DOPE for the workbook's rifle/load.
 
     Returns {status, message, unit, bc, bc_model, bc_source,
-    atmosphere:{...}, rows:{workbook_row:{'elev','wind'}}}. rows is
+    atmosphere:{...}, rows:{workbook_row:{'elev','wind','drop',
+    'velocity','energy'}}}. rows is
     empty unless status == OK. Never raises for expected conditions.
     """
     out = {"status": ERROR, "message": "", "unit": "mil",
@@ -153,13 +156,27 @@ def predicted_dope(workbook_path, manual_bc=None, manual_model="G7",
     unit = inp["unit"]
     ekey = "elev_moa" if unit == "moa" else "elev_mil"
     wkey = "wind_moa" if unit == "moa" else "wind_mil"
+    # Bullet weight (grains) for kinetic energy, parsed from the bullet
+    # label (e.g. "Hornady 140gr ELD-M"). No reliable weight -> energy
+    # is left blank (no fabrication), same policy as a missing BC.
+    gm = re.search(r"(\d+(?:\.\d+)?)\s*(?:gr|grn|grain|gn)s?\b",
+                   str(inp.get("bullet") or ""), re.I)
+    grains = float(gm.group(1)) if gm else None
     rows = {}
     for wb_row, rng in inp["row_ranges"]:
         s = sol.get(rng)
         if not s:
             continue
-        rows[wb_row] = {"elev": _fmt(s[ekey], unit),
-                        "wind": _fmt(s[wkey], unit)}
+        v = s.get("velocity_fps")
+        energy = (round(grains * v * v / 450240.0)
+                  if (grains and v) else None)
+        rows[wb_row] = {
+            "elev": _fmt(s[ekey], unit),
+            "wind": _fmt(s[wkey], unit),
+            "drop": "%d" % round(s["drop_in"]),
+            "velocity": ("%d" % round(v)) if v else "",
+            "energy": ("%d" % energy) if energy is not None else "",
+        }
     out.update({
         "status": OK, "message": "", "unit": unit,
         "bc": bc, "bc_model": model, "bc_source": src,

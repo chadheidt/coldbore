@@ -153,13 +153,22 @@ def _gather(workbook_path):
         prows = pred.get("rows", {})
         for row in data["dope"]:
             r = row["row_num"]
+            pr = prows.get(r)
+            if not pr:
+                continue
+            # Drop / velocity / energy are solver REFERENCE values — not
+            # something the shooter dials or confirms — so show them on
+            # every row (confirmed or predicted alike).
+            row["drop"] = pr.get("drop", "")
+            row["velocity"] = pr.get("velocity", "")
+            row["energy"] = pr.get("energy", "")
             confirmed = (row.get(elev_k) not in (None, "")
                          or row.get(wind_k) not in (None, ""))
-            if confirmed or r not in prows:
+            if confirmed:
                 continue
             try:
-                row[elev_k] = float(prows[r]["elev"])
-                row[wind_k] = float(prows[r]["wind"])
+                row[elev_k] = float(pr["elev"])
+                row[wind_k] = float(pr["wind"])
             except (TypeError, ValueError, KeyError):
                 continue
             row["predicted"] = True
@@ -189,9 +198,19 @@ def _gather(workbook_path):
     return data
 
 
-def _build_html(d):
-    """Render the pocket card as a single-page HTML document, sized for
-    4x6 landscape print (6 inches wide × 4 inches tall)."""
+def _build_html(d, layout="field"):
+    """Render the pocket card HTML.
+
+    layout:
+      "card"  — bare 6x4 page, one card (used to render the website /
+                demo-tour screenshot; never printed by users).
+      "field" — US Letter page, TWO true-size cards pinned top-left
+                with dashed cut guides (DEFAULT — what the app prints;
+                a Letter page prints 1:1 on any home printer, unlike a
+                6x4 page which printers shrink/float).
+      "large" — US Letter page, ONE card scaled up to fill the sheet
+                for desk/eyesight use.
+    """
     h = d["header"]
     title_line = f"{_fmt(h.get('rifle'))} • {_fmt(h.get('bullet'))} • {_fmt(h.get('charge'), '—')}gr • {_fmt(h.get('vel'), '—')} fps"
     logo_uri = _logo_data_uri()
@@ -215,18 +234,24 @@ def _build_html(d):
         unit_lbl = "Mils"
 
     # DOPE table rows
+    # Skip rows where range is empty (shouldn't happen — A9..A18 are
+    # 100..1000); the LAST rendered row caps the dial box's bottom edge.
+    renderable = [r for r in d["dope"] if r.get("range") not in (None, "")]
+    last_i = len(renderable) - 1
     dope_rows_html = []
-    for row in d["dope"]:
-        # Skip rows where range is empty (shouldn't happen — A9..A18 are 100..1000)
-        if row.get("range") in (None, ""):
-            continue
+    for i, row in enumerate(renderable):
+        b = " db" if i == last_i else ""
         cells = [f"<td class='r'>{_fmt(row.get('range'))}</td>",
-                 f"<td>{_fmt(row.get(elev_k))}</td>"]
+                 f"<td class='dial dl{b}'>{_fmt(row.get(elev_k))}</td>"]
         if show_elev_clk:
-            cells.append(f"<td class='clk'>{_fmt(row.get(elev_clk_k))}</td>")
-        cells.append(f"<td>{_fmt(row.get(wind_k))}</td>")
+            cells.append(f"<td class='dial clk{b}'>{_fmt(row.get(elev_clk_k))}</td>")
+        wind_edge = "" if show_wind_clk else " dr"
+        cells.append(f"<td class='dial{wind_edge}{b}'>{_fmt(row.get(wind_k))}</td>")
         if show_wind_clk:
-            cells.append(f"<td class='clk'>{_fmt(row.get(wind_clk_k))}</td>")
+            cells.append(f"<td class='dial clk dr{b}'>{_fmt(row.get(wind_clk_k))}</td>")
+        cells.append(f"<td class='tof'>{_fmt(row.get('drop'))}</td>")
+        cells.append(f"<td class='tof'>{_fmt(row.get('velocity'))}</td>")
+        cells.append(f"<td class='tof'>{_fmt(row.get('energy'))}</td>")
         cells.append(f"<td class='tof'>{_fmt(row.get('tof'))}</td>")
         tr_cls = " class='pred'" if row.get("predicted") else ""
         dope_rows_html.append(f"<tr{tr_cls}>" + "".join(cells) + "</tr>")
@@ -240,17 +265,72 @@ def _build_html(d):
     # Dynamic header matching the columns we actually render.
     elev_span = 2 if show_elev_clk else 1
     wind_span = 2 if show_wind_clk else 1
+    elev_unit_th = f'<th class="dial dl">{unit_lbl}</th>'
+    elev_clk_th = '<th class="dial">clk</th>' if show_elev_clk else ''
+    if show_wind_clk:
+        wind_unit_th = f'<th class="dial">{unit_lbl}</th>'
+        wind_clk_th = '<th class="dial dr">clk</th>'
+    else:
+        wind_unit_th = f'<th class="dial dr">{unit_lbl}</th>'
+        wind_clk_th = ''
     thead_html = (
         '<tr>'
         '<th rowspan="2">Range<br>(yd)</th>'
-        f'<th class="spanner" colspan="{elev_span}">Elev — {unit_lbl}</th>'
-        f'<th class="spanner" colspan="{wind_span}">Wind 10 mph ({unit_lbl})</th>'
+        f'<th class="spanner dial dl dt" colspan="{elev_span}">Elev — {unit_lbl}</th>'
+        f'<th class="spanner dial dr dt" colspan="{wind_span}">Wind 10 mph ({unit_lbl})</th>'
+        '<th rowspan="2">Drop<br>(in)</th>'
+        '<th rowspan="2">Vel<br>(fps)</th>'
+        '<th rowspan="2">Energy<br>(ft&middot;lb)</th>'
         '<th rowspan="2">TOF<br>(s)</th>'
         '</tr><tr>'
-        f'<th>{unit_lbl}</th>{"<th>clk</th>" if show_elev_clk else ""}'
-        f'<th>{unit_lbl}</th>{"<th>clk</th>" if show_wind_clk else ""}'
+        f'{elev_unit_th}{elev_clk_th}{wind_unit_th}{wind_clk_th}'
         '</tr>'
     )
+
+    card_div = f'''<div class="card">
+  <div class="title-bar">
+    <div class="brand">
+      {logo_img}
+      <span>Loadscope<span class="tm">™</span></span>
+    </div>
+    <div class="subtitle">Pocket Range Card</div>
+  </div>
+  <div class="title-line">{title_line}</div>
+  <div class="setup">
+    <div class="field"><span class="label">Scope:</span><span>{_fmt(h.get('scope'))}</span></div>
+    <div class="field"><span class="label">Click:</span><span>{_fmt(h.get('click'))}</span></div>
+    <div class="field"><span class="label">Zero:</span><span>{_fmt(h.get('zero'))} yd</span></div>
+    <div class="field"><span class="label">Sight Ht:</span><span>{_fmt(h.get('sight_ht'))} in</span></div>
+    <div class="field"><span class="label">Twist:</span><span>{_fmt(h.get('twist'))}</span></div>
+  </div>
+  {pred_banner}
+  <table>
+    <thead>
+      {thead_html}
+    </thead>
+    <tbody>
+      {dope_rows_str}
+    </tbody>
+  </table>
+  <div class="footer">Generated {d['generated_at']}</div>
+</div>'''
+
+    if layout == "card":
+        # Bare 6x4 — for the website / demo-tour screenshot only.
+        page_rule = "@page { size: 6in 4in; margin: 0.15in; }"
+        layout_css = ""
+        body_inner = card_div
+    elif layout == "large":
+        # One card scaled up to fill a Letter sheet (desk / eyesight).
+        page_rule = "@page { size: letter; margin: 0.45in; }"
+        layout_css = ".big { zoom: 1.30; }"
+        body_inner = f'<div class="big">{card_div}</div>'
+    else:  # "field" (default): Letter, TWO true-size cards, top-left.
+        page_rule = "@page { size: letter; margin: 0.3in; }"
+        layout_css = (".cut { outline: 0.5pt dashed #999; "
+                      "outline-offset: 4pt; margin: 0 0 0.5in 0; }")
+        body_inner = (f'<div class="cut">{card_div}</div>'
+                      f'<div class="cut">{card_div}</div>')
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -258,10 +338,7 @@ def _build_html(d):
 <meta charset="utf-8">
 <title>Pocket Range Card — {_fmt(h.get('rifle'))}</title>
 <style>
-  @page {{
-    size: 6in 4in;
-    margin: 0.15in;
-  }}
+  {page_rule}
   * {{ box-sizing: border-box; }}
   html, body {{
     margin: 0;
@@ -272,8 +349,8 @@ def _build_html(d):
     print-color-adjust: exact;
   }}
   .card {{
-    width: 5.7in;
-    height: 3.7in;
+    width: 5.8in;
+    min-height: 3.6in;
     padding: 0.1in;
     border: 1.5pt solid #000;
   }}
@@ -332,13 +409,13 @@ def _build_html(d):
   table {{
     width: 100%;
     border-collapse: collapse;
-    font-size: 7.5pt;
+    font-size: 9pt;
     font-variant-numeric: tabular-nums;
   }}
   th {{
     background: #f0eee9;
     font-weight: 700;
-    font-size: 6.5pt;
+    font-size: 7.5pt;
     padding: 2pt 1pt;
     text-align: center;
     border-bottom: 0.8pt solid #555;
@@ -363,12 +440,12 @@ def _build_html(d):
   }}
   td.clk {{
     color: #777;
-    font-size: 6.5pt;
+    font-size: 7.5pt;
     font-style: italic;
   }}
   td.tof {{
     color: #555;
-    font-size: 6.5pt;
+    font-size: 7.5pt;
   }}
   tr.pred td {{
     font-style: italic;
@@ -390,47 +467,33 @@ def _build_html(d):
     color: #888;
     text-align: center;
   }}
+  /* Elevation + Wind = the values the shooter actually dials. Box them
+     so they stand out from the reference columns (drop/vel/energy/tof). */
+  .dial {{ background: #fff5e6; }}
+  .dl {{ border-left: 1.7pt solid #000 !important; }}
+  .dr {{ border-right: 1.7pt solid #000 !important; }}
+  .dt {{ border-top: 1.7pt solid #000 !important; }}
+  .db {{ border-bottom: 1.7pt solid #000 !important; }}
+  {layout_css}
 </style>
 </head>
 <body>
-<div class="card">
-  <div class="title-bar">
-    <div class="brand">
-      {logo_img}
-      <span>Loadscope<span class="tm">™</span></span>
-    </div>
-    <div class="subtitle">Pocket Range Card</div>
-  </div>
-  <div class="title-line">{title_line}</div>
-  <div class="setup">
-    <div class="field"><span class="label">Scope:</span><span>{_fmt(h.get('scope'))}</span></div>
-    <div class="field"><span class="label">Click:</span><span>{_fmt(h.get('click'))}</span></div>
-    <div class="field"><span class="label">Zero:</span><span>{_fmt(h.get('zero'))} yd</span></div>
-    <div class="field"><span class="label">Sight Ht:</span><span>{_fmt(h.get('sight_ht'))} in</span></div>
-    <div class="field"><span class="label">Twist:</span><span>{_fmt(h.get('twist'))}</span></div>
-  </div>
-  {pred_banner}
-  <table>
-    <thead>
-      {thead_html}
-    </thead>
-    <tbody>
-      {dope_rows_str}
-    </tbody>
-  </table>
-  <div class="footer">Generated {d['generated_at']}</div>
-</div>
+{body_inner}
 </body>
 </html>"""
 
 
-def generate_pocket_card(workbook_path, open_after=True):
+def generate_pocket_card(workbook_path, open_after=True, layout="field"):
     """Generate a Pocket Range Card HTML from the workbook's Ballistics tab.
     Returns the path to the generated file. If `open_after`, opens it in
-    the user's default browser so they can print it (Cmd+P → 4x6 paper
-    or letter, save as PDF, etc.)."""
+    the user's default browser so they can print it.
+
+    layout defaults to "field" (US Letter, two true-size 4x6 cards,
+    top-left, cut guides) so the app's Print path lands 1:1 on a normal
+    home printer. "large" = one big card per Letter sheet (desk). "card"
+    = bare 6x4 (used only to render the website/demo screenshot)."""
     data = _gather(workbook_path)
-    html = _build_html(data)
+    html = _build_html(data, layout=layout)
 
     # Pick a writable output directory. Default = "Range Cards" next to
     # the workbook (works for normal user workbooks in their project

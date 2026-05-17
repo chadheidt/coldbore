@@ -66,7 +66,8 @@ def main():
     tmpdir = tempfile.mkdtemp(prefix="ls_predcard_")
     try:
         wb = _pre_range_workbook(os.path.join(tmpdir, "demo.xlsx"))
-        html = pocket_card.generate_pocket_card(wb, open_after=False)
+        html = pocket_card.generate_pocket_card(wb, open_after=False,
+                                                layout="card")
         cardout = os.path.join(tmpdir, "card")
         os.makedirs(cardout)
         subprocess.run(["qlmanage", "-t", "-s", "2000", html, "-o", cardout],

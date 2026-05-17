@@ -138,7 +138,8 @@ def _pdf_page_to_png(pdf_path, page_num, png_path, scale=3.0):
 def _render_card_png(png_path):
     sys.path.insert(0, os.path.join(ROOT, "app"))
     import pocket_card
-    html = pocket_card.generate_pocket_card(DEMO_WB, open_after=False)
+    html = pocket_card.generate_pocket_card(DEMO_WB, open_after=False,
+                                            layout="card")
     # Dedicated subdir — must NOT wipe TMP, which holds _workbook.pdf
     # that later sheet stops still need.
     card_tmp = os.path.join(TMP, "_card")

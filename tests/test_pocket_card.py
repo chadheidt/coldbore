@@ -117,22 +117,31 @@ def test_generate_writes_html_with_data(workbook_with_dope, tmp_path):
     assert "Loadscope" in content
     # Trademark mark on the brand
     assert "™" in content
-    # @page rule for 4x6 print
-    assert "size: 6in 4in" in content
+    # Default print layout is now US Letter (prints 1:1 on a normal home
+    # printer, unlike a 6x4 page which printers shrink/float) with TWO
+    # true-size cards per sheet.
+    assert "size: letter" in content
+    assert content.count('class="card"') == 2
 
 
 def test_generate_data_rows_count(workbook_with_dope):
-    out = pocket_card.generate_pocket_card(workbook_with_dope, open_after=False)
-    with open(out) as f:
-        content = f.read()
-    # Each data row has class "r" on its first td
     import re
-    data_rows = re.findall(r"<td class='r'>", content)
-    # We populated rows 9, 10, 11 — but DOPE_ROWS iterates 9-18.
-    # Rows 12-18 have no elev/wind data so they're empty cells in the table.
-    # The render loop currently outputs ALL DOPE_ROWS (after the no-data check
-    # on _gather). So count should be 10.
-    assert len(data_rows) == 10
+    # Canonical single card (layout="card" — used for the website /
+    # demo-tour screenshot): a 6x4 page with all 10 DOPE rows.
+    card = pocket_card.generate_pocket_card(
+        workbook_with_dope, open_after=False, layout="card")
+    with open(card) as f:
+        c1 = f.read()
+    assert "size: 6in 4in" in c1
+    assert len(re.findall(r"<td class='r'>", c1)) == 10
+    # Default "field" layout = US Letter with TWO cards per sheet, so
+    # the same 10 rows render twice (20 total).
+    fld = pocket_card.generate_pocket_card(
+        workbook_with_dope, open_after=False, layout="field")
+    with open(fld) as f:
+        c2 = f.read()
+    assert "size: letter" in c2
+    assert len(re.findall(r"<td class='r'>", c2)) == 20
 
 
 # ---------- URL dispatcher ----------

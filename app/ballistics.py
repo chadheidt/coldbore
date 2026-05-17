@@ -246,7 +246,7 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
                      humidity_pct=50.0, wind_mph=10.0,
                      wind_angle_clock=3.0, dt=0.0005, drag_model="G7"):
     """Return {range_yd: {'drop_in','elev_moa','elev_mil','wind_in',
-    'wind_moa','wind_mil','tof_s'}}. Point-mass RK-free Euler at small
+    'wind_moa','wind_mil','tof_s','velocity_fps'}}. Point-mass RK-free Euler at small
     dt; standard drag curve scaled by BC; gravity; constant crosswind.
 
     ``g7_bc`` is the ballistic coefficient in ``drag_model``'s reference
@@ -298,6 +298,7 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
         # previous-step state, for interpolating exactly to each target
         # range (muzzle = origin at rest-time 0)
         x0 = y0 = z0 = t0 = 0.0
+        v0 = muzzle_velocity_fps   # speed at muzzle (interp baseline)
         while ti < len(targets) and t < 12.0:
             v = math.sqrt(vx * vx + vy * vy)
             mach = v / speed_sound
@@ -311,6 +312,7 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
             x += vx * dt
             y += vy * dt
             t += dt
+            v_now = math.sqrt(vx * vx + vy * vy)   # post-step speed (fps)
             if want_wind:
                 # Full point-mass crosswind: drag acts on the air-
                 # relative cross velocity (vz - cross). The bullet starts
@@ -334,9 +336,10 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
                 f = (tx - x0) / (x - x0) if x != x0 else 0.0
                 out[fly_ranges[ti]] = (y0 + f * (y - y0),
                                        z0 + f * (z - z0),
-                                       t0 + f * (t - t0))
+                                       t0 + f * (t - t0),
+                                       v0 + f * (v_now - v0))
                 ti += 1
-            x0, y0, z0, t0 = x, y, z, t
+            x0, y0, z0, t0, v0 = x, y, z, t, v_now
         return out
 
     # Fire ALONG THE BORE (launch angle 0) and re-zero the sight line
@@ -361,14 +364,14 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
     # actual bore launch angle cancels and firing flat is exact.
     sh_ft = sight_height_in / 12.0
     flight = _fly(0.0, want_wind=True)
-    y_zero, _, _ = flight[zint]
+    y_zero, _, _, _ = flight[zint]
     dlos_zero_ft = y_zero - sh_ft               # level-scope drop at zero
     result = {}
     for r in ranges_yd:
         r = int(r)
         if r not in flight:
             continue
-        y, z, t = flight[r]
+        y, z, t, vel = flight[r]
         rng_in = r * 36.0
         dlos_r_ft = y - sh_ft                   # level-scope drop at R
         # remove the straight sight-line rotation that zeroes at zero_yd
@@ -388,5 +391,6 @@ def solve_trajectory(muzzle_velocity_fps, g7_bc, zero_yd=100.0,
             "wind_moa": round(wind_moa, 2),
             "wind_mil": round(wind_mil, 2),
             "tof_s": round(t, 3),
+            "velocity_fps": round(vel, 1),
         }
     return result
