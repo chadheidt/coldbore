@@ -4,6 +4,17 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
+## ▶️ RESUME HERE — 2026-05-17 (read first; full detail in memory `project_loadscope_rename_vertsd_inflight`)
+
+**Big terminology refactor DONE, committed `a3ff734`, pushed to `origin/website-revamp`. NOT published (main is clean; publish only on Chad's word → merge website-revamp→main).**
+- Workbook tabs: Load Log→**Powder Charge Log**, Seating Depth→**Seating Depth Log** (template + demo; 226/257 formula refs cascaded, charts intact). A1 title "Powder Charge Test — Best Charge Finder". "SD-Vert"→**Vertical SD**. Metric phrase "seating depth" deliberately preserved.
+- Code/`import_data.py`(repo ROOT)/tests/tools/website all renamed in lockstep. Website: accurate 4-factor "How Loadscope works", ballistic-calc hero line, **new "The Seating Depth Log" section**, corrected scoring text (+MR→group fallback). **207 tests pass.**
+- **DEFERRED:** demo screenshot images still show OLD labels — Excel 16.16 blocked regen. Render-tool save-verb bug fixed (`save active workbook`).
+
+**NEXT STEP:** Chad is reinstalling a newer Microsoft Office/Excel (old Office uninstall in progress; his OneDrive backed up to `~/Desktop/OneDrive-Personal-BACKUP-*`). **When new Excel is in: run `python3 tools/render_demo_screenshots.py` — it likely works now; then copy regenerated PNGs into `docs/assets/demo/`, verify the site, done.** Then Chad's publish gate.
+
+---
+
 ## 🛠️ IN PROGRESS — WEBSITE REVAMP (2026-05-16, pre-beta roadmap step 3)
 
 **NOT shipped/released** (per `project_release_review_cadence` — batch into beta; commit/push main + tests green only).
