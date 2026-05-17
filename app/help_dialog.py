@@ -55,7 +55,7 @@ powder name.
 
    <tag>     The row in the workbook this load belongs to.
              P1 through P10  =  Powder Ladder rows
-             S1 through S10  =  Seating Depth rows
+             S1 through S10  =  Seating Depth Log rows
              CONFIRM-1+      =  Confirmation groups (free-form)
 
    <number>  For P-tags: powder charge in grains.
@@ -67,12 +67,12 @@ powder name.
 
 WHAT'S IN THE WORKBOOK
 
-   Load Log         Powder ladder. Charge weight per row. Shots, Avg, SD,
+   Powder Charge Log         Powder ladder. Charge weight per row. Shots, Avg, SD,
                     Group, Vertical, Mean Radius all auto-populate.
                     The red SUGGESTED CHARGE bar at top picks the winning
                     charge based on a composite score.
 
-   Seating Depth    Same layout, but jump distance varies instead of charge.
+   Seating Depth Log    Same layout, but jump distance varies instead of charge.
                     Red SUGGESTED JUMP bar picks the winning seating depth.
 
    Charts           Where the scoring math runs. You can tune the weights
@@ -107,7 +107,7 @@ weights) before the SUGGESTED CHARGE bar will pick a winner.
 For best results, plan a powder ladder with 5–8 loads spaced about
 0.3–0.5 grains apart.
 
-The same applies to Seating Depth — at least 3 different jump distances
+The same applies to Seating Depth Log — at least 3 different jump distances
 before the SUGGESTED JUMP bar will recommend one.
 
 
@@ -133,43 +133,45 @@ The four factors:
       Average distance of each shot from the group center, converted
       to MOA. Better than extreme-spread group size because it uses every
       shot's distance from center, not just the two outliers.
+      If your BallisticX export didn't include mean radius, Loadscope
+      falls back to group size for this factor.
 
-   4. VERTICAL DISPERSION (in MOA)
-      Vertical-only dispersion at the middle charge.
-      Loadscope prefers SD-Vert (the statistical standard deviation of
-      vertical positions across every shot) because it correlates best
-      with real-world long-range hit probability.
+   4. VERTICAL SD (in MOA)
+      Vertical standard deviation at the middle charge — BallisticX's
+      "Vertical SD": the statistical standard deviation of vertical
+      positions across every shot. It correlates best with real-world
+      long-range hit probability.
       Fallback chain:
-          SD-Vert  →  Height (extreme spread)  →  MR
-      If your BallisticX export didn't include SD-Vert, Loadscope falls
-      back to Height. If neither is available, it uses MR so the score
-      doesn't break.
+          Vertical SD  →  vertical Height (extreme spread)  →  MR
+      If your BallisticX export didn't include Vertical SD, Loadscope
+      falls back to Height. If neither is available, it uses MR so the
+      score doesn't break.
 
 DEFAULT WEIGHTS
 
-   Load Log (powder ladder):    Vel 30 %  SD 20 %  MR 20 %  Vert 30 %
-   Seating Depth:               Vel 15 %  SD 25 %  MR 25 %  Vert 35 %
+   Powder Charge Log (powder ladder):    Vel 30 %  SD 20 %  MR 20 %  Vert 30 %
+   Seating Depth Log:               Vel 15 %  SD 25 %  MR 25 %  Vert 35 %
 
 WHY THESE WEIGHTS?
 
    Powder ladder defaults — a ladder is built to find a flat velocity
-   node, so Velocity gets the highest weight (30 %). Vertical
-   dispersion gets the same weight because it's the strongest predictor
+   node, so Velocity gets the highest weight (30 %). Vertical SD
+   gets the same weight because it's the strongest predictor
    of long-range accuracy. SD and MR get 20 % each — useful sanity
    checks, but a 5-shot group is too small a sample to outrank
    velocity-stability at this stage.
 
    Seating depth defaults — once the powder charge is locked in,
    seating depth tuning is about tight groups, not chasing velocity.
-   Vertical gets the highest weight (35 %) because vertical dispersion
+   Vertical SD gets the highest weight (35 %) because it
    is the dominant predictor of long-range accuracy and seating has
    the biggest effect on it. SD and MR get 25 % each — both visible in
    group consistency since seating depth affects bullet jump and
    barrel time. Velocity drops to 15 % because it barely changes with
    seating.
 
-You can edit these weights on the Charts tab and Seating Depth tab —
-they live in row 11 (Charts) and row 28 (Seating Depth). Weights must
+You can edit these weights on the Charts tab and Seating Depth Log tab —
+they live in row 11 (Charts) and row 28 (Seating Depth Log). Weights must
 sum to 1.0. To restore Loadscope's defaults, use
 Tools → Reset Composite Weights.
 

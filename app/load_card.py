@@ -2,7 +2,7 @@
 Load card generator.
 
 Reads the user's working workbook, pulls the suggested winning charge and
-seating depth (plus the rifle/cartridge/components info from the Load Log
+seating depth (plus the rifle/cartridge/components info from the Powder Charge Log
 header), and writes a single-page HTML "load card" formatted for printing.
 The user opens it in their browser and chooses File → Print → Save as PDF
 (or just prints it for the range bag).
@@ -23,24 +23,24 @@ from openpyxl import load_workbook
 # ANCHOR cells (top-left of each merged range). Adjacent label cells (e.g.,
 # "Rifle:" in A5) are intentionally NOT in this map — they're labels, not values.
 LOAD_LOG_FIELDS = {
-    "rifle":        ("Load Log", "B5"),   # B5:E5 merged, holds rifle name
-    "shooter":      ("Load Log", "G5"),   # G5:J5 merged
-    "cartridge":    ("Load Log", "L5"),   # L5:N5 merged
-    "barrel":       ("Load Log", "B6"),   # B6:E6 merged
-    "optic":        ("Load Log", "G6"),   # G6:J6 merged
-    "chrono":       ("Load Log", "L6"),   # L6:N6 merged
-    "bullet":       ("Load Log", "B9"),   # B9:D9 merged
-    "powder":       ("Load Log", "F9"),   # F9:G9 merged, has a LOOKUP formula
-    "primer":       ("Load Log", "I9"),   # I9:J9 merged
-    "brass":        ("Load Log", "L9"),   # L9:N9 merged
-    "cbto":         ("Load Log", "B10"),  # B10:E10 merged
-    "off_lands":    ("Load Log", "G10"),  # G10:J10 merged
-    "distance":     ("Load Log", "L10"),  # L10:N10 merged — yardage, NOT bullet weight
+    "rifle":        ("Powder Charge Log", "B5"),   # B5:E5 merged, holds rifle name
+    "shooter":      ("Powder Charge Log", "G5"),   # G5:J5 merged
+    "cartridge":    ("Powder Charge Log", "L5"),   # L5:N5 merged
+    "barrel":       ("Powder Charge Log", "B6"),   # B6:E6 merged
+    "optic":        ("Powder Charge Log", "G6"),   # G6:J6 merged
+    "chrono":       ("Powder Charge Log", "L6"),   # L6:N6 merged
+    "bullet":       ("Powder Charge Log", "B9"),   # B9:D9 merged
+    "powder":       ("Powder Charge Log", "F9"),   # F9:G9 merged, has a LOOKUP formula
+    "primer":       ("Powder Charge Log", "I9"),   # I9:J9 merged
+    "brass":        ("Powder Charge Log", "L9"),   # L9:N9 merged
+    "cbto":         ("Powder Charge Log", "B10"),  # B10:E10 merged
+    "off_lands":    ("Powder Charge Log", "G10"),  # G10:J10 merged
+    "distance":     ("Powder Charge Log", "L10"),  # L10:N10 merged — yardage, NOT bullet weight
 }
 
 # Suggested winners
 SUGGESTED_CHARGE_CELL = ("Charts", "B3")
-SUGGESTED_JUMP_CELL = ("Seating Depth", "D2")
+SUGGESTED_JUMP_CELL = ("Seating Depth Log", "D2")
 SUGGESTED_AVG_VEL_CELL = ("Charts", "E5")  # Avg velocity at suggested charge
 SUGGESTED_SD_CELL = ("Charts", "G3")
 SUGGESTED_GROUP_CELL = ("Charts", "G4")

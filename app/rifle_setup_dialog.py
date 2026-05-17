@@ -3,18 +3,18 @@
 The first slice of bringing the clean Loadscope format to the REAL
 workbook: a themed form for the hand-typed identity/setup data, so the
 user edits it in Loadscope instead of hunting cells in the Excel grid.
-It reads from and writes back into the workbook's Load Log header (the
+It reads from and writes back into the workbook's Powder Charge Log header (the
 single source of truth — its formulas propagate to the Ballistics
 header), exactly the openpyxl pattern apply_workbook_repairs already
 uses. Excel stays the calc engine.
 
-The field -> Load Log cell map + the read/write helpers are pure
+The field -> Powder Charge Log cell map + the read/write helpers are pure
 (no Qt), so they're unit-testable without a display.
 
 Deliberately EXCLUDED from Phase 1 (handled elsewhere / Phase 2):
-  - Powder (Load Log!G9) is a FORMULA auto-derived from the Garmin
+  - Powder (Powder Charge Log!G9) is a FORMULA auto-derived from the Garmin
     import — writing a literal would clobber it.
-  - Date (Load Log!B13) is a datetime-typed cell feeding formulas;
+  - Date (Powder Charge Log!B13) is a datetime-typed cell feeding formulas;
     typed-widget editing comes in Phase 2 to avoid format corruption.
 """
 
@@ -42,13 +42,13 @@ from openpyxl import load_workbook
 import component_data as _cd
 import smart_fields as _sf
 
-# (section, label, Load Log value-cell, kind). kind drives the widget:
+# (section, label, Powder Charge Log value-cell, kind). kind drives the widget:
 #   text|number  -> QLineEdit (number coerces to float on save)
 #   turret       -> LockedCombo (exact accepted strings — safeguard)
 #   bullet|primer-> CascadeField (manufacturer -> item, + Other)
 #   brass|chrono|shooter -> HistoryCombo (curated + remembered history)
 #   distance     -> HistoryCombo (presets + free) ; saved numeric
-# Verified against the demo workbook's Load Log header layout.
+# Verified against the demo workbook's Powder Charge Log header layout.
 RIFLE_SETUP_FIELDS = [
     ("Rifle & Shooter", "Rifle",     "B5",  "text"),
     ("Rifle & Shooter", "Shooter",   "G5",  "shooter"),
@@ -71,7 +71,7 @@ RIFLE_SETUP_FIELDS = [
 # workbook's numeric formulas working).
 _NUMERIC_KINDS = ("number", "distance")
 
-_SHEET = "Load Log"
+_SHEET = "Powder Charge Log"
 
 
 def read_rifle_setup(workbook_path):
@@ -87,7 +87,7 @@ def read_rifle_setup(workbook_path):
 
 
 def write_rifle_setup(workbook_path, values):
-    """Write edited values back to the Load Log header cells.
+    """Write edited values back to the Powder Charge Log header cells.
 
     `values` is {cell: str}. "number" fields are coerced to float when
     parseable (so they keep feeding the workbook's numeric formulas);

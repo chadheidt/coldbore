@@ -82,8 +82,8 @@ def workbook_with_dope(tmp_path):
     bal["E6"] = 100
     bal["H6"] = 1.75
     bal["K6"] = "1:8 RH"
-    # Scope click value lives on Load Log (single source of truth)
-    wb["Load Log"]["G7"] = "1/4 MOA"
+    # Scope click value lives on Powder Charge Log (single source of truth)
+    wb["Powder Charge Log"]["G7"] = "1/4 MOA"
     # 3 rows of sample DOPE (enough to satisfy "any data" check)
     sample = [
         (100, 0.0, 0, 0.0, 0, 0.1, 1, 0.3, 1, 0.11),
@@ -196,7 +196,7 @@ def test_confirmed_card_has_no_predicted_banner():
 
 def test_no_dope_no_bc_raises_with_bc_hint(fresh_demo):
     wb = _lw(fresh_demo)
-    wb["Load Log"]["B9"] = "Acme 999gr Unobtainium"
+    wb["Powder Charge Log"]["B9"] = "Acme 999gr Unobtainium"
     wb.save(fresh_demo)
     with pytest.raises(ValueError) as ei:
         pocket_card._gather(fresh_demo)

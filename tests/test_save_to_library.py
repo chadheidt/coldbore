@@ -62,8 +62,8 @@ def workbook_with_winner(tmp_path):
     from openpyxl import load_workbook
     wb = load_workbook(dst, keep_vba=False)
     wb.template = False
-    # Load Log header
-    ll = wb["Load Log"]
+    # Powder Charge Log header
+    ll = wb["Powder Charge Log"]
     ll["B5"].value = "Tikka T3x 6.5 CM"
     ll["B9"].value = "Hornady 140 ELD-M (140 gr)"
     ll["G9"].value = "H4350"
@@ -76,14 +76,14 @@ def workbook_with_winner(tmp_path):
     # reads the <v> cache directly).
     charts = wb["Charts"]
     charts["B3"].value = 41.5  # winning charge
-    # Pre-cache a winning Load Log row at row 16 (charge 41.5, AvgVel etc.)
+    # Pre-cache a winning Powder Charge Log row at row 16 (charge 41.5, AvgVel etc.)
     ll.cell(16, 2).value = 41.5
     ll.cell(16, 8).value = 2780.0   # H Avg Vel
     ll.cell(16, 10).value = 8.2     # J SD
     ll.cell(16, 11).value = 0.51    # K Group (in)
     ll.cell(16, 14).value = 0.18    # N Mean Radius (in)
-    # Seating Depth winner cells
-    sd = wb["Seating Depth"]
+    # Seating Depth Log winner cells
+    sd = wb["Seating Depth Log"]
     sd["D2"].value = 0.014
     sd["G2"].value = 2782.5  # better Avg Vel
     sd["J2"].value = 6.4     # better SD
@@ -103,7 +103,7 @@ def test_gather_suggested_load_reads_everything(workbook_with_winner):
     assert data["primer"] == "CCI BR-2"
     assert data["brass"] == "Lapua"
     assert data["jump"] == 0.014
-    # SD winner overrides Load Log values for Avg Vel + SD
+    # SD winner overrides Powder Charge Log values for Avg Vel + SD
     assert data["avg_vel"] == 2782.5
     assert data["sd_fps"] == 6.4
     # Group in MOA: 0.51 inches at 100yd = 0.487 MOA

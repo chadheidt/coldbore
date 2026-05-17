@@ -65,11 +65,11 @@ HEADER_FIELDS = {
     "zero":     ("Ballistics", "E6"),
     "sight_ht": ("Ballistics", "H6"),
     "twist":    ("Ballistics", "K6"),
-    # Scope click value lives on Load Log (single source of truth — the
+    # Scope click value lives on Powder Charge Log (single source of truth — the
     # Ballistics click-column formulas all reference it). Showing it on
     # the printed card tells the shooter which scope click value the
     # click counts assume.
-    "click":    ("Load Log", "G7"),
+    "click":    ("Powder Charge Log", "G7"),
 }
 
 # DOPE table rows on the Ballistics tab. Data lives in rows 9..18

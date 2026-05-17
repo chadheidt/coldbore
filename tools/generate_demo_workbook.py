@@ -101,7 +101,7 @@ POWDER_LADDER = [
     },
 ]
 
-# Seating Depth ladder at the winning charge (42.4gr). Jump is bullet-to-rifling.
+# Seating Depth Log ladder at the winning charge (42.4gr). Jump is bullet-to-rifling.
 SEATING_LADDER = [
     {
         "Tag": "S1",
@@ -247,7 +247,7 @@ def main():
     print(f"[4/4] Applying workbook repairs (chart refs + composite scoring)")
     import_data.apply_workbook_repairs(wb, GROUP_RECORDS, all_chrono)
 
-    # Populate the user-fill header cells on Load Log + Seating Depth with
+    # Populate the user-fill header cells on Powder Charge Log + Seating Depth Log with
     # realistic 6.5 Creedmoor demo values so the workbook looks COMPLETE when
     # a prospect opens it. apply_workbook_repairs only fills date / cartridge /
     # bullet weight — everything else needs to be added by hand.
@@ -266,7 +266,7 @@ def main():
     _populate_load_library(wb)
 
     # Re-run the Ballistics polish AFTER _populate_demo_headers has set
-    # Load Log G7 = "0.1 Mil". The first apply_workbook_repairs call ran
+    # Powder Charge Log G7 = "0.1 Mil". The first apply_workbook_repairs call ran
     # before G7 was set, so its auto-hide logic saw an empty G7 and
     # didn't hide MOA columns. Re-run now to pick up the demo's scope
     # type and hide the irrelevant click columns.
@@ -320,16 +320,16 @@ def _write_static_composite_scores(wb):
     The workbook ships pre-computed values so a prospect sees the suggested
     winner immediately, no Cmd+= required.
 
-    Targets (Load Log):
+    Targets (Powder Charge Log):
       - O16:O20 — composite score per row (lower = better)
       - B2 — suggested-charge value
       - G2/J2/L2 — winning row's AvgVel / SD / MR
 
     Targets (Charts):
-      - L18:L22 — composite scores (mirror of Load Log O column)
+      - L18:L22 — composite scores (mirror of Powder Charge Log O column)
       - R18:R22 — per-row "Best in" labels (Vert ✓ / Vel ✓ SD ✓ / MR ✓)
     """
-    ll = wb["Load Log"]
+    ll = wb["Powder Charge Log"]
     ch = wb["Charts"]
 
     # Default weights from Charts B11/D11/F11/H11 = 0.3 / 0.2 / 0.2 / 0.3
@@ -407,11 +407,11 @@ def _write_static_composite_scores(wb):
         else:
             best_in_labels.append(" ".join(tags))
 
-    # --- Write Load Log O16:O20 — composite per row ---
+    # --- Write Powder Charge Log O16:O20 — composite per row ---
     for i, comp in enumerate(composites):
         ll.cell(row=16 + i, column=15).value = round(comp, 3)
 
-    # --- Write Load Log row 2 — suggested-charge summary ---
+    # --- Write Powder Charge Log row 2 — suggested-charge summary ---
     # D2 is the top-left of the D2:E2 merge that holds the suggested-charge
     # value (A2:C2 is the merged "SUGGESTED CHARGE →" label). G2/J2/L2 are
     # single cells holding Avg Vel / SD / MR — overwriting the cross-sheet
@@ -443,7 +443,7 @@ def _write_static_composite_scores(wb):
 
     # --- Force test mode on Charts so all 5 candidates align with our data ---
     # Charts!B100 normally auto-toggles: "window" if 5+ candidates, "test"
-    # otherwise. Window mode skips the first Load Log row (B16 = P1), shifting
+    # otherwise. Window mode skips the first Powder Charge Log row (B16 = P1), shifting
     # candidates by 1. Our precomputed L18:L22 assume sequential alignment
     # with B16:B20 (test mode order). Pin B100 to "test" so the winner
     # selection matches our data.
@@ -531,10 +531,10 @@ def _write_static_composite_scores(wb):
     current_h = ll.row_dimensions[2].height if 2 in ll.row_dimensions else None
     if current_h is None or current_h < 38:
         ll.row_dimensions[2].height = 38
-    # Seating Depth O2 — same styling. The value is written by
+    # Seating Depth Log O2 — same styling. The value is written by
     # _write_seating_depth_static_values which runs separately.
-    if "Seating Depth" in wb.sheetnames:
-        sd_o2 = wb["Seating Depth"]["O2"]
+    if "Seating Depth Log" in wb.sheetnames:
+        sd_o2 = wb["Seating Depth Log"]["O2"]
         sd_o2.fill = red_yellow_fill
         sd_o2.font = yellow_font
         sd_o2.alignment = centered_wrapped
@@ -579,7 +579,7 @@ def _populate_ballistics_dope(wb):
         b.cell(row=r, column=10).value = tof       # J = TOF (sec)
 
     # Row 5 / 6 — rifle setup header that the Pocket Range Card reads. These
-    # cells are normally formulas pulling from Load Log; openpyxl save doesn't
+    # cells are normally formulas pulling from Powder Charge Log; openpyxl save doesn't
     # compute formulas, so the cached values are blank → Pocket Card shows
     # missing fps/gr. Write static values directly.
     b["B5"].value = "Tikka T3X CTR 6.5 CM"
@@ -943,17 +943,17 @@ def _lock_demo_workbook_completely(wb):
 
 
 def _write_seating_depth_static_values(wb):
-    """Write static composite scores + suggested-winner cells for the Seating Depth tab.
+    """Write static composite scores + suggested-winner cells for the Seating Depth Log tab.
 
-    Same shape as _write_static_composite_scores but targeting Seating Depth's
-    analysis block at rows 30-37 (vs Charts' 18-25), with Seating Depth's
+    Same shape as _write_static_composite_scores but targeting Seating Depth Log's
+    analysis block at rows 30-37 (vs Charts' 18-25), with Seating Depth Log's
     default weights (0.15 Vel / 0.25 SD / 0.25 MR / 0.35 Vert).
     """
-    if "Seating Depth" not in wb.sheetnames:
+    if "Seating Depth Log" not in wb.sheetnames:
         return
-    sd = wb["Seating Depth"]
+    sd = wb["Seating Depth Log"]
 
-    # SD-specific weights (Seating Depth!C28/F28/I28/L28 = 0.15/0.25/0.25/0.35)
+    # SD-specific weights (Seating Depth Log!C28/F28/I28/L28 = 0.15/0.25/0.25/0.35)
     w_vel, w_sd, w_mr, w_vert = 0.15, 0.25, 0.25, 0.35
 
     # Pair each SD chronograph record with its group record (matched by Tag)
@@ -1005,14 +1005,14 @@ def _write_seating_depth_static_values(wb):
         "Vert ✓": best_idx([c["vert"] for c in candidates]),
     }
 
-    # --- Write Seating Depth row 2 — suggested-jump summary ---
+    # --- Write Seating Depth Log row 2 — suggested-jump summary ---
     sd["D2"].value = winner["jump"]
     sd["G2"].value = winner["vel"]
     sd["J2"].value = winner["sd"]
     sd["L2"].value = winner["mr"]
     sd["N2"].value = winner["vert"]
 
-    # --- Write Seating Depth O2 — static "Best in: <tags>" ---
+    # --- Write Seating Depth Log O2 — static "Best in: <tags>" ---
     winner_tags_list = [tag for tag, i in bests.items() if i == winner_idx]
     if len(winner_tags_list) == 4:
         winner_tags = "All metrics ✓"
@@ -1030,7 +1030,7 @@ def _write_seating_depth_static_values(wb):
         sd.cell(row=r, column=12).value = "=NA()"
 
     # --- Write SD!A30:A37 — candidate jump values (since template formulas
-    # may reference Load Log which is for charges, not jumps) ---
+    # may reference Powder Charge Log which is for charges, not jumps) ---
     for i, c in enumerate(candidates):
         sd.cell(row=30 + i, column=1).value = c["jump"]
     for r in range(30 + len(candidates), 38):
@@ -1083,7 +1083,7 @@ def _write_seating_depth_static_values(wb):
 
 
 def _populate_demo_headers(wb):
-    """Fill the user-fill cells on Load Log + Seating Depth with demo-shooter
+    """Fill the user-fill cells on Powder Charge Log + Seating Depth Log with demo-shooter
     metadata so the workbook reads as a real, in-progress load development
     instead of half-empty cells."""
 
@@ -1105,7 +1105,7 @@ def _populate_demo_headers(wb):
     temp_f = 68
     notes = "Sunny, light breeze. 1500 ft DA."
 
-    for sheet_name in ("Load Log", "Seating Depth"):
+    for sheet_name in ("Powder Charge Log", "Seating Depth Log"):
         if sheet_name not in wb.sheetnames:
             continue
         sht = wb[sheet_name]
@@ -1126,12 +1126,12 @@ def _populate_demo_headers(wb):
         sht["L9"].value = primer
         sht["O9"].value = brass
         # Row 10 — different layouts per sheet (template-defined):
-        #   Load Log row 10  = CBTO / OAL / Distance (test-session metadata)
-        #   Seating Depth!A10 = "Charge:" — B10 must be the constant powder
+        #   Powder Charge Log row 10  = CBTO / OAL / Distance (test-session metadata)
+        #   Seating Depth Log!A10 = "Charge:" — B10 must be the constant powder
         #   charge used during the jump test (template formula =Charts!B3
         #   would resolve to the winner, but we overwrote that formula
         #   below, so write the static winning charge here).
-        if sheet_name == "Seating Depth":
+        if sheet_name == "Seating Depth Log":
             sht["B10"].value = winning_charge  # constant charge for jump test, gr
         else:
             sht["B10"].value = cbto            # CBTO measurement, in
@@ -1142,7 +1142,7 @@ def _populate_demo_headers(wb):
         # apply_workbook_repairs auto-filled LL!B13 with the ISO string from
         # the import — also rewrite it as a datetime so it displays right.
         date_for_sheet = (
-            datetime(2026, 4, 26) if sheet_name == "Seating Depth"
+            datetime(2026, 4, 26) if sheet_name == "Seating Depth Log"
             else datetime(2026, 4, 12)
         )
         sht["B13"].value = date_for_sheet

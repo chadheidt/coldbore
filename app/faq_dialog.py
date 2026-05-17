@@ -69,7 +69,7 @@ FAQ_DATA = [
      "<ul>"
      "<li><tt>P1 45.5 H4350</tt> &nbsp;—&nbsp; Powder Ladder, Load 1, "
      "45.5 grains of H4350</li>"
-     "<li><tt>S7 0.070 H4350</tt> &nbsp;—&nbsp; Seating Depth, Test 7, "
+     "<li><tt>S7 0.070 H4350</tt> &nbsp;—&nbsp; Seating Depth Log, Test 7, "
      "0.070-inch jump, H4350</li>"
      "</ul>"
      "<p>Type the label in your Garmin ShotView session name, your "
@@ -95,28 +95,37 @@ FAQ_DATA = [
 
     # ---- The Workbook ----
     ("The Workbook", "How does Loadscope decide which load / seating depth is best?",
-     "<p>Loadscope normalizes each candidate's <b>velocity SD</b>, <b>group "
-     "size</b>, <b>mean radius</b>, and <b>vertical dispersion</b> to a "
-     "0-to-1 scale (lower is better) and combines them into a single "
-     "<b>composite score</b> using adjustable weights. The candidate with "
-     "the lowest composite score wins.</p>"
-     "<p>The default weights are equal across all four metrics. You can "
-     "tune them on the Charts tab (cells C11, E11, G11, I11) — for "
-     "example, prioritize SD over group size if you're shooting long range.</p>"
+     "<p>Loadscope normalizes four metrics for each candidate — "
+     "<b>velocity flat-spot</b> (how little average velocity moves across "
+     "the charge window), <b>velocity SD</b>, <b>mean radius</b>, and "
+     "<b>vertical SD</b> — to a 0-to-1 scale (lower is better) and combines "
+     "them into a single <b>composite score</b> using adjustable weights. "
+     "The candidate with the lowest composite score wins.</p>"
+     "<p>If your BallisticX export doesn't include mean radius, Loadscope "
+     "uses <b>group size</b> for that metric instead; if it doesn't include "
+     "vertical SD, it falls back to vertical extreme spread, then mean "
+     "radius.</p>"
+     "<p>Default weights aren't equal — they're tuned per tab "
+     "(Powder Charge Log: Velocity 0.30, SD 0.20, MR 0.20, Vertical SD 0.30; "
+     "Seating Depth Log: 0.15 / 0.25 / 0.25 / 0.35). Adjust the blue weight "
+     "cells on the Charts tab (B11, D11, F11, H11; they must sum to 1.0), "
+     "or click <b>Reset Composite Weights</b> to restore defaults.</p>"
      "<p>Each candidate also gets a 'Best in:' tag for any individual "
      "metric where it scored best — even if it didn't win the composite.</p>"),
 
     ("The Workbook", "What does the 'Suggested Winner' mean?",
      "<p>The Suggested Winner is the candidate load (or seating depth) "
-     "with the best composite score across all four metrics — velocity SD, "
-     "group size, mean radius, and vertical dispersion. Loadscope marks "
-     "it with a 🥇 medal in the P column on Load Log and Seating Depth, "
+     "with the best composite score across all four metrics — velocity "
+     "flat-spot, velocity SD, mean radius, and vertical SD. Loadscope marks "
+     "it with a 🥇 medal in the P column on Powder Charge Log and Seating Depth Log, "
      "and writes the winning charge / jump value to the top of each tab.</p>"),
 
     ("The Workbook", "Can I change the scoring weights?",
-     "<p>Yes — open the Charts tab and edit the four weights cells "
-     "(C11, E11, G11, I11). The default is equal weight (0.25 each) for "
-     "velocity SD, group size, mean radius, and vertical dispersion.</p>"
+     "<p>Yes — open the Charts tab and edit the four blue weight cells "
+     "(B11, D11, F11, H11); they must sum to 1.0. They weight velocity "
+     "flat-spot, velocity SD, mean radius, and vertical SD. Defaults aren't "
+     "equal — Powder Charge Log uses 0.30 / 0.20 / 0.20 / 0.30, Seating Depth Log uses "
+     "0.15 / 0.25 / 0.25 / 0.35.</p>"
      "<p>If you change the weights, the composite scores and Suggested "
      "Winner update automatically. To return to defaults, click the "
      "orange <b>Reset Composite Weights</b> button on the Charts tab.</p>"),
@@ -133,7 +142,7 @@ FAQ_DATA = [
 
     ("The Workbook", "Why is my MOA column hidden? (Or vice versa.)",
      "<p>Loadscope auto-hides the click columns that don't match your "
-     "scope's turret. The Click: dropdown on the Load Log tab tells "
+     "scope's turret. The Click: dropdown on the Powder Charge Log tab tells "
      "Loadscope your scope's click value:</p>"
      "<ul>"
      "<li><b>0.1 Mil / 0.05 Mil scope</b> → MOA columns hide on Ballistics</li>"

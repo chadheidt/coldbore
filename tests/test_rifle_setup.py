@@ -58,7 +58,7 @@ def test_write_then_read_roundtrip(wb):
 def test_number_field_coerced_to_float(wb):
     write_rifle_setup(wb, {"B10": "2.250"})
     from openpyxl import load_workbook
-    v = load_workbook(wb)["Load Log"]["B10"].value
+    v = load_workbook(wb)["Powder Charge Log"]["B10"].value
     assert v == 2.25 and isinstance(v, float)
 
 
@@ -79,7 +79,7 @@ def test_formula_cell_g9_untouched(wb):
     # Powder G9 is a formula and not in the field map; writing the form
     # must never disturb it.
     from openpyxl import load_workbook
-    before = load_workbook(wb)["Load Log"]["G9"].value
+    before = load_workbook(wb)["Powder Charge Log"]["G9"].value
     write_rifle_setup(wb, {"B5": "Another Rifle"})
-    after = load_workbook(wb)["Load Log"]["G9"].value
+    after = load_workbook(wb)["Powder Charge Log"]["G9"].value
     assert before == after

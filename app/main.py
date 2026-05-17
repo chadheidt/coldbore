@@ -1357,7 +1357,7 @@ class MainWindow(QMainWindow):
             # v0.14: SD-only auto-prompt (Chad 2026-05-14). When user
             # imported seating-depth data without a powder ladder AND no
             # winning charge has been set yet, ask for the charge so we
-            # can populate Seating Depth!B10 + Charts!B3 automatically.
+            # can populate Seating Depth Log!B10 + Charts!B3 automatically.
             if result.get("needs_sd_charge"):
                 self._prompt_sd_only_charge(workbook_path)
             self._log("Workbook opened in Excel.", color=theme.LOG_SUCCESS)
@@ -1840,7 +1840,7 @@ class MainWindow(QMainWindow):
     def _prompt_sd_only_charge(self, workbook_path):
         """v0.14: when user imported seating-depth data without a powder
         ladder, ask them what charge weight they used. Write it to both
-        Seating Depth!B10 (the visible 'Charge:' cell) and Charts!B3
+        Seating Depth Log!B10 (the visible 'Charge:' cell) and Charts!B3
         (the source-of-truth winner cell that all other formulas reference).
         Chad 2026-05-14: "I also like the ability for the auto prompt."
         """
@@ -1857,7 +1857,7 @@ class MainWindow(QMainWindow):
         if not ok:
             self._log(
                 "Skipped seating-depth charge prompt — you can type it "
-                "manually into Seating Depth row 10.",
+                "manually into Seating Depth Log row 10.",
                 color=theme.LOG_DIM,
             )
             # Even if user cancelled, open Excel so they see their data
@@ -1867,8 +1867,8 @@ class MainWindow(QMainWindow):
         try:
             from openpyxl import load_workbook
             wb = load_workbook(workbook_path, data_only=False)
-            if "Seating Depth" in wb.sheetnames:
-                wb["Seating Depth"]["B10"].value = charge
+            if "Seating Depth Log" in wb.sheetnames:
+                wb["Seating Depth Log"]["B10"].value = charge
             if "Charts" in wb.sheetnames:
                 wb["Charts"]["B3"].value = charge
             wb.save(workbook_path)
@@ -1879,7 +1879,7 @@ class MainWindow(QMainWindow):
         except Exception as e:
             self._log(
                 f"Couldn't save the charge: {e}. "
-                "Open the workbook and type it into Seating Depth row 10.",
+                "Open the workbook and type it into Seating Depth Log row 10.",
                 color=theme.LOG_ERROR,
             )
         # Open Excel after we've written (or attempted to write) the charge.
@@ -2004,7 +2004,7 @@ class MainWindow(QMainWindow):
 
     def _reset_composite_weights(self):
         """Restore the workbook's composite-score weights to Loadscope's
-        defaults on both the Charts and Seating Depth sheets."""
+        defaults on both the Charts and Seating Depth Log sheets."""
         wb_path = self._selected_workbook()
         if not wb_path or not os.path.isfile(wb_path):
             QMessageBox.information(
@@ -2020,8 +2020,8 @@ class MainWindow(QMainWindow):
             (
                 f"Reset the composite-score weights on '{os.path.basename(wb_path)}' "
                 f"to Loadscope defaults?\n\n"
-                f"Charts (powder ladder):   Vel 0.30  •  SD 0.20  •  MR 0.20  •  SD-Vert 0.30\n"
-                f"Seating Depth:            Vel 0.15  •  SD 0.25  •  MR 0.25  •  SD-Vert 0.35\n\n"
+                f"Charts (powder ladder):   Vel 0.30  •  SD 0.20  •  MR 0.20  •  Vertical SD 0.30\n"
+                f"Seating Depth Log:            Vel 0.15  •  SD 0.25  •  MR 0.25  •  Vertical SD 0.35\n\n"
                 f"Any custom weights you've typed will be overwritten."
             ),
             QMessageBox.Yes | QMessageBox.No,
@@ -2055,7 +2055,7 @@ class MainWindow(QMainWindow):
     def _save_suggested_load(self):
         """Append a new row to Load Library capturing the current
         suggested load (winning charge from Charts, winning jump from
-        Seating Depth, components from Load Log header, performance
+        Seating Depth Log, components from Powder Charge Log header, performance
         metrics from the matching winner rows)."""
         wb_path = self._selected_workbook()
         if not wb_path or not os.path.isfile(wb_path):
@@ -2187,7 +2187,7 @@ class MainWindow(QMainWindow):
     def _open_demo_tour(self):
         """Open the guided demo tour panel beside Excel.
 
-        Walks the user through Load Log, Charts, Seating Depth, Ballistics,
+        Walks the user through Powder Charge Log, Charts, Seating Depth Log, Ballistics,
         Pocket Range Card, and Load Library with timed narration. Used both
         from the Workbook menu (any user can replay) and from the first-launch
         trial flow (auto-fires once).
@@ -2273,14 +2273,14 @@ class MainWindow(QMainWindow):
             self._log(f"Couldn't trigger print: {e}", color=theme.LOG_ERROR)
 
     def _workbook_has_data(self, workbook_path):
-        """Return True if Load Log row 16+ has any imported data (any charge value
+        """Return True if Powder Charge Log row 16+ has any imported data (any charge value
         in column B). Used to decide whether to prompt for new-cycle confirmation."""
         try:
             from openpyxl import load_workbook
             wb = load_workbook(workbook_path, data_only=True, keep_vba=False)
-            if "Load Log" not in wb.sheetnames:
+            if "Powder Charge Log" not in wb.sheetnames:
                 return False
-            ws = wb["Load Log"]
+            ws = wb["Powder Charge Log"]
             for r in range(16, 26):
                 v = ws.cell(r, 2).value
                 if v not in (None, ""):
@@ -2424,7 +2424,7 @@ class MainWindow(QMainWindow):
         except Exception:
             suggested_charge = None
         try:
-            suggested_jump = wb["Seating Depth"]["D2"].value
+            suggested_jump = wb["Seating Depth Log"]["D2"].value
         except Exception:
             suggested_jump = None
 

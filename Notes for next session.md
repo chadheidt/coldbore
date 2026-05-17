@@ -4,27 +4,20 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🌙 END OF DAY 2026-05-16 — RESUME HERE TOMORROW (read first)
+## ▶️ RESUME HERE — 2026-05-17 PM (read first; full detail in memory `project_loadscope_rename_vertsd_inflight`)
 
-**Where the website revamp lives:** committed on branch **`website-revamp`** (commit `8c8d16a`) in the main repo `/Users/macbook/Projects/Loadscope`. `main` was deliberately reverted to its clean pre-revamp state so it stays publish-safe (GitHub Pages serves `docs/` from `main`). **To continue: `git checkout website-revamp`** then keep editing `docs/index.html` and preview via `open docs/index.html` in the browser (NOT the Launch panel — it can't load local `assets/`).
+**Website revamp + rename + screenshots ALL DONE on `website-revamp` (pushed: `7e01a18`). `origin/main` still `88a04eb` — LIVE SITE UNCHANGED, NOTHING PUBLISHED. ONE gate left: Chad's explicit "publish" → then merge `website-revamp`→`main` (GitHub Pages serves `docs/` from `main`).**
 
-**Website status — Chad-approved so far, NOT published (held at his publish gate):** hero = "Loadscope finds your best load." + orange "scored from your *chronograph* and *group* data." + Load Log screenshot; sections = best-load hero → Stop guessing (Without/With, compacted) → Drag.Click.Done → **Built-in ballistic calculator** (Pocket Card, shrunk to 520px) → **See it in action** (7-stop slideshow, captions shortened, images capped 44vh — Chad said "looks great") → 6 feature cards → Install → FAQ (collapsed behind one "Show the questions" dropdown). Compaction pass done (h1 44/h2 28/etc., section pad 44, screenshots autocropped/shrunk). MV copy is factually correct everywhere ("measured from your chronograph data", not "set"). Cloudflare download/worker JS untouched.
+- **Rename** (`a3ff734`): Load Log→**Powder Charge Log**, Seating Depth→**Seating Depth Log**, "SD-Vert"→**Vertical SD**; code/tests/tools/website in lockstep; 207 tests pass. Metric phrase "seating depth" preserved.
+- **Demo screenshots regenerated** (`af8d5c5`): Excel 16.109 (Chad's reinstall) **broke** AppleScript PDF export (Microsoft regression — silent no-op; UI dialogs don't present under automation even with Accessibility). Chad chose Option A → **installed LibreOffice**; added a durable headless-LibreOffice export path to `tools/render_demo_screenshots.py` (preferred when soffice present, Excel path kept as fallback; `_prepped_workbook` pins fit-to-1-page + page-count assertion). All 6 demo PNGs + 5 site images now show the new labels, Claude-verified, fidelity strong.
+- **Website polish** (`7e01a18`): "See it in action" slideshow widened (stage 1000px, window-fit `min(55vh,500px)` frame, no-scroll, spacing tightened). 4 static sections (Drag/Click/Done, Powder Charge Log, Seating Depth Log, Ballistic calc) → alternating image-beside-text (`.split`/`.split.reverse`); standalone log shots capped (`.log-shot` 560px) to cut page length. Slideshow deliberately left full-width. Chad reviewed each iteration in the browser and approved the look.
+- **Final page audit done (Chad asked):** copy/voice/banned-words/rename-consistency/assets/formatting all clean (incl. `launch.html`). Found + FIXED 2 wordsmithing/accuracy items (slideshow caption #1 → canonical four factors; how-it-works step 2 "each tagged at the top of its log"). Per Chad's "publish only if you find no issues" — issues WERE found+fixed, so **held the live publish for his explicit go**.
 
-**To PUBLISH when Chad says "publish":** `git checkout main && git merge website-revamp && git push origin main` (GitHub Pages auto-deploys `docs/`). Until then DO NOT merge/push the branch.
-
-**Cleanup RESOLVED 2026-05-16 (Chad answered):** `6.xlsx` trashed; `~/Desktop/Load Dev Program/` trashed; `~/Desktop/Loadscope app/` KEPT (Chad's installed-app reference). Earlier same-day cleanup (all recoverable in ~/.Trash): `build/` + `dist/` (~276MB), `.DS_Store`×2, `.pytest_cache/`, `.wrangler/`; /tmp scratch deleted. Source, in-progress work, import/output folders, `.backups`, `.claude` untouched. Nothing pending here.
-
-**Preference-enforcement work done 2026-05-16 (active NEXT session):**
-- `CLAUDE.md` corrected: added a top **"🔴 OBEY EVERY TURN"** 6-rule block (box-every-ask, do-it-end-to-end incl. build/R2/install, investigate→recommend→act-once, no per-fix releases pre-beta, marketing-voice banned words, always-recommend); fixed the build/release procedure (self-drive build via `open "Build App.command"`, **mandatory R2 upload**, full-chain verify with test key, optional install self-test); added the no-per-fix-pre-beta + docs-publishes-from-main rules.
-- New memory `project_loadscope_marketing_voice.md` (brand voice + banned words + working style — read before any website/copy work).
-- **3 enforcement hooks wired** into local `.claude/settings.json` (gitignored; .bak made): a 2nd SessionStart command that cats the 7 rule-memory files verbatim into context; a UserPromptSubmit one-line reminder; a PreToolUse Bash guard `~/.claude/hooks/guard_docs_publish.py` that asks for confirmation before any `git push` that would change `docs/` on `main` (publish-safety). These solve the "saved but not read" gap — they take effect at the START of the next session.
-
-**Tomorrow's resume prompt (paste to start):**
-> Continue Loadscope. Read `Notes for next session.md` top. `git checkout website-revamp` — the website revamp WIP is there (commit 8c8d16a), main is clean/publish-safe. Reopen `docs/index.html` in the browser for final tweaks. When I say "publish" → merge website-revamp to main + push (GitHub Pages auto-deploys). v0.15.0 solver already shipped; cadence = no per-fix releases, batch to beta. Cleanup is done; nothing pending from me except the website review.
+**NEXT STEP (when Chad's back):** he reviews the audited page in the browser; on his explicit **"publish"** → `git checkout main && git merge website-revamp && git push origin main` (that's the go-live; Pages serves `docs/` from `main`). Optionally also rebuild/upload `Loadscope.dmg` to R2 for the fresh-install path (open follow-up). No app release (pre-beta cadence).
 
 ---
 
-## 🛠️ WEBSITE REVAMP detail (2026-05-16, pre-beta roadmap step 3)
+## 🛠️ IN PROGRESS — WEBSITE REVAMP (2026-05-16, pre-beta roadmap step 3)
 
 **NOT shipped/released** (per `project_release_review_cadence` — batch into beta; commit/push main + tests green only).
 

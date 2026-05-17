@@ -70,13 +70,13 @@ def export_load(workbook_path):
     }
     load_data = {
         "charge_gr": cell("Charts", "B3"),     # suggested charge
-        "jump_in": cell("Seating Depth", "D2"),  # suggested jump
+        "jump_in": cell("Seating Depth Log", "D2"),  # suggested jump
     }
     performance = {
         "avg_velocity_fps": cell("Charts", "E5"),
         "sd_fps": cell("Charts", "G3"),
         "group_in": cell("Charts", "G4"),
-        "mean_radius_in": cell("Seating Depth", "L2"),
+        "mean_radius_in": cell("Seating Depth Log", "L2"),
     }
 
     payload = {

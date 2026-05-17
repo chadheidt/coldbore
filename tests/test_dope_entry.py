@@ -97,7 +97,7 @@ def test_moa_writes_d_and_h(wb):
 def test_session_date_parsed_and_written(wb):
     write_dope(wb, "mil", [], date_str="2026-05-20")
     from datetime import datetime
-    v = load_workbook(wb)["Load Log"]["B13"].value
+    v = load_workbook(wb)["Powder Charge Log"]["B13"].value
     assert isinstance(v, datetime) and v.strftime("%Y-%m-%d") == "2026-05-20"
 
 
@@ -109,13 +109,13 @@ def test_date_displayed_mm_dd_yy(wb):
 def test_mm_dd_yy_input_roundtrips(wb):
     write_dope(wb, "mil", [], date_str="06/01/26")
     from datetime import datetime
-    v = load_workbook(wb)["Load Log"]["B13"].value
+    v = load_workbook(wb)["Powder Charge Log"]["B13"].value
     assert isinstance(v, datetime) and v.strftime("%m/%d/%y") == "06/01/26"
     assert read_dope(wb)["date"] == "06/01/26"
 
 
 def test_bad_date_does_not_corrupt(wb):
-    before = load_workbook(wb)["Load Log"]["B13"].value
+    before = load_workbook(wb)["Powder Charge Log"]["B13"].value
     write_dope(wb, "mil", [], date_str="not a date")
-    after = load_workbook(wb)["Load Log"]["B13"].value
+    after = load_workbook(wb)["Powder Charge Log"]["B13"].value
     assert before == after

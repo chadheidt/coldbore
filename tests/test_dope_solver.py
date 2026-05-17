@@ -62,7 +62,7 @@ def test_manual_bc_override_wins(wb):
 
 def test_no_bc_when_bullet_unknown_and_no_manual(wb):
     w = load_workbook(wb)
-    w["Load Log"]["B9"] = "Acme 999gr Unobtainium"
+    w["Powder Charge Log"]["B9"] = "Acme 999gr Unobtainium"
     w.save(wb)
     r = ds.predicted_dope(wb)
     assert r["status"] == ds.NO_BC

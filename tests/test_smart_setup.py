@@ -103,7 +103,7 @@ def test_create_working_workbook_bootstrap(tmp_path):
     assert os.path.isfile(p1) and p1.endswith(".xlsx")
     from openpyxl import load_workbook
     wb = load_workbook(p1)
-    assert "Load Log" in wb.sheetnames and wb.template is False
+    assert "Powder Charge Log" in wb.sheetnames and wb.template is False
     # uniquifies when the name is taken
     p2 = import_data.create_working_workbook(proj, TEMPLATE, name="My Load")
     assert p1 != p2 and os.path.isfile(p2)
@@ -122,7 +122,7 @@ def test_new_load_carryover_keeps_identity_clears_bullet(tmp_path):
     prior = import_data.create_working_workbook(str(tmp_path), TEMPLATE,
                                                 name="Prior")
     pw = load_workbook(prior)
-    ll = pw["Load Log"]
+    ll = pw["Powder Charge Log"]
     ll.cell(5, 2).value = "Tikka 6.5"        # Rifle
     ll.cell(7, 7).value = "0.1 Mil"          # Scope click
     ll.cell(9, 2).value = "Hornady 140 ELD-M"  # Bullet (should NOT carry)
@@ -130,7 +130,7 @@ def test_new_load_carryover_keeps_identity_clears_bullet(tmp_path):
     # new template wb, run inherit
     new_wb = load_workbook(TEMPLATE)
     inherited = import_data.inherit_rifle_setup(new_wb, str(tmp_path))
-    nl = new_wb["Load Log"]
+    nl = new_wb["Powder Charge Log"]
     assert nl.cell(5, 2).value == "Tikka 6.5"      # identity carried
     assert nl.cell(7, 7).value == "0.1 Mil"        # scope click carried
     assert nl.cell(9, 2).value in (None, "")       # bullet NOT carried

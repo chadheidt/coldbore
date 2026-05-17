@@ -385,13 +385,13 @@ def migrate_schema_to_10_shot(wb):
                 "Garmin Xero Import: migrated 7-shot → 10-shot layout"
             )
 
-    # --- Load Log + Seating Depth: cross-sheet refs to 'Garmin Xero Import'
+    # --- Powder Charge Log + Seating Depth Log: cross-sheet refs to 'Garmin Xero Import'
     # The candidate tables on these sheets pull Avg Vel / ES / SD values
     # from 'Garmin Xero Import' cols L/M/N (pre-migration AvgVel/SD/ES).
     # After the visible-sheet migration above, those values now live in
     # cols O/P/Q. Remap each formula. Only fires if the legacy references
     # are still in place.
-    for sheet_name, rows in (("Load Log", range(16, 26)), ("Seating Depth", range(16, 27))):
+    for sheet_name, rows in (("Powder Charge Log", range(16, 26)), ("Seating Depth Log", range(16, 27))):
         if sheet_name not in wb.sheetnames:
             continue
         ws = wb[sheet_name]
@@ -484,7 +484,7 @@ def inherit_rifle_setup(new_wb, project_dir, exclude_path=None):
     """
     import os
     from openpyxl import load_workbook
-    if "Load Log" not in new_wb.sheetnames:
+    if "Powder Charge Log" not in new_wb.sheetnames:
         return []
 
     # Find candidate prior workbooks: .xlsx files in the project folder + Completed Loads
@@ -507,7 +507,7 @@ def inherit_rifle_setup(new_wb, project_dir, exclude_path=None):
         return []
     candidates.sort(reverse=True)  # most recent first
 
-    # Fields to inherit, by (row, col) coordinate on Load Log
+    # Fields to inherit, by (row, col) coordinate on Powder Charge Log
     # Layout: A=label, B=value, F=label, G=value, K=label, L=value (and below)
     # Chad 2026-05-15: a new load carries over the STABLE rig identity
     # but starts FRESH on the load itself. Carry: rifle/shooter/
@@ -525,16 +525,16 @@ def inherit_rifle_setup(new_wb, project_dir, exclude_path=None):
         (9, 9,  "Primer"),
         (9, 12, "Brass"),
     ]
-    target_ws = new_wb["Load Log"]
+    target_ws = new_wb["Powder Charge Log"]
     inherited = []
     for _mtime, prior_path in candidates:
         try:
             prior_wb = load_workbook(prior_path, data_only=True, keep_vba=False)
         except Exception:
             continue
-        if "Load Log" not in prior_wb.sheetnames:
+        if "Powder Charge Log" not in prior_wb.sheetnames:
             continue
-        prior_ws = prior_wb["Load Log"]
+        prior_ws = prior_wb["Powder Charge Log"]
         any_inherited = False
         for r, c, label in FIELDS:
             tgt = target_ws.cell(r, c)
@@ -602,8 +602,8 @@ def stamp_load_name(wb, load_name):
     if not load_name:
         return
     stamps = {
-        "Load Log": load_name,
-        "Seating Depth": f"{load_name}  —  Seating Depth",
+        "Powder Charge Log": load_name,
+        "Seating Depth Log": f"{load_name}  —  Seating Depth Log",
         "Charts": f"{load_name}  —  Suggested Best Load",
         # Tab was renamed to "Start Here" in v0.14 — keep old name as
         # fallback for any in-flight workbooks.
@@ -630,11 +630,11 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
     set to the wrong defaults. Existing user input is never overwritten.
 
     Fixes:
-      - Load Log + Charts "Accuracy Node Finder" LineChart: display_blanks
+      - Powder Charge Log + Charts "Accuracy Node Finder" LineChart: display_blanks
         was set to 'zero' in early templates, which made the chart line
         drop to a flat zero baseline after the last shot. Changes it to
         'gap' so empty cells are skipped.
-      - Load Log!L10 + Seating Depth!L10 (Dist (yd)): if the user hasn't
+      - Powder Charge Log!L10 + Seating Depth Log!L10 (Dist (yd)): if the user hasn't
         filled it in yet AND the imported BallisticX records agree on a
         single distance, set it. The MR display in the suggested-charge
         red row divides by this distance to convert inches to MOA --
@@ -642,8 +642,8 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
     """
     fixes = []
 
-    # Self-heal the A3 "Click here to jump to Charts" hyperlink on Load Log
-    # and Seating Depth. Pre-v0.13.3 templates pointed it at an intra-sheet
+    # Self-heal the A3 "Click here to jump to Charts" hyperlink on Powder Charge Log
+    # and Seating Depth Log. Pre-v0.13.3 templates pointed it at an intra-sheet
     # row (A27) that was just a header label — no charts under it. We
     # retarget the link to the Charts sheet where the actual charts live.
     from openpyxl.worksheet.hyperlink import Hyperlink
@@ -651,7 +651,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
         "↓  Click here to jump to the Charts sheet "
         "(Suggested Best Load)  ↓"
     )
-    for sheet_name in ("Load Log", "Seating Depth"):
+    for sheet_name in ("Powder Charge Log", "Seating Depth Log"):
         if sheet_name not in wb.sheetnames:
             continue
         ws = wb[sheet_name]
@@ -672,7 +672,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
             a3.value = JUMP_DISPLAY
             fixes.append(f"{sheet_name}!A3: retargeted jump link to Charts sheet")
 
-    for sheet_name in ("Load Log", "Charts"):
+    for sheet_name in ("Powder Charge Log", "Charts"):
         if sheet_name not in wb.sheetnames:
             continue
         ws = wb[sheet_name]
@@ -711,7 +711,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
         from collections import Counter
         common_distance = Counter(distances).most_common(1)[0][0]
     if common_distance is not None:
-        for sheet_name in ("Load Log", "Seating Depth"):
+        for sheet_name in ("Powder Charge Log", "Seating Depth Log"):
             if sheet_name not in wb.sheetnames:
                 continue
             ws = wb[sheet_name]
@@ -720,13 +720,13 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
                 l10.value = common_distance
                 fixes.append(f"{sheet_name}!L10: set Dist (yd) = {common_distance}")
 
-    # Chart-source cells in Load Log H/J/K (Avg Vel, SD, Group) — these
+    # Chart-source cells in Powder Charge Log H/J/K (Avg Vel, SD, Group) — these
     # feed the Accuracy Node Finder LineChart. Excel charts plot empty
     # strings as zero (which is why the line dropped to a zero baseline
     # after the last shot). Returning NA() instead makes the chart skip
     # the cell. Custom number format hides #N/A from the user view.
-    if "Load Log" in wb.sheetnames:
-        ws = wb["Load Log"]
+    if "Powder Charge Log" in wb.sheetnames:
+        ws = wb["Powder Charge Log"]
         chart_src_changes = 0
         for r in range(16, 26):
             for col in (8, 10, 11):  # H, J, K
@@ -738,25 +738,25 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
                 if '[=NA()]' not in (cell.number_format or ""):
                     cell.number_format = '[=NA()]"";General'
         if chart_src_changes:
-            fixes.append(f"Load Log H/J/K16:25: rewired {chart_src_changes} chart-source formula(s) to skip empties")
+            fixes.append(f"Powder Charge Log H/J/K16:25: rewired {chart_src_changes} chart-source formula(s) to skip empties")
 
-    # Load Log!M2 "Best in:" indicator. v0.13.2 templates had an inline
+    # Powder Charge Log!M2 "Best in:" indicator. v0.13.2 templates had an inline
     # cross-sheet concat formula that Excel for Mac failed to render
     # (the cell appeared blank). v0.13.3 mirrors the working Seating
     # Depth pattern: pre-compute a per-row Best-in string on Charts!R18:R25,
-    # then Load Log!M2 does a simple INDEX/MATCH against the winning row.
-    if "Charts" in wb.sheetnames and "Load Log" in wb.sheetnames:
+    # then Powder Charge Log!M2 does a simple INDEX/MATCH against the winning row.
+    if "Charts" in wb.sheetnames and "Powder Charge Log" in wb.sheetnames:
         charts = wb["Charts"]
-        loadlog = wb["Load Log"]
+        loadlog = wb["Powder Charge Log"]
         # AGGREGATE(5,6,...) = MIN ignoring errors. Required because the
-        # NA() rewiring on Load Log H/J/K (above) propagates #N/A into
+        # NA() rewiring on Powder Charge Log H/J/K (above) propagates #N/A into
         # Charts D-G for empty rows, and plain MIN errors out on any #N/A.
         new_m2 = ('="Best in: "&IFERROR(INDEX(Charts!$R$18:$R$25,'
                   'MATCH(AGGREGATE(5,6,Charts!$L$18:$L$25),'
                   'Charts!$L$18:$L$25,0)),"")')
         if loadlog["M2"].value != new_m2:
             loadlog["M2"] = new_m2
-            fixes.append("Load Log!M2: simplified Best-in formula (cross-sheet INDEX/MATCH)")
+            fixes.append("Powder Charge Log!M2: simplified Best-in formula (cross-sheet INDEX/MATCH)")
         if charts["R17"].value != "Best in (per row)":
             charts["R17"] = "Best in (per row)"
             fixes.append("Charts!R17: added Best-in (per row) header")
@@ -772,9 +772,9 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
                 fixes.append(f"Charts!R{r}: per-row Best-in formula")
 
     # ---- Auto-fill session metadata from CSV data ----
-    # Skip if the workbook isn't a Load Log structure.
-    if "Load Log" in wb.sheetnames:
-        ws = wb["Load Log"]
+    # Skip if the workbook isn't a Powder Charge Log structure.
+    if "Powder Charge Log" in wb.sheetnames:
+        ws = wb["Powder Charge Log"]
 
         # Auto-fill Date in the Test Session bar (row 13, column B).
         # Use earliest date present in chronograph or group records.
@@ -792,7 +792,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
                 if date_candidates:
                     # Pick the first encountered (typically all from same range trip)
                     b13.value = date_candidates[0]
-                    fixes.append(f"Load Log!B13 (Date): auto-filled = {date_candidates[0]!r}")
+                    fixes.append(f"Powder Charge Log!B13 (Date): auto-filled = {date_candidates[0]!r}")
 
         # Auto-fill Cartridge from BallisticX caliber (row 5, column L)
         if group_records:
@@ -803,7 +803,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
                 l5 = ws.cell(5, 12)  # Cartridge value cell
                 if l5.value in (None, ""):
                     l5.value = most_common_cal
-                    fixes.append(f"Load Log!L5 (Cartridge): auto-filled = {most_common_cal!r}")
+                    fixes.append(f"Powder Charge Log!L5 (Cartridge): auto-filled = {most_common_cal!r}")
 
         # Auto-fill Bullet weight in row 9 (append to Bullet field if it has
         # text but no weight, or set to "{weight} gr" if empty)
@@ -822,7 +822,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
                         b9.value = f"{cur} ({most_common_wt} gr)"
                     else:
                         b9.value = f"{most_common_wt} gr"
-                    fixes.append(f"Load Log!B9 (Bullet): added weight = {most_common_wt} gr")
+                    fixes.append(f"Powder Charge Log!B9 (Bullet): added weight = {most_common_wt} gr")
 
         # Auto-fill Session note from Garmin into the Notes column for the
         # matching row. Each chronograph record may have a SessionNote.
@@ -832,7 +832,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
                 tag = (d.get("Tag") or "").strip()
                 if not note or not tag:
                     continue
-                # Find which Load Log row this tag will land in. Tags map to
+                # Find which Powder Charge Log row this tag will land in. Tags map to
                 # rows by order of P1, P2, ... appearing in the data table.
                 # Simpler approach: scan B16:B25, find matching charge, write note.
                 # The matching is loose — we just want to ENRICH, never overwrite.
@@ -848,7 +848,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
                     new_notes = (cur_notes + " " + note).strip() if cur_notes else note
                     if new_notes != cur_notes:
                         l13.value = new_notes
-                        fixes.append(f"Load Log!L13 (Notes): appended session note from {tag}")
+                        fixes.append(f"Powder Charge Log!L13 (Notes): appended session note from {tag}")
 
     # Reset every user-facing sheet's saved scroll/selection state so
     # the workbook opens at the top of each tab next time. Excel persists
@@ -860,7 +860,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
         # "Start Here" is the v0.14 rename; keep "After Range Day" as
         # fallback so this loop hits whichever name the sheet has at the
         # moment apply_workbook_repairs runs.
-        "Start Here", "After Range Day", "Load Log", "Charts", "Seating Depth",
+        "Start Here", "After Range Day", "Powder Charge Log", "Charts", "Seating Depth Log",
         "Garmin Xero Import", "BallisticX Import", "Load Library", "Ballistics",
     )
     view_resets = 0
@@ -905,9 +905,9 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
     # carried in the .xltx that make important rows nearly invisible. Each
     # is a 1-line height set; idempotent (won't shrink rows the user widened).
     LAYOUT_FIXES = [
-        ("Load Log", "row", 7, 22.0,
+        ("Powder Charge Log", "row", 7, 22.0,
          "MOA/MIL scope click dropdown row (G7:J7) was 6.0 px — invisible"),
-        ("Seating Depth", "row", 26, 30.0,
+        ("Seating Depth Log", "row", 26, 30.0,
          "'Save Suggested Load to Library' button row was 7.5 px — invisible"),
     ]
     for sheet_name, kind, idx, target, why in LAYOUT_FIXES:
@@ -920,7 +920,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
                 ws.row_dimensions[idx].height = target
                 fixes.append(f"{sheet_name}!row{idx}: height {current or 'default'} → {target} ({why})")
 
-    # v0.14 fix — Turret-type dropdown on G7 of both Load Log and Seating
+    # v0.14 fix — Turret-type dropdown on G7 of both Powder Charge Log and Seating
     # Depth. The same list is mirrored on both sheets so the user can pick
     # (or see) their click value on whichever tab they're working in.
     # "N/A" added 2026-05-13 for users whose scope has no adjustable turret
@@ -964,7 +964,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
             "(applied to full merge + input-message prompt)"
         )
 
-    for sheet_name in ("Load Log", "Seating Depth"):
+    for sheet_name in ("Powder Charge Log", "Seating Depth Log"):
         if sheet_name in wb.sheetnames:
             _replace_g7_validation(wb[sheet_name], sheet_name)
 
@@ -990,15 +990,15 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
     # color="FFB0B0B0").
     gray_side = Side(style="thin", color="FFB0B0B0")
     rifle_border = Border(left=gray_side, right=gray_side, top=gray_side, bottom=gray_side)
-    for sheet_name in ("Load Log", "Seating Depth"):
+    for sheet_name in ("Powder Charge Log", "Seating Depth Log"):
         if sheet_name not in wb.sheetnames:
             continue
         ws = wb[sheet_name]
         if not ws["F7"].value:
             ws["F7"].value = "Turret:"
             fixes.append(f"{sheet_name}!F7: added 'Turret:' label for G7 dropdown")
-        # Ensure G7:J7 merge exists (Load Log already has it from the
-        # template; Seating Depth doesn't, leaving G/H/I/J as four
+        # Ensure G7:J7 merge exists (Powder Charge Log already has it from the
+        # template; Seating Depth Log doesn't, leaving G/H/I/J as four
         # separate cells which looks broken next to row 6's merge).
         g7_merge_present = False
         for r in ws.merged_cells.ranges:
@@ -1034,7 +1034,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
     BUTTON_CELLS = [
         ("Charts", "A6"),    # Save Suggested Load to Library
         ("Charts", "A12"),   # Reset weights to Loadscope defaults
-        ("Seating Depth", "A26"),  # Save Suggested Load to Library
+        ("Seating Depth Log", "A26"),  # Save Suggested Load to Library
         ("Ballistics", "A2"),       # Print Pocket Range Card
     ]
     for sheet_name, coord in BUTTON_CELLS:
@@ -1088,8 +1088,8 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
     # rationale" hint into a cell comment.
     from openpyxl.styles import Alignment
     from openpyxl.comments import Comment
-    if "Seating Depth" in wb.sheetnames:
-        sd_ws = wb["Seating Depth"]
+    if "Seating Depth Log" in wb.sheetnames:
+        sd_ws = wb["Seating Depth Log"]
         a28 = sd_ws["A28"]
         current_value = (a28.value or "").strip()
         if current_value and "Reset" in current_value:
@@ -1111,7 +1111,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
             )
             a28.font = Font(color="FF1F4E78", bold=True)
             a28.border = Border(left=gray_side, right=gray_side, top=gray_side, bottom=gray_side)
-            fixes.append("Seating Depth!A28: 'Reset weights' button + widened col A + yellow accent")
+            fixes.append("Seating Depth Log!A28: 'Reset weights' button + widened col A + yellow accent")
 
     # v0.14 fix — Excel-Mac doesn't reliably recompute the AGGREGATE-based
     # composite-score formula chain after an openpyxl save. Precompute the
@@ -1125,13 +1125,13 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
         for f in static_fixes:
             print(f"    - {f}")
 
-    # v0.14 fix: Seating Depth!B10 charge cell — show a clear placeholder
+    # v0.14 fix: Seating Depth Log!B10 charge cell — show a clear placeholder
     # when no powder ladder data has populated Charts!B3 (Chad 2026-05-14:
     # users who only do a seating depth test wouldn't know to type the
     # charge into a blank cell). Smart formula: empty Charts!B3 → display
     # "← Type your charge (gr) here"; populated → display the winning charge.
-    if "Seating Depth" in wb.sheetnames:
-        sd_sheet = wb["Seating Depth"]
+    if "Seating Depth Log" in wb.sheetnames:
+        sd_sheet = wb["Seating Depth Log"]
         b10_val = sd_sheet["B10"].value
         legacy_formula = (
             isinstance(b10_val, str) and b10_val.strip() in ("=Charts!B3",)
@@ -1142,7 +1142,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
                 '=IF(Charts!B3="","← Type your charge (gr) here",Charts!B3)'
             )
             fixes.append(
-                "Seating Depth!B10: smart placeholder formula "
+                "Seating Depth Log!B10: smart placeholder formula "
                 "(shows 'Type your charge here' when no PL data)"
             )
 
@@ -1202,7 +1202,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
         for f in protect_fixes:
             print(f"    - {f}")
 
-    # v0.14: Smart placeholder on Seating Depth!B10 (the "Charge:" cell).
+    # v0.14: Smart placeholder on Seating Depth Log!B10 (the "Charge:" cell).
     # Normally the cell formula is =Charts!B3 → resolves to the powder
     # ladder winner. But if the user runs ONLY a seating depth test (no
     # powder ladder), Charts!B3 is empty and the user sees a blank cell
@@ -1210,8 +1210,8 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
     # raw formula with one that displays a placeholder when empty.
     # Chad 2026-05-14: "If someone is only doing a seating test, how
     # does our spreadsheet know how many grains of powder to enter?"
-    if "Seating Depth" in wb.sheetnames:
-        sd_ws = wb["Seating Depth"]
+    if "Seating Depth Log" in wb.sheetnames:
+        sd_ws = wb["Seating Depth Log"]
         existing_b10 = sd_ws["B10"].value
         # Don't clobber a user-typed numeric value (means they already
         # set it manually). Only refresh formula-based or empty cells.
@@ -1222,7 +1222,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
                 '=IF(Charts!B3="","← Type your charge (gr) here",Charts!B3)'
             )
             fixes.append(
-                "Seating Depth!B10: smart formula shows placeholder when "
+                "Seating Depth Log!B10: smart formula shows placeholder when "
                 "no powder ladder winner is set"
             )
 
@@ -1242,7 +1242,7 @@ def apply_workbook_repairs(wb, group_records, chronograph_records=None):
 
 def _write_static_analysis_values(wb, chronograph_records, group_records):
     """Precompute composite scores + Best-in tags + normalized metrics and
-    write them as STATIC values to Charts + Load Log + Seating Depth.
+    write them as STATIC values to Charts + Powder Charge Log + Seating Depth Log.
 
     Why: Excel-Mac doesn't reliably recompute the AGGREGATE-based composite
     chain after openpyxl saves. Writing static values forces the right
@@ -1351,7 +1351,7 @@ def _compute_composites_and_bests(candidates, weights):
 
 
 def _write_pl_static(wb, pl_chrono, group_by_tag):
-    """Powder ladder static-value writes targeting Load Log + Charts."""
+    """Powder ladder static-value writes targeting Powder Charge Log + Charts."""
     fixes = []
     candidates = _pair_chrono_with_groups(pl_chrono, group_by_tag)
     if len(candidates) < 2:
@@ -1369,8 +1369,8 @@ def _write_pl_static(wb, pl_chrono, group_by_tag):
     winner = candidates[winner_idx]
     winner_tags = tags_per_row[winner_idx] or "Composite ✓"
 
-    if "Load Log" in wb.sheetnames:
-        ll = wb["Load Log"]
+    if "Powder Charge Log" in wb.sheetnames:
+        ll = wb["Powder Charge Log"]
         # Winner row 2 (D2/G2/J2/L2 + M2 Best in)
         ll["D2"].value = winner["charge_or_jump"]
         ll["G2"].value = winner["vel"]
@@ -1417,7 +1417,7 @@ def _write_pl_static(wb, pl_chrono, group_by_tag):
         # Widen col P so the winner label fits without shrinking
         ll.column_dimensions["P"].width = 15
         fixes.append(
-            f"Load Log!D2/G2/J2/L2/M2 + O16:O{15+len(composites)} + "
+            f"Powder Charge Log!D2/G2/J2/L2/M2 + O16:O{15+len(composites)} + "
             f"P16:P25 top-3 medals static values + col P widened to 15"
         )
 
@@ -1425,10 +1425,10 @@ def _write_pl_static(wb, pl_chrono, group_by_tag):
     # from the data we already have. The Pocket Range Card reads these
     # cells via data_only=True (cached values) — without auto-fill the
     # template's cross-sheet formulas show blank → card prints with dashes.
-    if "Ballistics" in wb.sheetnames and "Load Log" in wb.sheetnames:
+    if "Ballistics" in wb.sheetnames and "Powder Charge Log" in wb.sheetnames:
         ball = wb["Ballistics"]
-        ll = wb["Load Log"]
-        # Pull rifle + bullet from Load Log's user-fill cells (header row 5/9)
+        ll = wb["Powder Charge Log"]
+        # Pull rifle + bullet from Powder Charge Log's user-fill cells (header row 5/9)
         rifle = ll["B5"].value
         bullet = ll["B9"].value
         scope = ll["G6"].value
@@ -1462,7 +1462,7 @@ def _write_pl_static(wb, pl_chrono, group_by_tag):
                 wrap_text=False,
             )
         fixes.append(
-            "Ballistics row 5/6: auto-filled rifle/bullet/scope from Load Log, "
+            "Ballistics row 5/6: auto-filled rifle/bullet/scope from Powder Charge Log, "
             f"charge/vel from winner ({winner['charge_or_jump']}gr @ {winner['vel']} fps); "
             "merged B:C on rows 5+6 for long rifle/scope names"
         )
@@ -1523,7 +1523,7 @@ def _write_pl_static(wb, pl_chrono, group_by_tag):
 
 
 def _write_sd_static(wb, sd_chrono, group_by_tag):
-    """Seating depth static-value writes targeting Seating Depth sheet."""
+    """Seating depth static-value writes targeting Seating Depth Log sheet."""
     fixes = []
     candidates = _pair_chrono_with_groups(sd_chrono, group_by_tag)
     if len(candidates) < 2:
@@ -1541,10 +1541,10 @@ def _write_sd_static(wb, sd_chrono, group_by_tag):
     winner = candidates[winner_idx]
     winner_tags = tags_per_row[winner_idx] or "Composite ✓"
 
-    if "Seating Depth" not in wb.sheetnames:
+    if "Seating Depth Log" not in wb.sheetnames:
         return fixes
 
-    sd = wb["Seating Depth"]
+    sd = wb["Seating Depth Log"]
     # Winner row 2
     sd["D2"].value = winner["charge_or_jump"]
     sd["G2"].value = winner["vel"]
@@ -1565,7 +1565,7 @@ def _write_sd_static(wb, sd_chrono, group_by_tag):
         sd.cell(row=16 + i, column=15).value = round(comp, 3)
     for r in range(16 + len(composites), 26):
         sd.cell(row=r, column=15).value = "=NA()"
-    # P16:P25 — top-3 medal ranking (matches Load Log treatment, Chad
+    # P16:P25 — top-3 medal ranking (matches Powder Charge Log treatment, Chad
     # 2026-05-14). Composite is "lower = better"; sort ASCENDING.
     sd_ranked = sorted(range(len(composites)), key=lambda i: composites[i])
     sd_medals = {}
@@ -1623,7 +1623,7 @@ def _write_sd_static(wb, sd_chrono, group_by_tag):
     for r in range(30 + len(candidates), 38):
         for col in (1, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14):
             sd.cell(row=r, column=col).value = "=NA()"
-    fixes.append(f"Seating Depth row 2 + O16:O{15+len(composites)} + A-N30:37 static values ({len(candidates)} candidates)")
+    fixes.append(f"Seating Depth Log row 2 + O16:O{15+len(composites)} + A-N30:37 static values ({len(candidates)} candidates)")
 
     return fixes
 
@@ -1889,13 +1889,13 @@ def _polish_ballistics_callout(wb):
     # Auto-hide the non-matching click columns based on scope type
     # (Chad 2026-05-14): a Mil-turret scope CAN'T dial MOA clicks, so
     # showing the empty MOA columns is just visual noise. Read the user's
-    # scope click value from Load Log G7 and hide the irrelevant columns.
+    # scope click value from Powder Charge Log G7 and hide the irrelevant columns.
     #   0.1 Mil / 0.05 Mil scope  → hide MOA cols (D, E, H, I)
     #   1/4 MOA / 1/8 MOA scope   → hide Mil cols (B, C, F, G)
     #   N/A or unset              → keep both visible (user can decide)
     g7 = ""
-    if "Load Log" in wb.sheetnames:
-        g7_val = wb["Load Log"]["G7"].value
+    if "Powder Charge Log" in wb.sheetnames:
+        g7_val = wb["Powder Charge Log"]["G7"].value
         g7 = str(g7_val).strip() if g7_val is not None else ""
     if g7 in ("0.1 Mil", "0.05 Mil"):
         for col in ("D", "E", "H", "I"):
@@ -2113,7 +2113,7 @@ def _polish_start_here_tab(wb):
          "45.5   →  45.5 grains of powder\n"
          "H4350  →  Powder type (Hodgdon H4350)"),
         ("S7 0.070 H4350",
-         "S7     →  Seating Depth, Test #7\n"
+         "S7     →  Seating Depth Log, Test #7\n"
          "0.070  →  0.070-inch jump distance\n"
          "H4350  →  Powder type (Hodgdon H4350)"),
     ]
@@ -2181,14 +2181,14 @@ def _polish_start_here_tab(wb):
               border=section_underline)
     row += 2
     tab_descriptions = [
-        ("Load Log",
+        ("Powder Charge Log",
          "Your powder ladder. Date, powder, bullet, and cartridge auto-fill "
          "from your CSVs. You fill in your rifle setup once (rifle, scope, "
          "click size, primer, brass, CBTO, OAL) — those values flow into "
-         "Seating Depth, Ballistics, and your Pocket Range Card automatically. "
+         "Seating Depth Log, Ballistics, and your Pocket Range Card automatically. "
          "The orange button jumps you to Charts."),
-        ("Seating Depth",
-         "Your seating-depth test data. Same idea as Load Log, one row per jump distance."),
+        ("Seating Depth Log",
+         "Your seating-depth test data. Same idea as Powder Charge Log, one row per jump distance."),
         ("Charts",
          "Your suggested best load. Loadscope ranks every powder ladder candidate by composite score. Save the winner to your Library with one click."),
         ("Ballistics",
@@ -2196,7 +2196,7 @@ def _polish_start_here_tab(wb):
         ("Load Library",
          "Every confirmed load you've saved over time, one row per load."),
         ("Garmin Xero & BallisticX Import",
-         "Auto-populated from your CSVs. You usually won't need to edit these — they feed Load Log + Seating Depth."),
+         "Auto-populated from your CSVs. You usually won't need to edit these — they feed Powder Charge Log + Seating Depth Log."),
     ]
     top_align_indent = Alignment(
         horizontal="left", vertical="top", wrap_text=True, indent=1,
@@ -2247,7 +2247,7 @@ def _polish_start_here_tab(wb):
         ("Run Import won't go",
          "Excel is probably open. Close Excel (Cmd+Q) and click Run Import again."),
         ("Click counts on Ballistics look wrong",
-         "Check the Click: dropdown on the Load Log tab and pick the right one for your scope."),
+         "Check the Click: dropdown on the Powder Charge Log tab and pick the right one for your scope."),
         ("Charts tab is empty",
          "Loadscope needs at least 2 candidate loads with BOTH chronograph AND target data to score them. Drop more CSVs and re-run import."),
         ("Print Pocket Range Card button does nothing",
@@ -2386,9 +2386,9 @@ def _protect_workbook(wb):
     UNLOCKED = {
         # Start Here = pure docs, no editable cells. Empty list ⇒ all locked.
         "Start Here": [],
-        # Load Log + Seating Depth: rifle/scope/cartridge metadata + click
+        # Powder Charge Log + Seating Depth Log: rifle/scope/cartridge metadata + click
         # dropdown + bullet/primer/brass + CBTO/OAL + date/temp/notes.
-        "Load Log": [
+        "Powder Charge Log": [
             "B5", "G5", "L5",          # Rifle, Shooter, Cartridge
             "B6", "G6", "L6",          # Barrel, Optic, Chrono
             "G7",                       # Turret dropdown
@@ -2396,7 +2396,7 @@ def _protect_workbook(wb):
             "B10", "G10", "L10",       # CBTO, OAL, Distance
             "B13", "G13", "K13", "L13", # Date, ?, Temp, Notes
         ],
-        "Seating Depth": [
+        "Seating Depth Log": [
             "B5", "G5", "L5",
             "B6", "G6", "L6",
             "G7",
@@ -2552,7 +2552,7 @@ def resize_comment_boxes(xlsx_path, width_px=360, height_px=220):
 # Default composite-score weights — used by the Tools → Reset Composite
 # Weights menu item to restore the workbook to Loadscope's recommended
 # starting values. Rationale lives in app/help_dialog.py and as a cell
-# comment on Charts!A10 + Seating Depth!A28.
+# comment on Charts!A10 + Seating Depth Log!A28.
 DEFAULT_WEIGHTS_CHARTS = {
     "B11": 0.3,   # Velocity
     "D11": 0.2,   # SD
@@ -2604,13 +2604,13 @@ def gather_suggested_load(workbook_path):
     from openpyxl import load_workbook
 
     wb = load_workbook(workbook_path, data_only=True, keep_vba=False)
-    if "Charts" not in wb.sheetnames or "Load Log" not in wb.sheetnames:
+    if "Charts" not in wb.sheetnames or "Powder Charge Log" not in wb.sheetnames:
         raise ValueError(
-            "This workbook doesn't have the expected sheets (Charts + Load Log)."
+            "This workbook doesn't have the expected sheets (Charts + Powder Charge Log)."
         )
     charts = wb["Charts"]
-    ll = wb["Load Log"]
-    sd = wb["Seating Depth"] if "Seating Depth" in wb.sheetnames else None
+    ll = wb["Powder Charge Log"]
+    sd = wb["Seating Depth Log"] if "Seating Depth Log" in wb.sheetnames else None
 
     winning_charge = charts["B3"].value
     if winning_charge in (None, "", 0):
@@ -2618,7 +2618,7 @@ def gather_suggested_load(workbook_path):
             "No suggested charge yet — run a powder ladder first."
         )
 
-    # Find which Load Log candidate row corresponds to the winner so
+    # Find which Powder Charge Log candidate row corresponds to the winner so
     # we can pull its metrics. Match by charge weight.
     winner_row = None
     for r in range(16, 26):
@@ -2634,12 +2634,12 @@ def gather_suggested_load(workbook_path):
         except (ValueError, TypeError):
             pass
 
-    # Distance for MOA conversion lives at L10 on both Load Log + SD
+    # Distance for MOA conversion lives at L10 on both Powder Charge Log + SD
     distance_yd = ll["L10"].value
     if distance_yd in (None, "") and sd is not None:
         distance_yd = sd["L10"].value
 
-    # Performance metrics from the winning Load Log row (inches → MOA).
+    # Performance metrics from the winning Powder Charge Log row (inches → MOA).
     # Columns: H=AvgVel, J=SD, K=Group(in), N=MeanRadius(in).
     if winner_row:
         avg_vel = ll.cell(winner_row, 8).value
@@ -2670,7 +2670,7 @@ def gather_suggested_load(workbook_path):
         else:
             winning_jump = None
 
-    # Load components from Load Log header (top section).
+    # Load components from Powder Charge Log header (top section).
     rifle = ll["B5"].value
     bullet = ll["B9"].value
     powder = ll["G9"].value
@@ -2773,7 +2773,7 @@ def save_suggested_load_to_library(workbook_path, data=None):
 
 
 def reset_composite_weights(workbook_path):
-    """Restore Charts and Seating Depth composite-score weights to the
+    """Restore Charts and Seating Depth Log composite-score weights to the
     Loadscope defaults. Returns a list of (sheet, cell, old, new) tuples
     describing what changed."""
     from openpyxl import load_workbook
@@ -2786,12 +2786,12 @@ def reset_composite_weights(workbook_path):
             old = ws[cell_ref].value
             ws[cell_ref] = value
             changes.append(("Charts", cell_ref, old, value))
-    if "Seating Depth" in wb.sheetnames:
-        ws = wb["Seating Depth"]
+    if "Seating Depth Log" in wb.sheetnames:
+        ws = wb["Seating Depth Log"]
         for cell_ref, value in DEFAULT_WEIGHTS_SEATING_DEPTH.items():
             old = ws[cell_ref].value
             ws[cell_ref] = value
-            changes.append(("Seating Depth", cell_ref, old, value))
+            changes.append(("Seating Depth Log", cell_ref, old, value))
     wb.save(workbook_path)
     return changes
 

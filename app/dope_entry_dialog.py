@@ -6,9 +6,9 @@ This is THE screen the ballistic solver will later pre-fill with
 predicted DOPE (the user then confirms/overwrites at the range).
 
 Writes into the Ballistics DOPE table (rows 9-18 = 100..1000 yd) and
-the Load Log session Date (B13). The click columns (C/E/G/I) are
+the Powder Charge Log session Date (B13). The click columns (C/E/G/I) are
 workbook FORMULAS that auto-fill from the click value — never touched.
-Only the shooter's unit is shown (Mil OR MOA, from Load Log!G7) — same
+Only the shooter's unit is shown (Mil OR MOA, from Powder Charge Log!G7) — same
 principle as the printed Pocket Card.
 
 Field map + read/write helpers are pure (no Qt) and unit-tested.
@@ -63,8 +63,8 @@ def _cell_save_text(confirmed, widget_text, orig_text):
 DOPE_ROWS = range(9, 19)          # Ballistics rows 9..18 = 100..1000 yd
 _RANGE_COL = "A"
 _NOTES_COL = "K"
-_CLICK_CELL = ("Load Log", "G7")  # decides Mil vs MOA
-_DATE_CELL = ("Load Log", "B13")
+_CLICK_CELL = ("Powder Charge Log", "G7")  # decides Mil vs MOA
+_DATE_CELL = ("Powder Charge Log", "B13")
 _BAL = "Ballistics"
 # MM/DD/YY is the displayed + preferred input format (Chad 2026-05-15);
 # the others are still accepted on input so a typed Y-M-D won't error.
