@@ -92,3 +92,78 @@ def extract_signed(s):
         return None
     cleaned = re.sub(r"\s+", "", str(s))
     return _to_float_locale_aware(cleaned)
+
+
+def group_stats_from_points(points, aim=None):
+    """Compute group statistics from a list of (x, y) shot coordinates.
+
+    Used by point-data parsers (OnTarget, ShotMarker, SMT) that export raw
+    impact coordinates rather than pre-computed group dimensions. Inputs and
+    outputs are in whatever linear unit the points are in (inches for
+    OnTarget/ShotMarker/SMT) — the caller ensures unit sanity.
+
+    points : iterable of (x, y) numeric pairs.
+    aim    : optional (x, y) point of aim. If given, ElevOffsetIn /
+             WindOffsetIn = group centroid minus aim (Y = elevation,
+             X = windage), matching the signed-offset convention used
+             elsewhere.
+
+    Returns a dict with the group-record numeric keys (GroupIn, WidthIn,
+    HeightIn, MRIn, CEPIn, SDRadIn, SDVertIn, SDHorizIn, ElevOffsetIn,
+    WindOffsetIn). Uncomputable values are None. One shot → zero spreads.
+    """
+    pts = []
+    for p in points or []:
+        try:
+            x = float(p[0]); y = float(p[1])
+        except (TypeError, ValueError, IndexError):
+            continue
+        pts.append((x, y))
+
+    out = {k: None for k in (
+        "GroupIn", "WidthIn", "HeightIn", "MRIn", "CEPIn",
+        "SDRadIn", "SDVertIn", "SDHorizIn", "ElevOffsetIn", "WindOffsetIn")}
+    if not pts:
+        return out
+
+    n = len(pts)
+    cx = sum(p[0] for p in pts) / n
+    cy = sum(p[1] for p in pts) / n
+    xs = [p[0] for p in pts]
+    ys = [p[1] for p in pts]
+    out["WidthIn"] = max(xs) - min(xs)
+    out["HeightIn"] = max(ys) - min(ys)
+
+    es = 0.0
+    for i in range(n):
+        for j in range(i + 1, n):
+            d = ((pts[i][0] - pts[j][0]) ** 2 +
+                 (pts[i][1] - pts[j][1]) ** 2) ** 0.5
+            if d > es:
+                es = d
+    out["GroupIn"] = es
+
+    radii = [((x - cx) ** 2 + (y - cy) ** 2) ** 0.5 for x, y in pts]
+    mr = sum(radii) / n
+    out["MRIn"] = mr
+    sr = sorted(radii)
+    mid = n // 2
+    out["CEPIn"] = sr[mid] if n % 2 else (sr[mid - 1] + sr[mid]) / 2.0
+
+    def _sd(vals, mean):
+        if len(vals) < 2:
+            return 0.0
+        return (sum((v - mean) ** 2 for v in vals) / (len(vals) - 1)) ** 0.5
+
+    out["SDVertIn"] = _sd(ys, cy)
+    out["SDHorizIn"] = _sd(xs, cx)
+    out["SDRadIn"] = _sd(radii, mr)
+
+    if aim is not None:
+        try:
+            ax = float(aim[0]); ay = float(aim[1])
+            out["WindOffsetIn"] = cx - ax
+            out["ElevOffsetIn"] = cy - ay
+        except (TypeError, ValueError, IndexError):
+            pass
+    return out

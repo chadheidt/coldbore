@@ -19,12 +19,28 @@ Order of ALL_PARSERS matters when files could be ambiguous — earlier parsers
 get tried first.
 """
 
-from . import ballisticx, garmin_xero
+from . import (
+    ballisticx,
+    garmin_xero,
+    labradar,
+    ontarget,
+    shotmarker,
+    smt,
+)
 
 
+# Order matters: earlier parsers get the first chance to claim a file.
+# Chronograph parsers first, then group parsers. Each detect() is written
+# to be specific so they don't claim each other's files; the LabRadar /
+# ShotMarker / SMT parsers carry NEEDS_REAL_SAMPLE_VALIDATION = True
+# (built from public docs, not yet checked against a real export).
 ALL_PARSERS = [
     garmin_xero,
+    labradar,
     ballisticx,
+    ontarget,
+    shotmarker,
+    smt,
 ]
 
 

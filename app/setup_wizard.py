@@ -29,8 +29,17 @@ from PyQt5.QtWidgets import (
 )
 
 
-# Subfolders we always create inside the project folder
-SUBFOLDERS = ("Garmin Imports", "BallisticX Imports", "Completed Loads")
+# Subfolders we always create inside the project folder.
+# Keep in sync with each parser's IMPORT_FOLDER (app/parsers/).
+SUBFOLDERS = (
+    "Garmin Imports",
+    "LabRadar Imports",
+    "BallisticX Imports",
+    "OnTarget Imports",
+    "ShotMarker Imports",
+    "Silver Mountain Imports",
+    "Completed Loads",
+)
 
 
 def find_bundled_template():
