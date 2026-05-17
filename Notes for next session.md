@@ -4,7 +4,26 @@ A handoff note so any future Claude session can pick up where we left off withou
 
 ---
 
-## 🛠️ IN PROGRESS — WEBSITE REVAMP (2026-05-16, pre-beta roadmap step 3)
+## 🌙 END OF DAY 2026-05-16 — RESUME HERE TOMORROW (read first)
+
+**Where the website revamp lives:** committed on branch **`website-revamp`** (commit `8c8d16a`) in the main repo `/Users/macbook/Projects/Loadscope`. `main` was deliberately reverted to its clean pre-revamp state so it stays publish-safe (GitHub Pages serves `docs/` from `main`). **To continue: `git checkout website-revamp`** then keep editing `docs/index.html` and preview via `open docs/index.html` in the browser (NOT the Launch panel — it can't load local `assets/`).
+
+**Website status — Chad-approved so far, NOT published (held at his publish gate):** hero = "Loadscope finds your best load." + orange "scored from your *chronograph* and *group* data." + Load Log screenshot; sections = best-load hero → Stop guessing (Without/With, compacted) → Drag.Click.Done → **Built-in ballistic calculator** (Pocket Card, shrunk to 520px) → **See it in action** (7-stop slideshow, captions shortened, images capped 44vh — Chad said "looks great") → 6 feature cards → Install → FAQ (collapsed behind one "Show the questions" dropdown). Compaction pass done (h1 44/h2 28/etc., section pad 44, screenshots autocropped/shrunk). MV copy is factually correct everywhere ("measured from your chronograph data", not "set"). Cloudflare download/worker JS untouched.
+
+**To PUBLISH when Chad says "publish":** `git checkout main && git merge website-revamp && git push origin main` (GitHub Pages auto-deploys `docs/`). Until then DO NOT merge/push the branch.
+
+**Open questions for Chad (pending his call — do NOT delete on guess):**
+1. `/Users/macbook/Projects/Loadscope/6.xlsx` — stray 104KB workbook at project root; looks like a stale review copy but it's data. Trash it?
+2. `~/Desktop/Load Dev Program/` and `~/Desktop/Loadscope app/` — ambiguous folders (possibly old copies / the installed app). Leave or Trash?
+
+**Cleanup done 2026-05-16 (all recoverable in ~/.Trash):** `build/` + `dist/` (~276MB), `.DS_Store`×2, `.pytest_cache/`, `.wrangler/`; /tmp scratch deleted. Source, in-progress work, import/output folders, `.backups`, `.claude` untouched.
+
+**Tomorrow's resume prompt (paste to start):**
+> Continue Loadscope. Read `Notes for next session.md` top. `git checkout website-revamp` — the website revamp WIP is there (commit 8c8d16a), main is clean/publish-safe. Reopen `docs/index.html` in the browser. Pending: my answers on `6.xlsx` + the two Desktop folders, then any final website tweaks, then I say "publish" → merge website-revamp to main + push. v0.15.0 solver already shipped; cadence = no per-fix releases, batch to beta.
+
+---
+
+## 🛠️ WEBSITE REVAMP detail (2026-05-16, pre-beta roadmap step 3)
 
 **NOT shipped/released** (per `project_release_review_cadence` — batch into beta; commit/push main + tests green only).
 
