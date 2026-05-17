@@ -326,8 +326,8 @@ header.hero .line2 {
 @media (max-width: 620px) { .ww-grid { grid-template-columns: 1fr; }
   .ww-grid .ww-cell.with { border-left: 0; } }
 .demo {
-  max-width: 760px;
-  margin: 28px auto 0;
+  max-width: 1000px;
+  margin: 14px auto 0;
 }
 .demo-stage {
   border: 1px solid var(--border);
@@ -337,17 +337,28 @@ header.hero .line2 {
 }
 .demo-stage img {
   display: block;
-  width: auto;
-  max-width: 100%;
-  max-height: 44vh;
-  height: auto;
-  margin: 0 auto;
+  width: 100%;
+  height: min(55vh, 500px);
   object-fit: contain;
+  background: var(--bg-light);
+  margin: 0;
 }
-#demo { padding: 30px 0; }
+#demo { padding: 18px 0; }
 #demo .section-sub { margin-bottom: 18px; }
 .demo-ctl { margin-top: 12px; }
 #ballistic .screenshot-wrap { max-width: 520px; }
+.screenshot-wrap.log-shot { max-width: 560px; }
+.split { display: flex; align-items: center; gap: 44px; max-width: 1000px; margin: 0 auto; }
+.split .split-text { flex: 1 1 36%; }
+.split .split-text h2,
+.split .split-text .section-sub { text-align: left; margin-left: 0; margin-right: 0; max-width: none; }
+.split .screenshot-wrap { flex: 1 1 64%; margin: 0; max-width: 580px; }
+.split.reverse { flex-direction: row-reverse; }
+@media (max-width: 760px) {
+  .split { flex-direction: column; gap: 20px; }
+  .split .split-text h2,
+  .split .split-text .section-sub { text-align: center; }
+}
 .demo-cap {
   background: var(--bg-light);
   padding: 12px 18px;
@@ -534,7 +545,7 @@ header.hero .line2 {
       <div class="step">
         <div class="num">2</div>
         <h3>Your best powder charge and seating depth</h3>
-        <p>Loadscope scores every load you tested across those metrics and determines your best powder charge and seating depth — tagged at the top of your Powder Charge Log.</p>
+        <p>Loadscope scores every load you tested across those metrics and determines your best powder charge and seating depth — each tagged at the top of its log.</p>
       </div>
       <div class="step">
         <div class="num">3</div>
@@ -552,40 +563,56 @@ header.hero .line2 {
 
 <section>
   <div class="container">
-    <h2>Drag. Click. <span class="accent">Done.</span></h2>
-    <p class="section-sub">That's the whole app — a drop zone, your workbook, and a Run button.</p>
-    <div class="screenshot-wrap" style="margin-top: 32px;">
-      <img src="assets/screenshot.png" alt="Loadscope application window showing the precision-rifle reticle drop zone, workbook picker, Run Import button, and activity log with successful Garmin and BallisticX import messages">
+    <div class="split reverse">
+      <div class="split-text">
+        <h2>Drag. Click. <span class="accent">Done.</span></h2>
+        <p class="section-sub">That's the whole app — a drop zone, your workbook, and a Run button.</p>
+      </div>
+      <div class="screenshot-wrap">
+        <img src="assets/screenshot.png" alt="Loadscope application window showing the precision-rifle reticle drop zone, workbook picker, Run Import button, and activity log with successful Garmin and BallisticX import messages">
+      </div>
     </div>
   </div>
 </section>
 
 <section style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
   <div class="container">
-    <h2>The <span class="accent">Powder Charge Log</span>.</h2>
-    <p class="section-sub">Every charge you tested, scored and ranked — your best one tagged at the top.</p>
-    <div class="screenshot-wrap" style="margin-top: 28px;">
-      <img src="assets/demo/01-load-log.png" alt="Loadscope Powder Charge Log for a 6.5 Creedmoor load: each powder charge scored across velocity flat-spot, shot-to-shot SD, mean radius (or group size) and vertical SD, with the winning charge tagged at the top">
+    <div class="split">
+      <div class="split-text">
+        <h2>The <span class="accent">Powder Charge Log</span>.</h2>
+        <p class="section-sub">Every charge you tested, scored and ranked — your best one tagged at the top.</p>
+      </div>
+      <div class="screenshot-wrap log-shot">
+        <img src="assets/demo/01-load-log.png" alt="Loadscope Powder Charge Log for a 6.5 Creedmoor load: each powder charge scored across velocity flat-spot, shot-to-shot SD, mean radius (or group size) and vertical SD, with the winning charge tagged at the top">
+      </div>
     </div>
   </div>
 </section>
 
 <section>
   <div class="container">
-    <h2>The <span class="accent">Seating Depth Log</span>.</h2>
-    <p class="section-sub">Same workflow for seating depth — each jump distance scored and ranked, your best one tagged at the top.</p>
-    <div class="screenshot-wrap" style="margin-top: 28px;">
-      <img src="assets/demo/03-seating-depth.png" alt="Loadscope Seating Depth Log for a 6.5 Creedmoor load: each bullet jump distance scored and ranked, with the winning seating depth tagged at the top">
+    <div class="split reverse">
+      <div class="split-text">
+        <h2>The <span class="accent">Seating Depth Log</span>.</h2>
+        <p class="section-sub">Same workflow for seating depth — each jump distance scored and ranked, your best one tagged at the top.</p>
+      </div>
+      <div class="screenshot-wrap log-shot">
+        <img src="assets/demo/03-seating-depth.png" alt="Loadscope Seating Depth Log for a 6.5 Creedmoor load: each bullet jump distance scored and ranked, with the winning seating depth tagged at the top">
+      </div>
     </div>
   </div>
 </section>
 
 <section id="ballistic">
   <div class="container">
-    <h2>Built-in <span class="accent">ballistic calculator</span>.</h2>
-    <p class="section-sub">Elevation, wind, drop, velocity and energy — 100 to 1000 yards, on a card that fits your pocket.</p>
-    <div class="screenshot-wrap" style="margin-top: 32px;">
-      <img src="assets/pocket-card-hero.png" alt="Loadscope Pocket Range Card: predicted elevation, wind, drop, velocity and energy from 100 to 1000 yards, validated against JBM">
+    <div class="split">
+      <div class="split-text">
+        <h2>Built-in <span class="accent">ballistic calculator</span>.</h2>
+        <p class="section-sub">Elevation, wind, drop, velocity and energy — 100 to 1000 yards, on a card that fits your pocket.</p>
+      </div>
+      <div class="screenshot-wrap">
+        <img src="assets/pocket-card-hero.png" alt="Loadscope Pocket Range Card: predicted elevation, wind, drop, velocity and energy from 100 to 1000 yards, validated against JBM">
+      </div>
     </div>
   </div>
 </section>
@@ -909,7 +936,7 @@ document.getElementById("accessCodeInput").addEventListener("keydown", (e) => {
 (function () {
   var STOPS = [
     { img: "assets/demo/01-load-log.png", title: "Powder Charge Log — your powder ladder",
-      text: "Every charge you tested, scored across velocity SD, group size, mean radius and vertical — the 🥇 marks the winner." },
+      text: "Every charge you tested, scored across velocity flat-spot, velocity SD, mean radius (or group size) and vertical SD — the 🥇 marks the winner." },
     { img: "assets/demo/02-charts.png", title: "Charts — heat-mapped scoring",
       text: "How it picked the winner — each load scored across four metrics, combined into one. Reweight to taste." },
     { img: "assets/demo/03-seating-depth.png", title: "Seating Depth Log — find your jump",
