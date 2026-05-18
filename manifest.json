@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.0",
+  "app_version": "0.16.1",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16 - More chronograph and target support. Loadscope now reads LabRadar chronograph reports, plus OnTarget and Silver Mountain (SMT) target exports - on top of Garmin Xero and BallisticX. ShotMarker is included as experimental (verify your numbers). Just drop the CSV in like always. Everything from v0.15 (Predicted DOPE solver validated against JBM, the built-in bullet database, the Pocket Card) is unchanged.",
+  "app_release_notes": "v0.16.1 - Fresh look. A cleaner, high-contrast interface across the whole app so fields and dropdowns are easy to read. Fixes dropdown menus that rendered dark and hard to see on macOS. All v0.16 features unchanged (LabRadar/OnTarget/Silver Mountain support, Predicted DOPE validated against JBM, the bullet database, the Pocket Card).",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
