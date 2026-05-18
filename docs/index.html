@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <title>Loadscope™ — precision rifle load development for Mac</title>
-<meta name="description" content="Loadscope turns Garmin Xero and BallisticX CSV exports into a structured load development workbook. No more typing velocities by hand.">
+<meta name="description" content="Loadscope turns chronograph and target CSVs (Garmin Xero, LabRadar, BallisticX, OnTarget, Silver Mountain) into a scored load-development workbook with predicted DOPE. No more typing velocities by hand.">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
@@ -103,6 +103,25 @@ header.hero .platform-note {
   font-size: 14px;
   color: var(--text-muted);
 }
+.hero-beta-badge {
+  display: inline-block;
+  margin: 0 auto 18px;
+  padding: 6px 16px;
+  border: 1px solid var(--orange);
+  border-radius: 999px;
+  background: rgba(217, 119, 6, 0.12);
+  color: var(--orange);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+header.hero .beta-note {
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+header.hero .beta-note strong { color: var(--text); }
 .screenshot-wrap {
   margin: 24px auto 0;
   max-width: 740px;
@@ -368,6 +387,45 @@ header.hero .line2 {
   border-top: 1px solid var(--border);
 }
 .demo-cap b { color: var(--text); }
+/* App-UI slides (Rifle & Setup, DOPE) get a real Mac app-window frame so
+   they read as a polished native app and hold their own next to the
+   bright workbook slides. Workbook/Excel slides stay bare (no chrome). */
+.demo-win { position: relative; }
+.demo-titlebar { display: none; }
+.demo-stage.app {
+  background: #14110c;
+  border-color: #14110c;
+  padding: 46px 50px;
+}
+.demo-stage.app .demo-win {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #cdc4b2;
+  box-shadow: 0 22px 55px rgba(0,0,0,.7);
+  background: #ece7dc;
+}
+.demo-stage.app .demo-titlebar {
+  display: block;
+  height: 38px;
+  background: #ece7dc;
+}
+.demo-stage.app .demo-titlebar::before {
+  content: "";
+  position: absolute; top: 19px; left: 18px;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: #ff5f56; transform: translateY(-50%);
+  box-shadow: 19px 0 0 #ffbd2e, 38px 0 0 #27c93f;
+}
+.demo-stage.app .demo-win img {
+  height: min(50vh, 460px);
+  background: #faf8f4;
+}
+.demo-stage.app .demo-cap {
+  background: transparent;
+  border-top: 0;
+  text-align: center;
+  padding-top: 18px;
+}
 .demo-ctl {
   display: flex;
   align-items: center;
@@ -521,6 +579,7 @@ header.hero .line2 {
     <div class="hero-logo">
       <img src="assets/icon.png" alt="Loadscope™ logo">
     </div>
+    <div class="hero-beta-badge">Private beta · Free</div>
     <h1>Precision rifle load development<br>for <span class="accent">Mac</span>.</h1>
     <div class="line2">Loadscope finds your best <span class="em">powder charge</span> and <span class="em">seating depth</span>.</div>
     <p class="tagline">Plus a built-in <strong>ballistic calculator</strong> — your full DOPE, 100 to 1000 yards.</p>
@@ -528,6 +587,7 @@ header.hero .line2 {
       <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Download Loadscope™</a>
       <a href="#demo" class="btn btn-large btn-outline">See it in action</a>
     </div>
+    <p class="beta-note">In private beta — no public download yet. <strong>Download</strong> requests your free access code.</p>
     <div class="platform-note">macOS 10.13+ &middot; Intel and Apple Silicon &middot; Free during beta</div>
   </div>
 </header>
@@ -539,21 +599,26 @@ header.hero .line2 {
     <div class="steps">
       <div class="step">
         <div class="num">1</div>
-        <h3>Drop your CSVs</h3>
-        <p>Drag your CSV exports onto the window and everything fills itself in — no retyping. (Currently supported: Garmin Xero and BallisticX.) Using other gear? Send a sample CSV and we'll add it.</p>
+        <h3>Set up once</h3>
+        <p>Enter your rifle, optic, components and session in a built-in form — Loadscope writes it straight into your workbook. No spreadsheet typing; start a new load and your setup carries forward.</p>
       </div>
       <div class="step">
         <div class="num">2</div>
+        <h3>Drop your CSVs</h3>
+        <p>Drag your <strong>chronograph and target-app CSVs</strong> onto the window and everything fills itself in — no retyping. Works with Garmin Xero, BallisticX and more (full list in the FAQ). Using other gear? Send a sample CSV and we'll add it.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
         <h3>Your best powder charge and seating depth</h3>
         <p>Loadscope scores every load you tested across those metrics and determines your best powder charge and seating depth — each tagged at the top of its log.</p>
       </div>
       <div class="step">
-        <div class="num">3</div>
+        <div class="num">4</div>
         <h3>Built-in ballistic calculator</h3>
         <p>From your winning load and the muzzle velocity measured by your chronograph, Loadscope's solver predicts elevation, wind, drop, velocity and energy at every distance — validated against the industry-standard JBM.</p>
       </div>
       <div class="step">
-        <div class="num">4</div>
+        <div class="num">5</div>
         <h3>Predicted DOPE &amp; Pocket Card</h3>
         <p>It prints on a 4&times;6 Pocket Range Card: predicted to start, then you confirm each distance by live fire and your real numbers replace the predictions.</p>
       </div>
@@ -569,7 +634,7 @@ header.hero .line2 {
         <p class="section-sub">That's the whole app — a drop zone, your workbook, and a Run button.</p>
       </div>
       <div class="screenshot-wrap">
-        <img src="assets/screenshot.png" alt="Loadscope application window showing the precision-rifle reticle drop zone, workbook picker, Run Import button, and activity log with successful Garmin and BallisticX import messages">
+        <img src="assets/screenshot.png" alt="Loadscope application window showing the precision-rifle reticle drop zone, workbook picker, Run Import button, and activity log with successful chronograph and group CSV import messages">
       </div>
     </div>
   </div>
@@ -622,8 +687,11 @@ header.hero .line2 {
     <h2>See it in <span class="accent">action</span>.</h2>
     <p class="section-sub">The same guided tour that's built into the app — no download required.</p>
     <div class="demo">
-      <div class="demo-stage">
-        <img id="demoImg" src="assets/demo/01-load-log.png" alt="">
+      <div class="demo-stage" id="demoStage">
+        <div class="demo-win">
+          <div class="demo-titlebar" aria-hidden="true"></div>
+          <img id="demoImg" src="assets/demo/01-load-log.png" alt="">
+        </div>
         <div class="demo-cap"><b id="demoTitle"></b> — <span id="demoText"></span></div>
       </div>
       <div class="demo-ctl">
@@ -718,8 +786,8 @@ header.hero .line2 {
         <p>34 of the most popular match bullets have BCs built in. For any other bullet, type its BC off the box or the maker's site once. It's not a source of published load data — you still cross-reference charges against current reloading manuals. The bullet database grows over time with no app update needed.</p>
       </details>
       <details class="faq-item">
-        <summary>Does it work with [other chronograph]?</summary>
-        <p>Currently supports Garmin Xero (ShotView CSVs) and BallisticX. The architecture is pluggable — adding LabRadar, MagnetoSpeed, Athlon Rangecraft, etc. is straightforward. If you'd like one added, send a sample CSV to support@loadscope.app.</p>
+        <summary>What chronographs and target apps does it read?</summary>
+        <p><strong>Chronographs:</strong> Garmin Xero (ShotView CSVs) and LabRadar. <strong>Target apps:</strong> BallisticX, OnTarget (PC/TDS) and Silver Mountain (SMT). ShotMarker is included as <strong>experimental</strong> — it works, but double-check the imported numbers until it's confirmed against more real files. The parser system is pluggable, so MagnetoSpeed, Athlon Rangecraft and others are quick to add — send a sample CSV to support@loadscope.app and we'll fold it in.</p>
       </details>
       <details class="faq-item">
         <summary>Is my data going to the cloud?</summary>
@@ -942,15 +1010,17 @@ document.getElementById("accessCodeInput").addEventListener("keydown", (e) => {
    download/worker code above; reuses the in-app guided-tour copy) ---- */
 (function () {
   var STOPS = [
+    { img: "assets/demo/00-setup.png", app: true, title: "Rifle & Setup — fill it in once",
+      text: "Enter your rifle, optic, components and session in the app. Loadscope writes it straight into your workbook — no typing into spreadsheet cells. New loads carry your setup forward." },
     { img: "assets/demo/01-load-log.png", title: "Powder Charge Log — your powder ladder",
       text: "Every charge you tested, scored across velocity flat-spot, velocity SD, mean radius (or group size) and vertical SD — the 🥇 marks the winner." },
     { img: "assets/demo/02-charts.png", title: "Charts — heat-mapped scoring",
       text: "How it picked the winner — each load scored across four metrics, combined into one. Reweight to taste." },
     { img: "assets/demo/03-seating-depth.png", title: "Seating Depth Log — find your jump",
       text: "Same workflow for seating depth — each jump ranked; the winner becomes your final cartridge length." },
-    { img: "assets/demo/dope-preview-1-predicted.png", title: "Predicted DOPE — your starting range card",
+    { img: "assets/demo/dope-preview-1-predicted.png", app: true, title: "Predicted DOPE — your starting range card",
       text: "From your load and measured muzzle velocity, a full predicted DOPE table — 100 to 1000 yards, validated against JBM." },
-    { img: "assets/demo/dope-preview-2-confirmed.png", title: "Confirmed at the range",
+    { img: "assets/demo/dope-preview-2-confirmed.png", app: true, title: "Confirmed at the range",
       text: "Type what you actually dialed; predicted cells turn solid white = confirmed. Your real results replace the predictions." },
     { img: "assets/demo/05-pocket-card.png", title: "Pocket Range Card — printable DOPE",
       text: "A clean 4×6 card — elevation, wind, drop, velocity, energy. Two per sheet; cut and go." },
@@ -963,6 +1033,7 @@ document.getElementById("accessCodeInput").addEventListener("keydown", (e) => {
   var titleEl = document.getElementById("demoTitle");
   var textEl = document.getElementById("demoText");
   var dotsEl = document.getElementById("demoDots");
+  var stageEl = document.getElementById("demoStage");
   STOPS.forEach(function (_, k) {
     var b = document.createElement("button");
     b.className = "dot";
@@ -974,6 +1045,7 @@ document.getElementById("accessCodeInput").addEventListener("keydown", (e) => {
     var s = STOPS[i];
     imgEl.src = s.img;
     imgEl.alt = s.title;
+    if (stageEl) stageEl.classList.toggle("app", !!s.app);
     titleEl.textContent = s.title;
     textEl.textContent = s.text;
     var ds = dotsEl.children;

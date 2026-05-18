@@ -1,9 +1,9 @@
 {
-  "app_version": "0.15.0",
+  "app_version": "0.16.0",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.15 - Predicted DOPE. Set your bullet and muzzle velocity and Loadscope predicts your whole DOPE table (elevation and wind, 100 to 1000 yards) with a ballistic solver validated against the industry-standard JBM. Predicted numbers show in grey; type what you actually dialed at the range and the cell turns solid white - confirmed. Predictions never overwrite confirmed data. 34 popular match bullets have BCs built in; for any other bullet just type its BC, and the bullet database grows over time with no app update. Tune BC, temperature, pressure and wind and re-predict on the fly. The printed Pocket Card marks predicted rows under a 'PREDICTED - verify at the range' banner. The guided demo now walks the whole thing.",
+  "app_release_notes": "v0.16 - More chronograph and target support. Loadscope now reads LabRadar chronograph reports, plus OnTarget and Silver Mountain (SMT) target exports - on top of Garmin Xero and BallisticX. ShotMarker is included as experimental (verify your numbers). Just drop the CSV in like always. Everything from v0.15 (Predicted DOPE solver validated against JBM, the built-in bullet database, the Pocket Card) is unchanged.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
