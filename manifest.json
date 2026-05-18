@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.2",
+  "app_version": "0.16.3",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.2 - Fixes the Rifle & Setup / Range & DOPE input fields and dropdowns that rendered dark and hard to read when macOS is in Dark Mode. The app now keeps its own light-on-Slate look regardless of your system appearance. No data or feature changes from v0.16.",
+  "app_release_notes": "v0.16.3 - Properly fixes the Rifle & Setup / Range & DOPE input fields and dropdowns that rendered dark and unreadable on macOS. Inputs are now forced to a clean white field regardless of macOS Dark Mode. No data or feature changes from v0.16.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
