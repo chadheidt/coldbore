@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.7",
+  "app_version": "0.16.8",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.7 - Import tab now has a visible 'Browse files...' link inside the drop zone so the click-to-pick option is impossible to miss (the whole drop zone is still clickable too). Starting a New Load clears the activity log and re-shows the fresh empty workbook's state, so stale 'Currently has 3 powder loads / 3 seating depth tests / suggested charge' lines from the previous load don't carry over.",
+  "app_release_notes": "v0.16.8 - Cleaner Import tab: hides the long workbook maintenance/protection log (just shows the parts you care about - which files parsed, totals, where the backup landed, done). Excel no longer auto-opens after every import - use 'View worksheet in Excel' on the Results or Pocket Card panel when you want to dig in. No more 'workbook contains links to external sources' popup - automatic scrub of zombie references from pre-rename workbooks. New Load now uses the bundled (current) template instead of an older copy that may live in your project folder, and auto-refreshes that local copy. Checkmarks across the app are now visible (orange with a crisp white check, no more barely-there gray). BX-only loads (target groups without chronograph data) now render in the Results panel instead of showing empty.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
