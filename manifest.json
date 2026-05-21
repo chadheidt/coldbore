@@ -3,7 +3,7 @@
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.5 - Rifle & Setup is now a compact, scrollable form with the Save button pinned so it is always visible (it could fall off the bottom on shorter windows). Fields no longer stretch edge-to-edge. Range & DOPE shows a clear 'set your bullet and muzzle velocity' prompt instead of an error on older workbooks.",
+  "app_release_notes": "v0.16.6 - Best Load card tighter and more readable. Pocket Card redesigned: 'Elevation' / 'Wind 10 mph' with 'Hold' and 'Clicks' side-by-side, TOF column now populates on every range, click count auto-computed from your scope click size. Load Library: right-click a saved load to copy, open in Excel, or delete. New Load: warns if your current winner isn't saved to the Library yet. Plus Cmd+1-7 keyboard shortcuts, click-to-browse on the CSV drop zone, and toast notifications on save.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
