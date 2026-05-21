@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.4",
+  "app_version": "0.16.6",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.4 - Fixes Rifle & Setup not saving (and Range & DOPE failing) on workbooks created before the recent sheet rename. Loadscope now reads and writes both the old and new sheet names, so existing load files work again with no changes to your data or formulas.",
+  "app_release_notes": "v0.16.5 - Rifle & Setup is now a compact, scrollable form with the Save button pinned so it is always visible (it could fall off the bottom on shorter windows). Fields no longer stretch edge-to-edge. Range & DOPE shows a clear 'set your bullet and muzzle velocity' prompt instead of an error on older workbooks.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
