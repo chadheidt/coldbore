@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.6",
+  "app_version": "0.16.7",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.6 - Best Load card tighter and more readable. Pocket Card redesigned: 'Elevation' / 'Wind 10 mph' with 'Hold' and 'Clicks' side-by-side, TOF column now populates on every range, click count auto-computed from your scope click size. Load Library: right-click a saved load to copy, open in Excel, or delete. New Load: warns if your current winner isn't saved to the Library yet. Plus Cmd+1-7 keyboard shortcuts, click-to-browse on the CSV drop zone, and toast notifications on save.",
+  "app_release_notes": "v0.16.7 - Import tab now has a visible 'Browse files...' link inside the drop zone so the click-to-pick option is impossible to miss (the whole drop zone is still clickable too). Starting a New Load clears the activity log and re-shows the fresh empty workbook's state, so stale 'Currently has 3 powder loads / 3 seating depth tests / suggested charge' lines from the previous load don't carry over.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
