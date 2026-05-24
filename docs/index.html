@@ -70,14 +70,25 @@ nav .container { display: flex; justify-content: space-between; align-items: cen
 }
 .btn:hover { background: var(--orange-dark); }
 .btn-large { padding: 10px 26px; font-size: 14.5px; }
+/* Chad 2026-05-23: was 'transparent + dim border + white text' — barely
+   visible on the dark bg. Now a faint-orange tint with orange border +
+   orange text, matching the hero-beta-badge treatment so the secondary
+   CTA reads as 'related to Loadscope orange' not 'a button I forgot
+   to color'. Solid orange-fill on hover. */
 .btn-outline {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: var(--text) !important;
+  background: rgba(217, 119, 6, 0.12);
+  border: 1px solid var(--orange);
+  color: var(--orange) !important;
 }
-.btn-outline:hover { background: var(--bg-light); }
+.btn-outline:hover {
+  background: var(--orange);
+  color: white !important;
+}
 header.hero {
-  padding: 52px 0 28px;
+  /* Chad 2026-05-23: tightened top padding from 52px -> 20px so the
+     logo sits closer to the nav bar — was reading as too much dead
+     space above the brand. */
+  padding: 20px 0 28px;
   text-align: center;
   border-bottom: 1px solid var(--border);
 }
@@ -97,7 +108,46 @@ header.hero .tagline {
   margin-left: auto;
   margin-right: auto;
 }
-header.hero .cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 48px; }
+/* "Plus:" lead-in for the hero bullet list. Same color as the dim
+   tagline so the eye reads it as connective tissue, not a heading. */
+header.hero .tagline-plus {
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+/* Bulleted "what you also get" list under the hero — centered card-
+   like rows with custom orange bullets so the default list margins
+   don't yank everything left. (Chad 2026-05-23: replaced the single-
+   line tagline with a 2-bullet treatment for the ballistic calculator
+   + Load Card recipe.) */
+header.hero .hero-plus-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto 24px;
+  max-width: 680px;
+  text-align: left;
+  display: inline-block;
+}
+header.hero .hero-plus-list li {
+  font-size: 17px;
+  color: var(--text-dim);
+  padding: 4px 0 4px 22px;
+  position: relative;
+  line-height: 1.45;
+}
+header.hero .hero-plus-list li::before {
+  content: "•";
+  color: var(--orange);
+  position: absolute;
+  left: 4px;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1.45;
+}
+header.hero .hero-plus-list strong { color: var(--text); }
+/* Chad 2026-05-23: cta-row margin-top 48 -> 16; the bullet list above
+   already has its own bottom margin, so 48px stacked was reading as
+   dead space. */
+header.hero .cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
 header.hero .platform-note {
   margin-top: 20px;
   font-size: 14px;
@@ -582,7 +632,11 @@ header.hero .line2 {
     <div class="hero-beta-badge">Private beta · Free</div>
     <h1>Precision rifle load development<br>for <span class="accent">Mac</span>.</h1>
     <div class="line2">Loadscope finds your best <span class="em">powder charge</span> and <span class="em">seating depth</span>.</div>
-    <p class="tagline">Plus a built-in <strong>ballistic calculator</strong> — your full DOPE, 100 to 1000 yards.</p>
+    <p class="tagline tagline-plus">Plus:</p>
+    <ul class="hero-plus-list">
+      <li>A built-in <strong>ballistic calculator</strong> &mdash; your full DOPE, 100 to 1000 yards.</li>
+      <li>A printable <strong>Load Card recipe</strong> &mdash; for the binder on your bench, or saved to your computer files.</li>
+    </ul>
     <div class="cta-row">
       <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Download Loadscope™</a>
       <a href="#demo" class="btn btn-large btn-outline">See it in action</a>
@@ -639,7 +693,7 @@ header.hero .line2 {
         <p class="section-sub">That's the whole app — a drop zone, your workbook, and a Run button.</p>
       </div>
       <div class="screenshot-wrap">
-        <img src="assets/screenshot.png" alt="Loadscope application window showing the precision-rifle reticle drop zone, workbook picker, Run Import button, and activity log with successful chronograph and group CSV import messages">
+        <img src="assets/import-screen.png" alt="Loadscope Import Data panel showing the precision-rifle reticle drop zone, 'Drop your CSV files here, or click to browse' prompt, the Browse files link, supported-device chips (Garmin Xero, LabRadar, BallisticX, OnTarget, ShotMarker, Silver Mountain), the Run Import button, and the activity log">
       </div>
     </div>
   </div>
@@ -705,6 +759,15 @@ header.hero .line2 {
   <div class="container">
     <h2>See it in <span class="accent">action</span>.</h2>
     <p class="section-sub">The same guided tour that's built into the app — no download required.</p>
+    <div class="demo-video">
+      <video controls preload="none" playsinline
+             poster="assets/demo/00-setup.png"
+             style="width:100%; max-width:960px; display:block; margin:0 auto; border-radius:12px; border:1px solid var(--border); background:#000;">
+        <source src="assets/loadscope-demo.mp4?v=2" type="video/mp4">
+        Your browser doesn't support embedded video. <a href="assets/loadscope-demo.mp4">Download the demo (10 MB MP4)</a>.
+      </video>
+      <p class="section-sub" style="margin-top:14px; font-size:0.95em;">Or step through it yourself:</p>
+    </div>
     <div class="demo">
       <div class="demo-stage" id="demoStage">
         <div class="demo-win">
@@ -798,7 +861,11 @@ header.hero .line2 {
       </details>
       <details class="faq-item">
         <summary>What's "predicted" vs "confirmed"?</summary>
-        <p>Grey italic numbers are predicted by the solver from your bullet, muzzle velocity and conditions. At the range you type what you actually dialed — that row turns solid white = confirmed. Predictions never overwrite confirmed data, and your printed Pocket Card carries a "verify at the range" banner until a row is confirmed.</p>
+        <p>Grey italic numbers are predicted by the solver from your bullet, muzzle velocity and conditions. At the range you type what you actually dialed — that row turns solid white = confirmed. Click <strong>Save DOPE</strong> and Loadscope writes both to your workbook: predicted rows stay grey italic, confirmed rows print solid. Predictions never overwrite confirmed data (only the reverse), and your printed Pocket Card carries a "verify at the range" banner until every row is confirmed.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Does Loadscope print a recipe for the load itself?</summary>
+        <p>Yes — every winning load gets a one-page <strong>Load Card</strong>. Open it from Results (the <strong>Generate Load Card</strong> button) or right-click any saved load in Load Library. The card lists bullet, powder, charge, primer, brass, CBTO, plus the velocity, SD, group and mean radius the load actually produced. Print from the page for the binder on your bench, or use <strong>Save as PDF&hellip;</strong> on Results for a native macOS save dialog &mdash; drops the recipe wherever you want it on your computer.</p>
       </details>
       <details class="faq-item">
         <summary>Do I have to enter a ballistic coefficient?</summary>
@@ -1044,6 +1111,8 @@ document.getElementById("accessCodeInput").addEventListener("keydown", (e) => {
       text: "Type what you actually dialed; predicted cells turn solid white = confirmed. Your real results replace the predictions." },
     { img: "assets/demo/05-pocket-card.png", title: "Pocket Range Card — printable DOPE",
       text: "A clean 4×6 card — elevation, wind, drop, velocity, energy. Two per sheet; cut and go." },
+    { img: "assets/demo/07-load-card.png", title: "Load Card — your winning recipe",
+      text: "Every winning load also gets a one-page printable recipe — bullet, powder, charge, primer, brass, CBTO, plus the performance numbers. Print for the bench binder, or Save as PDF via a native macOS save dialog for your computer files." },
     { img: "assets/demo/06-load-library.png", title: "Load Library — your winners over time",
       text: "Every winning load saved in one place — across cartridges, rifles and seasons." }
   ];
