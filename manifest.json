@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.12",
+  "app_version": "0.16.13",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.12 - Seating Depth Log ladder structure now matches Powder Charge Log. SD has its own Mean Radius column with real MR data, and the Composite Score column is back where it belongs (it had been mislabeled as Mean Radius, hiding the real composite from the table). Plus column-K and column-L unhide on PCL/SDL so the MR label and MR value in the hero row render. BallisticX Import sheet now carries the full set of group-quality stats (Group, Width, Height, MR, CEP, SD Radial, SD Vert, SD Horiz, Caliber) from your BallisticX session data — previously only Tag/Date/Distance/Caliber came across. Hero row label is now 'Vert SD:' (was the more ambiguous 'Vert:').",
+  "app_release_notes": "v0.16.13 - Workbook help moved to a dedicated Help tab. Cell hover-comments on Excel-for-Mac were clipping at the default popup size regardless of stored size, and the click-to-see input-message workaround still clipped on the longest entries. The new Help sheet at the end of the workbook holds every column meaning, score formula, and choice rationale in plain text \u2014 searchable, sortable, no platform-specific clipping. Each main sheet has a small hint pointing there. Also: Seating Depth Log chart titles now say CBTO instead of Jump (was a leftover from the Jump-to-CBTO swap), and the internal column header on Garmin/BallisticX source sheets is now ChargeOrCBTO.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
