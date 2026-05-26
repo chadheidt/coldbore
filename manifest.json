@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.10",
+  "app_version": "0.16.11",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.10 - Best-load now reads in inches, the way you measure groups at the bench. Mean Radius (MR) replaces Group in the Powder Charge Log so spread reflects real shot dispersion, not just the two worst rounds. Jump from lands swapped out for CBTO (cartridge base to ogive) - same measurement, but it's what your comparator reads off the bullet so there's nothing to convert. Seating Depth Test gets its own sub-tab on the Results screen, with separate Best Charge and Best CBTO trophy cards that all agree on the same final-load numbers as the hero card and Load Card. Setup form streamlined: pick your powder from a 91-name dropdown (or type your own), enter the charge you used for the seating depth ladder, and Loadscope handles the rest. Load Library now shows a single CBTO column with clean date format and CBTO-style load names. Charts title and summary use MR instead of Group. Demo tour, User Guide PDF, and website screenshots all refreshed to match the new flow.",
+  "app_release_notes": "v0.16.11 - Workbook hygiene after the v0.16.10 walk. Powder Charge Log hero now shows Vert SD alongside Mean Radius, matching the Seating Depth hero. Every hover-over tooltip in every sheet now shows its full text instead of clipping at the Excel default size. Shot columns on Powder Charge Log and Seating Depth Log are uniform width (Shot 4 was 60% wider than the others). OAL on row 10 is now a yellow editable cell with a comparator-vs-caliper tooltip - was a hardcoded number with nowhere to type your own after the Setup form was simplified. Garmin Xero Import and BallisticX Import sheets now mirror the shot and group data from the real session log so the ladder rows are populated instead of empty.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
