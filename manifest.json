@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.13",
+  "app_version": "0.16.14",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.13 - Workbook help moved to a dedicated Help tab. Cell hover-comments on Excel-for-Mac were clipping at the default popup size regardless of stored size, and the click-to-see input-message workaround still clipped on the longest entries. The new Help sheet at the end of the workbook holds every column meaning, score formula, and choice rationale in plain text \u2014 searchable, sortable, no platform-specific clipping. Each main sheet has a small hint pointing there. Also: Seating Depth Log chart titles now say CBTO instead of Jump (was a leftover from the Jump-to-CBTO swap), and the internal column header on Garmin/BallisticX source sheets is now ChargeOrCBTO.",
+  "app_release_notes": "v0.16.14 - User Guide PDF now has a Step 11 page on the in-workbook Help tab. Workbook hardened: gridlines and row/column headers hidden on every user-facing sheet, workbook structure locked, and only the cells you legitimately need to edit are unlocked (OAL on Powder Charge Log and Seating Depth Log row 10, plus the four weighting factors on Charts row 11 and Seating Depth Log row 28). Everything else is read-only - Loadscope writes via openpyxl, accidental clicks in Excel can not break anything.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
