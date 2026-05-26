@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.11",
+  "app_version": "0.16.12",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.11 - Workbook hygiene after the v0.16.10 walk. Powder Charge Log hero now shows Vert SD alongside Mean Radius, matching the Seating Depth hero. Every hover-over tooltip in every sheet now shows its full text instead of clipping at the Excel default size. Shot columns on Powder Charge Log and Seating Depth Log are uniform width (Shot 4 was 60% wider than the others). OAL on row 10 is now a yellow editable cell with a comparator-vs-caliper tooltip - was a hardcoded number with nowhere to type your own after the Setup form was simplified. Garmin Xero Import and BallisticX Import sheets now mirror the shot and group data from the real session log so the ladder rows are populated instead of empty.",
+  "app_release_notes": "v0.16.12 - Seating Depth Log ladder structure now matches Powder Charge Log. SD has its own Mean Radius column with real MR data, and the Composite Score column is back where it belongs (it had been mislabeled as Mean Radius, hiding the real composite from the table). Plus column-K and column-L unhide on PCL/SDL so the MR label and MR value in the hero row render. BallisticX Import sheet now carries the full set of group-quality stats (Group, Width, Height, MR, CEP, SD Radial, SD Vert, SD Horiz, Caliber) from your BallisticX session data — previously only Tag/Date/Distance/Caliber came across. Hero row label is now 'Vert SD:' (was the more ambiguous 'Vert:').",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
