@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.14",
+  "app_version": "0.16.15",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.14 - User Guide PDF now has a Step 11 page on the in-workbook Help tab. Workbook hardened: gridlines and row/column headers hidden on every user-facing sheet, workbook structure locked, and only the cells you legitimately need to edit are unlocked (OAL on Powder Charge Log and Seating Depth Log row 10, plus the four weighting factors on Charts row 11 and Seating Depth Log row 28). Everything else is read-only - Loadscope writes via openpyxl, accidental clicks in Excel can not break anything.",
+  "app_release_notes": "v0.16.15 - Workbook fixes. Composite weights on Charts row 11 (powder ladder) and Seating Depth Log row 28 are now properly editable - the bundled demo and master template had the wrong cells unlocked, so a fresh import would land on weights you could not change. The crash-prone Reset weights button is replaced with a static defaults hint so you can type the defaults back in. The OAL row on Powder Charge Log and Seating Depth Log row 10 is removed (precision reloaders track CBTO, not OAL). Weight banners now name their test (POWDER LADDER WEIGHTS / SEATING DEPTH WEIGHTS) so it is clear the two scores have independent tuning. Every workbook Loadscope writes is now pinned to open in Excel by default, so a fresh Mac where Numbers grabbed xlsx does not hijack your loads. Existing user workbooks self-heal on first open after update.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
