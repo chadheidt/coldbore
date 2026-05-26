@@ -668,7 +668,7 @@ header.hero .line2 {
         <p class="section-sub">Every charge you tested, scored and ranked — your best one tagged at the top.</p>
       </div>
       <div class="screenshot-wrap log-shot">
-        <img src="assets/demo/01-load-log.png" alt="Loadscope Powder Charge Log for a 6.5 Creedmoor load: each powder charge scored across velocity flat-spot, shot-to-shot SD, mean radius (or group size) and vertical SD, with the winning charge tagged at the top">
+        <img src="assets/demo/01-load-log.png?v=6" alt="Loadscope Powder Charge Log for a 6.5 Creedmoor load: each powder charge scored across velocity flat-spot, shot-to-shot SD, mean radius (or group size) and vertical SD, with the winning charge tagged at the top">
       </div>
     </div>
   </div>
@@ -679,10 +679,10 @@ header.hero .line2 {
     <div class="split reverse">
       <div class="split-text">
         <h2>The <span class="accent">Seating Depth Log</span>.</h2>
-        <p class="section-sub">Same workflow for seating depth — each jump distance scored and ranked, your best one tagged at the top.</p>
+        <p class="section-sub">Same workflow for seating depth — each CBTO scored and ranked, your best one tagged at the top.</p>
       </div>
       <div class="screenshot-wrap log-shot">
-        <img src="assets/demo/03-seating-depth.png" alt="Loadscope Seating Depth Log for a 6.5 Creedmoor load: each bullet jump distance scored and ranked, with the winning seating depth tagged at the top">
+        <img src="assets/demo/03-seating-depth.png?v=5" alt="Loadscope Seating Depth Log for a 6.5 Creedmoor load: each CBTO measurement scored and ranked, with the winning seating depth tagged at the top">
       </div>
     </div>
   </div>
@@ -710,7 +710,7 @@ header.hero .line2 {
         <p class="section-sub">Every winning load gets a one-page Load Card &mdash; bullet, powder, charge, primer, brass, CBTO, plus the numbers it actually produced. <strong>Print</strong> for the bench binder, or <strong>Save as PDF</strong>. Pull one up for any saved load months later.</p>
       </div>
       <div class="screenshot-wrap">
-        <img src="assets/demo/07-load-card.png" alt="Loadscope Load Card recipe: a one-page printable showing the suggested winning powder charge and bullet jump, the bullet, powder, primer, brass and CBTO, plus the velocity, SD, group and mean radius the winning load produced. Print button on the page; a separate Save as PDF action lives in the Loadscope app for a native save dialog.">
+        <img src="assets/demo/07-load-card.png?v=5" alt="Loadscope Load Card recipe: a one-page printable showing the suggested winning powder charge and CBTO, the bullet, powder, primer, brass, plus the velocity, SD, group and mean radius the winning load produced. Print button on the page; a separate Save as PDF action lives in the Loadscope app for a native save dialog.">
       </div>
     </div>
   </div>
@@ -722,9 +722,9 @@ header.hero .line2 {
     <p class="section-sub">The same guided tour that's built into the app — no download required.</p>
     <div class="demo-video">
       <video controls preload="none" playsinline
-             poster="assets/demo/00-setup.png"
+             poster="assets/demo/00-setup.png?v=5"
              style="width:100%; max-width:960px; display:block; margin:0 auto; border-radius:12px; border:1px solid var(--border); background:#000;">
-        <source src="assets/loadscope-demo.mp4?v=3" type="video/mp4">
+        <source src="assets/loadscope-demo.mp4?v=9" type="video/mp4">
         Your browser doesn't support embedded video. <a href="assets/loadscope-demo.mp4">Download the demo (10 MB MP4)</a>.
       </video>
     </div>
@@ -794,7 +794,7 @@ header.hero .line2 {
         <summary>How does Loadscope decide your best powder charge and seating depth?</summary>
         <p>No single number tells you a load is good — a tight group that wanders in velocity will betray you at distance, and a flat velocity string over a wide group won't hold either. So Loadscope doesn't pick your best powder charge or seating depth on one stat. It scores every charge and every seating depth you tested across four things that actually show up on target.</p>
         <p>Those four: <b>velocity flat-spot</b> (how little your average velocity moves across the charge window), <b>velocity SD</b> (shot-to-shot consistency), <b>mean radius</b> (true group center, not one flier — falls back to group size if your target app doesn't export it), and <b>vertical SD</b> (vertical dispersion — what costs you elevation at distance).</p>
-        <p>Each metric is put on the same 0-to-1 scale (lower is better) so they're comparable, then blended into one <b>composite score</b>. Lowest composite wins — Loadscope tags it 🥇 and writes the winning charge or jump to the top of the tab. Every candidate also earns a "Best in:" tag for any single metric it topped, even if it didn't win overall.</p>
+        <p>Each metric is put on the same 0-to-1 scale (lower is better) so they're comparable, then blended into one <b>composite score</b>. Lowest composite wins — Loadscope tags it 🥇 and writes the winning charge or CBTO to the top of the tab. Every candidate also earns a "Best in:" tag for any single metric it topped, even if it didn't win overall.</p>
         <p>The four aren't weighted equally, and the mix changes with the test. Defaults — <b>Powder Charge Log: 30% / 20% / 20% / 30%</b> and <b>Seating Depth Log: 15% / 25% / 25% / 35%</b> (velocity flat-spot / velocity SD / mean radius / vertical SD). They're tuned from real load-development work — weighted toward what holds up at distance, not a flat average — and every weight is yours. In the app's Charts tab you set them as decimals that add to 1.0 (30% = 0.30); that keeps the final score on the same 0-to-1 scale as the four metrics. Edit the blue weight cells or click <b>Reset Composite Weights</b> to restore the defaults.</p>
       </details>
       <details class="faq-item">

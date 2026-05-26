@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.9",
+  "app_version": "0.16.10",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.9 - Load Card recipe surfaced: Generate Load Card and Save as PDF buttons on the Results screen (and right-click on any saved row in Load Library). The PDF save uses a native macOS save dialog, not the browser print dialog. Welcome tour and User Guide updated with new Load Card and Load Library steps. Results panel: the whole page now scrolls as one unit (Best Load card, workbook image, and charts together), and the first-click workbook image renders at full width. Predicted DOPE now writes to the workbook in grey italic when you click Save - the Pocket Card and Excel-side view show your dial table immediately instead of waiting for range-confirmed values. Ballistics tab no longer hides columns D/E/H/I (the side effect was hiding Bullet and Charge fields on row 5). Charts tab x-axis now shows the actual charge weights instead of blanks. Plus the in-page Print button on the Load Card HTML.",
+  "app_release_notes": "v0.16.10 - Best-load now reads in inches, the way you measure groups at the bench. Mean Radius (MR) replaces Group in the Powder Charge Log so spread reflects real shot dispersion, not just the two worst rounds. Jump from lands swapped out for CBTO (cartridge base to ogive) - same measurement, but it's what your comparator reads off the bullet so there's nothing to convert. Seating Depth Test gets its own sub-tab on the Results screen, with separate Best Charge and Best CBTO trophy cards that all agree on the same final-load numbers as the hero card and Load Card. Setup form streamlined: pick your powder from a 91-name dropdown (or type your own), enter the charge you used for the seating depth ladder, and Loadscope handles the rest. Load Library now shows a single CBTO column with clean date format and CBTO-style load names. Charts title and summary use MR instead of Group. Demo tour, User Guide PDF, and website screenshots all refreshed to match the new flow.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
