@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.18",
+  "app_version": "0.16.19",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.18 - Restores Apple code-signing and notarization. The build pipeline silently fell back to adhoc signing on 2026-05-18 after a transient timestamp-server hiccup on one PyQt5 binary; every release since installed cleanly only because friends had a prior copy. v0.16.18 is the first release since v0.13.x that opens without a Gatekeeper prompt for new downloads. No functional changes from v0.16.17.",
+  "app_release_notes": "v0.16.19 - Start a New Load now actually starts clean. The previous version left stale CSVs in your import folders, which would silently re-import into the new workbook and make the Seating Depth Log look like the last load's data carried over. Now: starting a new load always archives every CSV in your import folders into a dated subfolder, plus carries your Load Library across so saved winners stay searchable across loads (matches the marketing promise). Setup carry-over (rifle/optic/cartridge/etc) works the same as before. Also refreshes the welcome-tour screenshots that were stale or captured with a macOS notification overlay.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
