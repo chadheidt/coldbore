@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.15",
+  "app_version": "0.16.16",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.15 - Workbook fixes. Composite weights on Charts row 11 (powder ladder) and Seating Depth Log row 28 are now properly editable - the bundled demo and master template had the wrong cells unlocked, so a fresh import would land on weights you could not change. The crash-prone Reset weights button is replaced with a static defaults hint so you can type the defaults back in. The OAL row on Powder Charge Log and Seating Depth Log row 10 is removed (precision reloaders track CBTO, not OAL). Weight banners now name their test (POWDER LADDER WEIGHTS / SEATING DEPTH WEIGHTS) so it is clear the two scores have independent tuning. Every workbook Loadscope writes is now pinned to open in Excel by default, so a fresh Mac where Numbers grabbed xlsx does not hijack your loads. Existing user workbooks self-heal on first open after update.",
+  "app_release_notes": "v0.16.16 - Results panel fixes after v0.16.15 workbook column shifts. Seating Depth Log Pos column now shows medal labels again (was rendering composite scores like 0.001 / 0.338 after the Mean Radius column was inserted). Powder Charge Log hero now highlights every metric the winning load is best in (was showing only Vertical SD because the reader was still looking at the old M2 cell instead of the moved Best-in tag at O2). When a seating depth test has run, the hero best-in tag now comes from the SDL winner (which can be best in all four metrics) instead of the PCL winner, so Avg Velocity lights up green when it should. Charts sub-tab now shows two separate weight sections - Powder Ladder (Charts row 11) and Seating Depth (Seating Depth Log row 28) - so users see both independent weighting sets. Removed the irrelevant scoring-breakdown chart that used to sit at the bottom of the Charts tab. Setup-form powder dropdown can no longer pick up stale Excel formula strings as autocomplete entries.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
