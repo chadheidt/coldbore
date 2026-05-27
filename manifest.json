@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.19",
+  "app_version": "0.16.20",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.19 - Start a New Load now actually starts clean. The previous version left stale CSVs in your import folders, which would silently re-import into the new workbook and make the Seating Depth Log look like the last load's data carried over. Now: starting a new load always archives every CSV in your import folders into a dated subfolder, plus carries your Load Library across so saved winners stay searchable across loads (matches the marketing promise). Setup carry-over (rifle/optic/cartridge/etc) works the same as before. Also refreshes the welcome-tour screenshots that were stale or captured with a macOS notification overlay.",
+  "app_release_notes": "v0.16.20 - Polish from the new-user walk. (1) SD-only hero now shows TEST CHARGE and POWDER alongside BEST CBTO - the load's full recipe at a glance instead of three of four fields hidden. If the SD test charge isnt filled in Setup, the cell shows a yellow 'Not set - Open Setup' pill that doubles as the reminder. (2) New Clear button on the Import panel - one click wipes the Activity log AND deletes any unimported CSV files in your folders. Confirm before anything goes. (3) Walk-time audit infrastructure: signed-bundle check #28 in verify-loadscope-ui is now walk-patch-aware - distinguishes 'shipped adhoc by accident' from 'signed bundle with mid-walk pyc patch' so iteration doesnt fail the regression guard against the 2026-05-18 silent-fallback.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
