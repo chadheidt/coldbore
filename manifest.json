@@ -1,9 +1,9 @@
 {
-  "app_version": "0.16.17",
+  "app_version": "0.16.18",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.17 - Small clarifier under the Results hero metrics. When a seating depth test has run, the hero shows the SDL winner's measurements (the most-recent measurement of the final combined load = PCL-winner charge AT SDL-winner CBTO). Those numbers won't exactly match the PCL log on the same screen because they're two different test runs. The hero now shows a dim attribution line - 'measured at your seating-depth winner CBTO - may differ slightly from the powder-ladder log below' - so the mismatch is self-explanatory instead of confusing.",
+  "app_release_notes": "v0.16.18 - Restores Apple code-signing and notarization. The build pipeline silently fell back to adhoc signing on 2026-05-18 after a transient timestamp-server hiccup on one PyQt5 binary; every release since installed cleanly only because friends had a prior copy. v0.16.18 is the first release since v0.13.x that opens without a Gatekeeper prompt for new downloads. No functional changes from v0.16.17.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": ""
