@@ -14,9 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.0.0",
+      "app_version": "0.16.21",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_release_notes": "Windows build not yet shipped. Phase 7 in progress 2026-05-27 — first Windows release pending CI workflow + Chad eye-test on N95 laptop."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-28/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.21 (Phase 7 walk-test build) - In-app auto-updater for Windows. Disclaimer viewer body now renders. Welcome tour PNGs stripped of Mac chrome + Powder test CBTO field added to the bundled Setup screenshot. Tooltip dark theme + IE 11 bypass for Generate Load Card. Direct download URL bypasses the gated Worker until ALLOWED_FILES is updated to include Loadscope-Setup.exe."
     }
   }
 }
