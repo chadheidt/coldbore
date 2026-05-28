@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.22",
+      "app_version": "0.16.23",
       "app_download_file": "Loadscope-Setup.exe",
       "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-28/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.22 (Phase 7 walk-test build) - Blue screen flash on Run Import killed (PowerShell + Chrome console hidden via CREATE_NO_WINDOW). 'macOS menu bar' text on Tools-banner now platform-aware. Start New Cycle carryover list: Seating Depth removed, Powder added. Visible checkmark glyph (was orange-only). Plus prior 0.16.21 fixes: Disclaimer body renders, welcome banner platform-neutral."
+      "app_release_notes": "v0.16.23 - Updater robustness. UpdateChecker now catches ALL exceptions (was silently dying on SSL/cert lookups). Manual Check-for-Updates click no longer silent no-ops when a launch check is still running -- shows 'check in progress' dialog instead. Plus workbook Help-sheet stale cell-reference cleanup (~10 entries pointing at moved/relabeled cells). Plus prior 0.16.22 fixes."
     }
   }
 }
