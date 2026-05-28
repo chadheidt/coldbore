@@ -8,7 +8,7 @@
 
 - `Loadscope beta — access code inside`
 - `{{ FRIEND_FIRST_NAME }}, your Loadscope beta code`
-- `Try Loadscope — your beta access (Mac)`
+- `Try Loadscope — your beta access (Mac or Windows)`
 
 ---
 
@@ -24,12 +24,12 @@ It unlocks both the download and the app itself.
 
 **To install:**
 
-1. Open [loadscope.app](https://loadscope.app) on your Mac.
+1. Open [loadscope.app](https://loadscope.app) on your Mac or Windows PC.
 2. Click the orange **Download** button at the top.
-3. Click **I have a code**, paste the code above, and your `Loadscope.dmg` will download (about 80 MB).
-4. Open the disk image, drag **Loadscope** onto the Applications shortcut, eject the disk image.
-5. Open Loadscope from your Applications folder. macOS opens it without any warning — the app is signed and notarized by Apple.
-6. On first launch, paste your code one more time in the license dialog. Click through the disclaimer, accept the default folder, and you'll land on the Rifle & Setup screen.
+3. Click **I have a code**, paste the code above. The installer for your platform will download — `Loadscope.dmg` on Mac (~80 MB) or `Loadscope-Setup.exe` on Windows (~40 MB).
+4. **Mac:** open the disk image, drag **Loadscope** onto the Applications shortcut, eject the disk image. Open Loadscope from your Applications folder — macOS opens it without any warning (signed and notarized by Apple).
+   **Windows:** double-click `Loadscope-Setup.exe`. On the first launch, Windows SmartScreen will show a blue warning — click **More info → Run anyway**. (Windows code-signing is in progress; the warning goes away once the certificate lands.) Click **Next** through the wizard.
+5. On first launch, paste your code one more time in the license dialog. Click through the disclaimer, accept the default folder, and you'll land on the Rifle & Setup screen.
 
 **Quick orientation:**
 
@@ -44,9 +44,10 @@ The welcome tour that auto-runs is the fastest way to see the workflow. About 90
 
 **Heads-up:**
 
-- macOS 10.13 or later. Runs natively on Intel; via Rosetta 2 on Apple Silicon.
+- **Mac:** macOS 10.13 or later. Runs natively on Intel; via Rosetta 2 on Apple Silicon.
+- **Windows:** Windows 10 or 11, 64-bit.
 - Updates land as a banner at the top of the window — one click installs.
-- Loadscope writes to a regular `.xlsx` file on your Mac. No cloud, no account, no telemetry. Workbooks are yours; uninstall whenever, your data stays.
+- Loadscope writes to a regular `.xlsx` file on your computer. No cloud, no account, no telemetry. Workbooks are yours; uninstall whenever, your data stays.
 - It's free during beta.
 
 Anything you need from me, just hit reply.

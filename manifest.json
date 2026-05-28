@@ -6,5 +6,17 @@
   "app_release_notes": "v0.16.20 - Polish from the new-user walk. (1) SD-only hero now shows TEST CHARGE and POWDER alongside BEST CBTO - the load's full recipe at a glance instead of three of four fields hidden. If the SD test charge isnt filled in Setup, the cell shows a yellow 'Not set - Open Setup' pill that doubles as the reminder. (2) New Clear button on the Import panel - one click wipes the Activity log AND deletes any unimported CSV files in your folders. Confirm before anything goes. (3) Walk-time audit infrastructure: signed-bundle check #28 in verify-loadscope-ui is now walk-patch-aware - distinguishes 'shipped adhoc by accident' from 'signed bundle with mid-walk pyc patch' so iteration doesnt fail the regression guard against the 2026-05-18 silent-fallback.",
   "template_version": "1.0",
   "template_download_url": "",
-  "template_release_notes": ""
+  "template_release_notes": "",
+  "platforms": {
+    "mac": {
+      "app_version": "0.16.20",
+      "app_download_file": "Loadscope.zip",
+      "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
+    },
+    "windows": {
+      "app_version": "0.0.0",
+      "app_download_file": "Loadscope-Setup.exe",
+      "app_release_notes": "Windows build not yet shipped. Phase 7 in progress 2026-05-27 — first Windows release pending CI workflow + Chad eye-test on N95 laptop."
+    }
+  }
 }
