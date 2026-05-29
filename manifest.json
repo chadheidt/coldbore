@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.29",
+      "app_version": "0.16.30",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29c/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.29 - Pocket Card now renders full-size in the sidebar (the Windows render was a tiny card in a huge transparent frame; now autocropped). Clicking a sidebar item (Results/DOPE) shows an instant loading marker so you know the click registered during the render. Excel Print links no longer pop a second Loadscope window - the action runs and quits with no window. Plus all prior walk-4 fixes (Mean Radius, Load Card CBTO, reliable update dialog, etc.)."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29d/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.30 - One-click background update restored (click Install Now -> downloads + silently installs + reopens, no browser/SmartScreen/wizard). Pocket Card sidebar render is now crisp (2x). Plus diagnostic logging for the Excel Print-link launch so the remaining multi-window issue can be pinned down. All prior walk-4 fixes included."
     }
   }
 }
