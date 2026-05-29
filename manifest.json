@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.35",
+      "app_version": "0.16.36",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29i/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.35 - Walk fixes: (1) Import log is clean now - no more 'skip / doesn't look like' or 'Applied polish' noise; you just see what imported. (2) Pocket Card right-half columns (Drop/Vel/Energy) are readable again - no more black. (3) Excel 'Print Pocket Card' and 'Print Workbook' no longer pull Loadscope in front of Excel, and Print Workbook now actually opens the printable view in your browser. (4) Library now uses the Load Name you typed. (5) New load carries your powder over. (6) Save bar and Pocket Card buttons sit higher so the Windows taskbar doesn't cover them. (7) Contact Support copies the address and asks before opening mail."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29j/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.36 - More walk fixes: Contact Support now just copies the support address (no more Windows 'what program?' picker); the Save DOPE bar on Range & DOPE sits higher so the taskbar doesn't cover it; the import log shows one clean 'Reading CSVs from' line per folder; and the Excel Ballistics tab now reminds you to open Range & DOPE and click Save DOPE if the table is empty."
     }
   }
 }

@@ -104,9 +104,15 @@
 <div class="card">
   <div id="loading">
     <div class="spinner"></div>
-    <h1>Launching Loadscope…</h1>
+    <h1>Opening in Loadscope…</h1>
     <p>Sending <span class="action-name" id="action-display">…</span> to Loadscope.</p>
-    <p style="font-size: 13px; margin-top: 24px;">You can close this tab once Loadscope responds.</p>
+    <p style="font-size: 13px; margin-top: 24px;">You can close this tab.</p>
+  </div>
+
+  <div class="fallback" id="success" style="display:none;">
+    <h1>Loadscope is handling it ✓</h1>
+    <p>Switch to the Loadscope window — your <span class="action-name" id="success-action">action</span> is opening there.</p>
+    <p style="font-size: 13px; margin-top: 16px;">You can safely close this tab.</p>
   </div>
 
   <div class="fallback" id="fallback">
@@ -137,27 +143,46 @@
   var displayName = ALLOWED_ACTIONS[rawAction] || rawAction || "(unknown action)";
 
   document.getElementById("action-display").textContent = displayName;
+  document.getElementById("success-action").textContent = displayName;
+
+  // Detect a successful launch: when Loadscope opens, its window comes to
+  // the foreground and THIS browser tab loses focus / becomes hidden. We
+  // watch for that signal (blur / visibility hidden) and treat it as
+  // "Loadscope took over." Previously the page ALWAYS showed "Loadscope
+  // didn't respond" after a timeout even on a successful launch (the app
+  // DID open) -- alarming, and on Windows it left a scary extra tab the
+  // user had to delete (Chad 2026-05-29 walk). Now: blurred -> friendly
+  // success message (+ try to auto-close); never-blurred -> real fallback.
+  var appTookOver = false;
+  function markTookOver() { appTookOver = true; }
+  window.addEventListener("blur", markTookOver);
+  window.addEventListener("pagehide", markTookOver);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "hidden") markTookOver();
+  });
 
   if (!action) {
     // Bad / missing action — go straight to the fallback (no redirect).
     document.getElementById("loading").style.display = "none";
     document.getElementById("fallback").classList.add("show");
   } else {
-    // Fire the loadscope:// URL. macOS Launch Services routes it to
-    // Loadscope.app, which handles the action and brings its window
-    // to the foreground. If the user doesn't have Loadscope installed
-    // (or has blocked custom scheme handlers), nothing happens — we
-    // surface the fallback after a short delay.
     var target = "loadscope://" + action;
     setTimeout(function () { window.location.href = target; }, 50);
 
-    // After 2s, if the user is still here (Loadscope didn't take over),
-    // show the fallback UI. macOS often keeps the browser tab focused
-    // even after a successful launch, so this isn't a reliable "did
-    // Loadscope launch?" detector — just a recovery affordance.
     setTimeout(function () {
       document.getElementById("loading").style.display = "none";
-      document.getElementById("fallback").classList.add("show");
+      if (appTookOver) {
+        // Loadscope launched (this tab lost focus). Reassure + try to
+        // close the tab. window.close() only works for script-opened
+        // windows, so it may be a no-op from an Excel-clicked link --
+        // the friendly "you can close this tab" copy covers that case.
+        var s = document.getElementById("success");
+        s.style.display = "block";
+        s.classList.add("show");
+        try { window.close(); } catch (e) {}
+      } else {
+        document.getElementById("fallback").classList.add("show");
+      }
     }, 2000);
   }
 
