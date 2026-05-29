@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.31",
+      "app_version": "0.16.32",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29e/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.31 - Excel Print links: clicking 'Print Pocket Range Card' in the workbook no longer pulls Loadscope to the front or pops extra windows - it just opens the card in your browser while Loadscope stays put. The 'cell is read-only' warning on those buttons is gone (button cells unlocked). Pocket Card now fits fully in the sidebar (no scrolling) and stays crisp. Plus the one-click background updater from 0.16.30 - this is the first update that should install with one click."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29f/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.32 - The Save bar stays visible when the window isn't full-screen (lower min height). Range & DOPE shows a reminder banner when it's empty, pointing you to import + pick a winner first. Contact Support now just opens your default mail app pre-filled (no chooser). 'Name your first load' is now part of the initial Setup Wizard. Plus all prior walk-4 fixes."
     }
   }
 }
