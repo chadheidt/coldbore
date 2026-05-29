@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.27",
+      "app_version": "0.16.28",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.27 - Walk-4 fixes. Seating Depth Log Mean Radius column now shows the real MR (was showing the composite score). Load Card Components CBTO shows the winning value (was a dash). Pocket Card sidebar renders full-size (timing-proof self-scaling). Import toast holds 4 seconds so it's readable. New Load while the workbook is open in Excel now says 'close it in Excel first' instead of a raw Windows error 32. Save button lifted off the window bottom edge. Library load names auto-fill from the recipe + right-click Rename. Excel Print links route to the running Loadscope (single-instance handoff) instead of cold-launching a second copy. First load now asks for a name like New Load does. Updater banner shows the correct version + can never silently do nothing."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29b/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.28 - Reliable update notifications: an available update now pops a dialog (the same kind that already works on Windows) instead of relying on the in-window banner, which didn't show on Windows. On Windows the dialog offers Download Update (opens the installer in your browser). Plus all v0.16.27 walk-4 fixes: SDL Mean Radius column shows the real MR (was the composite score), Load Card Components CBTO shows the winning value, Pocket Card sidebar renders full-size, 4-second import toast, New-Load-while-open-in-Excel message, Save button lifted, Library auto-slug names + right-click Rename, Excel Print links route to the running app, first load asks for a name."
     }
   }
 }
