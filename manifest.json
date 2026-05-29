@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.33",
+      "app_version": "0.16.34",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29g/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.33 - Updates are smoother: a 'Downloading update...' progress dialog so you see it working (no more silent wait), and the brief terminal/console window during install is gone (runs hidden). Plus all prior walk-4 fixes. (The 'unknown publisher' prompt during install will remain until the app is code-signed.)"
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29h/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.34 - (1) Editable Load Name on the Rifle & Setup screen - always visible; name your load and it shows on the hero, Load Card, and workbook headers. (2) Print Workbook now opens a clean printable view in your browser (Powder Charge Log + Seating Depth Log, one sheet per page) - just hit Print or Save as PDF. No more open-in-Excel-and-Ctrl+P. (3) A loading indicator now appears on the Results and Pocket Card screens so they no longer look blank while building."
     }
   }
 }
