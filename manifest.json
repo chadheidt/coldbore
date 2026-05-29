@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.32",
+      "app_version": "0.16.33",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29f/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.32 - The Save bar stays visible when the window isn't full-screen (lower min height). Range & DOPE shows a reminder banner when it's empty, pointing you to import + pick a winner first. Contact Support now just opens your default mail app pre-filled (no chooser). 'Name your first load' is now part of the initial Setup Wizard. Plus all prior walk-4 fixes."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29g/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.33 - Updates are smoother: a 'Downloading update...' progress dialog so you see it working (no more silent wait), and the brief terminal/console window during install is gone (runs hidden). Plus all prior walk-4 fixes. (The 'unknown publisher' prompt during install will remain until the app is code-signed.)"
     }
   }
 }
