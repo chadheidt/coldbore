@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.34",
+      "app_version": "0.16.35",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29h/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.34 - (1) Editable Load Name on the Rifle & Setup screen - always visible; name your load and it shows on the hero, Load Card, and workbook headers. (2) Print Workbook now opens a clean printable view in your browser (Powder Charge Log + Seating Depth Log, one sheet per page) - just hit Print or Save as PDF. No more open-in-Excel-and-Ctrl+P. (3) A loading indicator now appears on the Results and Pocket Card screens so they no longer look blank while building."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29i/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.35 - Walk fixes: (1) Import log is clean now - no more 'skip / doesn't look like' or 'Applied polish' noise; you just see what imported. (2) Pocket Card right-half columns (Drop/Vel/Energy) are readable again - no more black. (3) Excel 'Print Pocket Card' and 'Print Workbook' no longer pull Loadscope in front of Excel, and Print Workbook now actually opens the printable view in your browser. (4) Library now uses the Load Name you typed. (5) New load carries your powder over. (6) Save bar and Pocket Card buttons sit higher so the Windows taskbar doesn't cover them. (7) Contact Support copies the address and asks before opening mail."
     }
   }
 }
