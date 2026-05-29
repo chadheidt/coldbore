@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.26",
+      "app_version": "0.16.27",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-28/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.26 - Walk-4 batch continues. Save-Library popup CBTO line now shows the winning CBTO (was the empty Setup-time CBTO showing as a dash). Pocket Card sidebar render no longer locks at 200x200 -- defers initial rescale a tick so the inner widget has its real size + uses the scroll viewport size + the QLabel minSize prevents content-sized lock. apply_workbook_repairs now refreshes 11 stale Help-sheet cell references in EXISTING user workbooks so the in-workbook Help menu matches current cells. Plus prior 0.16.25 fixes."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.27 - Walk-4 fixes. Seating Depth Log Mean Radius column now shows the real MR (was showing the composite score). Load Card Components CBTO shows the winning value (was a dash). Pocket Card sidebar renders full-size (timing-proof self-scaling). Import toast holds 4 seconds so it's readable. New Load while the workbook is open in Excel now says 'close it in Excel first' instead of a raw Windows error 32. Save button lifted off the window bottom edge. Library load names auto-fill from the recipe + right-click Rename. Excel Print links route to the running Loadscope (single-instance handoff) instead of cold-launching a second copy. First load now asks for a name like New Load does. Updater banner shows the correct version + can never silently do nothing."
     }
   }
 }
