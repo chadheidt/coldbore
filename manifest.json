@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.44",
+      "app_version": "0.16.45",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-30r/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.44 - Charts layout polish. Each weight set's defaults and reasoning (plus the 'How did we land on these?' link) now sit beside the boxes in a larger, easier-to-read panel instead of crammed underneath - on both the powder ladder and seating depth cards."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-30s/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.45 - Scoring-consistency fixes from a deep audit. The Charts 'Best in' per-row tags now agree with the flat-spot winner even if the workbook is recalculated in Excel (a leftover formula could tag the wrong row). The Results hero's velocity checkmark now reads 'Flat-spot' so it's clear the velocity metric is the flat-spot, not raw average velocity. No change to how the winner is picked."
     }
   }
 }
