@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.36",
+      "app_version": "0.16.37",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29j/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.36 - More walk fixes: Contact Support now just copies the support address (no more Windows 'what program?' picker); the Save DOPE bar on Range & DOPE sits higher so the taskbar doesn't cover it; the import log shows one clean 'Reading CSVs from' line per folder; and the Excel Ballistics tab now reminds you to open Range & DOPE and click Save DOPE if the table is empty."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29k/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.37 - The in-app User Guide is refreshed: Steps 4 (Charge), 6 (Seating), and 7 (DOPE) now show the real in-app screens with numbered callouts, instead of raw spreadsheet pictures. Includes all v0.16.36 fixes."
     }
   }
 }
