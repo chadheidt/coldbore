@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.43",
+      "app_version": "0.16.44",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-30q/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.43 - Scoring correction. The Velocity weight now scores your VELOCITY FLAT-SPOT - how steady your velocity stays across the ladder (it finally uses your chronograph speeds), instead of group size. This matches the User Guide. Mean radius is still the scored group metric; group size is shown but no longer scored. This can change which load wins - it is the correct, spec-matching scoring."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-30r/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.44 - Charts layout polish. Each weight set's defaults and reasoning (plus the 'How did we land on these?' link) now sit beside the boxes in a larger, easier-to-read panel instead of crammed underneath - on both the powder ladder and seating depth cards."
     }
   }
 }
