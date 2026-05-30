@@ -1,17 +1,17 @@
 {
-  "app_version": "0.16.20",
+  "app_version": "0.16.46",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.20 - Polish from the new-user walk. (1) SD-only hero now shows TEST CHARGE and POWDER alongside BEST CBTO - the load's full recipe at a glance instead of three of four fields hidden. If the SD test charge isnt filled in Setup, the cell shows a yellow 'Not set - Open Setup' pill that doubles as the reminder. (2) New Clear button on the Import panel - one click wipes the Activity log AND deletes any unimported CSV files in your folders. Confirm before anything goes. (3) Walk-time audit infrastructure: signed-bundle check #28 in verify-loadscope-ui is now walk-patch-aware - distinguishes 'shipped adhoc by accident' from 'signed bundle with mid-walk pyc patch' so iteration doesnt fail the regression guard against the 2026-05-18 silent-fallback.",
+  "app_release_notes": "v0.16.46 - Live score tuning. Results > Charts now lets you tune the composite weights right in the app (number boxes + Re-score + Reset to defaults) for the powder ladder and seating depth, with a plain-English explainer of the defaults. Scoring correction: the Velocity weight now scores your velocity flat-spot - how steady your velocity stays across the ladder, using your chronograph speeds - instead of group size; mean radius remains the scored group metric. Also fixes the in-app Pocket Card preview on Mac.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "0.16.20",
+      "app_version": "0.16.46",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
+      "app_release_notes": "v0.16.46 - Live score tuning on Results > Charts (number boxes + Re-score + Reset, powder ladder + seating depth, with a defaults explainer). Scoring correction: the Velocity weight now scores your velocity flat-spot (steady velocity across the ladder, from your chronograph speeds) instead of group size; mean radius stays the scored group metric. Fixes the in-app Pocket Card preview on Mac."
     },
     "windows": {
       "app_version": "0.16.46",
