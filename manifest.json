@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.37",
+      "app_version": "0.16.38",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-29k/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.37 - The in-app User Guide is refreshed: Steps 4 (Charge), 6 (Seating), and 7 (DOPE) now show the real in-app screens with numbered callouts, instead of raw spreadsheet pictures. Includes all v0.16.36 fixes."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-30l/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.38 - Walk fixes. Contact Support now lets you open your default email app or just copy the address. Ballistics tab wind-hold headers no longer clip at the bottom. The Pocket Card reminds you to Save DOPE when it is showing predictions only. The User Guide button stays above the Windows taskbar on smaller screens. The browser hand-off page no longer flashes a scary 'did not respond' message on print actions, and Print Workbook fires on the first click. The demo tour uses clean screenshots. FAQ updated for the built-in DOPE predictor."
     }
   }
 }
