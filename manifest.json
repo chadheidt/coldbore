@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.39",
+      "app_version": "0.16.40",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-30m/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.39 - Contact Support adds an 'Open Gmail' button that opens a pre-filled compose tab in your browser - no app picker. Fixes the in-app Pocket Card preview on Mac. (The Ballistics row-8 header fix from v0.16.38 applies the next time you import.)"
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-30n/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.40 - Live tuning sliders. Results > Charts now has sliders for the powder-ladder and seating-depth score weights, each with a live total and a 'Re-score with these weights' button that recomputes the winner from your existing data - no re-import needed. This is the first time custom weights actually change which load wins."
     }
   }
 }
