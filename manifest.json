@@ -14,10 +14,10 @@
       "app_release_notes": "v0.16.20 - Polish from the new-user walk. SD-only hero now shows TEST CHARGE and POWDER. New Clear button on Import panel. Walk-time audit infrastructure (walk-patch-aware signed-bundle check)."
     },
     "windows": {
-      "app_version": "0.16.41",
+      "app_version": "0.16.42",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-30o/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.41 - Weight-tuning polish. The Charts score-weight controls are now number boxes (type a value or use the arrows; the mouse wheel won't nudge them by accident), with a 'Reset to Loadscope defaults' button. Each weight set shows its defaults + the reasoning, and a 'How did we land on these?' link opens the full explanation."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-30p/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.42 - Weight tuning, per test. Powder ladder and seating depth each get their own Re-score and Reset buttons (tuning one never touches the other). Clicking Re-score shows progress and a clear result - including when the winner doesn't change. Custom weights now survive a re-import, and if a re-score changes your winning load, Loadscope reminds you to re-check your saved DOPE. Guards for all-zero and too-few-loads."
     }
   }
 }
