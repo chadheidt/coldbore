@@ -509,9 +509,11 @@ header.hero .line2 {
   background: var(--bg-mid);
   border: 1px solid var(--border);
   border-radius: 14px;
-  padding: 32px 28px 24px;
+  padding: 24px 28px 20px;
   max-width: 460px;
   width: 100%;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
 }
 .download-modal h3 {
@@ -521,7 +523,7 @@ header.hero .line2 {
 .download-modal p {
   color: var(--text-dim);
   font-size: 15px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 .download-modal input {
   width: 100%;
@@ -555,7 +557,7 @@ header.hero .line2 {
 .modal-tabs {
   display: flex;
   gap: 0;
-  margin: -8px -28px 22px;
+  margin: -4px -28px 16px;
   border-bottom: 1px solid var(--border);
 }
 .modal-tab {
@@ -595,7 +597,7 @@ header.hero .line2 {
   font-family: -apple-system, sans-serif;
   font-size: 14px;
   resize: vertical;
-  min-height: 64px;
+  min-height: 52px;
   margin-bottom: 8px;
 }
 .download-modal textarea:focus { outline: none; border-color: var(--orange); }
@@ -607,7 +609,7 @@ header.hero .line2 {
 .platform-seg {
   display: flex;
   gap: 8px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
 }
 .platform-opt {
   flex: 1;
@@ -924,7 +926,7 @@ header.hero .line2 {
     <!-- Tab 1: request beta access -->
     <div class="tab-panel active" id="panelRequestAccess">
       <h3>Request beta access</h3>
-      <p>Tell me who you are. I'll review and email your access code within 24 hours. Loadscope is in private beta with a small group of precision rifle shooters.</p>
+      <p>Tell me who you are and I'll email your access code, usually within 24 hours.</p>
       <label for="reqName">Your name</label>
       <input type="text" id="reqName" class="name-email-input" placeholder="John Smith" autocomplete="name" maxlength="120">
       <label for="reqEmail">Email</label>
