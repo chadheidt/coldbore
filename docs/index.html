@@ -604,6 +604,51 @@ header.hero .line2 {
   letter-spacing: normal !important;
 }
 .turnstile-wrap { margin: 12px 0 10px; min-height: 65px; }
+.platform-seg {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.platform-opt {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: var(--bg);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 10px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.platform-opt:hover { border-color: var(--text-dim); }
+.platform-opt.active {
+  border-color: var(--orange);
+  background: rgba(217, 119, 6, 0.10);
+}
+.platform-opt-os {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+.platform-opt-sub {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  letter-spacing: normal;
+}
+.platform-opt.active .platform-opt-os { color: var(--orange); }
+.win-smartscreen-note {
+  background: rgba(217, 119, 6, 0.10);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 13px;
+  margin: 4px 0 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+.win-smartscreen-note strong { color: var(--text); }
 </style>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 </head>
@@ -619,7 +664,7 @@ header.hero .line2 {
       <a href="#features">Features</a>
       <a href="#install">Install</a>
       <a href="#faq">FAQ</a>
-      <a href="#" class="btn" onclick="openDownloadModal(event)">Download</a>
+      <a href="#" class="btn" onclick="openDownloadModal(event)">Get Loadscope</a>
     </div>
   </div>
 </nav>
@@ -638,10 +683,10 @@ header.hero .line2 {
       <li>A printable <strong>Load Card recipe</strong> &mdash; for the binder on your bench, or saved to your computer files.</li>
     </ul>
     <div class="cta-row">
-      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Download Loadscope™</a>
+      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get Loadscope™</a>
       <a href="#demo" class="btn btn-large btn-outline">See it in action</a>
     </div>
-    <p class="beta-note">In private beta — no public download yet. <strong>Download</strong> requests your free access code.</p>
+    <p class="beta-note">In private beta — invite only. <strong>Get Loadscope</strong> to request your free access code for Mac or Windows.</p>
     <div class="platform-note">macOS 10.13+ (Intel &amp; Apple Silicon) &middot; Windows 10/11 (64-bit) &middot; Free during beta</div>
   </div>
 </header>
@@ -762,8 +807,8 @@ header.hero .line2 {
     <div class="steps">
       <div class="step">
         <div class="num">1</div>
-        <h3>Download</h3>
-        <p>Click <strong>Download</strong> at the top of the page and paste the access code that was emailed to you. The Loadscope installer for your platform will start downloading.</p>
+        <h3>Get Loadscope</h3>
+        <p>Click <strong>Get Loadscope</strong> at the top of the page, pick <strong>Mac</strong> or <strong>Windows</strong>, and paste the access code that was emailed to you. The right installer for your computer starts downloading.</p>
       </div>
       <div class="step">
         <div class="num">2</div>
@@ -857,25 +902,27 @@ header.hero .line2 {
 
 <div class="download-modal" id="downloadModal" onclick="if(event.target===this) closeDownloadModal()">
   <div class="box">
+    <!-- Platform picker: drives both the request and the download. Auto-set
+         from the visitor's OS (overridable). One button, one modal, platform
+         handled inside — see Chad 2026-05-31 UI decision. -->
+    <div class="platform-seg" role="group" aria-label="Choose your computer">
+      <button type="button" class="platform-opt" id="platMac" onclick="setPlatform('mac')">
+        <span class="platform-opt-os">Mac</span>
+        <span class="platform-opt-sub">macOS 10.13+</span>
+      </button>
+      <button type="button" class="platform-opt" id="platWin" onclick="setPlatform('win')">
+        <span class="platform-opt-os">Windows</span>
+        <span class="platform-opt-sub">Windows 10/11</span>
+      </button>
+    </div>
+
     <div class="modal-tabs">
-      <button class="modal-tab active" id="tabHaveCode" onclick="switchTab('have-code')">I have a code</button>
-      <button class="modal-tab" id="tabRequestAccess" onclick="switchTab('request-access')">Request access</button>
+      <button class="modal-tab active" id="tabRequestAccess" onclick="switchTab('request-access')">Request a code</button>
+      <button class="modal-tab" id="tabHaveCode" onclick="switchTab('have-code')">I have a code</button>
     </div>
 
-    <!-- Tab 1: enter existing access code -->
-    <div class="tab-panel active" id="panelHaveCode">
-      <h3>Enter your beta access code</h3>
-      <p>Paste the access code that was emailed to you to start the download.</p>
-      <input type="text" id="accessCodeInput" placeholder="CBORE-XXXX-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
-      <div class="feedback" id="accessCodeFeedback"></div>
-      <div class="actions">
-        <button class="btn btn-outline" onclick="closeDownloadModal()">Cancel</button>
-        <button class="btn" id="downloadModalSubmit" onclick="submitAccessCode()">Download</button>
-      </div>
-    </div>
-
-    <!-- Tab 2: request beta access -->
-    <div class="tab-panel" id="panelRequestAccess">
+    <!-- Tab 1: request beta access -->
+    <div class="tab-panel active" id="panelRequestAccess">
       <h3>Request beta access</h3>
       <p>Tell me who you are. I'll review and email your access code within 24 hours. Loadscope is in private beta with a small group of precision rifle shooters.</p>
       <label for="reqName">Your name</label>
@@ -893,6 +940,21 @@ header.hero .line2 {
         <button class="btn" id="requestAccessSubmit" onclick="submitRequestAccess()">Send request</button>
       </div>
     </div>
+
+    <!-- Tab 2: enter existing access code -->
+    <div class="tab-panel" id="panelHaveCode">
+      <h3>Enter your beta access code</h3>
+      <p>Paste the access code that was emailed to you to start the download.</p>
+      <input type="text" id="accessCodeInput" placeholder="CBORE-XXXX-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <div class="feedback" id="accessCodeFeedback"></div>
+      <div class="win-smartscreen-note" id="winSmartScreenNote" style="display:none;">
+        Heads-up: until our Windows signing certificate lands, Windows may show a blue <strong>"Windows protected your PC"</strong> box the first time. Click <strong>More info → Run anyway</strong> — it's safe; that's just the unsigned-beta warning.
+      </div>
+      <div class="actions">
+        <button class="btn btn-outline" onclick="closeDownloadModal()">Cancel</button>
+        <button class="btn" id="downloadModalSubmit" onclick="submitAccessCode()">Download for Mac</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -900,15 +962,38 @@ header.hero .line2 {
 const WORKER_AUTHORIZE_URL = "https://coldbore-download.cheidt182.workers.dev/authorize";
 const WORKER_REQUEST_URL = "https://coldbore-download.cheidt182.workers.dev/request-access";
 
+// Auto-detect the visitor's OS to pre-select the platform toggle (overridable).
+const IS_WINDOWS = /Win(dows|32|64)/i.test(
+  (navigator.userAgent || "") + " " + (navigator.platform || ""));
+
+// Selected platform drives BOTH the request payload and which installer the
+// "I have a code" tab downloads. 'mac' | 'win'. Pre-set from the OS, but the
+// visitor can flip it (work Mac, home Windows PC, etc.).
+let selectedPlatform = IS_WINDOWS ? "win" : "mac";
+const PLATFORM_FILE = { mac: "Loadscope.dmg", win: "Loadscope-Setup.exe" };
+const PLATFORM_LABEL = { mac: "Mac", win: "Windows" };
+
+function setPlatform(p) {
+  selectedPlatform = (p === "win") ? "win" : "mac";
+  document.getElementById("platMac").classList.toggle("active", selectedPlatform === "mac");
+  document.getElementById("platWin").classList.toggle("active", selectedPlatform === "win");
+  // Download button label tracks the chosen platform.
+  const dl = document.getElementById("downloadModalSubmit");
+  if (dl) dl.textContent = "Download for " + PLATFORM_LABEL[selectedPlatform];
+  // SmartScreen heads-up shows only for Windows (only on the download tab).
+  const note = document.getElementById("winSmartScreenNote");
+  if (note) note.style.display = (selectedPlatform === "win") ? "block" : "none";
+}
+
 function openDownloadModal(ev) {
   if (ev) ev.preventDefault();
   document.getElementById("downloadModal").classList.add("open");
   document.getElementById("accessCodeFeedback").textContent = "";
   document.getElementById("requestAccessFeedback").textContent = "";
-  switchTab("have-code"); // default to the existing-code path
-  const inp = document.getElementById("accessCodeInput");
-  inp.value = "";
-  setTimeout(() => inp.focus(), 50);
+  setPlatform(selectedPlatform);   // sync toggle + button label + note to detected OS
+  switchTab("request-access");     // new visitors land on the request form
+  const n = document.getElementById("reqName");
+  setTimeout(() => { if (n) n.focus(); }, 50);
 }
 
 function closeDownloadModal() {
@@ -937,6 +1022,8 @@ async function submitAccessCode() {
   const code = document.getElementById("accessCodeInput").value.trim();
   const feedback = document.getElementById("accessCodeFeedback");
   const submitBtn = document.getElementById("downloadModalSubmit");
+  const file = PLATFORM_FILE[selectedPlatform];
+  const label = PLATFORM_LABEL[selectedPlatform];
 
   if (!code) {
     feedback.textContent = "Please enter your access code.";
@@ -951,13 +1038,13 @@ async function submitAccessCode() {
     const r = await fetch(WORKER_AUTHORIZE_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: code, file: "Loadscope.dmg" })
+      body: JSON.stringify({ code: code, file: file })
     });
     const data = await r.json();
     if (!r.ok) {
       feedback.textContent = data.error || "Something went wrong. Please try again.";
       submitBtn.disabled = false;
-      submitBtn.textContent = "Download";
+      submitBtn.textContent = "Download for " + label;
       return;
     }
     submitBtn.textContent = "Downloading...";
@@ -965,12 +1052,12 @@ async function submitAccessCode() {
     setTimeout(() => {
       closeDownloadModal();
       submitBtn.disabled = false;
-      submitBtn.textContent = "Download";
+      submitBtn.textContent = "Download for " + label;
     }, 800);
   } catch (err) {
     feedback.textContent = "Couldn't reach the server. Check your internet and try again.";
     submitBtn.disabled = false;
-    submitBtn.textContent = "Download";
+    submitBtn.textContent = "Download for " + label;
   }
 }
 
@@ -1011,6 +1098,7 @@ async function submitRequestAccess() {
         name: name,
         email: email,
         project_info: projectInfo,
+        platform: selectedPlatform,
         turnstile_token: turnstileToken,
       }),
     });
