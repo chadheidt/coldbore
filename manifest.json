@@ -1,23 +1,23 @@
 {
-  "app_version": "0.16.46",
+  "app_version": "0.16.47",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.46 - Live score tuning. Results > Charts now lets you tune the composite weights right in the app (number boxes + Re-score + Reset to defaults) for the powder ladder and seating depth, with a plain-English explainer of the defaults. Scoring correction: the Velocity weight now scores your velocity flat-spot - how steady your velocity stays across the ladder, using your chronograph speeds - instead of group size; mean radius remains the scored group metric. Also fixes the in-app Pocket Card preview on Mac.",
+  "app_release_notes": "v0.16.47 - Two-device license activation. Your access code now activates on up to two of your computers - say your bench PC and your range laptop. Once a computer is activated it keeps running offline, same as always. Moving to a new machine? Email support@loadscope.app and we'll free up a slot.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "0.16.46",
+      "app_version": "0.16.47",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v0.16.46 - Live score tuning on Results > Charts (number boxes + Re-score + Reset, powder ladder + seating depth, with a defaults explainer). Scoring correction: the Velocity weight now scores your velocity flat-spot (steady velocity across the ladder, from your chronograph speeds) instead of group size; mean radius stays the scored group metric. Fixes the in-app Pocket Card preview on Mac."
+      "app_release_notes": "v0.16.47 - Two-device license activation. Your access code now activates on up to two of your computers - say your bench Mac and your range laptop. Once a computer is activated it keeps running offline, same as always. Moving to a new machine? Email support@loadscope.app and we'll free up a slot."
     },
     "windows": {
-      "app_version": "0.16.46",
+      "app_version": "0.16.47",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/windows-walk-test-2026-05-30t/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.46 - The 'How did we land on these weights?' explainer now notes that Loadscope's scoring is built on established ballistics and precision-statistics principles and is checked by an automated test suite on every release."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.16.47/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.47 - Two-device license activation. Your access code now activates on up to two of your computers - say your bench PC and your range laptop. Once a computer is activated it keeps running offline, same as always. Moving to a new machine? Email support@loadscope.app and we'll free up a slot."
     }
   }
 }
