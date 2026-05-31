@@ -1,23 +1,23 @@
 {
-  "app_version": "0.16.47",
+  "app_version": "0.16.48",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.47 - Two-device license activation. Your access code now activates on up to two of your computers - say your bench PC and your range laptop. Once a computer is activated it keeps running offline, same as always. Moving to a new machine? Email support@loadscope.app and we'll free up a slot.",
+  "app_release_notes": "v0.16.48 - Two-device license activation. Your access code now activates on up to two of your computers - say your bench PC and your range laptop. Once a computer is activated it keeps running offline, same as always. Moving to a new machine? Email support@loadscope.app and we'll free up a slot.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "0.16.47",
+      "app_version": "0.16.48",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v0.16.47 - Two-device license activation. Your access code now activates on up to two of your computers - say your bench Mac and your range laptop. Once a computer is activated it keeps running offline, same as always. Moving to a new machine? Email support@loadscope.app and we'll free up a slot."
+      "app_release_notes": "v0.16.48 - Two-device license activation. Your access code now activates on up to two of your computers - say your bench Mac and your range laptop. Once a computer is activated it keeps running offline, same as always. Moving to a new machine? Email support@loadscope.app and we'll free up a slot."
     },
     "windows": {
-      "app_version": "0.16.47",
+      "app_version": "0.16.48",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.16.47/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.47 - Two-device license activation. Your access code now activates on up to two of your computers - say your bench PC and your range laptop. Once a computer is activated it keeps running offline, same as always. Moving to a new machine? Email support@loadscope.app and we'll free up a slot."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.16.48/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.48 - Two-device license activation. Your access code now activates on up to two of your computers - say your bench PC and your range laptop. Once a computer is activated it keeps running offline, same as always. Moving to a new machine? Email support@loadscope.app and we'll free up a slot."
     }
   }
 }
