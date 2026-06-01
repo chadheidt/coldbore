@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://loadscope.app/sitemap.xml
