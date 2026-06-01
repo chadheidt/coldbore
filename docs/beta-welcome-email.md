@@ -37,10 +37,11 @@ The welcome tour that auto-runs is the fastest way to see the workflow. About 90
 
 **What I want from you as a beta tester:**
 
-- **Use it on a real load development cycle.** Drop your Garmin / BallisticX / OnTarget / ShotMarker / SMT CSVs, run the import, look at the Results panel. Save a winning load to Library. Print a Load Card.
+- **Use it on a real load development cycle.** Drop your Garmin Xero / LabRadar / BallisticX / OnTarget / Silver Mountain / ShotMarker CSVs, run the import, look at the Results panel. Save a winning load to Library. Print a Load Card.
+- **If you shoot a MagnetoSpeed or Athlon Rangecraft, I especially want to hear from you.** Those two are brand-new and marked **experimental** in the app — they import, but I haven't confirmed them against a real file yet. Run your export through, then reply and tell me whether the velocities and stats matched what the device showed — and attach the file if you can. That's the last step to take the "experimental" tag off.
 - **Tell me what's confusing.** Wording, layout, anything that made you pause. I want the rough edges before this opens up.
-- **Tell me what's missing.** Different chronograph? Different target app? Email a sample CSV to `support@loadscope.app` and I'll add support.
-- **Bugs go to `support@loadscope.app`** with a quick description and (if it's a parse issue) the CSV that broke it.
+- **Tell me what's missing.** Different chronograph? Different target app? Email a sample export to `support@loadscope.app` and I'll add support.
+- **Bugs go to `support@loadscope.app`** with a quick description and (if it's a parse issue) the file that broke it.
 
 **Heads-up:**
 
