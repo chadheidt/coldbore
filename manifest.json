@@ -1,23 +1,23 @@
 {
-  "app_version": "0.16.53",
+  "app_version": "0.16.54",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.53 - Cleaner imports: after each Run Import, Loadscope files those CSVs into a dated Imported CSVs folder, so your import folders stay empty and the same files never load twice. Plus a clearer supported-device list on the Import screen.",
+  "app_release_notes": "v0.16.54 - Clearer velocity chart: the up-and-down spread bars are now labeled 'shot-to-shot spread' so it's obvious at a glance what they show.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "0.16.53",
+      "app_version": "0.16.54",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v0.16.53 - Cleaner imports: after each Run Import, Loadscope files those CSVs into a dated Imported CSVs folder, so your import folders stay empty and the same files never load twice. Plus a clearer supported-device list on the Import screen."
+      "app_release_notes": "v0.16.54 - Clearer velocity chart: the up-and-down spread bars are now labeled 'shot-to-shot spread' so it's obvious at a glance what they show."
     },
     "windows": {
-      "app_version": "0.16.53",
+      "app_version": "0.16.54",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.16.53/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.53 - Cleaner imports: after each Run Import, Loadscope files those CSVs into a dated Imported CSVs folder, so your import folders stay empty and the same files never load twice. Plus a clearer supported-device list on the Import screen."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.16.54/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.54 - Clearer velocity chart: the up-and-down spread bars are now labeled 'shot-to-shot spread' so it's obvious at a glance what they show."
     }
   }
 }
