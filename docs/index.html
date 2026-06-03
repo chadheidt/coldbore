@@ -144,6 +144,40 @@ header.hero .hero-plus-list li::before {
   line-height: 1.45;
 }
 header.hero .hero-plus-list strong { color: var(--text); }
+header.hero .hero-scoring {
+  font-size: 17px;
+  color: var(--text);
+  max-width: 640px;
+  margin: 20px auto 24px;
+  line-height: 1.6;
+  background: rgba(217, 119, 6, 0.10);
+  border: 1px solid var(--orange);
+  border-radius: 12px;
+  padding: 18px 26px;
+}
+header.hero .hero-scoring strong {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: var(--text);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+}
+header.hero .hero-data {
+  font-size: 14.5px;
+  color: var(--text-dim);
+  max-width: 660px;
+  margin: 18px auto 0;
+  line-height: 1.55;
+}
+header.hero .hero-data strong { color: var(--text); }
+header.hero .hero-windows-note {
+  max-width: 600px;
+  margin: 16px auto 0;
+  font-size: 12.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+header.hero .hero-windows-note strong { color: var(--text-dim); }
 /* Chad 2026-05-23: cta-row margin-top 48 -> 16; the bullet list above
    already has its own bottom margin, so 48px stacked was reading as
    dead space. */
@@ -192,6 +226,8 @@ header.hero .beta-note strong { color: var(--text); }
   font-style: italic;
 }
 section { padding: 30px 0; }
+/* Offset anchor jumps so the sticky nav doesn't cover the section heading. */
+section[id] { scroll-margin-top: 84px; }
 section h2 {
   font-size: 28px;
   font-weight: 700;
@@ -277,6 +313,34 @@ section .section-sub {
   text-align: center;
 }
 .beta-callout strong { color: var(--orange); }
+.install-collapse { max-width: 720px; margin: 0 auto; }
+.install-collapse summary {
+  list-style: none;
+  cursor: pointer;
+  text-align: center;
+  color: var(--orange);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 11px;
+  border: 1px solid var(--orange);
+  border-radius: 8px;
+  background: rgba(217, 119, 6, 0.10);
+}
+.install-collapse summary::-webkit-details-marker { display: none; }
+.install-collapse[open] summary { margin-bottom: 20px; }
+.video-modal {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0, 0, 0, 0.88); z-index: 200;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.video-modal.open { display: flex; }
+.video-modal .vbox { width: 100%; max-width: 900px; }
+.video-modal video { width: 100%; border-radius: 12px; display: block; }
+.video-modal .vclose {
+  position: absolute; top: 16px; right: 26px;
+  color: #fff; font-size: 38px; line-height: 1;
+  background: none; border: none; cursor: pointer;
+}
 .faq-grid { display: grid; gap: 16px; max-width: 800px; margin: 0 auto; }
 .faq-item {
   background: var(--bg-mid);
@@ -676,6 +740,7 @@ header.hero .line2 {
       <a href="#install">Install</a>
       <a href="#faq">FAQ</a>
       <a href="learn/">Learn</a>
+      <a href="#beta">Beta</a>
       <a href="#" class="btn" onclick="openDownloadModal(event)">Get Loadscope</a>
     </div>
   </div>
@@ -686,32 +751,41 @@ header.hero .line2 {
     <div class="hero-logo">
       <img src="assets/icon.png" alt="Loadscope™ logo">
     </div>
-    <div class="hero-beta-badge">Private beta · Free</div>
+    <div class="hero-beta-badge">Free beta</div>
     <h1>Precision rifle load development<br>for <span class="accent">Mac &amp; Windows</span>.</h1>
     <div class="line2">Loadscope finds your best <span class="em">powder charge</span> and <span class="em">seating depth</span>.</div>
-    <p class="tagline tagline-plus">Plus:</p>
-    <ul class="hero-plus-list">
-      <li>A built-in <strong>ballistic calculator</strong> &mdash; your full DOPE, 100 to 1000 yards.</li>
-      <li>A printable <strong>Load Card recipe</strong> &mdash; for the binder on your bench, or saved to your computer files.</li>
-    </ul>
+    <p class="hero-scoring"><strong>Loadscope scores every charge and seating depth on four metrics at once</strong> — velocity flat-spot, velocity SD, mean radius, vertical SD — blended into one winner.</p>
     <div class="cta-row">
       <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get Loadscope™</a>
-      <a href="#demo" class="btn btn-large btn-outline">See it in action</a>
+      <a href="#" class="btn btn-large btn-outline" onclick="openDemo(event)">View demo</a>
     </div>
-    <p class="beta-note">In private beta — invite only. <strong>Get Loadscope</strong> to request your free access code for Mac or Windows.</p>
-    <div class="platform-note">macOS 10.13+ (Intel &amp; Apple Silicon) &middot; Windows 10/11 (64-bit) &middot; Free during beta</div>
+    <p class="hero-data">Drop in the CSVs your chronograph and target app already export — label each once, and <strong>Loadscope does the rest</strong>.</p>
+    <p class="beta-note">Free during beta. <strong>Get Loadscope</strong> to request your access code for Mac or Windows.</p>
   </div>
 </header>
+
+<section>
+  <div class="container">
+    <h2>Scored <span class="accent">and</span> graphed.</h2>
+    <p class="section-sub">Every load scored into one winner — and charted so the flat-spot pops. Tune the weights and Loadscope re-scores from your existing data, no re-import.</p>
+    <div class="screenshot-wrap">
+      <img src="assets/demo/app-results.png?v=1" alt="Loadscope Results screen: the BEST LOAD - 42.4 gr at 2.205 CBTO for a 6.5 Creedmoor - scored across all four metrics (avg velocity, velocity SD, mean radius, vertical SD), with the best charge and best seating depth called out">
+    </div>
+    <div class="screenshot-wrap" style="margin-top:18px;">
+      <img src="assets/demo/gd-whiskers.png?v=1" alt="Loadscope velocity flat-spot chart: ten powder charges plotted with plus-or-minus 1 SD whiskers, a clear flat-spot plateau where the line levels off, and the winning charge highlighted">
+    </div>
+  </div>
+</section>
 
 <section>
   <div class="container">
     <div class="split reverse">
       <div class="split-text">
         <h2>Drag. Click. <span class="accent">Done.</span></h2>
-        <p class="section-sub">That's the whole app — a drop zone, your workbook, and a Run button.</p>
+        <p class="section-sub">That's the whole app — a drop zone (files or a whole folder), your workbook, and a Run button. The format of every CSV is auto-detected.</p>
       </div>
       <div class="screenshot-wrap">
-        <img src="assets/import-screen.png" alt="Loadscope Import Data panel showing the precision-rifle reticle drop zone, 'Drop your CSV files here, or click to browse' prompt, the Browse files link, supported-device chips (Garmin Xero, LabRadar, BallisticX, OnTarget, ShotMarker, Silver Mountain), the Run Import button, and the activity log">
+        <img src="assets/demo/gd-folder.png?v=1" alt="Loadscope drop zone: 'Drop CSV files or a folder here, or click to browse', Browse files and Browse folder links, supported-device chips (Garmin Xero, BallisticX), the Run Import button, and a 'Drop files or a whole folder, format auto-detected' note">
       </div>
     </div>
   </div>
@@ -722,7 +796,7 @@ header.hero .line2 {
     <div class="split">
       <div class="split-text">
         <h2>The <span class="accent">Powder Charge Log</span>.</h2>
-        <p class="section-sub">Every charge you tested, scored and ranked — your best one tagged at the top.</p>
+        <p class="section-sub">Every charge you tested, <strong>scored and ranked</strong> — your winner tagged at the top.</p>
       </div>
       <div class="screenshot-wrap log-shot">
         <img src="assets/demo/01-load-log.png?v=7" alt="Loadscope Powder Charge Log for a 6.5 Creedmoor load: each powder charge scored across velocity flat-spot, shot-to-shot SD, mean radius (or group size) and vertical SD, with the winning charge tagged at the top">
@@ -764,7 +838,7 @@ header.hero .line2 {
     <div class="split reverse">
       <div class="split-text">
         <h2>Keep the <span class="accent">recipe</span>.</h2>
-        <p class="section-sub">Every winning load gets a one-page Load Card &mdash; bullet, powder, charge, primer, brass, CBTO, plus the numbers it actually produced. <strong>Print</strong> for the bench binder, or <strong>Save as PDF</strong>. Pull one up for any saved load months later.</p>
+        <p class="section-sub">Every winning load gets a one-page Load Card &mdash; bullet, powder, charge, primer, brass, CBTO, plus the numbers it actually produced. <strong>Print</strong> for the bench binder, or <strong>Save as PDF</strong>. Pull one up for any saved load.</p>
       </div>
       <div class="screenshot-wrap">
         <img src="assets/demo/07-load-card.png?v=5" alt="Loadscope Load Card recipe: a one-page printable showing the suggested winning powder charge and CBTO, the bullet, powder, primer, brass, plus the velocity, SD, group and mean radius the winning load produced. Print button on the page; a separate Save as PDF action lives in the Loadscope app for a native save dialog.">
@@ -773,20 +847,6 @@ header.hero .line2 {
   </div>
 </section>
 
-<section id="demo">
-  <div class="container">
-    <h2>See it in <span class="accent">action</span>.</h2>
-    <p class="section-sub">The same guided tour that's built into the app — no download required.</p>
-    <div class="demo-video">
-      <video controls preload="none" playsinline
-             poster="assets/demo/00-setup.png?v=5"
-             style="width:100%; max-width:960px; display:block; margin:0 auto; border-radius:12px; border:1px solid var(--border); background:#000;">
-        <source src="assets/loadscope-demo.mp4?v=9" type="video/mp4">
-        Your browser doesn't support embedded video. <a href="assets/loadscope-demo.mp4">Download the demo (10 MB MP4)</a>.
-      </video>
-    </div>
-  </div>
-</section>
 
 <section id="features">
   <div class="container">
@@ -794,19 +854,34 @@ header.hero .line2 {
     <p class="section-sub">The rest of what Loadscope gives you.</p>
     <div class="features">
       <div class="feature">
+        <div class="icon">#</div>
+        <h3>Barrel round count</h3>
+        <p>Loadscope tracks total rounds through each barrel. Set a starting count once; every imported session adds to it automatically, and a <strong>+ Add</strong> button logs the practice or match rounds you didn't import.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📁</div>
+        <h3>Drop a whole folder</h3>
+        <p>Point Loadscope at a range-day folder and it pulls every CSV inside — chronograph and target, subfolders included — in one shot. No dragging files one at a time.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">📊</div>
+        <h3>Charts that show the flat-spot</h3>
+        <p>The Scoring tab graphs every charge with <strong>&plusmn;1&nbsp;SD whiskers</strong>, so the velocity flat-spot jumps right off the page. Hit <strong>Save chart image</strong> for a clean PNG.</p>
+      </div>
+      <div class="feature">
         <div class="icon">📚</div>
         <h3>Load Library</h3>
-        <p>Every winning load stays saved in the app — pull any of them back up months later, print the Load Card for the bench binder, save as PDF, or export the whole library to spreadsheet.</p>
+        <p>Every winning load stays saved in the app — pull any of them back up later, print the Load Card for the bench binder, save as PDF, or export the whole library to spreadsheet.</p>
       </div>
       <div class="feature">
         <div class="icon">↻</div>
         <h3>One-click updates</h3>
-        <p>When a new version ships, click <strong>Install Update</strong> in the app — no manual re-downloading or drag-to-Applications. Your data stays untouched.</p>
+        <p>When a new version ships, click <strong>Install Update</strong> in the app. Your data stays untouched.</p>
       </div>
       <div class="feature">
         <div class="icon">🛡</div>
         <h3>Your data, your machine</h3>
-        <p>Loadscope writes to a regular Excel file on your computer. No cloud, no account, no subscription. Workbooks are yours; uninstall whenever, your data stays.</p>
+        <p>Loadscope writes to a regular Excel file on your computer and <strong style="color: var(--text);">works fully offline</strong> — no cloud, no account, no subscription. Drop it on the range laptop with no signal and it runs. Workbooks are yours; uninstall whenever, your data stays.</p>
       </div>
     </div>
   </div>
@@ -815,12 +890,14 @@ header.hero .line2 {
 <section id="install" class="install">
   <div class="container">
     <h2>Install in <span class="accent">three steps</span>.</h2>
-    <p class="section-sub">Tested on macOS Sonoma &amp; Sequoia and Windows 10 &amp; 11. About one minute from download to first import.</p>
+    <p class="section-sub">Tested on macOS Sonoma &amp; Sequoia and Windows 10 &amp; 11.</p>
+    <details class="install-collapse">
+      <summary>Show the three steps &middot; about a minute</summary>
     <div class="steps">
       <div class="step">
         <div class="num">1</div>
         <h3>Get Loadscope</h3>
-        <p>Click <strong>Get Loadscope</strong> at the top of the page, pick <strong>Mac</strong> or <strong>Windows</strong>, and paste the access code that was emailed to you. The right installer for your computer starts downloading.</p>
+        <p>Click <strong>Get Loadscope</strong> at the top of the page, pick <strong>Mac</strong> or <strong>Windows</strong>, and paste the access code that will be emailed to you. The right installer for your computer starts downloading.</p>
       </div>
       <div class="step">
         <div class="num">2</div>
@@ -833,9 +910,37 @@ header.hero .line2 {
         <p><strong>Mac:</strong> drag <strong>Loadscope</strong> onto the <strong>Applications</strong> shortcut, eject the disk image, then open Loadscope from your Applications folder.<br><br><strong>Windows:</strong> click <strong>Next</strong> through the wizard. Loadscope installs to <strong>Program Files</strong> and a <strong>Start menu</strong> shortcut appears.</p>
       </div>
     </div>
+    </details>
 
-    <div class="beta-callout">
-      <strong>Apple-signed and notarized on Mac.</strong> No "unidentified developer" warning, no right-click trick &mdash; open and run, like any commercial app. Windows beta is currently unsigned (code-signing certificate in progress) &mdash; on first launch, click <strong>More info &rarr; Run anyway</strong> through Windows SmartScreen.
+    <p style="max-width:780px; margin:18px auto 0; font-size:12.5px; line-height:1.5; color:var(--text-muted); text-align:center;">
+      <strong style="color:var(--text-dim);">Apple-signed and notarized on Mac</strong> — open and run like any commercial app. Windows beta is currently unsigned (code-signing in progress) — on first launch, click <strong style="color:var(--text-dim);">More info &rarr; Run anyway</strong> through SmartScreen.
+    </p>
+  </div>
+</section>
+
+<section id="beta" style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <h2>Wanted: <span class="accent">beta testers</span>.</h2>
+    <p class="section-sub">Loadscope is free during beta. We're looking for precision shooters actively developing loads who'll run real range data through it and tell us what works — and what's missing.</p>
+    <div class="features">
+      <div class="feature">
+        <div class="icon">👤</div>
+        <h3>Who it's for</h3>
+        <p>Shooters running powder ladders and seating-depth tests with a chronograph and a target or group app. If you're chasing a load right now, you're who we built this for.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">✓</div>
+        <h3>What helps us</h3>
+        <p>Honest feedback — what's confusing, what's missing, anything that breaks. Shooting a device we don't list yet? Send a sample CSV and we'll add it.</p>
+      </div>
+      <div class="feature">
+        <div class="icon">★</div>
+        <h3>What you get</h3>
+        <p>The full app, free, and a direct line to shape where it goes. Early testers become founding users.</p>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:26px;">
+      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get your access code</a>
     </div>
   </div>
 </section>
@@ -856,7 +961,7 @@ header.hero .line2 {
       </details>
       <details class="faq-item">
         <summary>How do I get an access code?</summary>
-        <p>Loadscope is in private beta. Email <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a> to request access. You'll receive a unique code that unlocks both the download and the app itself.</p>
+        <p>Loadscope is in free beta. Click <strong>Get Loadscope</strong> (or email <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a>) to request your access code — it unlocks both the download and the app itself.</p>
       </details>
       <details class="faq-item">
         <summary>How many computers can I run one license on?</summary>
@@ -880,7 +985,7 @@ header.hero .line2 {
       </details>
       <details class="faq-item">
         <summary>What chronographs and target apps does it read?</summary>
-        <p><strong>Chronographs:</strong> Garmin Xero (ShotView CSVs), LabRadar, plus MagnetoSpeed and Athlon Rangecraft (both <strong>experimental</strong> — they import, just double-check the numbers until we've confirmed them against a real file). <strong>Target apps:</strong> BallisticX, OnTarget (PC/TDS), Silver Mountain (SMT) and ShotMarker. The parser system is pluggable, so a new chronograph or target app is quick to add — send a sample export to support@loadscope.app and we'll fold it in.</p>
+        <p><strong>Chronographs:</strong> Garmin Xero (ShotView CSVs) and LabRadar. <strong>Target apps:</strong> BallisticX, OnTarget (PC/TDS), Silver Mountain (SMT) and ShotMarker. The parser system is pluggable, so a new chronograph or target app is quick to add — send a sample export to support@loadscope.app and we'll fold it in.</p>
       </details>
       <details class="faq-item">
         <summary>Is my data going to the cloud?</summary>
@@ -913,12 +1018,23 @@ header.hero .line2 {
   <div class="container">
     <p><strong>Loadscope™</strong> &middot; <a href="mailto:support@loadscope.app">support@loadscope.app</a></p>
     <p>&copy; 2026 Loadscope™. All rights reserved.</p>
+    <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">macOS 10.13+ (Intel &amp; Apple Silicon) &middot; Windows 10/11 (64-bit) &middot; Free during beta</p>
     <p style="font-size:13.5px; margin-bottom:8px;"><a href="learn/">Learn</a> &middot; <a href="terms.html">Terms of Service</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="refund.html">Refund Policy</a></p>
     <div class="disclaimer">
       <strong>Reloading safety disclaimer:</strong> Loadscope is a tool for organizing and analyzing data you collect during precision rifle load development. It is NOT a source of published load data — it does not supply start or maximum charges, cartridge overall lengths, or load recipes; obtain those only from current reloading manuals. When Loadscope highlights a "suggested" winning charge or seating depth, that is a statistical ranking of the loads you personally tested — not a safety-vetted recommendation of what is safe to load or fire. Predicted ballistic data is an estimate, not a measurement; confirm it by live fire at known distances before relying on it for any shot. Always cross-reference loads against published manuals from powder, bullet, and cartridge manufacturers, watch for pressure signs, and start below maximum and work up. The developer is not liable for any damage, injury, or loss resulting from use of this app. You assume all risk associated with handloading and shooting.
     </div>
   </div>
 </footer>
+
+<div class="video-modal" id="videoModal" onclick="if(event.target===this) closeDemo()">
+  <button class="vclose" onclick="closeDemo()" aria-label="Close">&times;</button>
+  <div class="vbox">
+    <video id="demoVid" controls playsinline preload="none" poster="assets/demo/00-setup.png?v=5">
+      <source src="assets/loadscope-demo.mp4?v=13" type="video/mp4">
+      Your browser doesn't support embedded video. <a href="assets/loadscope-demo.mp4" style="color:var(--orange);">Download the demo</a>.
+    </video>
+  </div>
+</div>
 
 <div class="download-modal" id="downloadModal" onclick="if(event.target===this) closeDownloadModal()">
   <div class="box">
@@ -985,6 +1101,21 @@ header.hero .line2 {
 </div>
 
 <script>
+// Demo video popup player.
+function openDemo(ev) {
+  if (ev) ev.preventDefault();
+  var m = document.getElementById("videoModal");
+  var v = document.getElementById("demoVid");
+  if (m) m.classList.add("open");
+  if (v) { try { v.play(); } catch (e) {} }
+}
+function closeDemo() {
+  var m = document.getElementById("videoModal");
+  var v = document.getElementById("demoVid");
+  if (m) m.classList.remove("open");
+  if (v) v.pause();
+}
+
 const WORKER_AUTHORIZE_URL = "https://coldbore-download.cheidt182.workers.dev/authorize";
 const WORKER_REQUEST_URL = "https://coldbore-download.cheidt182.workers.dev/request-access";
 
