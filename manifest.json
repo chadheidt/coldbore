@@ -1,23 +1,23 @@
 {
-  "app_version": "0.16.51",
+  "app_version": "0.16.52",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v0.16.51 - Track total rounds per barrel right on Rifle & Setup (each import adds that session's rounds automatically). Import a whole range-day folder in one drop. Setup now remembers your rifles, optics and more - right-click any saved entry to remove it. Plus polish across the Scoring tab, help, and onboarding.",
+  "app_release_notes": "v0.16.52 - Track rounds per barrel, import a whole range-day folder at once, and a Setup that remembers your rifles and optics. Plus much faster Results, Pocket Card, Seating Depth and Setup screens, with a live loading bar instead of a wait.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "0.16.51",
+      "app_version": "0.16.52",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v0.16.51 - Track total rounds per barrel right on Rifle & Setup (each import adds that session's rounds automatically). Import a whole range-day folder in one drop. Setup now remembers your rifles, optics and more - right-click any saved entry to remove it. Plus polish across the Scoring tab, help, and onboarding."
+      "app_release_notes": "v0.16.52 - Track rounds per barrel, import a whole range-day folder at once, and a Setup that remembers your rifles and optics. Plus much faster Results, Pocket Card, Seating Depth and Setup screens, with a live loading bar instead of a wait."
     },
     "windows": {
-      "app_version": "0.16.51",
+      "app_version": "0.16.52",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.16.51/Loadscope-Setup.exe",
-      "app_release_notes": "v0.16.51 - Track total rounds per barrel right on Rifle & Setup (each import adds that session's rounds automatically). Import a whole range-day folder in one drop. Setup now remembers your rifles, optics and more - right-click any saved entry to remove it. Plus polish across the Scoring tab, help, and onboarding."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.16.52/Loadscope-Setup.exe",
+      "app_release_notes": "v0.16.52 - Track rounds per barrel, import a whole range-day folder at once, and a Setup that remembers your rifles and optics. Plus much faster Results, Pocket Card, Seating Depth and Setup screens, with a live loading bar instead of a wait."
     }
   }
 }
