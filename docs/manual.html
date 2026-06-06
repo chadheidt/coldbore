@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loadscope — User Manual</title>
+<meta name="description" content="The full Loadscope user manual: a page-by-page, button-by-button reference for the precision rifle load-development app.">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<style>
+:root{
+  --orange:#d97706; --orange-dark:#b45309;
+  --bg:#0e0f12; --panel:#16181d; --card:#1e2128; --border:#2c2f37;
+  --text:#f2f3f5; --dim:#aab0bb; --muted:#7c828d;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;font-size:16px}
+a{color:var(--orange);text-decoration:none}
+a:hover{text-decoration:underline}
+mark{background:var(--orange);color:#000;border-radius:2px;padding:0 1px}
+
+header.top{position:sticky;top:0;z-index:20;background:rgba(14,15,18,.96);
+  backdrop-filter:blur(6px);border-bottom:1px solid var(--border);padding:14px 20px}
+.top-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-weight:800;font-size:1.15rem;letter-spacing:.3px}
+.brand .accent{color:var(--orange)}
+.brand small{display:block;font-weight:600;font-size:.7rem;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
+.search-wrap{flex:1;min-width:240px;position:relative}
+#search{width:100%;padding:11px 38px 11px 14px;font-size:1rem;border-radius:10px;
+  border:1px solid var(--border);background:var(--card);color:var(--text)}
+#search:focus{outline:none;border-color:var(--orange)}
+.search-wrap .hint{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.85rem}
+#clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;
+  color:var(--muted);font-size:1.2rem;cursor:pointer;display:none}
+
+.layout{max-width:1100px;margin:0 auto;display:flex;gap:30px;padding:24px 20px 80px}
+nav.toc{width:230px;flex-shrink:0;position:sticky;top:86px;align-self:flex-start;max-height:calc(100vh - 110px);overflow:auto}
+nav.toc h4{font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:14px 0 6px}
+nav.toc a{display:block;padding:5px 10px;border-radius:7px;color:var(--dim);font-size:.92rem}
+nav.toc a:hover{background:var(--panel);text-decoration:none;color:var(--text)}
+main{flex:1;min-width:0}
+#noresults{display:none;padding:24px;color:var(--dim);background:var(--panel);border-radius:10px}
+
+section.doc{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+  padding:22px 24px;margin-bottom:18px;scroll-margin-top:90px}
+section.doc h2{font-size:1.45rem;color:var(--text);margin-bottom:4px}
+section.doc .lede{color:var(--dim);margin-bottom:14px}
+section.doc h3{font-size:1.02rem;color:var(--orange);margin:18px 0 6px}
+section.doc p{margin:8px 0;color:#dfe2e7}
+section.doc ul{margin:8px 0 8px 4px;list-style:none}
+section.doc li{padding:4px 0 4px 0;color:#dfe2e7}
+section.doc li b{color:var(--text)}
+.btn{display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:6px;
+  padding:1px 7px;font-size:.86rem;font-weight:600;color:var(--text);white-space:nowrap}
+.note{background:#1a1d23;border-left:3px solid var(--orange);padding:10px 14px;border-radius:6px;margin:12px 0;color:var(--dim);font-size:.95rem}
+footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);font-size:.85rem}
+@media(max-width:760px){nav.toc{display:none}.layout{padding:18px 14px 60px}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand">LOADSCOPE<span class="accent">™</span><small>User Manual</small></div>
+    <div class="search-wrap">
+      <input id="search" type="search" placeholder="Search the manual — type anything (e.g. &quot;import&quot;, &quot;score&quot;, &quot;DOPE&quot;)" autocomplete="off" aria-label="Search the manual">
+      <button id="clear" aria-label="Clear search">&times;</button>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" id="toc"><h4>Contents</h4></nav>
+  <main id="manual">
+
+    <section class="doc" id="overview">
+      <h2>Welcome to Loadscope</h2>
+      <p class="lede">What the app does, in one breath.</p>
+      <p>Loadscope turns your range data into a finished load. You shoot a powder ladder and (optionally) a seating-depth ladder, drop in your chronograph and target files, and Loadscope <b>scores every charge and seating depth</b>, picks the winner, and builds you a printable load card and a predicted DOPE chart.</p>
+      <h3>The workflow at a glance</h3>
+      <ul>
+        <li><b>1. Set up your rifle</b> once (the <b>Rifle &amp; Setup</b> page).</li>
+        <li><b>2. Shoot</b> your ladder over a chronograph and at a target.</li>
+        <li><b>3. Import</b> the CSV files (the <b>Import Data</b> page).</li>
+        <li><b>4. Read the answer</b> on the <b>Results</b> page — your best charge and seating depth, scored.</li>
+        <li><b>5. Predict your dial</b> on <b>Range &amp; DOPE</b>, and print a <b>Pocket Card</b> for the field.</li>
+      </ul>
+      <div class="note">Loadscope works without Excel. The workbook is computed in-app; cards print through your browser.</div>
+    </section>
+
+    <section class="doc" id="sidebar">
+      <h2>The sidebar (left column)</h2>
+      <p class="lede">Your whole workflow, top to bottom.</p>
+      <p>The buttons on the left move you through the app in order:</p>
+      <ul>
+        <li><span class="btn">Rifle &amp; Setup</span> — your rifle, cartridge, components, and barrel.</li>
+        <li><span class="btn">Import Data</span> — drop in your chronograph and target CSVs and run the import.</li>
+        <li><span class="btn">Results</span> — the scored ladder and your winning load.</li>
+        <li><span class="btn">Range &amp; DOPE</span> — the built-in ballistic calculator (predicted come-ups).</li>
+        <li><span class="btn">Pocket Card</span> — a printable range card.</li>
+        <li><span class="btn">Libraries</span> — your saved Loads, the Bullets reference, and Barrels round counts.</li>
+        <li><span class="btn">❓ Quick Guide</span> — pinned at the bottom; opens the illustrated quick-start.</li>
+        <li><span class="btn">New Load</span> — start a fresh load cycle (also at the bottom).</li>
+      </ul>
+      <p>Each button has a keyboard shortcut too: <b>Cmd+1</b> Rifle &amp; Setup, <b>Cmd+2</b> Import, <b>Cmd+3</b> Results, <b>Cmd+4</b> Range &amp; DOPE, <b>Cmd+5</b> Pocket Card, <b>Cmd+6</b> Libraries.</p>
+    </section>
+
+    <section class="doc" id="setup">
+      <h2>Rifle &amp; Setup</h2>
+      <p class="lede">Tell Loadscope about your rifle and load — once.</p>
+      <p>This page captures the constants for this load: the cartridge, the bullet (with its ballistic coefficient), the powder and your test charges, primer, brass, the rifle and barrel, and your optic. Loadscope remembers what you typed before and offers it as a dropdown next time.</p>
+      <h3>Key fields</h3>
+      <ul>
+        <li><b>Cartridge / Rifle / Barrel / Optic</b> — identify the setup. The barrel name is what your round count is tracked against.</li>
+        <li><b>Bullet</b> — pick from the library (its BC fills in) or type a custom bullet and BC.</li>
+        <li><b>Powder + test charges</b> — the powder and the charge weights you loaded for the ladder.</li>
+        <li><b>Primer / Brass</b> — for your records and the load card.</li>
+        <li><b>Round count</b> — set or add to this barrel's count. It is shared with the Barrels library and the phone companion.</li>
+      </ul>
+      <div class="note">You only set this up once per load. After that you just import range data.</div>
+    </section>
+
+    <section class="doc" id="import">
+      <h2>Import Data</h2>
+      <p class="lede">Drop your files, click Run. The only prep is labeling each session before you export — that is how Loadscope knows which load is which.</p>
+
+      <h3>Label your loads before you export (the important part)</h3>
+      <p>Loadscope matches each chronograph string and each target group to a row in your workbook by its <b>label</b>. Label every range session in this format:</p>
+      <div class="note" style="font-size:1.05rem"><b>&lt;tag&gt;&nbsp;&nbsp;&lt;number&gt;&nbsp;&nbsp;&lt;powder&gt;</b></div>
+      <ul>
+        <li><span class="btn">P1 45.5 H4350</span> &mdash; Powder ladder, load 1, 45.5 grains of H4350.</li>
+        <li><span class="btn">S7 2.205 H4350</span> &mdash; Seating test 7, CBTO 2.205 inches, H4350.</li>
+      </ul>
+      <p>Reading the label, left to right:</p>
+      <ul>
+        <li><b>tag</b> &mdash; which workbook row this load is. <b>P1&ndash;P10</b> are the Powder Charge Log rows; <b>S1&ndash;S10</b> are the Seating Depth Log rows.</li>
+        <li><b>number</b> &mdash; for a <b>P</b> tag it is the <b>powder charge in grains</b>; for an <b>S</b> tag it is the <b>CBTO in inches</b> (cartridge base to ogive, the seating-depth measurement you take with a comparator at the bench).</li>
+        <li><b>powder</b> &mdash; optional. If you include it, Loadscope auto-fills the powder name for that load.</li>
+      </ul>
+
+      <h3>Where to put the label</h3>
+      <ul>
+        <li><b>In the app</b> &mdash; if your chronograph or target app lets you name the session or group (for example Garmin ShotView), set the label there before you export.</li>
+        <li><b>On the file</b> &mdash; or just rename the exported CSV to the label, e.g. <span class="btn">P1 45.5 H4350.csv</span>. Loadscope reads the filename too, and the filename is the most reliable path &mdash; some apps' in-app label fields export inconsistently.</li>
+      </ul>
+      <div class="note">If a file name does not match the P#/S# pattern, Loadscope shows a "check your file names" warning instead of importing it into the wrong row.</div>
+
+      <h3>Dropping the files</h3>
+      <p>Two ways:</p>
+      <ul>
+        <li><b>Drag onto the Loadscope icon</b> (in the Dock/Applications, or the taskbar on Windows) &mdash; it auto-imports.</li>
+        <li><b>Drag into the Loadscope window</b>, then click <span class="btn">Run Import</span> when you are ready.</li>
+      </ul>
+      <p>Drop individual CSVs, or point Loadscope at a <b>whole range-day folder</b> and it pulls every CSV inside (subfolders included). Prefer not to drag? Use <span class="btn">Browse files…</span> or <span class="btn">Browse folder…</span> instead.</p>
+
+      <h3>Supported chronograph &amp; target apps</h3>
+      <p>Garmin Xero, LabRadar, BallisticX, OnTarget, Silver Mountain / ShotMarker &mdash; plus MagnetoSpeed and Athlon Rangecraft (these last two are experimental, so verify the numbers). The format of every file is detected automatically; you never have to sort them.</p>
+
+      <h3>Where your files go after import</h3>
+      <p>On a successful import, Loadscope moves the consumed CSVs into a dated <b>Imported CSVs</b> folder (outside your import folders) so your import folders stay clean and the same files never re-import by accident.</p>
+    </section>
+
+    <section class="doc" id="results">
+      <h2>Results</h2>
+      <p class="lede">Your best load, scored — not eyeballed.</p>
+      <p>Loadscope scores every charge and every seating depth across four measurements at once, then highlights the winner. The hero card at the top shows your <b>best load</b>: the winning powder charge at the winning seating depth, plus the numbers it actually produced.</p>
+      <h3>What you see</h3>
+      <ul>
+        <li><b>Best-load hero</b> — the suggested charge and CBTO, with measured velocity, SD, group and mean radius.</li>
+        <li><b>Charts</b> — velocity vs. charge with shot-to-shot spread bars; the flat-spot pops where the bars tighten.</li>
+        <li><b>Powder Charge / Seating Depth sub-tabs</b> — each charge or depth scored and ranked, winner tagged.</li>
+      </ul>
+      <h3>Actions</h3>
+      <ul>
+        <li><span class="btn">Save this load to Library</span> — keeps the winning load in your Loads library.</li>
+        <li><span class="btn">Generate Load Card</span> — a one-page printable recipe in your browser.</li>
+        <li><span class="btn">Save as PDF…</span> — save that card as a PDF.</li>
+        <li><b>Weight tuning</b> — adjust how much each metric counts; Loadscope re-scores instantly from your existing data, no re-import.</li>
+      </ul>
+    </section>
+
+    <section class="doc" id="dope">
+      <h2>Range &amp; DOPE</h2>
+      <p class="lede">A built-in ballistic calculator, validated against JBM.</p>
+      <p>Enter your muzzle velocity, ballistic coefficient, zero range, sight height and conditions, and Loadscope predicts your elevation and wind from 100 to 1000 yards. The solver is an industry-standard point-mass model with G1/G7 drag curves; its trajectories match JBM Ballistics to within 0.3 MOA across standard cases.</p>
+      <h3>Inputs</h3>
+      <ul>
+        <li><b>Muzzle velocity</b> — measured from your chronograph data, or enter it.</li>
+        <li><b>Bullet / BC / drag model</b> — pulled from your setup.</li>
+        <li><b>Zero range and sight height</b> — your rifle's setup.</li>
+        <li><b>Conditions</b> — temperature, pressure, humidity, and altitude (or density altitude).</li>
+      </ul>
+    </section>
+
+    <section class="doc" id="pocketcard">
+      <h2>Pocket Card</h2>
+      <p class="lede">A range card that fits your pocket.</p>
+      <p>The Pocket Card lays out your predicted elevation, wind, drop, velocity and energy from 100 to 1000 yards on a clean card. <span class="btn">Print</span> it for the bench binder, or <span class="btn">Save as PDF</span>. It prints true to size — two 4×6 cards per page with cut guides.</p>
+    </section>
+
+    <section class="doc" id="libraries">
+      <h2>Libraries</h2>
+      <p class="lede">Loads, Bullets, and Barrels — in one place.</p>
+      <p>The Libraries page has three tabs:</p>
+      <h3>Loads</h3>
+      <p>Every load you saved as a winner. Search by name, rifle, or powder. Right-click a row to open, rename, or delete it, and you can print the whole library as a reference.</p>
+      <h3>Bullets</h3>
+      <p>The reference library of bullets Loadscope can predict DOPE for, with each one's published BC and source. Search by maker, weight, or name. If yours is not listed, you can always type a custom BC in Rifle &amp; Setup.</p>
+      <h3>Barrels</h3>
+      <p>Every barrel with a saved round count, with an editable count. Editing it here updates the same number you see in Rifle &amp; Setup and on the phone companion — one count, everywhere.</p>
+    </section>
+
+    <section class="doc" id="companion">
+      <h2>Loadscope Ballistics (the phone companion)</h2>
+      <p class="lede">Your loads and dial in the field — and how to sync them.</p>
+      <p>Loadscope Ballistics is the iPhone and iPad companion. It carries your loads, gives you a live DOPE dial that re-solves as conditions change, lets you true your dope from a real shot, and tracks barrel rounds.</p>
+      <h3>Syncing with your phone</h3>
+      <p>Move loads and round counts between the desktop and the phone over your own Wi-Fi — no cloud, no account.</p>
+      <h3>1. Turn on Phone Sync (on the computer)</h3>
+      <p>On the desktop, go to <b>Support &rarr; Phone Sync</b> and switch it on. Leave it on while you sync. Your computer and phone must be on the <b>same Wi-Fi network</b>.</p>
+      <h3>2. Open Sync (on the phone)</h3>
+      <p>In Loadscope Ballistics, tap <span class="btn">Sync</span> at the top-left of the home screen. The app finds your computer by name and connects using your Loadscope license key (enter it once on the phone if it asks).</p>
+      <h3>3. Pull a load to your phone</h3>
+      <ul>
+        <li><span class="btn">Get a load (pick one)</span> — shows the loads on your computer; tap one to bring it to the phone. One at a time, so you carry only what you want — not everything.</li>
+      </ul>
+      <h3>4. Send your range data back to the computer</h3>
+      <ul>
+        <li><span class="btn">Send round counts &amp; truing</span> — pushes the rounds you shot and any trued velocity/BC back to the desktop. It <b>merges</b>: round counts add up and trued values update the matching load. It never overwrites or removes your loads.</li>
+      </ul>
+      <div class="note">It is all local. The data goes phone-to-computer directly over Wi-Fi; nothing is uploaded to a cloud or tied to an account.</div>
+      <h3>If the phone can't find the computer</h3>
+      <ul>
+        <li>Confirm <b>Phone Sync</b> is ON on the computer (<b>Support &rarr; Phone Sync</b>).</li>
+        <li>Confirm both devices are on the <b>same Wi-Fi</b>.</li>
+        <li>The phone needs your <b>Loadscope license key</b> entered once — it uses it to connect.</li>
+      </ul>
+    </section>
+
+    <section class="doc" id="newload">
+      <h2>New Load</h2>
+      <p class="lede">Start fresh for the next rifle or workup.</p>
+      <p>The <span class="btn">New Load</span> button (bottom of the sidebar) begins a new load cycle. Your finished workbook is moved into the <b>Completed Loads</b> folder so it is saved, and a clean workbook is ready for the next setup. If you have an unsaved winner, Loadscope warns you first.</p>
+    </section>
+
+    <section class="doc" id="menus">
+      <h2>The menus (top bar)</h2>
+      <p class="lede">Everything else lives up here.</p>
+      <h3>Settings</h3>
+      <p>App preferences &mdash; including whether Loadscope checks for updates when it launches.</p>
+      <h3>Workbook &amp; Folders</h3>
+      <p>Open your workbook in Excel (optional — the app does not need it), and manage your project folder and import folders.</p>
+      <h3>Support</h3>
+      <ul>
+        <li><b>Quick Guide (PDF)</b> — the illustrated quick-start.</li>
+        <li><b>User Manual</b> — this document.</li>
+        <li><b>Frequently Asked Questions</b> — common questions answered.</li>
+        <li><b>License Key</b> — view or enter your license.</li>
+        <li><b>Phone Sync</b> — turn on syncing with the Loadscope Ballistics phone app over Wi-Fi.</li>
+        <li><b>What's New</b> — what changed in recent versions.</li>
+        <li><b>Contact Support</b> — email us at support@loadscope.app.</li>
+      </ul>
+    </section>
+
+    <section class="doc" id="updates">
+      <h2>Updates &amp; What's New</h2>
+      <p class="lede">Loadscope keeps itself current.</p>
+      <p>When a new version is available, Loadscope shows a banner; one click downloads and installs it, then relaunches. After it updates, a <b>What's New</b> window shows what changed. You can re-open it anytime from <b>Support → What's New</b>.</p>
+    </section>
+
+    <section class="doc" id="scoring">
+      <h2>How scoring works</h2>
+      <p class="lede">Why Loadscope picks the load it does.</p>
+      <p>Instead of eyeballing one chart, Loadscope scores every charge and seating depth across <b>four measurements at once</b> and combines them into a single score:</p>
+      <ul>
+        <li><b>Velocity flat-spot</b> — where adding powder barely changes velocity (a stable node).</li>
+        <li><b>Velocity SD</b> — shot-to-shot consistency.</li>
+        <li><b>Mean radius</b> — how tight the group is, measured fairly.</li>
+        <li><b>Vertical SD</b> — vertical dispersion, which drives elevation error at distance.</li>
+      </ul>
+      <p>The highest combined score wins. The defaults work for most people, but if you value one thing over another you can change the balance yourself &mdash; see below.</p>
+    </section>
+
+    <section class="doc" id="weighting">
+      <h2>Custom weighting (changing how loads are scored)</h2>
+      <p class="lede">Loadscope's defaults suit most shooters. If you weight things differently, you can &mdash; and one click puts the defaults back.</p>
+      <p>The score combines four measurements: velocity flat-spot, velocity SD, mean radius (group), and vertical SD. The default balance for the <b>powder ladder</b> is <b>30% velocity flat-spot, 20% SD, 20% mean radius, 30% vertical</b>. The <b>seating-depth</b> test has its own sensible defaults. You never have to touch this &mdash; but you can.</p>
+      <h3>To change the weights</h3>
+      <ul>
+        <li>Go to the <b>Results</b> page. Each test (powder ladder and seating depth) has its own weight card.</li>
+        <li>Type a new percentage into each metric's <b>number box</b> &mdash; make velocity matter more, group size less, whatever fits how you shoot. The running total is shown and is balanced to 100% for you.</li>
+        <li>Click <span class="btn">Re-score with these weights</span>. Loadscope re-ranks every load instantly <b>from your existing data &mdash; no re-import</b>, and may crown a new winner.</li>
+      </ul>
+      <h3>To get back to the defaults</h3>
+      <ul>
+        <li>Click <span class="btn">Reset to defaults</span> on that test's weight card. It restores Loadscope's standard balance and re-scores.</li>
+      </ul>
+      <div class="note">Each test is independent &mdash; you can tune the powder ladder and leave seating depth on its defaults, or the other way around.</div>
+    </section>
+
+    <section class="doc" id="workbook">
+      <h2>The workbook</h2>
+      <p class="lede">Where your numbers live.</p>
+      <p>Behind the app is a standard Excel workbook with a sheet for each part of the workup — the Powder Charge Log, the Seating Depth Log, the Ballistics sheet, and your Load Library. You never have to open it; the app reads and writes it for you. If you want to, you can open it in Excel, Numbers, or any spreadsheet app.</p>
+    </section>
+
+    <section class="doc" id="trouble">
+      <h2>Troubleshooting</h2>
+      <p class="lede">If something is not working.</p>
+      <ul>
+        <li><b>An import did nothing</b> — check the file names match a charge or seating depth (the app shows a naming warning).</li>
+        <li><b>Results look empty</b> — you need at least the minimum data; make sure both a chronograph and a target file imported.</li>
+        <li><b>The phone will not find the computer</b> — confirm <b>Phone Sync</b> is on and both devices are on the same Wi-Fi.</li>
+        <li><b>Still stuck</b> — email <a href="mailto:support@loadscope.app">support@loadscope.app</a> and we will help.</li>
+      </ul>
+    </section>
+
+    <div id="noresults">No matches. Try a different word, or clear the search to see the whole manual.</div>
+  </main>
+</div>
+
+<footer>
+  Loadscope™ User Manual &middot; <a href="index.html">loadscope.app</a> &middot; Questions? <a href="mailto:support@loadscope.app">support@loadscope.app</a>
+</footer>
+
+<script>
+(function(){
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.doc'));
+  var toc = document.getElementById('toc');
+  var search = document.getElementById('search');
+  var clearBtn = document.getElementById('clear');
+  var noresults = document.getElementById('noresults');
+
+  // Build the table of contents from the sections.
+  sections.forEach(function(s){
+    var h = s.querySelector('h2');
+    if(!h) return;
+    var a = document.createElement('a');
+    a.href = '#' + s.id;
+    a.textContent = h.textContent;
+    toc.appendChild(a);
+  });
+
+  // Highlight helper: wrap matches inside text nodes only (never breaks tags).
+  function clearMarks(el){
+    el.querySelectorAll('mark').forEach(function(m){
+      var t = document.createTextNode(m.textContent);
+      m.parentNode.replaceChild(t, m);
+    });
+    el.normalize();
+  }
+  function highlight(el, q){
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    var nodes = [], n;
+    while(n = walker.nextNode()){ nodes.push(n); }
+    var ql = q.toLowerCase();
+    nodes.forEach(function(node){
+      var text = node.nodeValue, lower = text.toLowerCase(), idx = lower.indexOf(ql);
+      if(idx === -1) return;
+      var frag = document.createDocumentFragment(), pos = 0;
+      while(idx !== -1){
+        if(idx > pos) frag.appendChild(document.createTextNode(text.slice(pos, idx)));
+        var mark = document.createElement('mark');
+        mark.textContent = text.slice(idx, idx + q.length);
+        frag.appendChild(mark);
+        pos = idx + q.length;
+        idx = lower.indexOf(ql, pos);
+      }
+      if(pos < text.length) frag.appendChild(document.createTextNode(text.slice(pos)));
+      node.parentNode.replaceChild(frag, node);
+    });
+  }
+
+  function run(){
+    var q = search.value.trim();
+    clearBtn.style.display = q ? 'block' : 'none';
+    var anyShown = false;
+    sections.forEach(function(s){
+      clearMarks(s);
+      if(!q){ s.style.display = ''; anyShown = true; return; }
+      var match = s.textContent.toLowerCase().indexOf(q.toLowerCase()) !== -1;
+      s.style.display = match ? '' : 'none';
+      if(match){ anyShown = true; highlight(s, q); }
+    });
+    noresults.style.display = (q && !anyShown) ? 'block' : 'none';
+  }
+
+  search.addEventListener('input', run);
+  clearBtn.addEventListener('click', function(){ search.value=''; run(); search.focus(); });
+})();
+</script>
+</body>
+</html>
