@@ -834,6 +834,58 @@ header.hero .line2 {
 </section>
 
 
+<style>
+  #companion .comp-badge{display:inline-block;background:rgba(217,119,6,.12);color:var(--orange);
+    border:1px solid rgba(217,119,6,.4);border-radius:20px;padding:4px 14px;font-size:12px;
+    font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin-bottom:16px;}
+  #companion .comp-head{text-align:center;max-width:740px;margin:0 auto;}
+  #companion .comp-head .section-sub{margin-left:auto;margin-right:auto;}
+  #companion .comp-phones{display:flex;justify-content:center;align-items:flex-end;gap:26px;
+    margin:34px 0 30px;flex-wrap:wrap;}
+  #companion .comp-phones img{width:228px;height:auto;border-radius:30px;border:1px solid var(--border);
+    box-shadow:0 18px 50px rgba(0,0,0,.5);background:#000;}
+  #companion .comp-phones img.hero{width:262px;
+    box-shadow:0 22px 60px rgba(217,119,6,.20),0 18px 50px rgba(0,0,0,.55);}
+  #companion .comp-feats{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;
+    max-width:980px;margin:0 auto;}
+  #companion .comp-feats > div{display:flex;flex-direction:column;gap:3px;}
+  #companion .comp-feats strong{color:var(--text);font-size:14px;}
+  #companion .comp-feats span{color:var(--text-dim);font-size:12.5px;line-height:1.42;}
+  #companion .comp-cta{text-align:center;margin-top:30px;}
+  #companion .comp-soon{display:inline-block;background:var(--bg-light);border:1px solid var(--border);
+    color:var(--text);border-radius:9px;padding:10px 20px;font-size:14px;font-weight:600;}
+  #companion .comp-soon small{color:var(--text-muted);font-weight:400;}
+  @media(max-width:760px){
+    #companion .comp-feats{grid-template-columns:1fr 1fr;}
+    #companion .comp-phones img,#companion .comp-phones img.hero{width:172px;}
+  }
+</style>
+<section id="companion">
+  <div class="container">
+    <div class="comp-head">
+      <div class="comp-badge">New &middot; iPhone &amp; iPad</div>
+      <h2>Your best load &mdash; <span class="accent">in your pocket</span>.</h2>
+      <p class="section-sub">Loadscope finds your best load on the desktop. <strong>Loadscope Ballistics</strong> carries that exact load to the range and keeps it honest &mdash; a DOPE dial that re-solves live as conditions change, real crosswind math, your recipe at the bench, and round counts that sync back to the desktop. <strong>Free to download.</strong> Desktop owners unlock everything; anyone else unlocks phone-side load entry for a one-time <strong>$9.99</strong>.</p>
+    </div>
+    <div class="comp-phones">
+      <img src="assets/companion/phone-home.png" alt="Loadscope Ballistics home screen on iPhone: a branded hero card reading Loadscope Ballistics, Field ballistics and DOPE, by the makers of Loadscope, with tiles for DOPE cards and Barrels and a large New Load button.">
+      <img src="assets/companion/phone-dope.png" class="hero" alt="Loadscope Ballistics DOPE card on iPhone: a 6.5 Creedmoor load with current conditions (10 mph at 3 o'clock, 59 degrees, 29.92 inHg, density altitude 17 ft) and an elevation and wind dial table from 100 to 1000 yards in mils.">
+      <img src="assets/companion/phone-recipe.png" alt="Loadscope Ballistics recipe card on iPhone: the read-only components of a saved load for reference at the bench.">
+    </div>
+    <div class="comp-feats">
+      <div><strong>Live DOPE re-solve</strong><span>Density altitude, temp, pressure shift &mdash; re-solve your dial on the spot, for your load.</span></div>
+      <div><strong>Real wind math</strong><span>Speed and direction on a wind rose; it computes the true crosswind hold &mdash; no eyeballing.</span></div>
+      <div><strong>Recipe cards</strong><span>Your bullet, powder, charge, primer, brass and CBTO, bench-ready.</span></div>
+      <div><strong>Round count syncs back</strong><span>Tap the rounds you ran; the count flows back to that barrel on the desktop.</span></div>
+      <div><strong>Offline, no account</strong><span>Loads sync by file or QR. No cloud, no signal needed at the range.</span></div>
+    </div>
+    <div class="comp-cta">
+      <span class="comp-soon">Coming soon to the App Store &nbsp;<small>&mdash; iPhone &amp; iPad</small></span>
+    </div>
+  </div>
+</section>
+
+
 <section id="features">
   <div class="container">
     <h2>Built by precision <span class="accent">shooters</span>, for precision shooters.</h2>
@@ -992,8 +1044,8 @@ header.hero .line2 {
         <p><strong>Windows:</strong> Windows 10 or 11, 64-bit. No GPU required. Loadscope is a small app — runs fine on modest hardware.</p>
       </details>
       <details class="faq-item">
-        <summary>What about iOS?</summary>
-        <p>An iOS companion app is planned after the Windows release lands publicly. It will be a lean field tool — DOPE table and pocket card synced from the desktop — not a full load-development environment. The desktop app stays Mac &amp; Windows for the actual load-dev work.</p>
+        <summary>Is there an iPhone app?</summary>
+        <p><strong>Loadscope Ballistics</strong> is coming to the App Store for iPhone and iPad &mdash; a field companion, not a phone port of load development. It carries your confirmed load to the range: a DOPE dial that re-solves live as conditions change, real crosswind math, your recipe at the bench, and round counts that sync back to the desktop. It's <strong>free to download</strong> &mdash; desktop owners unlock everything, and anyone else can unlock phone-side load entry for a one-time <strong>$9.99</strong>. The desktop stays Mac &amp; Windows for the actual load-dev work.</p>
       </details>
       </div>
     </details>
