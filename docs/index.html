@@ -2,6 +2,25 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<!-- Meta (Facebook) Pixel — STAGED, INACTIVE.
+     To activate: create a pixel at business.facebook.com -> Events Manager,
+     copy the 15-16 digit Pixel ID, replace YOUR_PIXEL_ID below, then publish.
+     With the placeholder it sends ZERO data (the script never loads), so there
+     is no tracking until you switch it on. Disclosure is in privacy.html. -->
+<script>
+  window.LOADSCOPE_META_PIXEL_ID = "2447431782439486"; /* Loadscope LLC Meta Pixel (live 2026-06-06) */
+  (function(){
+    var id = window.LOADSCOPE_META_PIXEL_ID;
+    if(!id || id === "YOUR_PIXEL_ID") return; /* inactive until a real ID is set */
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', id); fbq('track', 'PageView');
+  })();
+</script>
+<!-- End Meta Pixel -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <title>Loadscope™ — precision rifle load development for Mac &amp; Windows</title>
