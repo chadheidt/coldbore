@@ -760,7 +760,7 @@ header.hero .line2 {
       <a href="#faq">FAQ</a>
       <a href="learn/">Learn</a>
       <a href="#beta">Beta</a>
-      <a href="#" class="btn" onclick="openDownloadModal(event)">Get Loadscope</a>
+      <a href="#" class="btn" onclick="openDownloadModal(event)">Request Beta Access</a>
     </div>
   </div>
 </nav>
@@ -772,13 +772,14 @@ header.hero .line2 {
     </div>
     <div class="hero-beta-badge">Free beta</div>
     <h1>Precision rifle load development<br>for <span class="accent">Mac &amp; Windows</span>.</h1>
+    <div class="hero-companion-note" style="font-size:14px;color:var(--text-muted);margin-top:8px;">Plus a free <strong style="color:var(--text-dim);">iPhone &amp; iPad</strong> companion &mdash; coming soon.</div>
     <div class="line2">Loadscope finds your best <span class="em">powder charge</span> and <span class="em">seating depth</span>.</div>
-    <p class="hero-scoring"><strong>Loadscope scores every charge and seating depth on four metrics at once</strong> — velocity flat-spot, velocity SD, mean radius, vertical SD — blended into one winner.</p>
+    <p class="hero-scoring"><strong>Loadscope scores every charge and seating depth</strong> and blends them into one clear winner.</p>
     <div class="cta-row">
       <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get Loadscope™</a>
       <a href="#" class="btn btn-large btn-outline" onclick="openDemo(event)">View demo</a>
     </div>
-    <p class="hero-data">Drop in the CSVs your chronograph and target app already export — label each once, and <strong>Loadscope does the rest</strong>.</p>
+    <p class="hero-data">Import the CSVs your chronograph and target app already export — label each once, and <strong>Loadscope does the rest</strong>.</p>
     <p class="beta-note">Free during beta. <strong>Get Loadscope</strong> to request your access code for Mac or Windows.</p>
   </div>
 </header>
@@ -863,8 +864,8 @@ header.hero .line2 {
     margin:34px 0 30px;flex-wrap:wrap;}
   #companion .comp-phones img{width:228px;height:auto;border-radius:30px;border:1px solid var(--border);
     box-shadow:0 18px 50px rgba(0,0,0,.5);background:#000;}
-  #companion .comp-phones img.hero{width:262px;
-    box-shadow:0 22px 60px rgba(217,119,6,.20),0 18px 50px rgba(0,0,0,.55);}
+  #companion .comp-phones img.hero{width:228px;
+    box-shadow:0 18px 50px rgba(0,0,0,.5);}
   #companion .comp-feats{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;
     max-width:980px;margin:0 auto;}
   #companion .comp-feats > div{display:flex;flex-direction:column;gap:3px;}
@@ -883,8 +884,8 @@ header.hero .line2 {
   <div class="container">
     <div class="comp-head">
       <div class="comp-badge">New &middot; iPhone &amp; iPad</div>
-      <h2>Your best load &mdash; <span class="accent">in your pocket</span>.</h2>
-      <p class="section-sub">Loadscope finds your best load on the desktop. <strong>Loadscope Ballistics</strong> carries that exact load to the range and keeps it honest &mdash; a DOPE dial that re-solves live as conditions change, real crosswind math, your recipe at the bench, and round counts that sync back to the desktop. <strong>Free to download.</strong> Desktop owners unlock everything; anyone else unlocks phone-side load entry for a one-time <strong>$9.99</strong>.</p>
+      <h2>Your best load &mdash; <span class="accent">in the field</span>.</h2>
+      <p class="section-sub"><strong>Loadscope Ballistics</strong> carries your best load from the desktop to the field &mdash; a DOPE dial that adjusts as wind, temperature and pressure change, plus true crosswind holds. Confirm your dope at a known distance and it trues your real velocity (or BC at distance). Track your round count and it syncs back to the desktop. <strong>Free to download.</strong> Desktop owners unlock everything; anyone else unlocks phone-side load entry for a one-time <strong>$9.99</strong>.</p>
     </div>
     <div class="comp-phones">
       <img src="assets/companion/phone-home.png" alt="Loadscope Ballistics home screen on iPhone: a branded hero card reading Loadscope Ballistics, Field ballistics and DOPE, by the makers of Loadscope, with tiles for DOPE cards and Barrels and a large New Load button.">
@@ -892,7 +893,7 @@ header.hero .line2 {
       <img src="assets/companion/phone-recipe.png" alt="Loadscope Ballistics recipe card on iPhone: the read-only components of a saved load for reference at the bench.">
     </div>
     <div class="comp-feats">
-      <div><strong>Live DOPE re-solve</strong><span>Density altitude, temp, pressure shift &mdash; re-solve your dial on the spot, for your load.</span></div>
+      <div><strong>Live DOPE re-solve</strong><span>Pull current local conditions for your exact position (Apple Weather) &mdash; density altitude, temp, pressure and wind re-solve your dial on the spot, for your load.</span></div>
       <div><strong>Real wind math</strong><span>Speed and direction on a wind rose; it computes the true crosswind hold &mdash; no eyeballing.</span></div>
       <div><strong>Recipe cards</strong><span>Your bullet, powder, charge, primer, brass and CBTO, bench-ready.</span></div>
       <div><strong>Round count syncs back</strong><span>Tap the rounds you ran; the count flows back to that barrel on the desktop.</span></div>
@@ -916,19 +917,9 @@ header.hero .line2 {
         <p>Loadscope tracks total rounds through each barrel. Set a starting count once; every imported session adds to it automatically, and a <strong>+ Add</strong> button logs the practice or match rounds you didn't import.</p>
       </div>
       <div class="feature">
-        <div class="icon">📁</div>
-        <h3>Drop a whole folder</h3>
-        <p>Point Loadscope at a range-day folder and it pulls every CSV inside — chronograph and target, subfolders included — in one shot. No dragging files one at a time.</p>
-      </div>
-      <div class="feature">
-        <div class="icon">📊</div>
-        <h3>Charts that show the flat-spot</h3>
-        <p>The Scoring tab graphs every charge with <strong>&plusmn;1&nbsp;SD whiskers</strong>, so the velocity flat-spot jumps right off the page. Hit <strong>Save chart image</strong> for a clean PNG.</p>
-      </div>
-      <div class="feature">
         <div class="icon">📚</div>
         <h3>Load Library</h3>
-        <p>Every winning load stays saved in the app — pull any of them back up later, print the Load Card for the bench binder, save as PDF, or export the whole library to spreadsheet.</p>
+        <p>Every winning load stays saved in the app — pull any of them back up later, print the Load Card for the bench binder, save as PDF, or export the whole library to spreadsheet. <strong>Want to keep tweaking a load you&rsquo;ve already saved?</strong> Reopen it and import more range data &mdash; the scoring updates with it.</p>
       </div>
       <div class="feature">
         <div class="icon">↻</div>
@@ -1033,10 +1024,6 @@ header.hero .line2 {
         <p>Grey italic numbers are predicted by the solver from your bullet, muzzle velocity and conditions. At the range you type what you actually dialed — that row turns solid white = confirmed. Click <strong>Save DOPE</strong> and Loadscope writes both to your workbook: predicted rows stay grey italic, confirmed rows print solid. Predictions never overwrite confirmed data (only the reverse), and your printed Pocket Card carries a "verify at the range" banner until every row is confirmed.</p>
       </details>
       <details class="faq-item">
-        <summary>Does Loadscope print a recipe for the load itself?</summary>
-        <p>Yes — every winning load gets a one-page <strong>Load Card</strong>. Open it from Results (the <strong>Generate Load Card</strong> button) or right-click any saved load in Load Library. The card lists bullet, powder, charge, primer, brass, CBTO, plus the velocity, SD, group and mean radius the load actually produced. Print from the page for the binder on your bench, or use <strong>Save as PDF&hellip;</strong> on Results &mdash; drops the recipe wherever you want it on your computer.</p>
-      </details>
-      <details class="faq-item">
         <summary>Do I have to enter a ballistic coefficient?</summary>
         <p>The most popular match bullets have their BCs built in. For any other bullet, type its BC off the box or the maker's site once. It's not a source of published load data — you still cross-reference charges against current reloading manuals. The bullet database grows over time with no app update needed.</p>
       </details>
@@ -1076,9 +1063,9 @@ header.hero .line2 {
     <p><strong>Loadscope™</strong> &middot; <a href="mailto:support@loadscope.app">support@loadscope.app</a></p>
     <p>&copy; 2026 Loadscope™. All rights reserved.</p>
     <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">macOS 10.13+ (Intel &amp; Apple Silicon) &middot; Windows 10/11 (64-bit) &middot; Free during beta</p>
-    <p style="font-size:13.5px; margin-bottom:8px;"><a href="learn/">Learn</a> &middot; <a href="terms.html">Terms of Service</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="refund.html">Refund Policy</a></p>
+    <p style="font-size:13.5px; margin-bottom:8px;"><a href="learn/">Learn</a> &middot; <a href="terms.html">Terms of Service</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="refund.html">Refund Policy</a> &middot; <a href="disclaimer.html">Disclaimer</a></p>
     <div class="disclaimer">
-      <strong>Reloading safety disclaimer:</strong> Loadscope is a tool for organizing and analyzing data you collect during precision rifle load development. It is NOT a source of published load data — it does not supply start or maximum charges, cartridge overall lengths, or load recipes; obtain those only from current reloading manuals. When Loadscope highlights a "suggested" winning charge or seating depth, that is a statistical ranking of the loads you personally tested — not a safety-vetted recommendation of what is safe to load or fire. Predicted ballistic data is an estimate, not a measurement; confirm it by live fire at known distances before relying on it for any shot. Always cross-reference loads against published manuals from powder, bullet, and cartridge manufacturers, watch for pressure signs, and start below maximum and work up. The developer is not liable for any damage, injury, or loss resulting from use of this app. You assume all risk associated with handloading and shooting.
+      <strong>Reloading safety:</strong> Loadscope is not a source of published load data, and its "suggested" winners are a statistical ranking of your own tested loads — not a safety-vetted recommendation. Always cross-reference current reloading manuals, watch for pressure signs, and start below maximum and work up. You assume all risk associated with handloading and shooting. <a href="disclaimer.html">Full disclaimer &rarr;</a>
     </div>
   </div>
 </footer>
