@@ -790,11 +790,12 @@ header.hero .line2 {
     <h2>Scored <span class="accent">and</span> graphed.</h2>
     <p class="section-sub">Every load scored into one winner — and charted so the flat-spot pops. Tune the weights and Loadscope re-scores from your existing data, no re-import.</p>
     <div class="screenshot-wrap">
-      <img src="assets/demo/app-results.png?v=1" alt="Loadscope Results screen: the BEST LOAD - 42.4 gr at 2.205 CBTO for a 6.5 Creedmoor - scored across all four metrics (avg velocity, velocity SD, mean radius, vertical SD), with the best charge and best seating depth called out">
+      <img src="assets/demo/app-results.png?v=2" alt="Loadscope Results screen: the BEST LOAD - 42.4 gr at 2.205 CBTO for a 6.5 Creedmoor - scored across all four metrics (avg velocity, velocity SD, mean radius, vertical SD), with the best charge and best seating depth called out, and a Phone Sync button in the sidebar">
     </div>
     <div class="screenshot-wrap" style="margin-top:18px;">
       <img src="assets/demo/gd-whiskers.png?v=1" alt="Loadscope velocity flat-spot chart: ten powder charges plotted with plus-or-minus 1 SD whiskers, a clear flat-spot plateau where the line levels off, and the winning charge highlighted">
     </div>
+    <p style="text-align:center;color:var(--text-muted);font-size:.82rem;max-width:640px;margin:22px auto 0;">Sample data shown for demonstration only &mdash; not load data. Always work up from your published manual.</p>
   </div>
 </section>
 
@@ -878,7 +879,7 @@ header.hero .line2 {
   #companion .comp-soon small{color:var(--text-muted);font-weight:400;}
   @media(max-width:760px){
     #companion .comp-feats{grid-template-columns:1fr 1fr;}
-    #companion .comp-phones img,#companion .comp-phones img.hero{width:172px;}
+    #companion .comp-phones img,#companion .comp-phones img.hero{width:min(228px, calc(50% - 13px));}
   }
 </style>
 <section id="companion">
@@ -890,11 +891,12 @@ header.hero .line2 {
     </div>
     <div class="comp-phones">
       <img src="assets/companion/phone-home.png" alt="Loadscope Ballistics home screen on iPhone: a branded hero card reading Loadscope Ballistics, Field ballistics and DOPE, by the makers of Loadscope, with tiles for DOPE cards and Barrels and a large New Load button.">
-      <img src="assets/companion/phone-dope.png" class="hero" alt="Loadscope Ballistics DOPE card on iPhone: a 6.5 Creedmoor load with current conditions (10 mph at 3 o'clock, 59 degrees, 29.92 inHg, density altitude 17 ft) and an elevation and wind dial table from 100 to 1000 yards in mils.">
+      <img src="assets/companion/phone-dope.png" class="hero" alt="Loadscope Ballistics DOPE card on iPhone: a 6.5 Creedmoor load pulling current conditions from My location via Apple Weather (8 to 16 mph gusting at 3 o'clock, 59 degrees, 29.92 inHg, density altitude 17 ft) and an elevation and wind dial table from 100 to 1000 yards in mils, the wind column showing a low-to-high hold range for the gusts.">
       <img src="assets/companion/phone-recipe.png" alt="Loadscope Ballistics recipe card on iPhone: the read-only components of a saved load for reference at the bench.">
+      <img src="assets/companion/phone-rounds.png" alt="Loadscope Ballistics Rounds tab on iPhone: a 24-inch 1-to-8 twist barrel with a round count of 520 and a plus-minus stepper to add the rounds you just shot, which syncs back to that barrel on the desktop.">
     </div>
     <div class="comp-feats">
-      <div><strong>Live DOPE re-solve</strong><span>Pull current local conditions for your exact position (Apple Weather) &mdash; density altitude, temp, pressure and wind re-solve your dial on the spot, for your load.</span></div>
+      <div><strong>Live DOPE re-solve</strong><span>Pull current local conditions for your exact position &mdash; density altitude, temp, pressure and wind re-solve your dial on the spot, for your load. <strong>Powered by Apple&nbsp;Weather.</strong></span></div>
       <div><strong>Real wind math</strong><span>Speed and direction on a wind rose; it computes the true crosswind hold &mdash; no eyeballing.</span></div>
       <div><strong>Recipe cards</strong><span>Your bullet, powder, charge, primer, brass and CBTO, bench-ready.</span></div>
       <div><strong>Round count syncs back</strong><span>Tap the rounds you ran; the count flows back to that barrel on the desktop.</span></div>
