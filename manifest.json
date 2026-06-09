@@ -1,23 +1,23 @@
 {
- "app_version": "0.16.56",
+ "app_version": "0.16.57",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v0.16.56 - CBTO now always shows in thousandths (e.g. 2.270) everywhere, including the printed Load Card. Plus a cleaner Libraries page: bolder tabs, bigger text, and each barrel shown as its own card.",
+ "app_release_notes": "v0.16.57 - New Load Card tab shows your current winning load's full recipe and build sheet at a glance. Plus, in the Libraries page you can now open a Load Card or Pocket Card for any saved load - each Pocket Card re-solves its dope from that load's own velocity and bullet.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "0.16.56",
+   "app_version": "0.16.57",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v0.16.56 - CBTO now always shows in thousandths (e.g. 2.270) everywhere, including the printed Load Card. Plus a cleaner Libraries page: bolder tabs, bigger text, and each barrel shown as its own card."
+   "app_release_notes": "v0.16.57 - New Load Card tab shows your current winning load's full recipe and build sheet at a glance. Plus, in the Libraries page you can now open a Load Card or Pocket Card for any saved load - each Pocket Card re-solves its dope from that load's own velocity and bullet."
   },
   "windows": {
-   "app_version": "0.16.56",
+   "app_version": "0.16.57",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.16.56/Loadscope-Setup.exe",
-   "app_release_notes": "v0.16.56 - CBTO now always shows in thousandths (e.g. 2.270) everywhere, including the printed Load Card. Plus a cleaner Libraries page: bolder tabs, bigger text, and each barrel shown as its own card."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.16.57/Loadscope-Setup.exe",
+   "app_release_notes": "v0.16.57 - New Load Card tab shows your current winning load's full recipe and build sheet at a glance. Plus, in the Libraries page you can now open a Load Card or Pocket Card for any saved load - each Pocket Card re-solves its dope from that load's own velocity and bullet."
   }
  }
 }
