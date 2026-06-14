@@ -1134,8 +1134,34 @@ header.hero .line2 {
           <input type="email" id="reqEmail" class="name-email-input" placeholder="you@example.com" autocomplete="email" maxlength="200">
         </div>
       </div>
-      <label for="reqProjectInfo">What you're working on <span style="color: var(--text-muted); font-size: 12px;">(optional)</span></label>
-      <input type="text" id="reqProjectInfo" class="name-email-input" placeholder="e.g. 7 SAUM, 168 Berger Hybrid, H1000" maxlength="300">
+      <div class="form-row2">
+        <div>
+          <label for="reqChrono">Chronograph <span style="color: var(--text-muted); font-size: 12px;">(optional)</span></label>
+          <select id="reqChrono" class="name-email-input">
+            <option value="">&mdash; select &mdash;</option>
+            <option>Garmin Xero</option>
+            <option>LabRadar</option>
+            <option>MagnetoSpeed</option>
+            <option>Athlon Rangecraft</option>
+            <option>Other</option>
+            <option>None / not sure yet</option>
+          </select>
+        </div>
+        <div>
+          <label for="reqTargetApp">Target app <span style="color: var(--text-muted); font-size: 12px;">(optional)</span></label>
+          <select id="reqTargetApp" class="name-email-input">
+            <option value="">&mdash; select &mdash;</option>
+            <option>BallisticX</option>
+            <option>OnTarget</option>
+            <option>Silver Mountain</option>
+            <option>ShotMarker</option>
+            <option>Other</option>
+            <option>None / not sure yet</option>
+          </select>
+        </div>
+      </div>
+      <label for="reqProjectInfo">Anything else? <span style="color: var(--text-muted); font-size: 12px;">(optional)</span></label>
+      <input type="text" id="reqProjectInfo" class="name-email-input" placeholder="e.g. other gear, or what you're working on" maxlength="300">
       <div class="turnstile-wrap">
         <div class="cf-turnstile" data-sitekey="0x4AAAAAADNX_3J_xCND3c-H" data-theme="dark"></div>
       </div>
@@ -1153,7 +1179,7 @@ header.hero .line2 {
       <input type="text" id="accessCodeInput" placeholder="CBORE-XXXX-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
       <div class="feedback" id="accessCodeFeedback"></div>
       <div class="win-smartscreen-note" id="winSmartScreenNote" style="display:none;">
-        Heads-up: until our Windows signing certificate lands, Windows may show a blue <strong>"Windows protected your PC"</strong> box the first time. Click <strong>More info → Run anyway</strong> — it's safe; that's just the unsigned-beta warning.
+        Heads-up: Loadscope is code-signed by <strong>Loadscope LLC</strong>, but because the certificate is new, Windows SmartScreen may still show a one-time blue <strong>"Windows protected your PC"</strong> box. Click <strong>More info → Run anyway</strong> — the publisher reads "Loadscope LLC". It fades as more people install.
       </div>
       <div class="actions">
         <button class="btn btn-outline" onclick="closeDownloadModal()">Cancel</button>
@@ -1284,6 +1310,8 @@ async function submitAccessCode() {
 async function submitRequestAccess() {
   const name = document.getElementById("reqName").value.trim();
   const email = document.getElementById("reqEmail").value.trim();
+  const chronograph = document.getElementById("reqChrono").value;
+  const targetApp = document.getElementById("reqTargetApp").value;
   const projectInfo = document.getElementById("reqProjectInfo").value.trim();
   const feedback = document.getElementById("requestAccessFeedback");
   const submitBtn = document.getElementById("requestAccessSubmit");
@@ -1317,6 +1345,8 @@ async function submitRequestAccess() {
       body: JSON.stringify({
         name: name,
         email: email,
+        chronograph: chronograph,
+        target_app: targetApp,
         project_info: projectInfo,
         platform: selectedPlatform,
         turnstile_token: turnstileToken,

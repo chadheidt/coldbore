@@ -28,12 +28,16 @@ It unlocks both the download and the app itself.
 2. Click the orange **Download** button at the top.
 3. Click **I have a code**, paste the code above. The installer for your platform will download — `Loadscope.dmg` on Mac (~80 MB) or `Loadscope-Setup.exe` on Windows (~40 MB).
 4. **Mac:** open the disk image, drag **Loadscope** onto the Applications shortcut, eject the disk image. Open Loadscope from your Applications folder — macOS opens it without any warning (signed and notarized by Apple).
-   **Windows:** double-click `Loadscope-Setup.exe`. On the first launch, Windows SmartScreen will show a blue warning — click **More info → Run anyway**. (Windows code-signing is in progress; the warning goes away once the certificate lands.) Click **Next** through the wizard.
+   **Windows:** double-click `Loadscope-Setup.exe`. Loadscope is code-signed by **Loadscope LLC**, but because the certificate is new, Windows SmartScreen may still show a one-time blue warning — click **More info → Run anyway** (the publisher reads "Loadscope LLC"). Click **Next** through the wizard.
 5. On first launch, paste your code one more time in the license dialog. Click through the disclaimer, accept the default folder, and you'll land on the Rifle & Setup screen.
 
 **Quick orientation:**
 
 The welcome tour that auto-runs is the fastest way to see the workflow. About 90 seconds. The Help (?) link bottom-left of the sidebar opens the illustrated User Guide PDF if you want a deeper walkthrough later.
+
+**Loadscope on your phone (free for you):**
+
+There's a companion app, **Loadscope Ballistics**, for iPhone and iPad — a field ballistic calculator that gives you your dial and wind for any range with live conditions from Apple Weather. The load-entry unlock is normally $9.99, but it's free for you: just enter this same code in the phone app. Get it on the App Store: https://apps.apple.com/us/app/loadscope-ballistics/id6777277349
 
 **What I want from you as a beta tester:**
 
