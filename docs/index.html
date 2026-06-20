@@ -1160,6 +1160,18 @@ header.hero .line2 {
           </select>
         </div>
       </div>
+      <label for="reqSource">Where did you hear about Loadscope?</label>
+      <select id="reqSource" class="name-email-input" onchange="toggleSourceOther()">
+        <option value="">&mdash; select &mdash;</option>
+        <option>Sniper's Hide</option>
+        <option>Long Range Hunting</option>
+        <option>AccurateShooter</option>
+        <option>Rokslide</option>
+        <option>Reddit</option>
+        <option>Friend / word of mouth</option>
+        <option>Other</option>
+      </select>
+      <input type="text" id="reqSourceOther" class="name-email-input" placeholder="Where did you hear about us?" maxlength="120" style="display: none; margin-top: 8px;">
       <label for="reqProjectInfo">Anything else? <span style="color: var(--text-muted); font-size: 12px;">(optional)</span></label>
       <input type="text" id="reqProjectInfo" class="name-email-input" placeholder="e.g. other gear, or what you're working on" maxlength="300">
       <div class="turnstile-wrap">
@@ -1307,11 +1319,22 @@ async function submitAccessCode() {
   }
 }
 
+// Show the "please tell us where" box only when they pick Other.
+function toggleSourceOther() {
+  const sel = document.getElementById("reqSource");
+  const other = document.getElementById("reqSourceOther");
+  const isOther = sel.value === "Other";
+  other.style.display = isOther ? "block" : "none";
+  if (!isOther) other.value = "";
+}
+
 async function submitRequestAccess() {
   const name = document.getElementById("reqName").value.trim();
   const email = document.getElementById("reqEmail").value.trim();
   const chronograph = document.getElementById("reqChrono").value;
   const targetApp = document.getElementById("reqTargetApp").value;
+  const source = document.getElementById("reqSource").value;
+  const sourceOther = document.getElementById("reqSourceOther").value.trim();
   const projectInfo = document.getElementById("reqProjectInfo").value.trim();
   const feedback = document.getElementById("requestAccessFeedback");
   const submitBtn = document.getElementById("requestAccessSubmit");
@@ -1322,6 +1345,14 @@ async function submitRequestAccess() {
   }
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     feedback.textContent = "Please enter a valid email address.";
+    return;
+  }
+  if (!source) {
+    feedback.textContent = "Please tell us where you heard about Loadscope.";
+    return;
+  }
+  if (source === "Other" && !sourceOther) {
+    feedback.textContent = "Please tell us where you heard about us.";
     return;
   }
 
@@ -1347,6 +1378,8 @@ async function submitRequestAccess() {
         email: email,
         chronograph: chronograph,
         target_app: targetApp,
+        source: source,
+        source_other: sourceOther,
         project_info: projectInfo,
         platform: selectedPlatform,
         turnstile_token: turnstileToken,
