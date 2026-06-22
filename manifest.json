@@ -1,23 +1,23 @@
 {
- "app_version": "0.17.0",
+ "app_version": "0.17.1",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v0.17.0 - New Ladder: a guided flow that does the matching for you. Set up your rifle and plan your ladder once, shoot it in order, then drop your chronograph and target files as-is - Loadscope matches each string to the right charge. No labeling, no renaming. Plus one-click Rework a Saved Load, and the in-app guide, manual, and Quick Start are all rewritten for the new flow.",
+ "app_release_notes": "v0.17.1 - Fixes license activation, which was being blocked at the network edge (new keys got stuck in demo mode). Includes everything in 0.17.0: New Ladder, a guided flow that does the matching for you - set up your rifle and plan your ladder once, shoot it in order, then drop your chronograph and target files as-is and Loadscope matches each string to the right charge. No labeling, no renaming. Plus one-click Rework a Saved Load, and the in-app guide, manual, and Quick Start are all rewritten for the new flow.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "0.17.0",
+   "app_version": "0.17.1",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v0.17.0 - New Ladder: a guided flow that does the matching for you. Set up your rifle and plan your ladder once, shoot it in order, then drop your chronograph and target files as-is - Loadscope matches each string to the right charge. No labeling, no renaming. Plus one-click Rework a Saved Load, and the in-app guide, manual, and Quick Start are all rewritten for the new flow."
+   "app_release_notes": "v0.17.1 - Fixes license activation, which was being blocked at the network edge (new keys got stuck in demo mode). Includes everything in 0.17.0: New Ladder, a guided flow that does the matching for you - set up your rifle and plan your ladder once, shoot it in order, then drop your chronograph and target files as-is and Loadscope matches each string to the right charge. No labeling, no renaming. Plus one-click Rework a Saved Load, and the in-app guide, manual, and Quick Start are all rewritten for the new flow."
   },
   "windows": {
-   "app_version": "0.17.0",
+   "app_version": "0.17.1",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.17.0/Loadscope-Setup.exe",
-   "app_release_notes": "v0.17.0 - New Ladder: a guided flow that does the matching for you. Set up your rifle and plan your ladder once, shoot it in order, then drop your chronograph and target files as-is - Loadscope matches each string to the right charge. No labeling, no renaming. Plus one-click Rework a Saved Load, and the in-app guide, manual, and Quick Start are all rewritten for the new flow."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.17.1/Loadscope-Setup.exe",
+   "app_release_notes": "v0.17.1 - Fixes license activation, which was being blocked at the network edge (new keys got stuck in demo mode). Includes everything in 0.17.0: New Ladder, a guided flow that does the matching for you - set up your rifle and plan your ladder once, shoot it in order, then drop your chronograph and target files as-is and Loadscope matches each string to the right charge. No labeling, no renaming. Plus one-click Rework a Saved Load, and the in-app guide, manual, and Quick Start are all rewritten for the new flow."
   }
  }
 }
