@@ -29,7 +29,7 @@ It unlocks both the download and the app itself.
 3. Click **I have a code**, paste the code above. The installer for your platform will download — `Loadscope.dmg` on Mac (~80 MB) or `Loadscope-Setup.exe` on Windows (~40 MB).
 4. **Mac:** open the disk image, drag **Loadscope** onto the Applications shortcut, eject the disk image. Open Loadscope from your Applications folder — macOS opens it without any warning (signed and notarized by Apple).
    **Windows:** double-click `Loadscope-Setup.exe`. Loadscope is code-signed by **Loadscope LLC**, but because the certificate is new, Windows SmartScreen may still show a one-time blue warning — click **More info → Run anyway** (the publisher reads "Loadscope LLC"). Click **Next** through the wizard.
-5. On first launch, paste your code one more time in the license dialog. Click through the disclaimer, accept the default folder, and you'll land on the Rifle & Setup screen.
+5. On first launch, paste your code one more time in the license dialog. Click through the disclaimer, accept the default folder, and you'll land on the Home screen — start with **New Ladder** in the left sidebar.
 
 **Quick orientation:**
 
@@ -41,7 +41,7 @@ There's a companion app, **Loadscope Ballistics**, for iPhone and iPad — a fie
 
 **What I want from you as a beta tester:**
 
-- **Use it on a real load development cycle.** Drop your Garmin Xero / LabRadar / BallisticX / OnTarget / Silver Mountain / ShotMarker CSVs — or just point Loadscope at the whole range-day folder and it pulls every CSV inside — run the import, look at the Results panel. Save a winning load to Library. Print a Load Card.
+- **Use it on a real load development cycle.** Start a **New Ladder**, enter your ladder once (start charge, step, how many), and shoot it in order. Then drop your Garmin Xero / LabRadar / BallisticX / OnTarget / Silver Mountain / ShotMarker files — or just point Loadscope at the whole range-day folder — and run the import. Loadscope matches each string to the right charge for you. Look at the Results panel, save a winning load to Library, print a Load Card.
 - **If you shoot a MagnetoSpeed or Athlon Rangecraft, I especially want to hear from you.** Those two are brand-new and marked **experimental** in the app — they import, but I haven't confirmed them against a real file yet. Run your export through, then reply and tell me whether the velocities and stats matched what the device showed — and attach the file if you can. That's the last step to take the "experimental" tag off.
 - **Tell me what's confusing.** Wording, layout, anything that made you pause. I want the rough edges before this opens up.
 - **Tell me what's missing.** Different chronograph? Different target app? Email a sample export to `support@loadscope.app` and I'll add support.

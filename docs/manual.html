@@ -95,13 +95,13 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p>The buttons on the left move you through the app in order:</p>
       <ul>
         <li><span class="btn">Rifle &amp; Setup</span> — your rifle, cartridge, components, and barrel.</li>
-        <li><span class="btn">Import Data</span> — drop in your chronograph and target CSVs and run the import.</li>
+        <li><span class="btn">Import Data</span> — drop in the files your chronograph and target app export and run the import.</li>
         <li><span class="btn">Results</span> — the scored ladder and your winning load.</li>
-        <li><span class="btn">Range &amp; DOPE</span> — the built-in ballistic calculator (predicted come-ups).</li>
+        <li><span class="btn">Range &amp; DOPE</span> — the built-in ballistic calculator (predicted dial).</li>
         <li><span class="btn">Pocket Card</span> — a printable range card.</li>
         <li><span class="btn">Libraries</span> — your saved Loads, the Bullets reference, and Barrels round counts.</li>
         <li><span class="btn">❓ Quick Guide</span> — pinned at the bottom; opens the illustrated quick-start.</li>
-        <li><span class="btn">New Load</span> — start a fresh load cycle (also at the bottom).</li>
+        <li><span class="btn">New Ladder</span> — the guided way to start a load: plan a ladder, shoot it in order, drop your files (also at the bottom).</li>
       </ul>
       <p>Each button has a keyboard shortcut too: <b>Cmd+1</b> Rifle &amp; Setup, <b>Cmd+2</b> Import, <b>Cmd+3</b> Results, <b>Cmd+4</b> Range &amp; DOPE, <b>Cmd+5</b> Pocket Card, <b>Cmd+6</b> Libraries.</p>
     </section>
@@ -123,28 +123,25 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
 
     <section class="doc" id="import">
       <h2>Import Data</h2>
-      <p class="lede">Drop your files, click Run. The only prep is labeling each session before you export — that is how Loadscope knows which load is which.</p>
+      <p class="lede">Drop your files, click Run. With a New Ladder set up, there is no prep at all — you label nothing.</p>
 
-      <h3>Label your loads before you export (the important part)</h3>
-      <p>Loadscope matches each chronograph string and each target group to a row in your workbook by its <b>label</b>. Label every range session in this format:</p>
+      <h3>The easy way: start a New Ladder first</h3>
+      <p>Click <span class="btn">New Ladder</span> in the sidebar, enter your ladder once (start charge, step, number of charges), and shoot it in order — lowest charge to highest. Then drop the files your chronograph and target app already export and click <span class="btn">Run Import</span>. Loadscope matches each string to the right charge by shot order and time. No renaming, no labeling. See <a href="#newladder">New Ladder</a> for the full walkthrough.</p>
+
+      <h3>Importing without a ladder plan (ad-hoc)</h3>
+      <p>You only need this for a one-off import — say, adding a single string to an existing load without setting up a ladder first. Then Loadscope assigns each file to a row by a short label in the <b>file name</b>, in this format:</p>
       <div class="note" style="font-size:1.05rem"><b>&lt;tag&gt;&nbsp;&nbsp;&lt;number&gt;&nbsp;&nbsp;&lt;powder&gt;</b></div>
       <ul>
         <li><span class="btn">P1 45.5 H4350</span> &mdash; Powder ladder, load 1, 45.5 grains of H4350.</li>
         <li><span class="btn">S7 2.205 H4350</span> &mdash; Seating test 7, CBTO 2.205 inches, H4350.</li>
       </ul>
-      <p>Reading the label, left to right:</p>
       <ul>
         <li><b>tag</b> &mdash; which workbook row this load is. <b>P1&ndash;P10</b> are the Powder Charge Log rows; <b>S1&ndash;S10</b> are the Seating Depth Log rows.</li>
         <li><b>number</b> &mdash; for a <b>P</b> tag it is the <b>powder charge in grains</b>; for an <b>S</b> tag it is the <b>CBTO in inches</b> (cartridge base to ogive, the seating-depth measurement you take with a comparator at the bench).</li>
         <li><b>powder</b> &mdash; optional. If you include it, Loadscope auto-fills the powder name for that load.</li>
       </ul>
-
-      <h3>Where to put the label</h3>
-      <ul>
-        <li><b>In the app</b> &mdash; if your chronograph or target app lets you name the session or group (for example Garmin ShotView), set the label there before you export.</li>
-        <li><b>On the file</b> &mdash; or just rename the exported CSV to the label, e.g. <span class="btn">P1 45.5 H4350.csv</span>. Loadscope reads the filename too, and the filename is the most reliable path &mdash; some apps' in-app label fields export inconsistently.</li>
-      </ul>
-      <div class="note">If a file name does not match the P#/S# pattern, Loadscope shows a "check your file names" warning instead of importing it into the wrong row.</div>
+      <p>Set the label in your chronograph or target app's session name, or just rename the exported CSV, e.g. <span class="btn">P1 45.5 H4350.csv</span>. But for a normal ladder you never need this — the New Ladder flow does the matching for you.</p>
+      <div class="note">Importing ad-hoc and a file name does not match the P#/S# pattern? Loadscope shows a "check your file names" warning instead of importing it into the wrong row — or just start a New Ladder and skip naming entirely.</div>
 
       <h3>Dropping the files</h3>
       <p>Two ways:</p>
@@ -242,10 +239,17 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       </ul>
     </section>
 
-    <section class="doc" id="newload">
-      <h2>New Load</h2>
-      <p class="lede">Start fresh for the next rifle or workup.</p>
-      <p>The <span class="btn">New Load</span> button (bottom of the sidebar) begins a new load cycle. Your finished workbook is moved into the <b>Completed Loads</b> folder so it is saved, and a clean workbook is ready for the next setup. If you have an unsaved winner, Loadscope warns you first.</p>
+    <section class="doc" id="newladder">
+      <h2>New Ladder</h2>
+      <p class="lede">The guided way to start a load — plan a ladder, shoot it in order, drop your files. You label nothing.</p>
+      <p>The <span class="btn">New Ladder</span> button (bottom of the sidebar) walks you through three steps:</p>
+      <ol>
+        <li><b>Rifle &amp; setup</b> — pick a saved rifle from the dropdown, or fill it in once.</li>
+        <li><b>Plan your ladder</b> — enter your starting charge, the step between charges, and how many charges (or a seating-depth test). Loadscope lays out every load for you.</li>
+        <li><b>Shoot &amp; import</b> — shoot the ladder from the lowest charge to the highest, in order, then drop your chronograph and target files and click <span class="btn">Run Import</span>. Loadscope matches each string to the right charge by shot order and time.</li>
+      </ol>
+      <p>Each new ladder begins a fresh load cycle: your finished workbook is moved into the <b>Completed Loads</b> folder so it is saved, and a clean workbook is ready. If you have an unsaved winner, Loadscope warns you first.</p>
+      <p><b>Reworking a saved load?</b> Use <span class="btn">Rework a Saved Load</span> on the Home screen. It opens New Ladder with that load's rifle and setup already filled in — just enter the new charges and import. Your original is kept.</p>
     </section>
 
     <section class="doc" id="menus">
