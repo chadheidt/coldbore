@@ -123,25 +123,10 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
 
     <section class="doc" id="import">
       <h2>Import Data</h2>
-      <p class="lede">Drop your files, click Run. With a New Ladder set up, there is no prep at all — you label nothing.</p>
+      <p class="lede">Drop your files, click Run. With a New Ladder set up, there is no prep at all.</p>
 
-      <h3>The easy way: start a New Ladder first</h3>
-      <p>Click <span class="btn">New Ladder</span> in the sidebar, enter your ladder once (start charge, step, number of charges), and shoot it in order — lowest charge to highest. Then drop the files your chronograph and target app already export and click <span class="btn">Run Import</span>. Loadscope matches each string to the right charge by shot order and time. No renaming, no labeling. See <a href="#newladder">New Ladder</a> for the full walkthrough.</p>
-
-      <h3>Importing without a ladder plan (ad-hoc)</h3>
-      <p>You only need this for a one-off import — say, adding a single string to an existing load without setting up a ladder first. Then Loadscope assigns each file to a row by a short label in the <b>file name</b>, in this format:</p>
-      <div class="note" style="font-size:1.05rem"><b>&lt;tag&gt;&nbsp;&nbsp;&lt;number&gt;&nbsp;&nbsp;&lt;powder&gt;</b></div>
-      <ul>
-        <li><span class="btn">P1 45.5 H4350</span> &mdash; Powder ladder, load 1, 45.5 grains of H4350.</li>
-        <li><span class="btn">S7 2.205 H4350</span> &mdash; Seating test 7, CBTO 2.205 inches, H4350.</li>
-      </ul>
-      <ul>
-        <li><b>tag</b> &mdash; which workbook row this load is. <b>P1&ndash;P10</b> are the Powder Charge Log rows; <b>S1&ndash;S10</b> are the Seating Depth Log rows.</li>
-        <li><b>number</b> &mdash; for a <b>P</b> tag it is the <b>powder charge in grains</b>; for an <b>S</b> tag it is the <b>CBTO in inches</b> (cartridge base to ogive, the seating-depth measurement you take with a comparator at the bench).</li>
-        <li><b>powder</b> &mdash; optional. If you include it, Loadscope auto-fills the powder name for that load.</li>
-      </ul>
-      <p>Set the label in your chronograph or target app's session name, or just rename the exported CSV, e.g. <span class="btn">P1 45.5 H4350.csv</span>. But for a normal ladder you never need this — the New Ladder flow does the matching for you.</p>
-      <div class="note">Importing ad-hoc and a file name does not match the P#/S# pattern? Loadscope shows a "check your file names" warning instead of importing it into the wrong row — or just start a New Ladder and skip naming entirely.</div>
+      <h3>Start a New Ladder first</h3>
+      <p>Click <span class="btn">New Ladder</span> in the sidebar, enter your ladder once (start charge, step, number of charges), and shoot it in order — lowest charge to highest. Then drop the files your chronograph and target app already export and click <span class="btn">Run Import</span>. Loadscope matches each string to the right charge by shot order and time. See <a href="#newladder">New Ladder</a> for the full walkthrough.</p>
 
       <h3>Dropping the files</h3>
       <p>Two ways:</p>
@@ -241,7 +226,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
 
     <section class="doc" id="newladder">
       <h2>New Ladder</h2>
-      <p class="lede">The guided way to start a load — plan a ladder, shoot it in order, drop your files. You label nothing.</p>
+      <p class="lede">The guided way to start a load — plan a ladder, shoot it in order, drop your files.</p>
       <p>The <span class="btn">New Ladder</span> button (bottom of the sidebar) walks you through three steps:</p>
       <ol>
         <li><b>Rifle &amp; setup</b> — pick a saved rifle from the dropdown, or fill it in once.</li>

@@ -1,23 +1,23 @@
 {
- "app_version": "0.17.2",
+ "app_version": "0.17.3",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v0.17.2 - Fixes in-app updates on Mac (the update downloaded but never finished installing). Updates now download and install in one step, then reopen. Includes the 0.17.1 activation fix and the 0.17.0 New Ladder flow.",
+ "app_release_notes": "v0.17.3 - After a New Ladder import, Loadscope takes you straight to your Results. The import screen now shows a clear count of the files you've added before you run. Plus wording and in-app help cleanups.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "0.17.2",
+   "app_version": "0.17.3",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v0.17.2 - Fixes in-app updates on Mac (the update downloaded but never finished installing). Updates now download and install in one step, then reopen. Includes the 0.17.1 activation fix and the 0.17.0 New Ladder flow."
+   "app_release_notes": "v0.17.3 - After a New Ladder import, Loadscope takes you straight to your Results. The import screen now shows a clear count of the files you've added before you run. Plus wording and in-app help cleanups."
   },
   "windows": {
-   "app_version": "0.17.1",
+   "app_version": "0.17.3",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.17.1/Loadscope-Setup.exe",
-   "app_release_notes": "v0.17.1 - Fixes license activation, which was being blocked at the network edge (new keys got stuck in demo mode). Includes the New Ladder flow: set up your ladder once, shoot it in order, drop your files as-is and Loadscope matches each string to the right charge."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.17.3/Loadscope-Setup.exe",
+   "app_release_notes": "v0.17.3 - After a New Ladder import, Loadscope takes you straight to your Results. The import screen now shows a clear count of the files you've added before you run. Plus wording and in-app help cleanups."
   }
  }
 }
