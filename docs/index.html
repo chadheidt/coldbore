@@ -81,6 +81,11 @@ nav .container { display: flex; justify-content: space-between; align-items: cen
 @media (max-width: 720px) {
   .hero-logo img { width: 72px; height: 72px; }
 }
+/* Narrow phones: show just the logo icon so the nav CTA doesn't collide with
+   the wordmark (the brand name is right below in the hero anyway). */
+@media (max-width: 440px) {
+  .logo-text { display: none; }
+}
 .nav-links { display: flex; gap: 28px; align-items: center; }
 .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 15px; transition: color 0.15s; }
 .nav-links a:hover { color: var(--text); }
@@ -95,6 +100,7 @@ nav .container { display: flex; justify-content: space-between; align-items: cen
   font-size: 15px;
   border: none;
   cursor: pointer;
+  white-space: nowrap;
   transition: background 0.15s;
 }
 .btn:hover { background: var(--orange-dark); }
@@ -284,17 +290,23 @@ section .section-sub {
   padding: 28px;
 }
 .feature .icon {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 44px;
   height: 44px;
   border-radius: 10px;
   background: var(--orange);
-  color: white;
-  text-align: center;
-  line-height: 44px;
-  font-size: 22px;
-  font-weight: 700;
   margin-bottom: 16px;
+}
+.feature .icon svg {
+  width: 22px;
+  height: 22px;
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .feature h3 {
   font-size: 16px;
@@ -450,11 +462,11 @@ footer p { margin-bottom: 8px; }
   .nav-links a:not(.btn) { display: none; }
 }
 header.hero h1 .em { color: var(--orange); font-style: italic; }
-header.hero .line2 .auto { color: #fff; }
+header.hero .line2 .auto { color: var(--orange); }
 header.hero .line2 {
   font-size: 24px;
   font-weight: 700;
-  color: var(--orange);
+  color: var(--text);
   letter-spacing: -0.4px;
   line-height: 1.15;
   margin: 0 0 22px;
@@ -754,6 +766,23 @@ header.hero .line2 {
   color: var(--text-dim);
 }
 .win-smartscreen-note strong { color: var(--text); }
+/* Install-section signing note, lifted out of fine print into a calm bordered
+   callout (Chad 2026-06-23: the plain grey footnote was too buried). Leads with
+   the positive "Signed & notarized" so it reassures rather than alarms. */
+.install-note {
+  max-width: 720px;
+  margin: 22px auto 0;
+  background: var(--bg-mid);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--orange);
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text-dim);
+  text-align: left;
+}
+.install-note strong { color: var(--text); }
 /* Hero "how it works" 3-step strip — the buried "plan once / shoot in
    order / import files" line, promoted to a bold scannable flow so a
    first-time visitor sees what Loadscope does at a glance (Chad 2026-06-23). */
@@ -786,7 +815,7 @@ header.hero .line2 {
   justify-content: center;
 }
 .hero-steps .hs .t { font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2; }
-.hero-steps .hs .t span { display: block; font-size: 12.5px; font-weight: 500; color: var(--text-muted); letter-spacing: 0.2px; margin-top: 2px; }
+.hero-steps .hs .t span { display: block; font-size: 12.5px; font-weight: 500; color: var(--text-dim); letter-spacing: 0.2px; margin-top: 2px; }
 .hero-steps .arrow { display: flex; align-items: center; color: var(--orange); font-size: 22px; font-weight: 700; }
 .hero-steps-tail {
   font-size: 20px;
@@ -822,10 +851,10 @@ header.hero .line2 {
 .two-up .up .shot {
   width: fit-content;
   margin: 0 auto;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
   border: 1px solid var(--border);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
   background: #fff;
 }
 /* Both cards render at the SAME height so the pair reads as matched
@@ -860,7 +889,7 @@ header.hero .line2 {
   <div class="container">
     <div class="logo">
       <img src="assets/icon.png" alt="Loadscope™ Icon">
-      LOADSCOPE™
+      <span class="logo-text">LOADSCOPE™</span>
     </div>
     <div class="nav-links">
       <a href="#features">Features</a>
@@ -868,7 +897,7 @@ header.hero .line2 {
       <a href="#faq">FAQ</a>
       <a href="learn/">Learn</a>
       <a href="#beta">Beta</a>
-      <a href="#" class="btn" onclick="openDownloadModal(event)">Request Beta Access</a>
+      <a href="#" class="btn" onclick="openDownloadModal(event)">Get Loadscope™</a>
     </div>
   </div>
 </nav>
@@ -894,7 +923,7 @@ header.hero .line2 {
       <a href="#" class="btn btn-large btn-outline" onclick="openDemo(event)">View demo</a>
     </div>
     <p class="beta-note">Free during beta. <strong>Get Loadscope</strong> to request your access code for Mac or Windows.</p>
-    <div class="hero-companion-note" style="font-size:14px;color:var(--text-muted);margin-top:18px;">Plus a free <strong style="color:var(--text-dim);">iPhone &amp; iPad</strong> companion.</div>
+    <div class="hero-companion-note" style="font-size:14px;color:var(--text-dim);margin-top:18px;">Plus a free <strong style="color:var(--text);">iPhone &amp; iPad</strong> companion.</div>
     <a class="hero-appstore" href="https://apps.apple.com/app/id6777277349" target="_blank" rel="noopener" style="display:inline-block;margin-top:10px;" aria-label="Download Loadscope Ballistics on the App Store"><img src="assets/download-on-the-app-store.svg" alt="Download on the App Store" height="44" style="height:44px;width:auto;display:block;"></a>
   </div>
 </header>
@@ -933,7 +962,7 @@ header.hero .line2 {
     <div class="screenshot-wrap" style="margin-top:18px;">
       <img src="assets/demo/gd-whiskers.png?v=1" alt="Loadscope velocity flat-spot chart: ten powder charges plotted with plus-or-minus 1 SD whiskers, a clear flat-spot plateau where the line levels off, and the winning charge highlighted">
     </div>
-    <p style="text-align:center;color:var(--text-muted);font-size:.82rem;max-width:640px;margin:22px auto 0;">Sample data shown for demonstration only &mdash; not load data. Always work up from your published manual.</p>
+    <p style="text-align:center;color:var(--text-dim);font-size:.82rem;max-width:640px;margin:22px auto 0;">Sample data shown for demonstration only &mdash; not load data. Always work up from your published manual.</p>
   </div>
 </section>
 
@@ -996,7 +1025,7 @@ header.hero .line2 {
   #companion .comp-cta{text-align:center;margin-top:30px;}
   #companion .comp-appstore{display:inline-block;transition:opacity .15s;}
   #companion .comp-appstore:hover{opacity:.85;}
-  #companion .comp-cta-sub{color:var(--text-muted);font-size:13px;margin-top:10px;}
+  #companion .comp-cta-sub{color:var(--text-dim);font-size:13px;margin-top:10px;}
   @media(max-width:760px){
     #companion .comp-feats{grid-template-columns:1fr 1fr;}
     #companion .comp-phones img,#companion .comp-phones img.hero{width:min(228px, calc(50% - 13px));}
@@ -1036,22 +1065,22 @@ header.hero .line2 {
     <p class="section-sub">The rest of what Loadscope gives you.</p>
     <div class="features">
       <div class="feature">
-        <div class="icon">#</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
         <h3>Barrel round count</h3>
         <p>Loadscope tracks total rounds through each barrel. Set a starting count once; every imported session adds to it automatically, and a <strong>+ Add</strong> button logs the practice or match rounds you didn't import.</p>
       </div>
       <div class="feature">
-        <div class="icon">📚</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
         <h3>Load Library</h3>
-        <p>Every winning load stays saved in the app — pull any of them back up later, print the Load Card for the bench binder, save as PDF, or export the whole library to spreadsheet. <strong>Want to keep tweaking a load you&rsquo;ve already saved?</strong> Reopen it and import more range data &mdash; the scoring updates with it.</p>
+        <p>Every winning load stays saved in the app — pull any of them back up later, print the Load Card for the bench binder, save as PDF, or export the whole library to spreadsheet. <strong>Want to build on a saved load?</strong> Rework it &mdash; Loadscope opens a fresh ladder with that load&rsquo;s rifle and components already filled in; set your new charges, shoot, and import. Your original load stays put.</p>
       </div>
       <div class="feature">
-        <div class="icon">↻</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
         <h3>One-click updates</h3>
         <p>When a new version ships, click <strong>Install Update</strong> in the app. Your data stays untouched.</p>
       </div>
       <div class="feature">
-        <div class="icon">🛡</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <h3>Your data, your machine</h3>
         <p>Loadscope writes to a regular Excel file on your computer and <strong style="color: var(--text);">works fully offline</strong> — no cloud, no account, no subscription. Drop it on the range laptop with no signal and it runs. Workbooks are yours; uninstall whenever, your data stays.</p>
       </div>
@@ -1084,9 +1113,9 @@ header.hero .line2 {
     </div>
     </details>
 
-    <p style="max-width:780px; margin:18px auto 0; font-size:12.5px; line-height:1.5; color:var(--text-muted); text-align:center;">
-      <strong style="color:var(--text-dim);">Apple-signed and notarized on Mac, code-signed by Loadscope LLC on Windows</strong> — open and run like any commercial app. Because the Windows certificate is new, SmartScreen may still show a one-time <strong style="color:var(--text-dim);">More info &rarr; Run anyway</strong> until it builds reputation.
-    </p>
+    <div class="install-note">
+      <strong>Signed &amp; notarized.</strong> Apple-signed and notarized on Mac &mdash; it opens and runs like any commercial app. On Windows it's code-signed by <strong>Loadscope LLC</strong>; because the certificate is new, Windows may still show a one-time security prompt (SmartScreen's <strong>More info &rarr; Run anyway</strong>) until it builds reputation.
+    </div>
   </div>
 </section>
 
@@ -1096,23 +1125,23 @@ header.hero .line2 {
     <p class="section-sub">Loadscope is free during beta. We're looking for precision shooters actively developing loads who'll run real range data through it and tell us what works — and what's missing.</p>
     <div class="features">
       <div class="feature">
-        <div class="icon">👤</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
         <h3>Who it's for</h3>
         <p>Shooters running powder ladders and seating-depth tests with a chronograph and a target or group app. If you're chasing a load right now, you're who we built this for.</p>
       </div>
       <div class="feature">
-        <div class="icon">✓</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
         <h3>What helps us</h3>
         <p>Honest feedback — what's confusing, what's missing, anything that breaks. Shooting a device we don't list yet? Send a sample CSV and we'll add it.</p>
       </div>
       <div class="feature">
-        <div class="icon">★</div>
+        <div class="icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
         <h3>What you get</h3>
         <p>The full app, free, and a direct line to shape where it goes. Early testers become founding users.</p>
       </div>
     </div>
     <div style="text-align:center; margin-top:26px;">
-      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get your access code</a>
+      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get Loadscope™</a>
     </div>
   </div>
 </section>
@@ -1202,7 +1231,7 @@ header.hero .line2 {
   <button class="vclose" onclick="closeDemo()" aria-label="Close">&times;</button>
   <div class="vbox">
     <video id="demoVid" controls playsinline preload="none" poster="assets/demo/00-setup.png?v=5">
-      <source src="assets/loadscope-demo.mp4?v=13" type="video/mp4">
+      <source src="assets/loadscope-demo.mp4?v=14" type="video/mp4">
       Your browser doesn't support embedded video. <a href="assets/loadscope-demo.mp4" style="color:var(--orange);">Download the demo</a>.
     </video>
   </div>
