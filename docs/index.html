@@ -882,6 +882,34 @@ header.hero .line2 {
 @media (max-width: 520px) { #features .features { grid-template-columns: 1fr; } }
 </style>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<!-- Structured data (JSON-LD) — read by ALL search engines (Google, Bing, etc.),
+     not just Google. Helps them understand Loadscope is a Mac/Windows app. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Loadscope",
+  "operatingSystem": "macOS, Windows",
+  "applicationCategory": "UtilitiesApplication",
+  "applicationSubCategory": "Precision rifle load development",
+  "softwareVersion": "0.17.3",
+  "url": "https://loadscope.app/",
+  "image": "https://loadscope.app/assets/og-image.png",
+  "description": "Loadscope turns chronograph and target CSVs (Garmin Xero, LabRadar, BallisticX, OnTarget, ShotMarker, Silver Mountain) into a scored load-development workbook with predicted DOPE. It finds your best powder charge and seating depth automatically, on Mac and Windows.",
+  "keywords": "precision rifle load development, powder ladder test, seating depth test, ballistics calculator, Garmin Xero data, LabRadar, chronograph software, predicted DOPE, handloading software, reloading software, best rifle load, OCW test",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Loadscope LLC",
+    "url": "https://loadscope.app/"
+  }
+}
+</script>
 </head>
 <body>
 
