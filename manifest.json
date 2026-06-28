@@ -14,10 +14,10 @@
    "app_release_notes": "v0.18.0 - Import from phone: measure your groups in the Loadscope phone app and pull them straight into your load on the desktop over Wi-Fi, each target matched to its charge. New on the Measure tab: pick a Powder or Seating-depth ladder, and enter a custom bullet diameter."
   },
   "windows": {
-   "app_version": "0.17.3",
+   "app_version": "0.18.0",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.17.3/Loadscope-Setup.exe",
-   "app_release_notes": "v0.17.3 - After a New Ladder import, Loadscope takes you straight to your Results. The import screen now shows a clear count of the files you've added before you run. Plus wording and in-app help cleanups."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.18.0/Loadscope-Setup.exe",
+   "app_release_notes": "v0.18.0 - Import from phone: measure your groups in the Loadscope phone app and pull them straight into your load on the desktop over Wi-Fi, each target matched to its charge. New on the Measure tab: pick a Powder or Seating-depth ladder, and enter a custom bullet diameter."
   }
  }
 }
