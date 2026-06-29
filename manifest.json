@@ -1,17 +1,17 @@
 {
- "app_version": "1.0.0",
+ "app_version": "1.0.1",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.0.0 - Loadscope is out of beta. One-time purchase with lifetime updates: measure your target groups in-app, import your chronograph data, and Loadscope scores every load to call your best one. Thanks for being here early.",
+ "app_release_notes": "v1.0.1 - Adds a Request a Refund option under the Support menu (30-day money-back, no questions asked), plus behind-the-scenes commerce hardening.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.0.0",
+   "app_version": "1.0.1",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.0.0 - Loadscope is out of beta. One-time purchase with lifetime updates: measure your target groups in-app, import your chronograph data, and Loadscope scores every load to call your best one. Thanks for being here early."
+   "app_release_notes": "v1.0.1 - Adds a Request a Refund option under the Support menu (30-day money-back, no questions asked), plus behind-the-scenes commerce hardening."
   },
   "windows": {
    "app_version": "1.0.0",
