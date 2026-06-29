@@ -1,17 +1,17 @@
 {
- "app_version": "1.0.1",
+ "app_version": "1.0.2",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.0.1 - Adds a Request a Refund option under the Support menu (30-day money-back, no questions asked), plus behind-the-scenes commerce hardening.",
+ "app_release_notes": "v1.0.2 - Improves the Request a Refund form: adds a contact-email field so we can always reach you, and fixes the input boxes so your text is readable.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.0.1",
+   "app_version": "1.0.2",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.0.1 - Adds a Request a Refund option under the Support menu (30-day money-back, no questions asked), plus behind-the-scenes commerce hardening."
+   "app_release_notes": "v1.0.2 - Improves the Request a Refund form: adds a contact-email field so we can always reach you, and fixes the input boxes so your text is readable."
   },
   "windows": {
    "app_version": "1.0.1",
