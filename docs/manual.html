@@ -77,12 +77,12 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
     <section class="doc" id="overview">
       <h2>Welcome to Loadscope</h2>
       <p class="lede">What the app does, in one breath.</p>
-      <p>Loadscope turns your range data into a finished load. You shoot a powder ladder and (optionally) a seating-depth ladder, drop in your chronograph and target files, and Loadscope <b>scores every charge and seating depth</b>, picks the winner, and builds you a printable load card and a predicted DOPE chart.</p>
+      <p>Loadscope turns your range data into a finished load. You shoot a powder ladder and (optionally) a seating-depth ladder, import your chronograph data, and measure your target groups right in the app (or import them from a target app if you use one). Loadscope <b>scores every powder charge and seating depth</b>, picks the winner, and builds you a printable load card and a predicted DOPE chart.</p>
       <h3>The workflow at a glance</h3>
       <ul>
         <li><b>1. Set up your rifle</b> once (the <b>Rifle &amp; Setup</b> page).</li>
         <li><b>2. Shoot</b> your ladder over a chronograph and at a target.</li>
-        <li><b>3. Import</b> the CSV files (the <b>Import Data</b> page).</li>
+        <li><b>3. Import</b> your chronograph data (the <b>Import Data</b> page) and <b>measure</b> your target groups from a photo (the <b>Measure Target</b> page) &mdash; or import a target app's CSV if you use one.</li>
         <li><b>4. Read the answer</b> on the <b>Results</b> page — your best charge and seating depth, scored.</li>
         <li><b>5. Predict your dial</b> on <b>Range &amp; DOPE</b>, and print a <b>Pocket Card</b> for the field.</li>
       </ul>
@@ -95,13 +95,14 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p>The buttons on the left move you through the app in order:</p>
       <ul>
         <li><span class="btn">Rifle &amp; Setup</span> — your rifle, cartridge, components, and barrel.</li>
-        <li><span class="btn">Import Data</span> — drop in the files your chronograph and target app export and run the import.</li>
+        <li><span class="btn">Import Data</span> — import your chronograph data (and a target app's export, if you use one) and run the import.</li>
+        <li><span class="btn">Measure Target</span> — measure your target groups from a photo, right in the app. Scores in like an import.</li>
         <li><span class="btn">Results</span> — the scored ladder and your winning load.</li>
         <li><span class="btn">Range &amp; DOPE</span> — the built-in ballistic calculator (predicted dial).</li>
         <li><span class="btn">Pocket Card</span> — a printable range card.</li>
         <li><span class="btn">Libraries</span> — your saved Loads, the Bullets reference, and Barrels round counts.</li>
         <li><span class="btn">❓ Quick Guide</span> — pinned at the bottom; opens the illustrated quick-start.</li>
-        <li><span class="btn">New Ladder</span> — the guided way to start a load: plan a ladder, shoot it in order, drop your files (also at the bottom).</li>
+        <li><span class="btn">New Ladder</span> — the guided way to start a load: plan a ladder, shoot it in order, import your data (also at the bottom).</li>
       </ul>
       <p>Each button has a keyboard shortcut too: <b>Cmd+1</b> Rifle &amp; Setup, <b>Cmd+2</b> Import, <b>Cmd+3</b> Results, <b>Cmd+4</b> Range &amp; DOPE, <b>Cmd+5</b> Pocket Card, <b>Cmd+6</b> Libraries.</p>
     </section>
@@ -123,24 +124,40 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
 
     <section class="doc" id="import">
       <h2>Import Data</h2>
-      <p class="lede">Drop your files, click Run. With a New Ladder set up, there is no prep at all.</p>
+      <p class="lede">Import your chronograph, click Run. With a New Ladder set up, there is no prep at all.</p>
 
       <h3>Start a New Ladder first</h3>
-      <p>Click <span class="btn">New Ladder</span> in the sidebar, enter your ladder once (start charge, step, number of charges), and shoot it in order — lowest charge to highest. Then drop the files your chronograph and target app already export and click <span class="btn">Run Import</span>. Loadscope matches each string to the right charge by shot order and time. See <a href="#newladder">New Ladder</a> for the full walkthrough.</p>
+      <p>Click <span class="btn">New Ladder</span> in the sidebar, enter your ladder once (start charge, step, number of charges), and shoot it in order — lowest charge to highest. Then import your chronograph data &mdash; and your target app's export if you use one &mdash; and click <span class="btn">Run Import</span>. (No target app? <a href="#measure">Measure your target groups</a> from a photo instead.) Loadscope matches each string to the right charge by shot order and time. See <a href="#newladder">New Ladder</a> for the full walkthrough.</p>
 
-      <h3>Dropping the files</h3>
+      <h3>Importing the files</h3>
       <p>Two ways:</p>
       <ul>
         <li><b>Drag onto the Loadscope icon</b> (in the Dock/Applications, or the taskbar on Windows) &mdash; it auto-imports.</li>
         <li><b>Drag into the Loadscope window</b>, then click <span class="btn">Run Import</span> when you are ready.</li>
       </ul>
-      <p>Drop individual CSVs, or point Loadscope at a <b>whole range-day folder</b> and it pulls every CSV inside (subfolders included). Prefer not to drag? Use <span class="btn">Browse files…</span> or <span class="btn">Browse folder…</span> instead.</p>
+      <p>Import individual CSVs, or point Loadscope at a <b>whole range-day folder</b> and it pulls every CSV inside (subfolders included). Prefer not to drag? Use <span class="btn">Browse files…</span> or <span class="btn">Browse folder…</span> instead.</p>
 
       <h3>Supported chronograph &amp; target apps</h3>
       <p>Garmin Xero, LabRadar, BallisticX, OnTarget, Silver Mountain / ShotMarker &mdash; plus MagnetoSpeed and Athlon Rangecraft (these last two are experimental, so verify the numbers). The format of every file is detected automatically; you never have to sort them.</p>
 
       <h3>Where your files go after import</h3>
       <p>On a successful import, Loadscope moves the consumed CSVs into a dated <b>Imported CSVs</b> folder (outside your import folders) so your import folders stay clean and the same files never re-import by accident.</p>
+    </section>
+
+    <section class="doc" id="measure">
+      <h2>Measure Target</h2>
+      <p class="lede">Photograph your target and Loadscope measures the group for you, right in the app &mdash; then scores it in like an import. No separate target app needed.</p>
+      <p>The <span class="btn">Measure Target</span> page measures your target groups from a photo, right in Loadscope &mdash; no separate target app required (though you can still import one if you use it). You load a photo of your target, mark your shots, and Loadscope works out the group &mdash; group size, <b>mean radius</b>, vertical &mdash; and how far it sits off your aim. Each measured target group flows through the <b>same scoring path</b> as a BallisticX import, so your Results look identical either way.</p>
+      <h3>How it works</h3>
+      <ul>
+        <li><b>Bring in your target groups.</b> Two ways: tap <span class="btn">Import from phone</span> to pull groups you measured on the <a href="#companion">Loadscope Ballistics</a> app straight off your phone over Wi-Fi (paired to your charges in order) &mdash; or <span class="btn">Choose target photos</span> to measure on the desktop. For desktop measuring, pick a photo for each charge, or one photo of a whole sheet with a bull per charge, with a known reference in frame (a ruler, or a 1" grid).</li>
+        <li><b>Set the scale.</b> Click two points a known distance apart and tell Loadscope how far apart they really are. That turns pixels into real inches.</li>
+        <li><b>Mark your aim, then tap each shot.</b> Loadscope does the geometry as you go.</li>
+        <li><b>Pick the ladder kind.</b> A <b>Powder/Seating</b> toggle sets whether each bull is a charge (grains) or a seating depth (CBTO), and any caliber can be typed in if it's not in the list.</li>
+        <li><b>Save the target.</b> Each saved bull lands in your scored Results under its charge; your best load is named on the Results page.</li>
+      </ul>
+      <div class="note">Measuring a whole charge ladder on one target sheet? Mark each bull and tell Loadscope which charge it is &mdash; no handwriting to read. The same works for a seating-depth ladder, one bull per depth.</div>
+      <p>Prefer to measure on your phone in the field? The <a href="#companion">Loadscope Ballistics</a> companion app has the same group-measuring tool, and there's a free, standalone <b>Loadscope Measure</b> app if all you want is a group number.</p>
     </section>
 
     <section class="doc" id="results">
@@ -226,12 +243,12 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
 
     <section class="doc" id="newladder">
       <h2>New Ladder</h2>
-      <p class="lede">The guided way to start a load — plan a ladder, shoot it in order, drop your files.</p>
+      <p class="lede">The guided way to start a load — plan a ladder, shoot it in order, import your data.</p>
       <p>The <span class="btn">New Ladder</span> button (bottom of the sidebar) walks you through three steps:</p>
       <ol>
         <li><b>Rifle &amp; setup</b> — pick a saved rifle from the dropdown, or fill it in once.</li>
         <li><b>Plan your ladder</b> — enter your starting charge, the step between charges, and how many charges (or a seating-depth test). Loadscope lays out every load for you.</li>
-        <li><b>Shoot &amp; import</b> — shoot the ladder from the lowest charge to the highest, in order, then drop your chronograph and target files and click <span class="btn">Run Import</span>. Loadscope matches each string to the right charge by shot order and time.</li>
+        <li><b>Shoot &amp; import</b> — shoot the ladder from the lowest charge to the highest, in order, then import your chronograph data and measure your target groups (or import a target app's export), and click <span class="btn">Run Import</span>. Loadscope matches each string to the right charge by shot order and time.</li>
       </ol>
       <p>Each new ladder begins a fresh load cycle: your finished workbook is moved into the <b>Completed Loads</b> folder so it is saved, and a clean workbook is ready. If you have an unsaved winner, Loadscope warns you first.</p>
       <p><b>Reworking a saved load?</b> Use <span class="btn">Rework a Saved Load</span> on the Home screen. It opens New Ladder with that load's rifle and setup already filled in — just enter the new charges and import. Your original is kept.</p>
@@ -303,7 +320,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p class="lede">If something is not working.</p>
       <ul>
         <li><b>An import did nothing</b> — check the file names match a charge or seating depth (the app shows a naming warning).</li>
-        <li><b>Results look empty</b> — you need at least the minimum data; make sure both a chronograph and a target file imported.</li>
+        <li><b>Results look empty</b> — you need at least the minimum data; make sure a chronograph file imported and you have at least one group (measured or imported).</li>
         <li><b>The phone will not find the computer</b> — confirm <b>Phone Sync</b> is on and both devices are on the same Wi-Fi.</li>
         <li><b>Still stuck</b> — email <a href="mailto:support@loadscope.app">support@loadscope.app</a> and we will help.</li>
       </ul>

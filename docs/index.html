@@ -24,12 +24,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 <title>Loadscope™ — precision rifle load development for Mac &amp; Windows</title>
-<meta name="description" content="Loadscope turns chronograph and target CSVs (Garmin Xero, LabRadar, BallisticX, OnTarget, Silver Mountain) into a scored load-development workbook with predicted DOPE. No more typing velocities by hand.">
+<meta name="description" content="Loadscope imports your chronograph data (Garmin Xero, LabRadar) and measures your target groups from a photo — no separate target app needed — then scores your best powder charge and seating depth with predicted DOPE. Mac and Windows.">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <meta property="og:title" content="Loadscope">
-<meta property="og:description" content="Precision rifle load development for Mac and Windows. Drop your chronograph and target CSVs; Loadscope finds your best powder charge and seating depth.">
+<meta property="og:description" content="Precision rifle load development for Mac and Windows. Import your chronograph data and measure your target groups in-app; Loadscope finds your best powder charge and seating depth.">
 <meta property="og:image" content="https://loadscope.app/assets/og-image.png?v=1">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -39,7 +39,7 @@
 <meta property="og:site_name" content="Loadscope">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Loadscope">
-<meta name="twitter:description" content="Precision rifle load development for Mac and Windows. Drop your chronograph and target CSVs; Loadscope finds your best powder charge and seating depth - automatically.">
+<meta name="twitter:description" content="Precision rifle load development for Mac and Windows. Import your chronograph data and measure your target groups in-app; Loadscope finds your best powder charge and seating depth - automatically.">
 <meta name="twitter:image" content="https://loadscope.app/assets/og-image.png?v=1">
 <meta property="og:type" content="website">
 <style>
@@ -892,10 +892,10 @@ header.hero .line2 {
   "operatingSystem": "macOS, Windows",
   "applicationCategory": "UtilitiesApplication",
   "applicationSubCategory": "Precision rifle load development",
-  "softwareVersion": "0.17.3",
+  "softwareVersion": "0.18.0",
   "url": "https://loadscope.app/",
   "image": "https://loadscope.app/assets/og-image.png",
-  "description": "Loadscope turns chronograph and target CSVs (Garmin Xero, LabRadar, BallisticX, OnTarget, ShotMarker, Silver Mountain) into a scored load-development workbook with predicted DOPE. It finds your best powder charge and seating depth automatically, on Mac and Windows.",
+  "description": "Loadscope imports your chronograph data (Garmin Xero, LabRadar) and measures your target groups from a photo — or imports them from optional target apps like BallisticX, OnTarget, ShotMarker, Silver Mountain — then scores your best powder charge and seating depth into a load-development workbook with predicted DOPE, on Mac and Windows.",
   "keywords": "precision rifle load development, powder ladder test, seating depth test, ballistics calculator, Garmin Xero data, LabRadar, chronograph software, predicted DOPE, handloading software, reloading software, best rifle load, OCW test",
   "offers": {
     "@type": "Offer",
@@ -943,7 +943,7 @@ header.hero .line2 {
       <div class="arrow">&rarr;</div>
       <div class="hs"><span class="n">2</span><span class="t">Shoot it in order<span>Loadscope matches them</span></span></div>
       <div class="arrow">&rarr;</div>
-      <div class="hs"><span class="n">3</span><span class="t">Import your files<span>chrono + target CSVs</span></span></div>
+      <div class="hs"><span class="n">3</span><span class="t">Import &amp; measure<span>chronograph data + your target groups</span></span></div>
     </div>
     <p class="hero-steps-tail">Loadscope does the rest.<span>Scored, ranked, and charted &mdash; your best load called out.</span></p>
     <div class="cta-row">
@@ -970,13 +970,24 @@ header.hero .line2 {
   <div class="container">
     <div class="split reverse">
       <div class="split-text">
-        <h2>Import. Click. <span class="accent">Done.</span></h2>
-        <p class="section-sub">That's the whole app — a drop zone (files or a whole folder), your workbook, and a Run button. The format of every CSV is auto-detected.</p>
+        <h2>Import your <span class="accent">chronograph</span>.</h2>
+        <p class="section-sub">Bring in your chronograph data — a file or a whole folder — and hit Run. Every CSV format is auto-detected, so there's nothing to format or label. Already shoot through a target app? Its export imports the same way.</p>
       </div>
       <div class="screenshot-wrap">
         <img src="assets/demo/gd-folder.png?v=1" alt="Loadscope drop zone: 'Drop CSV files or a folder here, or click to browse', Browse files and Browse folder links, supported-device chips (Garmin Xero, BallisticX), the Run Import button, and a 'Drop files or a whole folder, format auto-detected' note">
       </div>
     </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2>Measure your target groups, <span class="accent">right in Loadscope</span>.</h2>
+    <p class="section-sub">No separate target app needed. Photograph your target, set the scale off a known reference, and tap your shots &mdash; Loadscope works out group size, <strong>mean radius</strong> and vertical, then scores it. Shoot a whole powder <em>or</em> seating-depth ladder on one sheet and measure every bull in a single pass &mdash; a Powder/Seating toggle sets which you're testing. Or measure on your phone in the field and pull the target groups straight into the load over Wi-Fi. Already use a target app like BallisticX? Import its CSV instead &mdash; your call.</p>
+    <div class="screenshot-wrap">
+      <img src="assets/measure-target.png?v=2" alt="Loadscope Measure Target screen: a 6.5 Creedmoor powder ladder measured on one six-bull target sheet, each bull tagged with its powder charge and group in MOA, an Import from phone button and a Powder/Seating ladder toggle on the right, and live Results showing group size and mean radius for the charge being marked.">
+    </div>
+    <p style="text-align:center;color:var(--text-dim);font-size:.82rem;max-width:640px;margin:22px auto 0;">Sample target shown for demonstration only.</p>
   </div>
 </section>
 
@@ -1045,8 +1056,8 @@ header.hero .line2 {
     box-shadow:0 18px 50px rgba(0,0,0,.5);background:#000;}
   #companion .comp-phones img.hero{width:228px;
     box-shadow:0 18px 50px rgba(0,0,0,.5);}
-  #companion .comp-feats{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;
-    max-width:980px;margin:0 auto;}
+  #companion .comp-feats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+    max-width:760px;margin:0 auto;}
   #companion .comp-feats > div{display:flex;flex-direction:column;gap:3px;}
   #companion .comp-feats strong{color:var(--text);font-size:14px;}
   #companion .comp-feats span{color:var(--text-dim);font-size:12.5px;line-height:1.42;}
@@ -1064,7 +1075,7 @@ header.hero .line2 {
     <div class="comp-head">
       <div class="comp-badge">New &middot; iPhone &amp; iPad</div>
       <h2>Your best load &mdash; <span class="accent">in the field</span>.</h2>
-      <p class="section-sub"><strong>Loadscope Ballistics</strong> carries your best load from the desktop to the field, then re-solves your dial live as conditions change. <strong>Free to download</strong> &mdash; desktop owners unlock everything; anyone else unlocks phone-side load entry for a one-time <strong>$9.99</strong>.</p>
+      <p class="section-sub"><strong>Loadscope Ballistics</strong> carries your best load from the desktop to the field, re-solves your dial live as conditions change, and <strong>measures your target groups right there at the target</strong> &mdash; then syncs them back to the load. <strong>Free to download</strong> &mdash; desktop owners unlock everything; anyone else unlocks phone-side load entry for a one-time <strong>$9.99</strong>.</p>
     </div>
     <div class="comp-phones">
       <img src="assets/companion/phone-home.png" alt="Loadscope Ballistics home screen on iPhone: a branded hero card reading Loadscope Ballistics, Field ballistics and DOPE, by the makers of Loadscope, with tiles for DOPE cards and Barrels and a large New Load button.">
@@ -1077,11 +1088,13 @@ header.hero .line2 {
       <div><strong>Real wind math</strong><span>Speed and direction on a wind rose; it computes the true crosswind hold &mdash; no eyeballing.</span></div>
       <div><strong>Recipe cards</strong><span>Your bullet, powder, charge, primer, brass and CBTO, bench-ready.</span></div>
       <div><strong>Round count syncs back</strong><span>Tap the rounds you ran; the count flows back to that barrel on the desktop.</span></div>
+      <div><strong>Measure at the target</strong><span>Photograph your target group, set the scale, tap your shots &mdash; group size and mean radius on the spot, then pull it into the load on the desktop over Wi-Fi.</span></div>
       <div><strong>Direct Wi-Fi sync</strong><span>Push a load straight from the desktop to your phone over your own Wi-Fi &mdash; no cloud, no account, no cables. Once it&rsquo;s on the phone it works with no signal at the range.</span></div>
     </div>
     <div class="comp-cta">
       <a class="comp-appstore" href="https://apps.apple.com/app/id6777277349" target="_blank" rel="noopener" aria-label="Download Loadscope Ballistics on the App Store"><img src="assets/download-on-the-app-store.svg" alt="Download on the App Store" height="52" style="height:52px;width:auto;"></a>
       <div class="comp-cta-sub">Free for iPhone &amp; iPad</div>
+      <div class="comp-cta-sub" style="margin-top:6px;">Just want a group number? There&rsquo;s a free, standalone <strong>Loadscope&nbsp;Measure</strong> app that does only that.</div>
     </div>
   </div>
 </section>
@@ -1155,7 +1168,7 @@ header.hero .line2 {
       <div class="feature">
         <div class="icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
         <h3>Who it's for</h3>
-        <p>Shooters running powder ladders and seating-depth tests with a chronograph and a target or group app. If you're chasing a load right now, you're who we built this for.</p>
+        <p>Shooters running powder ladders and seating-depth tests over a chronograph &mdash; groups measured right in Loadscope, or imported from a target app if you use one. If you're developing a load right now, you're who we built this for.</p>
       </div>
       <div class="feature">
         <div class="icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
@@ -1184,7 +1197,7 @@ header.hero .line2 {
       <details class="faq-item">
         <summary>How does Loadscope decide your best powder charge and seating depth?</summary>
         <p>No single number tells you a load is good — a tight group that wanders in velocity will betray you at distance, and a flat velocity string over a wide group won't hold either. So Loadscope doesn't pick your best powder charge or seating depth on one stat. It scores every charge and every seating depth you tested across four things that actually show up on target.</p>
-        <p>Those four: <b>velocity flat-spot</b> (how little your average velocity moves across the charge window), <b>velocity SD</b> (shot-to-shot consistency), <b>mean radius</b> (true group center, not one flier — falls back to group size if your target app doesn't export it), and <b>vertical SD</b> (vertical dispersion — what costs you elevation at distance).</p>
+        <p>Those four: <b>velocity flat-spot</b> (how little your average velocity moves across the charge window), <b>velocity SD</b> (shot-to-shot consistency), <b>mean radius</b> (true group center, not one flier — falls back to group size when only that's available), and <b>vertical SD</b> (vertical dispersion — what costs you elevation at distance).</p>
         <p>Each metric is put on the same 0-to-1 scale (lower is better) so they're comparable, then blended into one <b>composite score</b>. Lowest composite wins — Loadscope tags it 🥇 and writes the winning charge or CBTO to the top of the tab. Every candidate also earns a "Best in:" tag for any single metric it topped, even if it didn't win overall.</p>
         <p>The four aren't weighted equally, and the mix changes with the test. Defaults — <b>Powder Charge Log: 30% / 20% / 20% / 30%</b> and <b>Seating Depth Log: 15% / 25% / 25% / 35%</b> (velocity flat-spot / velocity SD / mean radius / vertical SD). They're tuned from real load-development work — weighted toward what holds up at distance, not a flat average — and every weight is yours. In the app's Charts tab you set them as decimals that add to 1.0 (30% = 0.30); that keeps the final score on the same 0-to-1 scale as the four metrics. Edit the blue weight cells or click <b>Reset Composite Weights</b> to restore the defaults.</p>
       </details>
@@ -1215,6 +1228,10 @@ header.hero .line2 {
       <details class="faq-item">
         <summary>What chronographs and target apps does it read?</summary>
         <p><strong>Chronographs:</strong> Garmin Xero (ShotView CSVs) and LabRadar. <strong>Target apps:</strong> BallisticX, OnTarget (PC/TDS), Silver Mountain (SMT) and ShotMarker. The parser system is pluggable, so a new chronograph or target app is quick to add — send a sample export to support@loadscope.app and we'll fold it in.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do I need a target app to measure my groups?</summary>
+        <p>No. Loadscope has built-in <strong>group measurement</strong> &mdash; photograph your target, set the scale off a known reference, tap your shots, and it works out group size, mean radius and vertical for you, then scores it. Shoot a whole powder ladder &mdash; or a seating-depth ladder &mdash; on one target sheet and measure every bull in one pass; you tell it which bull is which. Or measure on the iPhone in the field and pull the target groups into the load over Wi-Fi. Already run a target app? Import its CSV instead &mdash; your call. <a href="/learn/measure-groups-from-a-photo.html">How measuring from a photo works &rarr;</a></p>
       </details>
       <details class="faq-item">
         <summary>Is my data going to the cloud?</summary>
@@ -1259,7 +1276,7 @@ header.hero .line2 {
   <button class="vclose" onclick="closeDemo()" aria-label="Close">&times;</button>
   <div class="vbox">
     <video id="demoVid" controls playsinline preload="none" poster="assets/demo/00-setup.png?v=5">
-      <source src="assets/loadscope-demo.mp4?v=14" type="video/mp4">
+      <source src="assets/loadscope-demo.mp4?v=15" type="video/mp4">
       Your browser doesn't support embedded video. <a href="assets/loadscope-demo.mp4" style="color:var(--orange);">Download the demo</a>.
     </video>
   </div>
