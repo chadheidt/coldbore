@@ -14,10 +14,10 @@
    "app_release_notes": "v1.0.0 - Loadscope is out of beta. One-time purchase with lifetime updates: measure your target groups in-app, import your chronograph data, and Loadscope scores every load to call your best one. Thanks for being here early."
   },
   "windows": {
-   "app_version": "0.18.2",
+   "app_version": "1.0.0",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v0.18.2/Loadscope-Setup.exe",
-   "app_release_notes": "v0.18.2 - The in-app User Manual and welcome tour now show measuring your target groups right in Loadscope. The app now always checks for updates on launch so you never miss one. Plus a clearer error report, startup hardening, and an up-to-date What's New list."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.0.0/Loadscope-Setup.exe",
+   "app_release_notes": "v1.0.0 - Loadscope is out of beta. One-time purchase with lifetime updates: measure your target groups in-app, import your chronograph data, and Loadscope scores every load to call your best one. Thanks for being here early."
   }
  }
 }
