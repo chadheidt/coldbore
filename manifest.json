@@ -1,17 +1,17 @@
 {
- "app_version": "0.18.0",
+ "app_version": "0.18.1",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v0.18.0 - Import from phone: measure your groups in the Loadscope phone app and pull them straight into your load on the desktop over Wi-Fi, each target matched to its charge. New on the Measure tab: pick a Powder or Seating-depth ladder, and enter a custom bullet diameter.",
+ "app_release_notes": "v0.18.1 - The in-app User Manual and welcome tour now show measuring your target groups right in Loadscope. The app now always checks for updates on launch so you never miss one. Plus a clearer error report and hardening so a saved setting can never block the app from opening.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "0.18.0",
+   "app_version": "0.18.1",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v0.18.0 - Import from phone: measure your groups in the Loadscope phone app and pull them straight into your load on the desktop over Wi-Fi, each target matched to its charge. New on the Measure tab: pick a Powder or Seating-depth ladder, and enter a custom bullet diameter."
+   "app_release_notes": "v0.18.1 - The in-app User Manual and welcome tour now show measuring your target groups right in Loadscope. The app now always checks for updates on launch so you never miss one. Plus a clearer error report and hardening so a saved setting can never block the app from opening."
   },
   "windows": {
    "app_version": "0.18.0",
