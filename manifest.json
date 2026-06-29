@@ -14,10 +14,10 @@
    "app_release_notes": "v1.0.2 - Improves the Request a Refund form: adds a contact-email field so we can always reach you, and fixes the input boxes so your text is readable."
   },
   "windows": {
-   "app_version": "1.0.1",
+   "app_version": "1.0.2",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.0.1/Loadscope-Setup.exe",
-   "app_release_notes": "v1.0.1 - Adds a Request a Refund option under the Support menu (30-day money-back, no questions asked), plus behind-the-scenes commerce hardening."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.0.2/Loadscope-Setup.exe",
+   "app_release_notes": "v1.0.2 - Improves the Request a Refund form: adds a contact-email field so we can always reach you, and fixes the input boxes so your text is readable."
   }
  }
 }
