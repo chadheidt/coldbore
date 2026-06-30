@@ -1,0 +1,85 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Standard Deviation and Extreme Spread in Load Development: What&rsquo;s a Good Number? | Loadscope</title>
+<meta name="description" content="What counts as a good SD or ES when you&rsquo;re developing a load? A plain-English guide to velocity standard deviation and extreme spread &mdash; what each tells you, what numbers to chase, the sample-size trap, and why SD is really a vertical-at-distance number.">
+<link rel="canonical" href="https://loadscope.app/learn/standard-deviation-load-development.html">
+<meta property="og:title" content="SD and ES in Load Development: What&rsquo;s a Good Number?"><meta property="og:description" content="What counts as a good SD or ES when you&rsquo;re developing a load? A plain-English guide to velocity standard deviation and extreme spread &mdash; what each tells you, what numbers to chase, the sample-size trap, and why SD is really a vertical-at-distance number.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/standard-deviation-load-development.html">
+<meta property="og:image" content="https://loadscope.app/assets/icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<style>
+:root{--orange:#d97706;--bg:#0e0f12;--bg-mid:#1a1c20;--bg-light:#252830;--text:#f5f5f5;--text-dim:#9ca3af;--text-muted:#6b7280;--border:#2d3036;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}
+.container{max-width:760px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;background:rgba(14,15,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10}
+nav .container{max-width:1080px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;color:#fff;text-decoration:none}
+.logo img{width:30px;height:30px;border-radius:7px}
+.nav-links a{color:var(--text-dim);text-decoration:none;margin-left:20px;font-size:15px}
+.nav-links a:hover{color:#fff}
+.btn{background:var(--orange);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:700}
+article{padding:48px 0 24px}
+.crumb{color:var(--text-muted);font-size:14px;margin-bottom:18px}
+.crumb a{color:var(--text-dim);text-decoration:none}
+h1{font-size:34px;line-height:1.2;margin-bottom:14px;letter-spacing:-.4px}
+h2{font-size:23px;margin:34px 0 10px;color:#fff}
+p{color:#dfe2e6;margin-bottom:16px}
+ul,ol{margin:0 0 16px 22px}
+li{color:#dfe2e6;margin-bottom:8px}
+a{color:var(--orange)}
+.lead{font-size:19px;color:var(--text-dim);margin-bottom:8px}
+strong{color:#fff}
+figure{margin:26px 0}
+figure img{width:100%;border:1px solid var(--border);border-radius:12px;display:block}
+figure.tight{max-width:380px;margin-left:auto;margin-right:auto}
+figcaption{color:var(--text-muted);font-size:14px;margin-top:8px;text-align:center}
+.cta{background:var(--bg-mid);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:12px;padding:22px 24px;margin:34px 0}
+.cta h3{color:#fff;font-size:19px;margin-bottom:8px}
+.cta .btn{display:inline-block;margin-top:6px;text-decoration:none}
+.related{border-top:1px solid var(--border);margin-top:40px;padding-top:24px}
+.related a{display:block;margin-bottom:8px;text-decoration:none;color:var(--text-dim)}
+.related a:hover{color:var(--orange)}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:28px 0;color:var(--text-muted);font-size:14px;text-align:center}
+footer a{color:var(--orange);text-decoration:none}
+</style></head><body><nav><div class="container">
+<a class="logo" href="/"><img src="/assets/icon.png" alt="Loadscope">LOADSCOPE&trade;</a>
+<div class="nav-links"><a href="/learn/">Learn</a><a href="/#faq">FAQ</a><a href="/#install">Install</a><a class="btn" href="/">Get Loadscope</a></div>
+</div></nav><div class="container"><article>
+<div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a> &rsaquo; SD and ES in load development</div>
+<h1>SD and ES in Load Development: What&rsquo;s a Good Number?</h1>
+
+<p class="lead">Everyone chases a single-digit SD. The honest answer: standard deviation matters more than extreme spread, and it only matters as much as your distance demands. Here&rsquo;s how to read both numbers without fooling yourself.</p>
+
+<p>Your chronograph hands you a velocity for every shot. <strong>Extreme spread (ES)</strong> and <strong>standard deviation (SD)</strong> are just two ways of summarizing how much those velocities scattered. They&rsquo;re the most-quoted numbers in load development &mdash; and the most misread. A good SD on the wrong number of shots tells you nothing; a great SD at 100 yards barely shows on paper. Let&rsquo;s sort out what each one is actually worth.</p>
+
+<h2>ES vs SD &mdash; what each one tells you</h2>
+<p><strong>Extreme spread</strong> is the simplest: your fastest shot minus your slowest. It&rsquo;s easy to picture, and it&rsquo;s the number one bad round completely wrecks. Shoot a tidy string and clip one flier, and your ES doubles while the load itself didn&rsquo;t change.</p>
+<p><strong>Standard deviation</strong> describes the whole string, not just its two worst members. It&rsquo;s the average distance of your velocities from their mean &mdash; so it tells you what the load <em>tends</em> to do, and one flier nudges it instead of detonating it. <strong>Chase SD.</strong> Treat ES as a flier-detector: if ES is wide while SD is tight, you probably had one bad round, not a bad load.</p>
+
+<h2>So what&rsquo;s a &ldquo;good&rdquo; SD?</h2>
+<p>As a rough community yardstick for a centerfire rifle load: a <strong>single-digit SD</strong> is excellent, <strong>under ~12&ndash;15 fps</strong> is solid for most shooting, and once you&rsquo;re north of ~20 fps you&rsquo;ll see it on target at distance. But those numbers are meaningless without two pieces of context: how many shots you measured, and how far you&rsquo;re shooting.</p>
+
+<h2>The trap nobody mentions: sample size</h2>
+<p>An SD calculated from 3 or 5 shots is mostly noise. Standard deviation needs a real sample before it settles down &mdash; figure <strong>10 shots as a minimum, and 20&ndash;30 to trust it.</strong> A &ldquo;single-digit SD&rdquo; off a 3-shot string is usually luck, and chasing it will send you re-loading to beat a number that was never real. If you&rsquo;re comparing charges in a ladder with a few shots each, read SD as a soft signal, not a verdict &mdash; and confirm your finalists with a longer string.</p>
+
+<h2>Why SD really matters: vertical at distance</h2>
+<p>Here&rsquo;s the part that makes SD worth the trouble. Velocity variation turns into <strong>vertical dispersion downrange</strong> &mdash; a slower bullet drops more by the time it gets there, a faster one less, and that spread opens up the longer the flight. At 100 yards, even a sloppy SD hides inside the group. At 600 and beyond, SD <em>is</em> your vertical. That&rsquo;s why the F-Class and long-range crowd obsess over it and the 100-yard benchrest crowd cares less: SD is really a prediction of how tall your group gets when it counts.</p>
+
+<h2>Where it fits in your load decision</h2>
+<p>SD is one input, not the whole answer. A load can post a pretty SD and still string vertically on paper, or shoot tight while its velocity wanders &mdash; so the number that matters is how all of it lines up: the <a href="/learn/powder-ladder-test.html">velocity flat-spot</a>, the SD, the <a href="/learn/measure-groups-from-a-photo.html">mean radius</a>, and the vertical on target. You can square these up by hand in a spreadsheet, or let the math do it.</p>
+
+<p>That&rsquo;s exactly what Loadscope does: it reads your chronograph CSV, computes velocity SD (and ES) for every charge you tested, lines it up against your group data, and <strong>weighs SD into the best-load call</strong> instead of leaving you to eyeball it. <a href="/learn/how-loadscope-scores-a-load.html">See how the scoring works &rarr;</a></p>
+
+<div style="background:#221a14;border:1px solid #6b4e1e;border-radius:10px;padding:14px 18px;margin:28px 0;color:#e8cfa0;font-size:15px"><strong>The one rule to remember:</strong> don&rsquo;t trust an SD from a tiny string. Three good shots can flatter a mediocre load. Shoot enough rounds to give the number a chance to be honest, then compare loads on more than SD alone.</div>
+
+<div class="cta"><h3>Stop eyeballing your SD</h3>
+<p>Loadscope reads your chronograph and target data, scores every powder charge and seating depth on velocity flat-spot, SD, mean radius and vertical, names your best load, and prints a range card &mdash; on Mac and Windows.</p>
+<a class="btn" href="/">See how it works &rarr;</a></div>
+<div class="related"><strong style="color:#fff">Keep reading</strong><br><br><a href="/learn/garmin-xero-data.html">Turn your Garmin Xero data into a decision &rarr;</a><a href="/learn/powder-ladder-test.html">How to read a powder ladder &rarr;</a><a href="/learn/how-loadscope-scores-a-load.html">How Loadscope scores a load &rarr;</a></div>
+</article></div>
+<footer><div class="container">
+<p>&copy; 2026 Loadscope&trade;. Automated rifle load development for Mac &amp; Windows. &middot; <a href="/">loadscope.app</a></p>
+<p style="margin-top:6px"><a href="/learn/">Learn</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></p>
+</div></footer></body></html>
