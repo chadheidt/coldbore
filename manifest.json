@@ -1,23 +1,23 @@
 {
- "app_version": "1.0.2",
+ "app_version": "1.0.3",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.0.2 - Improves the Request a Refund form: adds a contact-email field so we can always reach you, and fixes the input boxes so your text is readable.",
+ "app_release_notes": "v1.0.3 - Big Measure-a-Ladder update: mark several groups on one target photo (each labeled by charge), Set scale is now a simple ruler (drag, then Set length), and seating ladders support a jam, not just a jump. Loads are simpler too - one active load at a time, older ones under Past Loads, and new loads name themselves from your rifle and cartridge.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.0.2",
+   "app_version": "1.0.3",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.0.2 - Improves the Request a Refund form: adds a contact-email field so we can always reach you, and fixes the input boxes so your text is readable."
+   "app_release_notes": "v1.0.3 - Big Measure-a-Ladder update: mark several groups on one target photo (each labeled by charge), Set scale is now a simple ruler (drag, then Set length), and seating ladders support a jam, not just a jump. Loads are simpler too - one active load at a time, older ones under Past Loads, and new loads name themselves from your rifle and cartridge."
   },
   "windows": {
-   "app_version": "1.0.2",
+   "app_version": "1.0.3",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.0.2/Loadscope-Setup.exe",
-   "app_release_notes": "v1.0.2 - Improves the Request a Refund form: adds a contact-email field so we can always reach you, and fixes the input boxes so your text is readable."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.0.3/Loadscope-Setup.exe",
+   "app_release_notes": "v1.0.3 - Big Measure-a-Ladder update: mark several groups on one target photo (each labeled by charge), Set scale is now a simple ruler (drag, then Set length), and seating ladders support a jam, not just a jump. Loads are simpler too - one active load at a time, older ones under Past Loads, and new loads name themselves from your rifle and cartridge."
   }
  }
 }
