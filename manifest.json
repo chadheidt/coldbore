@@ -1,17 +1,17 @@
 {
- "app_version": "1.0.4",
+ "app_version": "1.0.5",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.0.4 - The big Measure-a-Ladder update (several groups per target photo, ruler-style Set scale, seating jam support, one active load with Past Loads, auto-named loads), now with a polish pass so input fields no longer cut off long values (rifle/optic names, ladder charges) and hints read cleaner.",
+ "app_release_notes": "v1.0.5 - Quality-of-life update: press and hold the minus/plus buttons to spin ladder numbers fast, Past Loads and Rework a Saved Load now find every load you've saved, and the built-in User Guide and Help are refreshed for the new Measure workflow.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.0.4",
+   "app_version": "1.0.5",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.0.4 - The big Measure-a-Ladder update (several groups per target photo, ruler-style Set scale, seating jam support, one active load with Past Loads, auto-named loads), now with a polish pass so input fields no longer cut off long values (rifle/optic names, ladder charges) and hints read cleaner."
+   "app_release_notes": "v1.0.5 - Quality-of-life update: press and hold the minus/plus buttons to spin ladder numbers fast, Past Loads and Rework a Saved Load now find every load you've saved, and the built-in User Guide and Help are refreshed for the new Measure workflow."
   },
   "windows": {
    "app_version": "1.0.4",
