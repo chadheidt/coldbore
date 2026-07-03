@@ -14,10 +14,10 @@
    "app_release_notes": "v1.0.6 - A much bigger bullet library: hundreds of current match and hunting bullets added across .22 through .338, each with a sourced ballistic coefficient. Also more accurate predicted DOPE when two bullets share the same name and weight in different calibers."
   },
   "windows": {
-   "app_version": "1.0.5",
+   "app_version": "1.0.6",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.0.5/Loadscope-Setup.exe",
-   "app_release_notes": "v1.0.5 - Quality-of-life update: press and hold the minus/plus buttons to spin ladder numbers fast, Past Loads and Rework a Saved Load now find every load you've saved, and the built-in User Guide and Help are refreshed for the new Measure workflow."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.0.6/Loadscope-Setup.exe",
+   "app_release_notes": "v1.0.6 - A much bigger bullet library: hundreds of current match and hunting bullets added across .22 through .338, each with a sourced ballistic coefficient. Also more accurate predicted DOPE when two bullets share the same name and weight in different calibers."
   }
  }
 }
