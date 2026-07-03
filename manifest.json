@@ -1,17 +1,17 @@
 {
- "app_version": "1.0.6",
+ "app_version": "1.0.7",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.0.6 - A much bigger bullet library: hundreds of current match and hunting bullets added across .22 through .338, each with a sourced ballistic coefficient. Also more accurate predicted DOPE when two bullets share the same name and weight in different calibers.",
+ "app_release_notes": "v1.0.7 - Fixes progress bars that were not visible on Mac: the update-download meter and the 'Loading' indicators now show correctly.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.0.6",
+   "app_version": "1.0.7",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.0.6 - A much bigger bullet library: hundreds of current match and hunting bullets added across .22 through .338, each with a sourced ballistic coefficient. Also more accurate predicted DOPE when two bullets share the same name and weight in different calibers."
+   "app_release_notes": "v1.0.7 - Fixes progress bars that were not visible on Mac: the update-download meter and the 'Loading' indicators now show correctly."
   },
   "windows": {
    "app_version": "1.0.6",
