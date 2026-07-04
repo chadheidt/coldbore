@@ -1,17 +1,17 @@
 {
- "app_version": "1.1.0",
+ "app_version": "1.1.1",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.1.0 - New Compare Loads page: pick saved loads from the same rifle and see which powder and charge shot best, scored on velocity SD, mean radius, and vertical SD. Plus Library cleanup: delete saved loads, bullets, rifles, and barrels you no longer want.",
+ "app_release_notes": "v1.1.1 - A rifle you set up now saves to your Rifles library right away, so you can come back and finish the ladder later. Plus a faster, clearer check for your saved loads when you start a New Ladder.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.1.0",
+   "app_version": "1.1.1",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.1.0 - New Compare Loads page: pick saved loads from the same rifle and see which powder and charge shot best, scored on velocity SD, mean radius, and vertical SD. Plus Library cleanup: delete saved loads, bullets, rifles, and barrels you no longer want."
+   "app_release_notes": "v1.1.1 - A rifle you set up now saves to your Rifles library right away, so you can come back and finish the ladder later. Plus a faster, clearer check for your saved loads when you start a New Ladder."
   },
   "windows": {
    "app_version": "1.1.0",
