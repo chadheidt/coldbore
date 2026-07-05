@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.1",
+ "app_version": "1.2.2",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.1 - Loads sent from the Loadscope Ballistics phone app now pop up on the desktop the moment they arrive, with a Review and Import button, plus a 'Review phone loads' shortcut in the sidebar. On the phone, the Send screen is clearer and lets you pick exactly which loads to send.",
+ "app_release_notes": "v1.2.2 - Target groups sent from your phone now get their own review list on the desktop: see each one, delete any you do not want, and add the rest to a load to score it. The phone-loads review list gained a delete button on each row, and the sidebar shortcuts for items waiting from your phone no longer clip their text.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.1",
+   "app_version": "1.2.2",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.1 - Loads sent from the Loadscope Ballistics phone app now pop up on the desktop the moment they arrive, with a Review and Import button, plus a 'Review phone loads' shortcut in the sidebar. On the phone, the Send screen is clearer and lets you pick exactly which loads to send."
+   "app_release_notes": "v1.2.2 - Target groups sent from your phone now get their own review list on the desktop: see each one, delete any you do not want, and add the rest to a load to score it. The phone-loads review list gained a delete button on each row, and the sidebar shortcuts for items waiting from your phone no longer clip their text."
   },
   "windows": {
    "app_version": "1.2.0",
