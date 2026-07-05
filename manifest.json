@@ -1,17 +1,17 @@
 {
- "app_version": "1.1.1",
+ "app_version": "1.2.0",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.1.1 - A rifle you set up now saves to your Rifles library right away, so you can come back and finish the ladder later. Plus a faster, clearer check for your saved loads when you start a New Ladder.",
+ "app_release_notes": "v1.2.0 - Send the rifles and recipes you built on the Loadscope Ballistics phone app straight to your desktop over Wi-Fi. They import as new loads marked 'from phone, not yet tested' and never overwrite a load you already have.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.1.1",
+   "app_version": "1.2.0",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.1.1 - A rifle you set up now saves to your Rifles library right away, so you can come back and finish the ladder later. Plus a faster, clearer check for your saved loads when you start a New Ladder."
+   "app_release_notes": "v1.2.0 - Send the rifles and recipes you built on the Loadscope Ballistics phone app straight to your desktop over Wi-Fi. They import as new loads marked 'from phone, not yet tested' and never overwrite a load you already have."
   },
   "windows": {
    "app_version": "1.1.1",
