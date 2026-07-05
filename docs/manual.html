@@ -100,7 +100,8 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
         <li><span class="btn">Results</span> — the scored ladder and your winning load.</li>
         <li><span class="btn">Range &amp; DOPE</span> — the built-in ballistic calculator (predicted dial).</li>
         <li><span class="btn">Pocket Card</span> — a printable range card.</li>
-        <li><span class="btn">Libraries</span> — your saved Loads, the Bullets reference, and Barrels round counts.</li>
+        <li><span class="btn">Compare Loads</span> — pick saved loads from the same rifle and see which powder and charge shot best.</li>
+        <li><span class="btn">Libraries</span> — your saved Loads, the Bullets reference, your Rifles, and Barrels round counts. Delete anything you no longer want.</li>
         <li><span class="btn">❓ Quick Guide</span> — pinned at the bottom; opens the illustrated quick-start.</li>
         <li><span class="btn">New Ladder</span> — the guided way to start a load: plan a ladder, shoot it in order, import your data (also at the bottom).</li>
       </ul>
@@ -120,6 +121,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
         <li><b>Round count</b> — set or add to this barrel's count. It is shared with the Barrels library and the phone companion.</li>
       </ul>
       <div class="note">You only set this up once per load. After that you just import range data.</div>
+      <div class="note">Set up a rifle now, run the ladder later. When you build a rifle it is saved to your <a href="#libraries">Rifles</a> library right away &mdash; even if you don't shoot that day &mdash; so you can come back, start a New Ladder, and pick it up where you left off.</div>
     </section>
 
     <section class="doc" id="import">
@@ -151,12 +153,13 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <h3>How it works</h3>
       <ul>
         <li><b>Bring in your target groups.</b> Two ways: tap <span class="btn">Import from phone</span> to pull groups you measured on the <a href="#companion">Loadscope Ballistics</a> app straight off your phone over Wi-Fi (paired to your charges in order) &mdash; or <span class="btn">Choose target photos</span> to measure on the desktop. For desktop measuring, pick a photo for each charge, or one photo of a whole sheet with a bull per charge, with a known reference in frame (a ruler, or a 1" grid).</li>
-        <li><b>Set the scale.</b> Click two points a known distance apart and tell Loadscope how far apart they really are. That turns pixels into real inches.</li>
+        <li><b>Set the scale.</b> Drag a line across something a known distance apart &mdash; a ruler, or a 1" grid square &mdash; then click <span class="btn">Set length</span> and type how far it really is. That turns pixels into real inches. Let off early? Just drag again before you confirm.</li>
         <li><b>Mark your aim, then tap each shot.</b> Loadscope does the geometry as you go.</li>
-        <li><b>Pick the ladder kind.</b> A <b>Powder/Seating</b> toggle sets whether each bull is a charge (grains) or a seating depth (CBTO), and any caliber can be typed in if it's not in the list.</li>
+        <li><b>Add a bull for each charge.</b> Shooting a whole ladder on one target sheet? Click <span class="btn">+ Add group</span> to drop another bull on the same photo; each bull is numbered and keeps its own charge or seating depth, labeled right on the target and editable. <span class="btn">Remove group</span> takes one back off.</li>
+        <li><b>Pick the ladder kind.</b> A <b>Powder/Seating</b> toggle sets whether each bull is a charge (grains) or a seating depth (CBTO), and any caliber can be typed in if it's not in the list. For seating, a jam reads back plainly: positive is <b>jump</b> off the lands, negative is <b>jam</b> into them, zero is <b>touching</b>.</li>
         <li><b>Save the target.</b> Each saved bull lands in your scored Results under its charge; your best load is named on the Results page.</li>
       </ul>
-      <div class="note">Measuring a whole charge ladder on one target sheet? Mark each bull and tell Loadscope which charge it is &mdash; no handwriting to read. The same works for a seating-depth ladder, one bull per depth.</div>
+      <div class="note">Measuring a whole ladder on one target sheet? Use <span class="btn">+ Add group</span> for each bull and tell Loadscope which charge it is &mdash; no handwriting to read. The same works for a seating-depth ladder, one bull per depth.</div>
       <p>Prefer to measure on your phone in the field? The <a href="#companion">Loadscope Ballistics</a> companion app has the same group-measuring tool, and there's a free, standalone <b>Loadscope Measure</b> app if all you want is a group number.</p>
     </section>
 
@@ -198,16 +201,26 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p>The Pocket Card lays out your predicted elevation, wind, drop, velocity and energy from 100 to 1000 yards on a clean card. <span class="btn">Print</span> it for the bench binder, or <span class="btn">Save as PDF</span>. It prints true to size — two 4×6 cards per page with cut guides.</p>
     </section>
 
+    <section class="doc" id="compare">
+      <h2>Compare Loads</h2>
+      <p class="lede">Which powder and charge actually shot best?</p>
+      <p>Open <span class="btn">Compare Loads</span> from the sidebar, tick two or more loads you've saved for the <b>same rifle</b>, and click <span class="btn">Compare selected</span>. Loadscope scores each load on <b>velocity SD</b>, <b>mean radius</b>, and <b>vertical SD</b>, then names the winner in plain language.</p>
+      <p>It is confidence-aware: when the top two loads are within the measurement noise, it says <b>too close to call &mdash; shoot more</b> instead of crowning a false winner. This is the honest way to answer "which powder is best in this rifle and bullet" from your real measured results &mdash; comparing loads that differ by powder, bullet, or charge.</p>
+      <div class="note">Compare only loads from the same rifle. Comparing across different rifles is apples-to-oranges, so Loadscope warns you and won't score it.</div>
+    </section>
+
     <section class="doc" id="libraries">
       <h2>Libraries</h2>
-      <p class="lede">Loads, Bullets, and Barrels — in one place.</p>
-      <p>The Libraries page has three tabs:</p>
+      <p class="lede">Loads, Bullets, Rifles, and Barrels — in one place.</p>
+      <p>The Libraries page has four tabs. Each one has a <span class="btn">Delete</span> button so you can clear out anything you no longer want.</p>
       <h3>Loads</h3>
-      <p>Every load you saved as a winner. Search by name, rifle, or powder. Right-click a row to open, rename, or delete it, and you can print the whole library as a reference.</p>
+      <p>Every load you saved as a winner. Search by name, rifle, or powder. Right-click a row to open or rename it, use <span class="btn">Delete load</span> to remove one, and you can print the whole library as a reference.</p>
       <h3>Bullets</h3>
       <p>The reference library of bullets Loadscope can predict DOPE for, with each one's published BC and source. Search by maker, weight, or name. If yours is not listed, you can always type a custom BC in Rifle &amp; Setup.</p>
+      <h3>Rifles</h3>
+      <p>Every rifle setup you've saved. Building a rifle in <a href="#newladder">New Ladder</a> files it here automatically, so you can reopen it to start a new ladder anytime. Delete a rifle you've sold or retired.</p>
       <h3>Barrels</h3>
-      <p>Every barrel with a saved round count, with an editable count. Editing it here updates the same number you see in Rifle &amp; Setup and on the phone companion — one count, everywhere.</p>
+      <p>Every barrel with a saved round count, with an editable count. Editing it here updates the same number you see in Rifle &amp; Setup and on the phone companion — one count, everywhere. Delete a barrel you no longer shoot.</p>
     </section>
 
     <section class="doc" id="companion">
@@ -250,7 +263,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
         <li><b>Plan your ladder</b> — enter your starting charge, the step between charges, and how many charges (or a seating-depth test). Loadscope lays out every load for you.</li>
         <li><b>Shoot &amp; import</b> — shoot the ladder from the lowest charge to the highest, in order, then import your chronograph data and measure your target groups (or import a target app's export), and click <span class="btn">Run Import</span>. Loadscope matches each string to the right charge by shot order and time.</li>
       </ol>
-      <p>Each new ladder begins a fresh load cycle: your finished workbook is moved into the <b>Completed Loads</b> folder so it is saved, and a clean workbook is ready. If you have an unsaved winner, Loadscope warns you first.</p>
+      <p>Each new ladder auto-names itself from your cartridge and bullet (like <b>6.5 Creedmoor 140 ELD-M</b>) &mdash; keep it or rename it. Loadscope keeps <b>one active load</b> at a time: starting a fresh ladder files your current one away and readies a clean workbook, and a <b>Working on:</b> bar across the top always shows which load you're in. Nothing is deleted &mdash; reopen any earlier load from <span class="btn">Past Loads</span> on the Home screen. If you have an unsaved winner, Loadscope warns you first.</p>
       <p><b>Reworking a saved load?</b> Use <span class="btn">Rework a Saved Load</span> on the Home screen. It opens New Ladder with that load's rifle and setup already filled in — just enter the new charges and import. Your original is kept.</p>
     </section>
 

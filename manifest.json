@@ -14,10 +14,10 @@
    "app_release_notes": "v1.1.1 - A rifle you set up now saves to your Rifles library right away, so you can come back and finish the ladder later. Plus a faster, clearer check for your saved loads when you start a New Ladder."
   },
   "windows": {
-   "app_version": "1.1.0",
+   "app_version": "1.1.1",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.1.0/Loadscope-Setup.exe",
-   "app_release_notes": "v1.1.0 - New Compare Loads page: pick saved loads from the same rifle and see which powder and charge shot best, scored on velocity SD, mean radius, and vertical SD. Plus Library cleanup: delete saved loads, bullets, rifles, and barrels you no longer want."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.1.1/Loadscope-Setup.exe",
+   "app_release_notes": "v1.1.1 - A rifle you set up now saves to your Rifles library right away, so you can come back and finish the ladder later. Plus a faster, clearer check for your saved loads when you start a New Ladder."
   }
  }
 }
