@@ -14,10 +14,10 @@
    "app_release_notes": "v1.2.3 - Your Load Library now shows ALL your loads in one place: your active load plus every past (archived) one, clearly marked, so nothing feels hidden. The table fits the window with your performance numbers always visible, Print actually prints the page, and you can now name a load on the Loadscope Ballistics phone app and that name shows up here."
   },
   "windows": {
-   "app_version": "1.2.0",
+   "app_version": "1.2.3",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.0/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.0 - Send the rifles and recipes you built on the Loadscope Ballistics phone app straight to your desktop over Wi-Fi. They import as new loads marked 'from phone, not yet tested' and never overwrite a load you already have."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.3/Loadscope-Setup.exe",
+   "app_release_notes": "v1.2.3 - Your Load Library now shows ALL your loads in one place: your active load plus every past (archived) one, clearly marked, so nothing feels hidden. The table fits the window with your performance numbers always visible, Print actually prints the page, and you can now name a load on the Loadscope Ballistics phone app and that name shows up here."
   }
  }
 }
