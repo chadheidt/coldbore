@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.2",
+ "app_version": "1.2.3",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.2 - Target groups sent from your phone now get their own review list on the desktop: see each one, delete any you do not want, and add the rest to a load to score it. The phone-loads review list gained a delete button on each row, and the sidebar shortcuts for items waiting from your phone no longer clip their text.",
+ "app_release_notes": "v1.2.3 - Your Load Library now shows ALL your loads in one place: your active load plus every past (archived) one, clearly marked, so nothing feels hidden. The table fits the window with your performance numbers always visible, Print actually prints the page, and you can now name a load on the Loadscope Ballistics phone app and that name shows up here.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.2",
+   "app_version": "1.2.3",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.2 - Target groups sent from your phone now get their own review list on the desktop: see each one, delete any you do not want, and add the rest to a load to score it. The phone-loads review list gained a delete button on each row, and the sidebar shortcuts for items waiting from your phone no longer clip their text."
+   "app_release_notes": "v1.2.3 - Your Load Library now shows ALL your loads in one place: your active load plus every past (archived) one, clearly marked, so nothing feels hidden. The table fits the window with your performance numbers always visible, Print actually prints the page, and you can now name a load on the Loadscope Ballistics phone app and that name shows up here."
   },
   "windows": {
    "app_version": "1.2.0",
