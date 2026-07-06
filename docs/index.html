@@ -873,10 +873,11 @@ header.hero .line2 {
 @media (max-width: 760px) {
   .two-up { grid-template-columns: 1fr; gap: 34px; }
 }
-/* "Built by precision shooters" — force all four cards onto one line
-   (Chad 2026-06-23). Scoped to #features so the 3-card Beta section, which
-   reuses .features, keeps its own auto-fit layout. */
-#features .features { grid-template-columns: repeat(4, 1fr); gap: 18px; }
+/* "Built by precision shooters" — 3 across so the five cards balance as
+   3 + 2 (Chad 2026-06-23; grew to five when Compare loads was added
+   2026-07-06). Scoped to #features so the 3-card Beta section, which reuses
+   .features, keeps its own auto-fit layout. */
+#features .features { grid-template-columns: repeat(3, 1fr); gap: 18px; }
 #features .feature { padding: 22px 20px; }
 @media (max-width: 880px) { #features .features { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 520px) { #features .features { grid-template-columns: 1fr; } }
@@ -1113,7 +1114,12 @@ header.hero .line2 {
       <div class="feature">
         <div class="icon"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
         <h3>Load Library</h3>
-        <p>Every winning load stays saved in the app — pull any of them back up later, print the Load Card for the bench binder, save as PDF, or export the whole library to spreadsheet. <strong>Want to build on a saved load?</strong> Rework it &mdash; Loadscope opens a fresh ladder with that load&rsquo;s rifle and components already filled in; set your new charges, shoot, and import. Your original load stays put.</p>
+        <p>Every winning load stays in the app &mdash; active and archived, in one searchable list. Pull any of them back up, or print the whole library or a single Load Card. <strong>Building on one?</strong> Rework it &mdash; a fresh ladder opens with that load&rsquo;s rifle and components filled in, your original untouched.</p>
+      </div>
+      <div class="feature">
+        <div class="icon"><svg viewBox="0 0 24 24"><line x1="3" y1="21" x2="21" y2="21"/><rect x="5" y="11" width="3.5" height="9"/><rect x="10.25" y="5" width="3.5" height="15"/><rect x="15.5" y="14" width="3.5" height="6"/></svg></div>
+        <h3>Compare loads</h3>
+        <p>Shot the same bullet over three powders? Select the saved loads from one rifle and Loadscope lines them up head-to-head &mdash; scoring velocity SD, group, and vertical &mdash; then calls which one shot best.</p>
       </div>
       <div class="feature">
         <div class="icon"><svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></div>
@@ -1123,7 +1129,7 @@ header.hero .line2 {
       <div class="feature">
         <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
         <h3>Your data, your machine</h3>
-        <p>Loadscope writes to a regular Excel file on your computer and <strong style="color: var(--text);">works fully offline</strong> — no cloud, no account, no subscription. Drop it on the range laptop with no signal and it runs. Workbooks are yours; uninstall whenever, your data stays.</p>
+        <p>Loadscope writes to a regular Excel file on your computer and <strong style="color: var(--text);">works fully offline</strong> — no cloud, no account, no subscription. Drop it on the range laptop with no signal and it runs.</p>
       </div>
     </div>
   </div>
