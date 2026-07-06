@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.3",
+ "app_version": "1.2.4",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.3 - Your Load Library now shows ALL your loads in one place: your active load plus every past (archived) one, clearly marked, so nothing feels hidden. The table fits the window with your performance numbers always visible, Print actually prints the page, and you can now name a load on the Loadscope Ballistics phone app and that name shows up here.",
+ "app_release_notes": "v1.2.4 - Garmin Xero users: Loadscope now reads the Excel (.xlsx) files the ShotView app makes when you export several sessions at once -- no more exporting one session at a time. They import and drop into your ladder in firing order automatically, just like before.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.3",
+   "app_version": "1.2.4",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.3 - Your Load Library now shows ALL your loads in one place: your active load plus every past (archived) one, clearly marked, so nothing feels hidden. The table fits the window with your performance numbers always visible, Print actually prints the page, and you can now name a load on the Loadscope Ballistics phone app and that name shows up here."
+   "app_release_notes": "v1.2.4 - Garmin Xero users: Loadscope now reads the Excel (.xlsx) files the ShotView app makes when you export several sessions at once -- no more exporting one session at a time. They import and drop into your ladder in firing order automatically, just like before."
   },
   "windows": {
    "app_version": "1.2.3",
