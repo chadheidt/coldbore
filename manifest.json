@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.9",
+ "app_version": "1.2.10",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.9 - The Measure screen's caliber now matches your bullet (7mm rifles were showing the .264 default). Fixed the elevation offset sign so a low group reads as low (negative) -- what you actually shot. \"Set scale\" now tells you when a photo's scale is already set, so you don't redo it for each group on a multi-target photo. And deleting a rifle or barrel from your Libraries now sticks.",
+ "app_release_notes": "v1.2.10 - \"Save this target & go to next\" now shows a Saving... indicator so a slow save reads as working, not frozen. The Barrels round-count buttons render as clear -/+ on every Mac (they were blank boxes for some setups). And the sample Tikka rifle and demo barrel no longer file themselves into your real Libraries when you browse the demo.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.9",
+   "app_version": "1.2.10",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.9 - The Measure screen's caliber now matches your bullet (7mm rifles were showing the .264 default). Fixed the elevation offset sign so a low group reads as low (negative) -- what you actually shot. \"Set scale\" now tells you when a photo's scale is already set, so you don't redo it for each group on a multi-target photo. And deleting a rifle or barrel from your Libraries now sticks."
+   "app_release_notes": "v1.2.10 - \"Save this target & go to next\" now shows a Saving... indicator so a slow save reads as working, not frozen. The Barrels round-count buttons render as clear -/+ on every Mac (they were blank boxes for some setups). And the sample Tikka rifle and demo barrel no longer file themselves into your real Libraries when you browse the demo."
   },
   "windows": {
    "app_version": "1.2.6",
