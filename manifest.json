@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.4",
+ "app_version": "1.2.5",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.4 - Garmin Xero users: Loadscope now reads the Excel (.xlsx) files the ShotView app makes when you export several sessions at once -- no more exporting one session at a time. They import and drop into your ladder in firing order automatically, just like before.",
+ "app_release_notes": "v1.2.5 - Import fixes: your target groups now line up with the right charge automatically by shot/measure order (real BallisticX date/time files score correctly, not velocity-only). Your ladder also matches even when you shoot fewer shots per charge than planned. Plus Garmin Xero multi-session .xlsx import, a standalone seating-depth test can be saved to your Library, and 'Start a new ladder' / 'Reset queue' truly clear staged files.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.4",
+   "app_version": "1.2.5",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.4 - Garmin Xero users: Loadscope now reads the Excel (.xlsx) files the ShotView app makes when you export several sessions at once -- no more exporting one session at a time. They import and drop into your ladder in firing order automatically, just like before."
+   "app_release_notes": "v1.2.5 - Import fixes: your target groups now line up with the right charge automatically by shot/measure order (real BallisticX date/time files score correctly, not velocity-only). Your ladder also matches even when you shoot fewer shots per charge than planned. Plus Garmin Xero multi-session .xlsx import, a standalone seating-depth test can be saved to your Library, and 'Start a new ladder' / 'Reset queue' truly clear staged files."
   },
   "windows": {
    "app_version": "1.2.3",
