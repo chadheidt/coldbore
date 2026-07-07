@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.5",
+ "app_version": "1.2.6",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.5 - Import fixes: your target groups now line up with the right charge automatically by shot/measure order (real BallisticX date/time files score correctly, not velocity-only). Your ladder also matches even when you shoot fewer shots per charge than planned. Plus Garmin Xero multi-session .xlsx import, a standalone seating-depth test can be saved to your Library, and 'Start a new ladder' / 'Reset queue' truly clear staged files.",
+ "app_release_notes": "v1.2.6 - Compare Loads now shows every load you've saved (across all your workbooks), grouped by rifle -- not just the one that's open. And the Load Card now prints the correct group size, mean radius, and vertical SD for a powder-charge winner.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.5",
+   "app_version": "1.2.6",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.5 - Import fixes: your target groups now line up with the right charge automatically by shot/measure order (real BallisticX date/time files score correctly, not velocity-only). Your ladder also matches even when you shoot fewer shots per charge than planned. Plus Garmin Xero multi-session .xlsx import, a standalone seating-depth test can be saved to your Library, and 'Start a new ladder' / 'Reset queue' truly clear staged files."
+   "app_release_notes": "v1.2.6 - Compare Loads now shows every load you've saved (across all your workbooks), grouped by rifle -- not just the one that's open. And the Load Card now prints the correct group size, mean radius, and vertical SD for a powder-charge winner."
   },
   "windows": {
    "app_version": "1.2.3",
