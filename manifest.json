@@ -14,10 +14,10 @@
    "app_release_notes": "v1.2.6 - Compare Loads now shows every load you've saved (across all your workbooks), grouped by rifle -- not just the one that's open. And the Load Card now prints the correct group size, mean radius, and vertical SD for a powder-charge winner."
   },
   "windows": {
-   "app_version": "1.2.3",
+   "app_version": "1.2.6",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.3/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.3 - Your Load Library now shows ALL your loads in one place: your active load plus every past (archived) one, clearly marked, so nothing feels hidden. The table fits the window with your performance numbers always visible, Print actually prints the page, and you can now name a load on the Loadscope Ballistics phone app and that name shows up here."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.6/Loadscope-Setup.exe",
+   "app_release_notes": "v1.2.6 - Compare Loads now shows every load you've saved across all your workbooks (grouped by rifle), and the Load Card prints the correct group, mean radius, and vertical SD for a powder-charge winner. Includes the 1.2.4/1.2.5 import fixes: Garmin xlsx import, target groups auto-pair by shot order, and cleaner staged-file handling."
   }
  }
 }
