@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.10",
+ "app_version": "1.2.11",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.10 - \"Save this target & go to next\" now shows a Saving... indicator so a slow save reads as working, not frozen. The Barrels round-count buttons render as clear -/+ on every Mac (they were blank boxes for some setups). And the sample Tikka rifle and demo barrel no longer file themselves into your real Libraries when you browse the demo.",
+ "app_release_notes": "v1.2.11 - You can now remove the demo's sample rifle and barrel anytime (Settings, or Workbook menu > Remove Sample Data). The Measure screen shows what chronograph data a load already has (\"5 charges - N555 - Jul 6\"), so it's clear why results appear without importing. And re-planning a ladder on a load that already has chronograph data now warns you first, with a one-click Start a New Load.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.10",
+   "app_version": "1.2.11",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.10 - \"Save this target & go to next\" now shows a Saving... indicator so a slow save reads as working, not frozen. The Barrels round-count buttons render as clear -/+ on every Mac (they were blank boxes for some setups). And the sample Tikka rifle and demo barrel no longer file themselves into your real Libraries when you browse the demo."
+   "app_release_notes": "v1.2.11 - You can now remove the demo's sample rifle and barrel anytime (Settings, or Workbook menu > Remove Sample Data). The Measure screen shows what chronograph data a load already has (\"5 charges - N555 - Jul 6\"), so it's clear why results appear without importing. And re-planning a ladder on a load that already has chronograph data now warns you first, with a one-click Start a New Load."
   },
   "windows": {
    "app_version": "1.2.6",
