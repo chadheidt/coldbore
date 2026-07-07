@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.8",
+ "app_version": "1.2.9",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.8 - The Measure Target screen is cleaner: when your ladder is already planned, the charge fields you set in New Ladder no longer repeat, and Undo/Clear/Start-this-target-over sit next to Save. Your point-of-aim offset now reads in your scope's dial unit (mils or MOA) so you can use it to sight in. Fixed a wrong default bullet (it stays blank until you pick one). Saved target photos group into collapsible folders by load. Plus a bigger \"Set this scale\" button and visible Barrels +/- buttons.",
+ "app_release_notes": "v1.2.9 - The Measure screen's caliber now matches your bullet (7mm rifles were showing the .264 default). Fixed the elevation offset sign so a low group reads as low (negative) -- what you actually shot. \"Set scale\" now tells you when a photo's scale is already set, so you don't redo it for each group on a multi-target photo. And deleting a rifle or barrel from your Libraries now sticks.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.8",
+   "app_version": "1.2.9",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.8 - The Measure Target screen is cleaner: when your ladder is already planned, the charge fields you set in New Ladder no longer repeat, and Undo/Clear/Start-this-target-over sit next to Save. Your point-of-aim offset now reads in your scope's dial unit (mils or MOA) so you can use it to sight in. Fixed a wrong default bullet (it stays blank until you pick one). Saved target photos group into collapsible folders by load. Plus a bigger \"Set this scale\" button and visible Barrels +/- buttons."
+   "app_release_notes": "v1.2.9 - The Measure screen's caliber now matches your bullet (7mm rifles were showing the .264 default). Fixed the elevation offset sign so a low group reads as low (negative) -- what you actually shot. \"Set scale\" now tells you when a photo's scale is already set, so you don't redo it for each group on a multi-target photo. And deleting a rifle or barrel from your Libraries now sticks."
   },
   "windows": {
    "app_version": "1.2.6",
