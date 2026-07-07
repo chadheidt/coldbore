@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.6",
+ "app_version": "1.2.7",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.6 - Compare Loads now shows every load you've saved (across all your workbooks), grouped by rifle -- not just the one that's open. And the Load Card now prints the correct group size, mean radius, and vertical SD for a powder-charge winner.",
+ "app_release_notes": "v1.2.7 - Loadscope now walks you through load development step by step, with a clear next-step pop-up at each stage. Rifle & Setup has one clear \"Next: Plan your ladder\" button and saves your setup for you. Your measured targets can't get lost -- they auto-save -- and a new Targets tab in Libraries keeps your marked-up target photos, grouped by load. The Load Card now shows your pre-entered powder-test CBTO, plus clearer photo-import help and friendlier import messages.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.6",
+   "app_version": "1.2.7",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.6 - Compare Loads now shows every load you've saved (across all your workbooks), grouped by rifle -- not just the one that's open. And the Load Card now prints the correct group size, mean radius, and vertical SD for a powder-charge winner."
+   "app_release_notes": "v1.2.7 - Loadscope now walks you through load development step by step, with a clear next-step pop-up at each stage. Rifle & Setup has one clear \"Next: Plan your ladder\" button and saves your setup for you. Your measured targets can't get lost -- they auto-save -- and a new Targets tab in Libraries keeps your marked-up target photos, grouped by load. The Load Card now shows your pre-entered powder-test CBTO, plus clearer photo-import help and friendlier import messages."
   },
   "windows": {
    "app_version": "1.2.6",
