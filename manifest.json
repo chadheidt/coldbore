@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.11",
+ "app_version": "1.2.12",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.11 - You can now remove the demo's sample rifle and barrel anytime (Settings, or Workbook menu > Remove Sample Data). The Measure screen shows what chronograph data a load already has (\"5 charges - N555 - Jul 6\"), so it's clear why results appear without importing. And re-planning a ladder on a load that already has chronograph data now warns you first, with a one-click Start a New Load.",
+ "app_release_notes": "v1.2.12 - Fixed: your measured targets no longer disappear from a load after you import your chronograph -- they stay with the load and score together. New: right-click a saved target in the Targets library to add it to the load you're working on. And the left menu now lists Measure Target above Import Data, matching the step-by-step flow.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.11",
+   "app_version": "1.2.12",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.11 - You can now remove the demo's sample rifle and barrel anytime (Settings, or Workbook menu > Remove Sample Data). The Measure screen shows what chronograph data a load already has (\"5 charges - N555 - Jul 6\"), so it's clear why results appear without importing. And re-planning a ladder on a load that already has chronograph data now warns you first, with a one-click Start a New Load."
+   "app_release_notes": "v1.2.12 - Fixed: your measured targets no longer disappear from a load after you import your chronograph -- they stay with the load and score together. New: right-click a saved target in the Targets library to add it to the load you're working on. And the left menu now lists Measure Target above Import Data, matching the step-by-step flow."
   },
   "windows": {
    "app_version": "1.2.11",
