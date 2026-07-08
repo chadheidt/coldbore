@@ -14,10 +14,10 @@
    "app_release_notes": "v1.2.12 - Fixed: your measured targets no longer disappear from a load after you import your chronograph -- they stay with the load and score together. New: right-click a saved target in the Targets library to add it to the load you're working on. And the left menu now lists Measure Target above Import Data, matching the step-by-step flow."
   },
   "windows": {
-   "app_version": "1.2.11",
+   "app_version": "1.2.12",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.11/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.11 - A big catch-up (everything from 1.2.7 on): Loadscope now guides you step by step through setup, planning, measuring your target photos, importing your chronograph, and your best load. The Measure screen is cleaner and shows what chronograph data a load already has. Elevation/windage offsets and caliber now read correctly, and the Barrels round-count buttons are clear -/+ again. New: Remove Sample Data (Settings or Workbook menu) to clear the demo rig, and a heads-up before re-planning a ladder over existing chronograph data."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.12/Loadscope-Setup.exe",
+   "app_release_notes": "v1.2.12 - Fixed: your measured targets no longer disappear from a load after you import your chronograph -- they stay with the load and score together. New: right-click a saved target in the Targets library to add it to the load you're working on. And the left menu now lists Measure Target above Import Data, matching the step-by-step flow."
   }
  }
 }
