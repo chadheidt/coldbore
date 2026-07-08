@@ -1,23 +1,23 @@
 {
- "app_version": "1.2.14",
+ "app_version": "1.2.15",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.14 - The sidebar's \"New Ladder\" button is now \"Create New Load,\" with a prominent picker so you can start a fresh load from a saved rifle in one click. Right-click any saved rifle in Libraries to create a new load with it, see or compare its loads, print a DOPE card, or duplicate, rename, or delete it.",
+ "app_release_notes": "v1.2.15 - Create New Load now files your current load to Past Loads and starts a fresh one (the button previously re-showed your old screen). And after you plan your ladder it walks you to Measure Target to add your groups, then Import your chronograph, then Results -- the full guided flow, measure first.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.14",
+   "app_version": "1.2.15",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.14 - The sidebar's \"New Ladder\" button is now \"Create New Load,\" with a prominent picker so you can start a fresh load from a saved rifle in one click. Right-click any saved rifle in Libraries to create a new load with it, see or compare its loads, print a DOPE card, or duplicate, rename, or delete it."
+   "app_release_notes": "v1.2.15 - Create New Load now files your current load to Past Loads and starts a fresh one (the button previously re-showed your old screen). And after you plan your ladder it walks you to Measure Target to add your groups, then Import your chronograph, then Results -- the full guided flow, measure first."
   },
   "windows": {
-   "app_version": "1.2.14",
+   "app_version": "1.2.15",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.14/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.14 - The sidebar's \"New Ladder\" button is now \"Create New Load,\" with a prominent picker so you can start a fresh load from a saved rifle in one click. Right-click any saved rifle in Libraries to create a new load with it, see or compare its loads, print a DOPE card, or duplicate, rename, or delete it."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.15/Loadscope-Setup.exe",
+   "app_release_notes": "v1.2.15 - Create New Load now files your current load to Past Loads and starts a fresh one (the button previously re-showed your old screen). And after you plan your ladder it walks you to Measure Target to add your groups, then Import your chronograph, then Results -- the full guided flow, measure first."
   }
  }
 }
