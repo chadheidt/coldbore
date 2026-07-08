@@ -1,23 +1,23 @@
 {
- "app_version": "1.2.13",
+ "app_version": "1.2.14",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.13 - New: if a thrown charge landed off your plan's even step, you can now edit that rung's charge (or seating depth) right on the Results screen -- Loadscope re-sorts the ladder and re-scores the winner for you. Your measured targets now come back when you return to the Measure Target screen. Your winning load saves to the Library automatically, updating in place instead of adding a duplicate row. Removed a dead Print button from the top of the in-app load card.",
+ "app_release_notes": "v1.2.14 - The sidebar's \"New Ladder\" button is now \"Create New Load,\" with a prominent picker so you can start a fresh load from a saved rifle in one click. Right-click any saved rifle in Libraries to create a new load with it, see or compare its loads, print a DOPE card, or duplicate, rename, or delete it.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.13",
+   "app_version": "1.2.14",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.13 - New: if a thrown charge landed off your plan's even step, you can now edit that rung's charge (or seating depth) right on the Results screen -- Loadscope re-sorts the ladder and re-scores the winner for you. Your measured targets now come back when you return to the Measure Target screen. Your winning load saves to the Library automatically, updating in place instead of adding a duplicate row. Removed a dead Print button from the top of the in-app load card."
+   "app_release_notes": "v1.2.14 - The sidebar's \"New Ladder\" button is now \"Create New Load,\" with a prominent picker so you can start a fresh load from a saved rifle in one click. Right-click any saved rifle in Libraries to create a new load with it, see or compare its loads, print a DOPE card, or duplicate, rename, or delete it."
   },
   "windows": {
-   "app_version": "1.2.13",
+   "app_version": "1.2.14",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.13/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.13 - New: if a thrown charge landed off your plan's even step, you can now edit that rung's charge (or seating depth) right on the Results screen -- Loadscope re-sorts the ladder and re-scores the winner for you. Your measured targets now come back when you return to the Measure Target screen. Your winning load saves to the Library automatically, updating in place instead of adding a duplicate row. Removed a dead Print button from the top of the in-app load card."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.14/Loadscope-Setup.exe",
+   "app_release_notes": "v1.2.14 - The sidebar's \"New Ladder\" button is now \"Create New Load,\" with a prominent picker so you can start a fresh load from a saved rifle in one click. Right-click any saved rifle in Libraries to create a new load with it, see or compare its loads, print a DOPE card, or duplicate, rename, or delete it."
   }
  }
 }
