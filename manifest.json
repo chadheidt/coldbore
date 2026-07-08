@@ -14,10 +14,10 @@
    "app_release_notes": "v1.2.13 - New: if a thrown charge landed off your plan's even step, you can now edit that rung's charge (or seating depth) right on the Results screen -- Loadscope re-sorts the ladder and re-scores the winner for you. Your measured targets now come back when you return to the Measure Target screen. Your winning load saves to the Library automatically, updating in place instead of adding a duplicate row. Removed a dead Print button from the top of the in-app load card."
   },
   "windows": {
-   "app_version": "1.2.12",
+   "app_version": "1.2.13",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.12/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.12 - Fixed: your measured targets no longer disappear from a load after you import your chronograph -- they stay with the load and score together. New: right-click a saved target in the Targets library to add it to the load you're working on. And the left menu now lists Measure Target above Import Data, matching the step-by-step flow."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.13/Loadscope-Setup.exe",
+   "app_release_notes": "v1.2.13 - New: if a thrown charge landed off your plan's even step, you can now edit that rung's charge (or seating depth) right on the Results screen -- Loadscope re-sorts the ladder and re-scores the winner for you. Your measured targets now come back when you return to the Measure Target screen. Your winning load saves to the Library automatically, updating in place instead of adding a duplicate row. Removed a dead Print button from the top of the in-app load card."
   }
  }
 }
