@@ -1321,7 +1321,7 @@ header.hero .line2 {
       <div class="feedback" id="requestAccessFeedback"></div>
       <div class="actions">
         <button class="btn btn-outline" onclick="closeDownloadModal()">Cancel</button>
-        <a class="btn" href="https://loadscope.lemonsqueezy.com/checkout/buy/83b4751b-90c2-4a93-966a-65e3aeda8ecb" target="_blank" rel="noopener">Buy now &mdash; $59</a>
+        <a class="btn" id="buyNowLink" href="https://loadscope.lemonsqueezy.com/checkout/buy/83b4751b-90c2-4a93-966a-65e3aeda8ecb" target="_blank" rel="noopener">Buy now &mdash; $59</a>
       </div>
       <p style="font-size: 13px; color: var(--text-muted); margin-top: 14px;">After checkout, your access code arrives by email &mdash; then use <strong>I have a code</strong> to download.</p>
     </div>
@@ -1358,6 +1358,32 @@ function closeDemo() {
   if (m) m.classList.remove("open");
   if (v) v.pause();
 }
+
+// Attribution: capture whatever UTM params a visitor arrived with (Meta ad,
+// forum link, social bio, etc.) and carry them into the Buy Now checkout link
+// as Lemon Squeezy custom data, so each order can be traced back to a channel
+// instead of being a dead end (Chad 2026-07-09 -- a sale came in with no way
+// to tell where it originated). Last-touch: a later visit with new UTM params
+// overwrites the stored ones, matching how the buyer actually arrived this time.
+(function attributionCapture() {
+  var UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+  try {
+    var params = new URLSearchParams(window.location.search);
+    UTM_KEYS.forEach(function (k) {
+      var v = params.get(k);
+      if (v) sessionStorage.setItem(k, v);
+    });
+    var link = document.getElementById("buyNowLink");
+    if (link) {
+      var url = new URL(link.href);
+      UTM_KEYS.forEach(function (k) {
+        var v = sessionStorage.getItem(k);
+        if (v) url.searchParams.set("checkout[custom][" + k + "]", v);
+      });
+      link.href = url.toString();
+    }
+  } catch (e) { /* attribution is best-effort -- never block checkout */ }
+})();
 
 const WORKER_AUTHORIZE_URL = "https://coldbore-download.cheidt182.workers.dev/authorize";
 const WORKER_REQUEST_URL = "https://coldbore-download.cheidt182.workers.dev/request-access";
