@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.16",
+ "app_version": "1.2.17",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.16 - Measure screen: your result badges drag and place cleanly on the last target, the what's-next guidance rides in a banner that never covers your target, and placing badges is smooth. Start a new load now carries your setup forward (rifle, powder, brass, distance, and more). Reworded 'CSV' to 'files' throughout since Loadscope reads Excel exports too.",
+ "app_release_notes": "v1.2.17 - Chronograph files that hold sessions from several range days no longer get spliced into one ladder by accident. Loadscope now builds the ladder from a single day's sessions, shows the date on every session so you can see what it picked, and lets you place any leftover session by hand. Fixes an import screen that rendered with unreadable labels on Windows.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.16",
+   "app_version": "1.2.17",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.16 - Measure screen: your result badges drag and place cleanly on the last target, the what's-next guidance rides in a banner that never covers your target, and placing badges is smooth. Start a new load now carries your setup forward (rifle, powder, brass, distance, and more). Reworded 'CSV' to 'files' throughout since Loadscope reads Excel exports too."
+   "app_release_notes": "v1.2.17 - Chronograph files that hold sessions from several range days no longer get spliced into one ladder by accident. Loadscope now builds the ladder from a single day's sessions, shows the date on every session so you can see what it picked, and lets you place any leftover session by hand. Fixes an import screen that rendered with unreadable labels on Windows."
   },
   "windows": {
    "app_version": "1.2.15",
