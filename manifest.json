@@ -14,10 +14,10 @@
    "app_release_notes": "v1.2.19 - The 'Workbook backups to keep' number in Settings was printed in cream on a white box - readable now. Entering a retired beta code tells you it was retired and points you at the key from your purchase email, instead of saying it looks like a typo. The Workbook menu now says Create New Load, matching the sidebar and the wizard. Also fixes two Windows-only screens that painted their text the same color as the background."
   },
   "windows": {
-   "app_version": "1.2.17",
+   "app_version": "1.2.19",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.17/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.17 - Chronograph files that hold sessions from several range days no longer get spliced into one ladder by accident. Loadscope now builds the ladder from a single day's sessions, shows the date on every session so you can see what it picked, and lets you place any leftover session by hand. Also fixes dialogs that showed unreadable text on Windows."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.19/Loadscope-Setup.exe",
+   "app_release_notes": "v1.2.19 - Three screens printed their text the same color as the background and are readable again: the Settings window's title, the 'backups to keep' number in Settings, and the Cancel button on Create New Load. Entering a retired beta code now tells you it was retired and points you at the key from your purchase email, instead of saying it looks like a typo. The Workbook menu now says Create New Load, matching the rest of the app."
   }
  }
 }
