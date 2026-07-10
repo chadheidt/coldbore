@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.17",
+ "app_version": "1.2.18",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.17 - Chronograph files that hold sessions from several range days no longer get spliced into one ladder by accident. Loadscope now builds the ladder from a single day's sessions, shows the date on every session so you can see what it picked, and lets you place any leftover session by hand. Fixes an import screen that rendered with unreadable labels on Windows.",
+ "app_release_notes": "v1.2.18 - Fixes two Windows screens that painted their text the same color as the background: the Settings window's title, and the Cancel button on Create New Load. Entering a retired beta code now tells you it was retired and points you at your purchase key, instead of saying it looks like a typo. The Workbook menu now says Create New Load, matching the rest of the app.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.17",
+   "app_version": "1.2.18",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.17 - Chronograph files that hold sessions from several range days no longer get spliced into one ladder by accident. Loadscope now builds the ladder from a single day's sessions, shows the date on every session so you can see what it picked, and lets you place any leftover session by hand. Fixes an import screen that rendered with unreadable labels on Windows."
+   "app_release_notes": "v1.2.18 - Entering a retired beta code now tells you it was retired and points you at your purchase key, instead of saying it looks like a typo. The Workbook menu now says Create New Load, matching the sidebar and the wizard. Also fixes two Windows-only screens that painted their text the same color as the background."
   },
   "windows": {
    "app_version": "1.2.17",
