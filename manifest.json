@@ -14,10 +14,10 @@
    "app_release_notes": "v1.2.22 - Fixed a crash when deleting target photos from the right-click menu in Libraries (your scored results were never affected). Also, renaming a saved load now updates its name everywhere - the Loads tab and Targets tab always agree."
   },
   "windows": {
-   "app_version": "1.2.21",
+   "app_version": "1.2.22",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.21/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.21 - Fixed an update loop: if Loadscope was installed somewhere the automatic updater can't replace, it used to ask to update, download, fail, and ask again forever. Now it tells you once and points you to loadscope.app to download it yourself, instead of looping."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.22/Loadscope-Setup.exe",
+   "app_release_notes": "v1.2.22 - Fixed a crash when deleting target photos from the right-click menu in Libraries (your scored results were never affected). Also, renaming a saved load now updates its name everywhere - the Loads tab and Targets tab always agree."
   }
  }
 }
