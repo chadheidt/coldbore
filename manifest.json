@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.19",
+ "app_version": "1.2.20",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.19 - Three screens printed their text the same color as the background. The Settings window's title and its 'backups to keep' number, and the Cancel button on Create New Load. All three are readable again. Entering a retired beta code now tells you it was retired and points you at the key from your purchase email, instead of saying it looks like a typo. The Workbook menu now says Create New Load, matching the rest of the app.",
+ "app_release_notes": "v1.2.20 - The Targets library can now print and delete. Right-click a target photo to Print it (a page opens in your browser with a Print button) or Delete it; right-click a load's name to delete all of that load's target photos at once. Deleting a photo never changes your scored result - it only removes the picture. Left-click a photo to view it full size; right-click for those options.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.19",
+   "app_version": "1.2.20",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.19 - The 'Workbook backups to keep' number in Settings was printed in cream on a white box - readable now. Entering a retired beta code tells you it was retired and points you at the key from your purchase email, instead of saying it looks like a typo. The Workbook menu now says Create New Load, matching the sidebar and the wizard. Also fixes two Windows-only screens that painted their text the same color as the background."
+   "app_release_notes": "v1.2.20 - The Targets library can now print and delete. Right-click a target photo to Print it (a page opens in your browser with a Print button) or Delete it; right-click a load's name to delete all of that load's target photos at once. Deleting a photo never changes your scored result - it only removes the picture. Left-click a photo to view it full size; right-click for those options."
   },
   "windows": {
    "app_version": "1.2.19",
