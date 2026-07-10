@@ -14,10 +14,10 @@
    "app_release_notes": "v1.2.17 - Chronograph files that hold sessions from several range days no longer get spliced into one ladder by accident. Loadscope now builds the ladder from a single day's sessions, shows the date on every session so you can see what it picked, and lets you place any leftover session by hand. Fixes an import screen that rendered with unreadable labels on Windows."
   },
   "windows": {
-   "app_version": "1.2.15",
+   "app_version": "1.2.17",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.15/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.15 - Create New Load now files your current load to Past Loads and starts a fresh one (the button previously re-showed your old screen). And after you plan your ladder it walks you to Measure Target to add your groups, then Import your chronograph, then Results -- the full guided flow, measure first."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.17/Loadscope-Setup.exe",
+   "app_release_notes": "v1.2.17 - Chronograph files that hold sessions from several range days no longer get spliced into one ladder by accident. Loadscope now builds the ladder from a single day's sessions, shows the date on every session so you can see what it picked, and lets you place any leftover session by hand. Also fixes dialogs that showed unreadable text on Windows."
   }
  }
 }
