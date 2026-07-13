@@ -14,10 +14,10 @@
    "app_release_notes": "v1.2.24 - When your ladder is not evenly spaced, New Ladder setup now lets you enter your own charges (or seating depths): switch to 'Enter my charges' and type each one in the order you'll shoot them. Loadscope keeps them in shooting order for you. Also fixes the Remove Group button so removing a rung keeps the right charges instead of shifting them."
   },
   "windows": {
-   "app_version": "1.2.23",
+   "app_version": "1.2.24",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.23/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.23 - You can now rename a load from the Targets tab (right-click the load's header line). Renaming also shows up right away now - the Loads and Targets tabs refresh when you switch to them, so a new name appears immediately."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.24/Loadscope-Setup.exe",
+   "app_release_notes": "v1.2.24 - When your ladder is not evenly spaced, New Ladder setup now lets you enter your own charges (or seating depths): switch to 'Enter my charges' and type each one in the order you'll shoot them. Loadscope keeps them in shooting order for you. Also fixes the Remove Group button so removing a rung keeps the right charges instead of shifting them."
   }
  }
 }
