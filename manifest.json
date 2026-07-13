@@ -1,23 +1,23 @@
 {
- "app_version": "1.2.25",
+ "app_version": "1.2.26",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.25 - Your in-progress work now sticks around: leaving the Measure Target screen (or clicking Create New Load) no longer wipes what you were doing. Compare Loads now shows a composite score for each load and fills in the CBTO. Manual charge entry starts blank with a clear delete button on each row. Plus a clearer 'how many groups are on this photo?' question, a progress indicator when saving your marked targets, snappier Library tabs, and a fix for a green flash when saving a load.",
+ "app_release_notes": "v1.2.26 - Fixes the Best Load card so its green check marks are honest. On a powder-only ladder it was showing 'best in all metrics' even when the winning charge only won one -- it now shows exactly which categories the load actually won (your winner is still the same; only the badge was wrong).",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.25",
+   "app_version": "1.2.26",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.25 - Your in-progress work now sticks around: leaving the Measure Target screen (or clicking Create New Load) no longer wipes what you were doing. Compare Loads now shows a composite score for each load and fills in the CBTO. Manual charge entry starts blank with a clear delete button on each row. Plus a clearer 'how many groups are on this photo?' question, a progress indicator when saving your marked targets, snappier Library tabs, and a fix for a green flash when saving a load."
+   "app_release_notes": "v1.2.26 - Fixes the Best Load card so its green check marks are honest. On a powder-only ladder it was showing 'best in all metrics' even when the winning charge only won one -- it now shows exactly which categories the load actually won (your winner is still the same; only the badge was wrong)."
   },
   "windows": {
-   "app_version": "1.2.25",
+   "app_version": "1.2.26",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.25/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.25 - Your in-progress work now sticks around: leaving the Measure Target screen (or clicking Create New Load) no longer wipes what you were doing. Compare Loads now shows a composite score for each load and fills in the CBTO. Manual charge entry starts blank with a clear delete button on each row. Plus a clearer 'how many groups are on this photo?' question, a progress indicator when saving your marked targets, snappier Library tabs, and a fix for a green flash when saving a load."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.26/Loadscope-Setup.exe",
+   "app_release_notes": "v1.2.26 - Fixes the Best Load card so its green check marks are honest. On a powder-only ladder it was showing 'best in all metrics' even when the winning charge only won one -- it now shows exactly which categories the load actually won (your winner is still the same; only the badge was wrong)."
   }
  }
 }
