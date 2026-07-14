@@ -1,17 +1,22 @@
 {
- "app_version": "1.2.27",
+ "app_version": "1.2.28",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.27 - New 'Why this WON' explainer on the Best Load card: tap it next to the winning charge to see, in plain English, why the most balanced load beat the ones that topped a single test. Also restores the winner's green 'best in' check on the card, and the Loads tab now shows a name for every saved load.",
+ "app_release_notes": "v1.2.28 - Now runs natively on Apple Silicon Macs: no Rosetta needed, and faster. Plus: drag your target photos straight onto the Measure screen - from Finder or the Photos app.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.27",
+   "app_version": "1.2.28",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.27 - New 'Why this WON' explainer on the Best Load card: tap it next to the winning charge to see, in plain English, why the most balanced load beat the ones that topped a single test. Also restores the winner's green 'best in' check on the card, and the Loads tab now shows a name for every saved load."
+   "app_release_notes": "v1.2.28 - Now runs natively on Apple Silicon Macs: no Rosetta needed, and faster. Plus: drag your target photos straight onto the Measure screen - from Finder or the Photos app."
+  },
+  "mac_arm64": {
+   "app_version": "1.2.28",
+   "app_download_file": "Loadscope-arm64.zip",
+   "app_release_notes": "v1.2.28 - Now runs natively on Apple Silicon Macs: no Rosetta needed, and faster. Plus: drag your target photos straight onto the Measure screen - from Finder or the Photos app."
   },
   "windows": {
    "app_version": "1.2.27",

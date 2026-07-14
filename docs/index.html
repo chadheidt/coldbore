@@ -1254,7 +1254,7 @@ header.hero .line2 {
       </details>
       <details class="faq-item">
         <summary>What hardware does Loadscope run on?</summary>
-        <p><strong>Mac:</strong> macOS 10.13 or newer. Runs natively on Intel Macs and via Rosetta 2 on Apple Silicon (M-series).</p>
+        <p><strong>Mac:</strong> macOS 10.13 or newer. Runs natively on both Intel and Apple Silicon (M-series) Macs &mdash; no Rosetta needed.</p>
         <p><strong>Windows:</strong> Windows 10 or 11, 64-bit. No GPU required. Loadscope is a small app — runs fine on modest hardware.</p>
       </details>
       <details class="faq-item">
@@ -1392,11 +1392,31 @@ const WORKER_REQUEST_URL = "https://coldbore-download.cheidt182.workers.dev/requ
 const IS_WINDOWS = /Win(dows|32|64)/i.test(
   (navigator.userAgent || "") + " " + (navigator.platform || ""));
 
+// Apple Silicon detection (2026-07-14 dual build). navigator.userAgent ALWAYS
+// reports "Intel" on Mac (Apple spoofs it), so we read the WebGL GPU string:
+// Apple Silicon Macs report an "Apple" GPU; Intel Macs report Intel/AMD/Radeon.
+// CONSERVATIVE on purpose: only return arm64 when we're confident it's Apple
+// Silicon; anything unknown falls back to the x86_64 build, which runs on EVERY
+// Mac (natively on Intel, via Rosetta on Apple Silicon). So an Intel Mac can
+// never be handed an arm64 build it can't run.
+function isAppleSilicon() {
+  try {
+    const c = document.createElement("canvas");
+    const gl = c.getContext("webgl") || c.getContext("experimental-webgl");
+    if (!gl) return false;
+    const ext = gl.getExtension("WEBGL_debug_renderer_info");
+    const r = String(ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
+                          : (gl.getParameter(gl.RENDERER) || ""));
+    return /apple/i.test(r) && !/intel|amd|radeon|nvidia/i.test(r);
+  } catch (e) { return false; }
+}
+const MAC_DMG = isAppleSilicon() ? "Loadscope-arm64.dmg" : "Loadscope.dmg";
+
 // Selected platform drives BOTH the request payload and which installer the
 // "I have a code" tab downloads. 'mac' | 'win'. Pre-set from the OS, but the
 // visitor can flip it (work Mac, home Windows PC, etc.).
 let selectedPlatform = IS_WINDOWS ? "win" : "mac";
-const PLATFORM_FILE = { mac: "Loadscope.dmg", win: "Loadscope-Setup.exe" };
+const PLATFORM_FILE = { mac: MAC_DMG, win: "Loadscope-Setup.exe" };
 const PLATFORM_LABEL = { mac: "Mac", win: "Windows" };
 
 function setPlatform(p) {
