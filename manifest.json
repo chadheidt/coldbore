@@ -19,10 +19,10 @@
    "app_release_notes": "v1.2.28 - Now runs natively on Apple Silicon Macs: no Rosetta needed, and faster. Plus: drag your target photos straight onto the Measure screen - from Finder or the Photos app."
   },
   "windows": {
-   "app_version": "1.2.27",
+   "app_version": "1.2.28",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.27/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.27 - New 'Why this WON' explainer on the Best Load card: tap it next to the winning charge to see, in plain English, why the most balanced load beat the ones that topped a single test. Also restores the winner's green 'best in' check on the card, and the Loads tab now shows a name for every saved load."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.28/Loadscope-Setup.exe",
+   "app_release_notes": "v1.2.28 - Drag your target photos straight onto the Measure screen instead of hunting for the file. Plus, distance suggestions now go out to 1000 yd (300 / 600 / 800 / 1000) for known-distance and long-range shooters, and you can still type any value."
   }
  }
 }
