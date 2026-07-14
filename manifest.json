@@ -1,17 +1,17 @@
 {
- "app_version": "1.2.26",
+ "app_version": "1.2.27",
  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.26 - Fixes the Best Load card so its green check marks are honest. On a powder-only ladder it was showing 'best in all metrics' even when the winning charge only won one -- it now shows exactly which categories the load actually won (your winner is still the same; only the badge was wrong).",
+ "app_release_notes": "v1.2.27 - New 'Why this WON' explainer on the Best Load card: tap it next to the winning charge to see, in plain English, why the most balanced load beat the ones that topped a single test. Also restores the winner's green 'best in' check on the card, and the Loads tab now shows a name for every saved load.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.2.26",
+   "app_version": "1.2.27",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.26 - Fixes the Best Load card so its green check marks are honest. On a powder-only ladder it was showing 'best in all metrics' even when the winning charge only won one -- it now shows exactly which categories the load actually won (your winner is still the same; only the badge was wrong)."
+   "app_release_notes": "v1.2.27 - New 'Why this WON' explainer on the Best Load card: tap it next to the winning charge to see, in plain English, why the most balanced load beat the ones that topped a single test. Also restores the winner's green 'best in' check on the card, and the Loads tab now shows a name for every saved load."
   },
   "windows": {
    "app_version": "1.2.26",
