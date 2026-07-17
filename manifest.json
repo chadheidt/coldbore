@@ -1,28 +1,28 @@
 {
- "app_version": "1.2.29",
- "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
- "app_download_file": "Loadscope.zip",
- "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.2.29 - Your Results screen now tells you what the best-load call is WORTH: a plain-English line under your winner saying whether your own ladder can back it up, or whether it is too noisy to call yet. Plus: the Measure screen now reads back the scale VALUE you entered (\"Scale: 1.5 in\"), so you can confirm it at a glance.",
- "template_version": "1.0",
- "template_download_url": "",
- "template_release_notes": "",
- "platforms": {
-  "mac": {
-   "app_version": "1.2.29",
-   "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.2.29 - Your Results screen now tells you what the best-load call is WORTH: a plain-English line under your winner saying whether your own ladder can back it up, or whether it is too noisy to call yet. Plus: the Measure screen now reads back the scale VALUE you entered (\"Scale: 1.5 in\"), so you can confirm it at a glance."
-  },
-  "mac_arm64": {
-   "app_version": "1.2.29",
-   "app_download_file": "Loadscope-arm64.zip",
-   "app_release_notes": "v1.2.29 - Your Results screen now tells you what the best-load call is WORTH: a plain-English line under your winner saying whether your own ladder can back it up, or whether it is too noisy to call yet. Plus: the Measure screen now reads back the scale VALUE you entered (\"Scale: 1.5 in\"), so you can confirm it at a glance."
-  },
-  "windows": {
-   "app_version": "1.2.28",
-   "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.28/Loadscope-Setup.exe",
-   "app_release_notes": "v1.2.28 - Drag your target photos straight onto the Measure screen instead of hunting for the file. Plus, distance suggestions now go out to 1000 yd (300 / 600 / 800 / 1000) for known-distance and long-range shooters, and you can still type any value."
+  "app_version": "1.2.29",
+  "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
+  "app_download_file": "Loadscope.zip",
+  "app_website_url": "https://loadscope.app/",
+  "app_release_notes": "v1.2.29 - Your Results screen now tells you what the best-load call is WORTH: a plain-English line under your winner saying whether your own ladder can back it up, or whether it is too noisy to call yet. Plus: the Measure screen now reads back the scale VALUE you entered (\"Scale: 1.5 in\"), so you can confirm it at a glance.",
+  "template_version": "1.0",
+  "template_download_url": "",
+  "template_release_notes": "",
+  "platforms": {
+    "mac": {
+      "app_version": "1.2.29",
+      "app_download_file": "Loadscope.zip",
+      "app_release_notes": "v1.2.29 - Your Results screen now tells you what the best-load call is WORTH: a plain-English line under your winner saying whether your own ladder can back it up, or whether it is too noisy to call yet. Plus: the Measure screen now reads back the scale VALUE you entered (\"Scale: 1.5 in\"), so you can confirm it at a glance."
+    },
+    "mac_arm64": {
+      "app_version": "1.2.29",
+      "app_download_file": "Loadscope-arm64.zip",
+      "app_release_notes": "v1.2.29 - Your Results screen now tells you what the best-load call is WORTH: a plain-English line under your winner saying whether your own ladder can back it up, or whether it is too noisy to call yet. Plus: the Measure screen now reads back the scale VALUE you entered (\"Scale: 1.5 in\"), so you can confirm it at a glance."
+    },
+    "windows": {
+      "app_version": "1.2.29",
+      "app_download_file": "Loadscope-Setup.exe",
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.2.29/Loadscope-Setup.exe",
+      "app_release_notes": "v1.2.29 - Your Results screen now tells you what the best-load call is WORTH: a plain-English line under your winner saying whether your own ladder can back it up. Plus the Measure screen reads back the scale value you entered, and six fixes -- including one where Loadscope was only reading the first 7 shots of each string."
+    }
   }
- }
 }
