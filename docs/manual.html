@@ -302,22 +302,22 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
         <li><b>Mean radius</b> — how tight the group is, measured fairly.</li>
         <li><b>Vertical SD</b> — vertical dispersion, which drives elevation error at distance.</li>
       </ul>
-      <p>The highest combined score wins. The defaults work for most people, but if you value one thing over another you can change the balance yourself &mdash; see below.</p>
+      <p>The best combined score wins. Loadscope's automatic weights work for most people, but if you value one thing over another you can change the balance yourself &mdash; see below.</p>
     </section>
 
     <section class="doc" id="weighting">
       <h2>Custom weighting (changing how loads are scored)</h2>
-      <p class="lede">Loadscope's defaults suit most shooters. If you weight things differently, you can &mdash; and one click puts the defaults back.</p>
-      <p>The score combines four measurements: velocity flat-spot, velocity SD, mean radius (group), and vertical SD. The default balance for the <b>powder ladder</b> is <b>30% velocity flat-spot, 20% SD, 20% mean radius, 30% vertical</b>. The <b>seating-depth</b> test has its own sensible defaults. You never have to touch this &mdash; but you can.</p>
+      <p class="lede">Loadscope's automatic weights suit most shooters. If you weight things differently, you can &mdash; and one click hands the dial back to Loadscope.</p>
+      <p>The score combines four measurements: flat-spot, velocity SD, mean radius (group), and vertical. <b>Loadscope sets the balance automatically from your test distance</b> &mdash; mean radius leads up close, velocity SD takes over at range. Seating depth leans on mean radius, and flat-spot stays a light signal. You never have to touch this &mdash; but you can.</p>
       <h3>To change the weights</h3>
       <ul>
         <li>Go to the <b>Results</b> page. Each test (powder ladder and seating depth) has its own weight card.</li>
         <li>Type a new percentage into each metric's <b>number box</b> &mdash; make velocity matter more, group size less, whatever fits how you shoot. The running total is shown and is balanced to 100% for you.</li>
         <li>Click <span class="btn">Re-score with these weights</span>. Loadscope re-ranks every load instantly <b>from your existing data &mdash; no re-import</b>, and may crown a new winner.</li>
       </ul>
-      <h3>To get back to the defaults</h3>
+      <h3>To hand the dial back to Loadscope</h3>
       <ul>
-        <li>Click <span class="btn">Reset to defaults</span> on that test's weight card. It restores Loadscope's standard balance and re-scores.</li>
+        <li>Click <span class="btn">Use recommended weights</span> on that test's weight card. It returns to Loadscope's automatic, distance-set weights and re-scores.</li>
       </ul>
       <div class="note">Each test is independent &mdash; you can tune the powder ladder and leave seating depth on its defaults, or the other way around.</div>
     </section>

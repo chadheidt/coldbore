@@ -48,25 +48,66 @@ footer a{color:var(--orange);text-decoration:none}
 <div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a> &rsaquo; How Loadscope Scores a Load: Flat-Spot, SD, Mean Radius, Vertical SD</div>
 <h1>How Loadscope Scores a Load: Flat-Spot, SD, Mean Radius, Vertical SD</h1>
 
-<p class="lead">Most tools graph your data and leave the judgment to you. Loadscope goes one step further: it scores every load you tested and names the best one. Here's exactly how.</p>
+<p class="lead">Most tools graph your data and leave the call to you. Loadscope scores every load you tested and names your best one &mdash; weighting the measurements the way your test distance demands. Here's exactly how.</p>
 
-<h2>Four metrics that show up on target</h2>
-<p>A load is only as good as what it does on paper at distance. Loadscope scores each charge and seating depth on the four things that actually matter there:</p>
+<h2>Four measurements that show up on target</h2>
+<p>Loadscope scores each charge and seating depth on four things, each put on the same 0-to-1 scale (lower is better) and blended into one composite. Lowest composite wins.</p>
 <ul>
-<li><strong>Velocity flat-spot</strong> &mdash; how steady the speed stays across nearby charges. A load in a flat-spot forgives small charge and temperature changes. (Read more on <a href="/learn/powder-ladder-test.html">reading a powder ladder</a>.)</li>
-<li><strong>SD (standard deviation)</strong> &mdash; shot-to-shot velocity consistency. Low SD means tight vertical at distance.</li>
-<li><strong>Mean radius</strong> &mdash; the average distance of each shot from group center. A steadier read on true precision than a single group-size number, because one flier doesn't dominate it.</li>
-<li><strong>Vertical SD</strong> &mdash; how much the shots stack up and down. At range, vertical is what costs you, so it's measured on its own.</li>
+<li><strong>Mean radius</strong> &mdash; the average distance of each shot from group center. A steadier read on true precision than a single group-size number, because one flier doesn't dominate it. It leads the score up close, where the group on paper is the honest read.</li>
+<li><strong>Velocity SD</strong> &mdash; shot-to-shot velocity consistency. It puts almost nothing on target at 100 yards, but turns into vertical downrange &mdash; so it earns more weight the farther you shoot.</li>
+<li><strong>Vertical</strong> &mdash; how much the shots stack up and down. At range this is what a powder charge most directly drives.</li>
+<li><strong>Flat-spot</strong> &mdash; how little your average velocity moves across nearby charges. Kept as a light, optional signal &mdash; more on why below. (Read more on <a href="/learn/powder-ladder-test.html">reading a powder ladder</a>.)</li>
 </ul>
 
-<h2>Why scoring, not just graphing</h2>
-<p>A graph shows you the data; it still leaves you squinting at it trying to call the winner &mdash; and three-shot strings are noisy enough that two people can read the same graph differently. Loadscope applies the same scoring to every load, every time, so the comparison is consistent and the best-load call is repeatable, not a gut feel.</p>
+<h2>The weights follow your test distance</h2>
+<p>The four aren't weighted equally, and the mix isn't a fixed table &mdash; Loadscope sets it from the distance you tested at. The reason is physics: a powder charge controls velocity, and velocity turns into <strong>vertical</strong> spread downrange &mdash; near zero at 100 yards, steep by 1000. So up close, mean radius leads and velocity barely counts; stretch out and velocity SD takes over. Seating-depth tests lean on mean radius at every distance, because seating tunes group shape, not speed.</p>
 
-<h2>You stay in control of the weights</h2>
-<p>The four metrics are weighted, and the weights are yours to adjust. A benchrest shooter chasing the smallest group can lean on mean radius; a long-range shooter who lives and dies by vertical can weight SD and vertical higher. Change the weights and Loadscope re-scores instantly.</p>
+<h2>Why flat-spot stays light</h2>
+<p>Barrels do vibrate, and positive compensation is real, measured physics &mdash; we don't dispute that. What Loadscope weights lightly is the idea that a three-to-five shot ladder can reliably <em>find</em> a velocity flat-spot; large-sample testing shows that read is mostly sampling noise, and even barrel-tuner researchers don't defend the small-sample version. It stays an optional signal you can weight up &mdash; not the thing your winner rides on.</p>
+
+<h2>What it can't see</h2>
+<p>Two honest limits. <strong>Wind</strong> is the biggest long-range miss, and no load metric captures it &mdash; at distance it contaminates your horizontal spread, which is one reason mean radius earns less weight far out. And <strong>small samples lie</strong>: a five-shot SD of 9 fps has a true range of roughly 5 to 26 fps. Scores are a ranking aid, not proof &mdash; more shots make every number more trustworthy.</p>
+
+<h2>You can still set the weights yourself</h2>
+<p>Loadscope sets a sensible starting point, but every weight is a slider. A benchrest shooter chasing the smallest group can lean harder on mean radius; a long-range shooter who lives and dies by vertical can push SD and vertical higher. Change the weights and Loadscope re-scores instantly &mdash; or hand the dial back and let it set them from your distance again.</p>
 
 <h2>The output</h2>
 <p>Loadscope reads your chronograph data and measures your target groups, scores every powder charge and seating depth, names your best load, then predicts your full DOPE from the muzzle velocity your chronograph measured &mdash; and prints a Pocket Range Card and a one-page recipe. The whole load workup, scored, in one app on Mac and Windows.</p>
+
+<h2>The hard questions</h2>
+<p style="color:#fff;font-weight:700;margin-bottom:2px">&ldquo;Velocity SD doesn't matter at 100 yards &mdash; why weight it at all?&rdquo;</p>
+<p>Correct that it barely touches the target at 100. We weight it as a load-quality signal that predicts distance performance, not as a 100-yard hit driver &mdash; and the weight climbs to dominate at range, exactly where the ballistics say it should. If you only ever shoot close, slide it down; the app lets you.</p>
+<p style="color:#fff;font-weight:700;margin-bottom:2px">&ldquo;Group size should decide the winner.&rdquo;</p>
+<p>We score group quality with mean radius, which uses every shot and is far steadier at small sample sizes than extreme-spread group size. Group size is still shown &mdash; it just doesn't set the ranking on the strength of your two worst shots.</p>
+<p style="color:#fff;font-weight:700;margin-bottom:2px">&ldquo;You're ignoring the flat-spot or harmonic tune.&rdquo;</p>
+<p>Barrels do vibrate and positive compensation is real, measured physics &mdash; we don't dispute that. What we weight lightly is the idea that a three-to-five shot chronograph ladder reliably <em>finds</em> a velocity flat-spot; large-sample testing shows that read is mostly sampling noise, and even barrel-tuner researchers don't defend the small-sample version. It stays an optional signal you can weight up.</p>
+<p style="color:#fff;font-weight:700;margin-bottom:2px">&ldquo;Who says these exact weights are right?&rdquo;</p>
+<p>Nobody &mdash; and we say so. The physics sets the shape and a defensible range; the exact number is our starting point, and every weight is a slider. The honesty is the defense: we can show the model, the sources, and the reasoning behind each choice.</p>
+
+<h2>Sources</h2>
+<p>These informed our approach. They support the principles behind the scoring &mdash; they are not endorsements of our specific weights.</p>
+<p style="color:#fff;font-weight:700;margin-bottom:2px">Velocity, distance &amp; hit probability</p>
+<ul>
+<li>Applied Ballistics &mdash; <em>Shot-to-Shot Variation in Muzzle Velocity &amp; BC</em>; WEZ analysis papers (Litz, Periard)</li>
+<li>PrecisionRifleBlog (Cal Zant) &mdash; <em>How Much Does SD Matter?</em>; <em>Do Lower SDs Actually Help You Hit More Targets?</em> (2024 PRS data &mdash; a real but modest effect)</li>
+</ul>
+<p style="color:#fff;font-weight:700;margin-bottom:2px">Sample size &amp; mean radius</p>
+<ul>
+<li>The Hornady Podcast &mdash; Ep. 050 &amp; 052 <em>Your Groups Are (Still) Too Small</em>; Ep. 099 <em>Let's Talk Mean Radius</em></li>
+<li>PrecisionRifleBlog &mdash; <em>Statistics for Shooters</em> series; Outdoor Life &mdash; <em>What is Mean Radius</em></li>
+<li>Bryan Litz &mdash; <em>Accuracy and Precision for Long Range Shooting</em></li>
+</ul>
+<p style="color:#fff;font-weight:700;margin-bottom:2px">Flat-spots &amp; barrel harmonics <span style="color:#d9c186;font-weight:600;font-size:13px">(honest disagreement)</span></p>
+<ul>
+<li>Skeptical of small-sample flat-spots: Hornady Podcast; Litz &mdash; <em>Science of Accuracy</em> (ladder testing); Keith Glasscock (Winning in the Wind)</li>
+<li>The real physics of harmonics / positive compensation: Vaughn &mdash; <em>Rifle Accuracy Facts</em>; Varmint Al (FEA); Geoffrey Kolbe (Border Barrels)</li>
+<li>The practitioner / flat-spot schools: Newberry (OCW); Satterlee &amp; the 6.5 Guys; Erik Cortina</li>
+</ul>
+<p style="color:#fff;font-weight:700;margin-bottom:2px">Seating depth &amp; wind</p>
+<ul>
+<li>Berger Bullets &mdash; <em>Setting Up Your Loads for Optimum Accuracy</em>; Cortina Precision &mdash; load development</li>
+<li>Wind dominance: Litz / Applied Ballistics; PrecisionRifleBlog &mdash; <em>How Much Does Wind Reading Matter?</em></li>
+</ul>
 
 <div style="background:#221a14;border:1px solid #6b4e1e;border-radius:10px;padding:14px 18px;margin:28px 0;color:#e8cfa0;font-size:15px"><strong>A note on safety:</strong> This is a technique explainer, not load data. Handloading carries real risk &mdash; always work up from the starting charges in current published load data for your specific components, watch for pressure signs, and use only charges you can verify. Loadscope helps you read your results; it doesn't replace safe handloading practice.</div>
 <div class="cta"><h3>Let Loadscope do this for you</h3>

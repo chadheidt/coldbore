@@ -1,22 +1,22 @@
 {
-  "app_version": "1.2.29",
+  "app_version": "1.3.0",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v1.2.29 - Your Results screen now tells you what the best-load call is WORTH: a plain-English line under your winner saying whether your own ladder can back it up, or whether it is too noisy to call yet. Plus: the Measure screen now reads back the scale VALUE you entered (\"Scale: 1.5 in\"), so you can confirm it at a glance.",
+  "app_release_notes": "v1.3.0 - Loadscope now sets your scoring weights from the distance you tested at: mean radius leads up close, velocity SD takes over at range. Same best-load call, pointed at where you shoot. Plus a yardage picker on the Measure screen and a new 'How Loadscope Scores' page in the Support menu. Your saved loads don't change unless you re-score.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "1.2.29",
+      "app_version": "1.3.0",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v1.2.29 - Your Results screen now tells you what the best-load call is WORTH: a plain-English line under your winner saying whether your own ladder can back it up, or whether it is too noisy to call yet. Plus: the Measure screen now reads back the scale VALUE you entered (\"Scale: 1.5 in\"), so you can confirm it at a glance."
+      "app_release_notes": "v1.3.0 - Loadscope now sets your scoring weights from the distance you tested at: mean radius leads up close, velocity SD takes over at range. Same best-load call, pointed at where you shoot. Plus a yardage picker on the Measure screen and a new 'How Loadscope Scores' page in the Support menu. Your saved loads don't change unless you re-score."
     },
     "mac_arm64": {
-      "app_version": "1.2.29",
+      "app_version": "1.3.0",
       "app_download_file": "Loadscope-arm64.zip",
-      "app_release_notes": "v1.2.29 - Your Results screen now tells you what the best-load call is WORTH: a plain-English line under your winner saying whether your own ladder can back it up, or whether it is too noisy to call yet. Plus: the Measure screen now reads back the scale VALUE you entered (\"Scale: 1.5 in\"), so you can confirm it at a glance."
+      "app_release_notes": "v1.3.0 - Loadscope now sets your scoring weights from the distance you tested at: mean radius leads up close, velocity SD takes over at range. Same best-load call, pointed at where you shoot. Plus a yardage picker on the Measure screen and a new 'How Loadscope Scores' page in the Support menu. Your saved loads don't change unless you re-score."
     },
     "windows": {
       "app_version": "1.2.29",
