@@ -1,9 +1,9 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Your Garmin Xero Has the Data &mdash; Here&#x27;s What to Do With It | Loadscope</title>
-<meta name="description" content="The Garmin Xero records every shot&#x27;s velocity and exports a CSV from the ShotView app. Here&#x27;s how to turn that chronograph data into a real load-development decision.">
+<meta name="description" content="Plug your Garmin Xero into your computer and Loadscope reads every session straight off it &mdash; no ShotView, no exporting one at a time. Here&#x27;s how to turn that chronograph data into your best load.">
 <link rel="canonical" href="https://loadscope.app/learn/garmin-xero-data.html">
-<meta property="og:title" content="Your Garmin Xero Has the Data &mdash; Here&#x27;s What to Do With It"><meta property="og:description" content="The Garmin Xero records every shot&#x27;s velocity and exports a CSV from the ShotView app. Here&#x27;s how to turn that chronograph data into a real load-development decision.">
+<meta property="og:title" content="Your Garmin Xero Has the Data &mdash; Here&#x27;s What to Do With It"><meta property="og:description" content="Plug your Garmin Xero into your computer and Loadscope reads every session straight off it &mdash; no ShotView, no exporting one at a time. Here&#x27;s how to turn that chronograph data into your best load.">
 <meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/garmin-xero-data.html">
 <meta property="og:image" content="https://loadscope.app/assets/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
@@ -31,6 +31,7 @@ li{color:#dfe2e6;margin-bottom:8px}
 a{color:var(--orange)}
 .lead{font-size:19px;color:var(--text-dim);margin-bottom:8px}
 strong{color:#fff}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:var(--bg-light);border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:#fff}
 .cta{background:var(--bg-mid);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:12px;padding:22px 24px;margin:34px 0}
 .cta h3{color:#fff;font-size:19px;margin-bottom:8px}
 .cta .btn{display:inline-block;margin-top:6px;text-decoration:none}
@@ -48,10 +49,12 @@ footer a{color:var(--orange);text-decoration:none}
 <div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a> &rsaquo; Your Garmin Xero Has the Data &mdash; Here&#x27;s What to Do With It</div>
 <h1>Your Garmin Xero Has the Data &mdash; Here&#x27;s What to Do With It</h1>
 
-<p class="lead">The Garmin Xero is a fantastic chronograph &mdash; it catches every shot's velocity without a tripod or a sky screen to align. But the velocity is only step one. Here's how to actually use that data.</p>
+<p class="lead">The Garmin Xero catches every shot's velocity without a tripod or a sky screen to align &mdash; and it keeps every session it has ever recorded. Plug it into your computer and all of it comes off at once. Here's how to turn that into your best load.</p>
 
 <h2>Getting the data off the Xero</h2>
-<p>Every session lives in the Garmin <strong>ShotView</strong> app on your phone. Open a session, and you can share it out as a <strong>CSV</strong> file &mdash; a plain spreadsheet of your per-shot velocities plus the session's average, SD, and extreme spread. That CSV is the raw material for load development.</p>
+<p>The fastest way is the USB cable that came with it. <strong>Plug the Xero into your computer</strong> and it mounts like a thumb drive &mdash; every session it has ever recorded is sitting in <code>Garmin/Shot_Sessions</code> as a <strong>.FIT</strong> file, one per string. Loadscope watches for the device: plug it in and it tells you how many sessions are on it and offers to read them. Nothing is written, moved or deleted on the chronograph.</p>
+<p>Because a Xero holds months of range days &mdash; and a single day can hold two different ladders and a few unrelated strings &mdash; Loadscope asks which sessions belong to <em>this</em> ladder. It lists them by time, shot count, average speed and SD, grouped by range day, and pre-selects the block that is most likely your ladder. You confirm; it imports the lot in one pass.</p>
+<p>The <strong>ShotView</strong> route still works if you prefer it, or if the cable is at home: open a session in the app on your phone, share it out as a <strong>CSV</strong>, and drop that on Loadscope the same way. Same data, more steps &mdash; one session per export.</p>
 
 <h2>What the numbers mean</h2>
 <ul>
@@ -65,12 +68,12 @@ footer a{color:var(--orange);text-decoration:none}
 <p>The Xero hands you clean velocity data &mdash; but it doesn't tell you which charge to pick, it doesn't connect your speeds to your groups on paper, and it doesn't predict your drop. That's the work that usually ends up in a hand-built spreadsheet, and it's where most load development stalls.</p>
 <p>The point of a chronograph is the decision it enables: <strong>which load is best, and where will it hit at distance.</strong> Velocity is the input; the scored load and the DOPE table are the answer.</p>
 
-<h2>From CSV to a decision</h2>
-<p>Loadscope reads your ShotView CSV directly &mdash; no retyping velocities &mdash; alongside your target-group data, scores every charge and seating depth, names the winner, and predicts your full DOPE from the velocity the Xero actually measured. The data you already have, turned into the call you're trying to make.</p>
+<h2>From the chronograph to a decision</h2>
+<p>Loadscope names your <strong>best load</strong>. Plug the Xero in, pick the sessions from that range day, measure your target groups in the same app, and it scores every charge and every seating depth you shot &mdash; velocity flat-spot, SD, mean radius and vertical &mdash; then calls the winner and predicts your full DOPE from the velocity the Xero actually measured. No retyping velocities, no naming files, no spreadsheet.</p>
 
 <div style="background:#221a14;border:1px solid #6b4e1e;border-radius:10px;padding:14px 18px;margin:28px 0;color:#e8cfa0;font-size:15px"><strong>A note on safety:</strong> This is a technique explainer, not load data. Handloading carries real risk &mdash; always work up from the starting charges in current published load data for your specific components, watch for pressure signs, and use only charges you can verify. Loadscope helps you read your results; it doesn't replace safe handloading practice.</div>
 <div class="cta"><h3>Let Loadscope do this for you</h3>
-<p>Import your chronograph data and measure your groups right in Loadscope, and it scores every powder charge and seating depth you tested, names your best load, predicts your full DOPE, and prints a range card &mdash; on Mac and Windows. No spreadsheets, no second app.</p>
+<p>Plug the Xero in and measure your groups right in Loadscope, and it scores every powder charge and seating depth you tested, names your best load, predicts your full DOPE, and prints a range card &mdash; on Mac and Windows. No spreadsheets, no second app.</p>
 <a class="btn" href="/">See how it works &rarr;</a></div>
 <div class="related"><strong style="color:#fff">Keep reading</strong><br><br><a href="/learn/powder-ladder-test.html">How to read a powder ladder &rarr;</a><a href="/learn/how-loadscope-scores-a-load.html">How Loadscope scores a load &rarr;</a></div>
 </article></div>

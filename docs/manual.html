@@ -53,6 +53,7 @@ section.doc li{padding:4px 0 4px 0;color:#dfe2e7}
 section.doc li b{color:var(--text)}
 .btn{display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:6px;
   padding:1px 7px;font-size:.86rem;font-weight:600;color:var(--text);white-space:nowrap}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;background:var(--card);border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:var(--text)}
 .note{background:#1a1d23;border-left:3px solid var(--orange);padding:10px 14px;border-radius:6px;margin:12px 0;color:var(--dim);font-size:.95rem}
 footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);font-size:.85rem}
 @media(max-width:760px){nav.toc{display:none}.layout{padding:18px 14px 60px}}
@@ -126,16 +127,21 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
 
     <section class="doc" id="import">
       <h2>Import Data</h2>
-      <p class="lede">Import your chronograph, click Run. With a load already set up, there is no prep at all.</p>
+      <p class="lede">Plug your chronograph in, or drop its export file here, and click Run. With a load already set up, there is no prep at all.</p>
 
       <h3>Start a new load first</h3>
       <p>Click <span class="btn">Create New Load</span> in the sidebar, enter your ladder once (start charge, step, number of charges), and shoot it in order — lowest charge to highest. Then import your chronograph data &mdash; and your target app's export if you use one &mdash; and click <span class="btn">Run Import</span>. (No target app? <a href="#measure">Measure your target groups</a> from a photo instead.) Loadscope matches each string to the right charge by shot order and time. See <a href="#newladder">Create New Load</a> for the full walkthrough.</p>
 
+      <h3>Straight off a Garmin Xero (the easy way)</h3>
+      <p>Plug the Xero into your computer with its USB cable. Loadscope notices it and shows a banner at the top of the Import Data page &mdash; <i>&ldquo;Garmin Xero connected &mdash; 12 sessions on it.&rdquo;</i> &mdash; with a <span class="btn">Choose your sessions &rarr;</span> button. No ShotView, no exporting one session at a time.</p>
+      <p>Your Xero holds every session it has ever recorded, so Loadscope asks which ones belong to <i>this</i> ladder. It lists them by time, shot count, average speed and SD, grouped by range day, and pre-selects the block that is most likely your ladder &mdash; check the selection, adjust if you shot two ladders that day, and confirm. Loadscope copies the sessions it needs; it never writes to or erases anything on the chronograph.</p>
+
       <h3>Importing the files</h3>
-      <p>Two ways:</p>
+      <p>Any chronograph or target-app export, three ways:</p>
       <ul>
         <li><b>Drag onto the Loadscope icon</b> (in the Dock/Applications, or the taskbar on Windows) &mdash; it auto-imports.</li>
         <li><b>Drag into the Loadscope window</b>, then click <span class="btn">Run Import</span> when you are ready.</li>
+        <li><b>A Garmin <code>.FIT</code> file</b> works exactly like a CSV &mdash; drag one in, or a whole <code>Shot_Sessions</code> folder, if you copied them off the chronograph yourself.</li>
       </ul>
       <p>Import individual CSVs, or point Loadscope at a <b>whole range-day folder</b> and it pulls every CSV inside (subfolders included). Prefer not to drag? Use <span class="btn">Browse files…</span> or <span class="btn">Browse folder…</span> instead.</p>
 
