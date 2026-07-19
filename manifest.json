@@ -19,10 +19,10 @@
       "app_release_notes": "v1.4.0 - Loadscope now reads Garmin .FIT files straight off your chronograph: plug the Xero in and drag the Shot_Sessions folder in, no exporting session by session. Pick which sessions belong to the ladder on a new chooser screen. Targets sent from your phone now land on the right charge and count toward the best-load call. And if you drop chronograph files before planning a ladder, Loadscope stops and helps you plan it instead of guessing."
     },
     "windows": {
-      "app_version": "1.3.0",
+      "app_version": "1.4.0",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.3.0/Loadscope-Setup.exe",
-      "app_release_notes": "v1.3.0 - Loadscope now sets your scoring weights from the distance you tested at: mean radius leads the best-load call up close, velocity SD takes over at range. Same best-load pick, pointed at where you actually shoot. Plus a yardage picker on the Measure screen and a new 'How Loadscope Scores' page in the Support menu. Your saved loads don't change unless you re-score them."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.4.0/Loadscope-Setup.exe",
+      "app_release_notes": "v1.4.0 - Loadscope now reads Garmin .FIT files straight off your chronograph: plug the Xero in and point Loadscope at the Shot_Sessions folder, no exporting session by session. A new screen lets you pick which sessions belong to the ladder. Targets sent from your phone now land on the right charge and count toward the best-load call. Fixes: a charge that recorded no shots could win the ladder; a rung you fired could vanish from the scored table while another printed twice; a rung with no shots could show the next rung's velocity; a false COPY FAILED when reading a Garmin Xero; and guidance pop-ups can be turned back on again."
     }
   }
 }
