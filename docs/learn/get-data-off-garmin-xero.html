@@ -54,12 +54,12 @@ footer a{color:var(--orange);text-decoration:none}
 <div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a> &rsaquo; How to Get Data Off a Garmin Xero</div>
 <h1>How to Get Data Off a Garmin Xero</h1>
 
-<p class="lead">The Xero records every shot and keeps every session it has ever fired. Getting that off the unit is easy once you know it mounts like a thumb drive &mdash; here are the three routes and what each one actually gives you.</p>
+<p class="lead">The Xero records every shot and holds your last 50 sessions. Getting that off the unit is easy once you know it mounts like a thumb drive &mdash; here are the three routes and what each one actually gives you.</p>
 
 <h2>The short answer</h2>
 <table>
 <tr><th>Route</th><th>What you get</th><th>Best for</th></tr>
-<tr><td><strong>USB cable</strong></td><td>Every session on the unit, as <code>.FIT</code> files</td><td>Getting a whole range day at once</td></tr>
+<tr><td><strong>USB cable</strong></td><td>Every session still on the unit, as <code>.FIT</code> files</td><td>Getting a whole range day at once</td></tr>
 <tr><td><strong>ShotView app</strong></td><td>One session at a time, as a <code>.CSV</code> (or several as <code>.xlsx</code>)</td><td>When you don't have the cable</td></tr>
 <tr><td><strong>Straight into Loadscope</strong></td><td>The sessions you pick, already matched to your ladder</td><td>Load development</td></tr>
 </table>
@@ -89,7 +89,7 @@ footer a{color:var(--orange);text-decoration:none}
 
 <h2>3. Straight into Loadscope (skip the file wrangling)</h2>
 <p>Loadscope reads both. Plug the Xero in and it notices the device, tells you how many sessions are on it, and offers to read them &mdash; no copying folders, no converting <code>.FIT</code> to anything.</p>
-<p>Because the unit holds months of range days, it asks which sessions belong to <em>this</em> ladder. They're listed by time, shot count, average speed and SD, grouped by range day, with the likely block already selected. Nothing is written to or erased on the chronograph.</p>
+<p>Because the unit holds up to 50 sessions &mdash; often several range days &mdash; it asks which sessions belong to <em>this</em> ladder. They're listed by time, shot count, average speed and SD, grouped by range day, with the likely block already selected. Nothing is written to or erased on the chronograph.</p>
 <p><strong>And the cable is optional.</strong> A ShotView CSV imports exactly the same way, and scores identically. Use whichever you have on you.</p>
 
 <h2>Common snags</h2>
@@ -98,7 +98,7 @@ footer a{color:var(--orange);text-decoration:none}
 <li><strong>Dry the port first.</strong> Garmin's manual says to thoroughly dry the USB port, the weather cap and the area around it before connecting to a computer, to prevent corrosion. Worth remembering if you shot in the rain.</li>
 <li><strong>You see a <code>Garmin</code> folder but no <code>Shot_Sessions</code>.</strong> That folder only appears once the unit has recorded at least one session.</li>
 <li><strong>The <code>.FIT</code> file won't open.</strong> Expected &mdash; it's binary, not a spreadsheet. It needs software that reads FIT.</li>
-<li><strong>You have far more sessions than you expected.</strong> Also expected. The Xero never clears itself, so a unit in service for a season holds every string on it &mdash; which is exactly why picking the right ones matters.</li>
+<li><strong>You have far more sessions than you expected.</strong> Also expected. The Xero stores up to <strong>50 sessions</strong> (100 shots each) and does not clear itself, so a unit in regular use is usually holding several range days at once &mdash; which is exactly why picking the right ones matters. Once it is full the chronograph asks you to delete a session before it will record a new one, so it never silently discards a string you shot.</li>
 </ul>
 
 <div style="background:#221a14;border:1px solid #6b4e1e;border-radius:10px;padding:14px 18px;margin:28px 0;color:#e8cfa0;font-size:15px"><strong>A note on safety:</strong> This page is about moving files off a device &mdash; it is not load data. Handloading carries real risk &mdash; always work up from the starting charges in current published load data for your specific components, watch for pressure signs, and use only charges you can verify.</div>
