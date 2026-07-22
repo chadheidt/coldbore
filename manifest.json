@@ -19,10 +19,10 @@
       "app_release_notes": "v1.5.0 - Installing Loadscope is now one step: open the download, double-click the single Loadscope icon, and it sets itself up and lands in your Dock -- no dragging, no second icon. Right after you buy, an Activate Loadscope button on the download page opens the app with your license key already filled in. When two charges finish neck and neck, the Results screen names the runner-up and tells you whether more rounds would settle it or whether they are simply two good loads. Plus fixes: your load keeps the name you typed (6.5mm no longer becomes 65mm), the Home screen names the load that is actually open, the Import button no longer looks stuck after an import finishes, reworking a load keeps its cartridge, and the Tools menu points to the right place."
     },
     "windows": {
-      "app_version": "1.4.0",
+      "app_version": "1.5.0",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.4.0/Loadscope-Setup.exe",
-      "app_release_notes": "v1.4.0 - Loadscope now reads Garmin .FIT files straight off your chronograph: plug the Xero in and point Loadscope at the Shot_Sessions folder, no exporting session by session. A new screen lets you pick which sessions belong to the ladder. Targets sent from your phone now land on the right charge and count toward the best-load call. Fixes: a charge that recorded no shots could win the ladder; a rung you fired could vanish from the scored table while another printed twice; a rung with no shots could show the next rung's velocity; a false COPY FAILED when reading a Garmin Xero; and guidance pop-ups can be turned back on again."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.5.0/Loadscope-Setup.exe",
+      "app_release_notes": "v1.5.0 - Activating is easier: right after you buy, the download page has an Activate Loadscope button that opens the app with your license key already filled in -- no digging through email. When two charges finish neck and neck, the Results screen names the runner-up and tells you whether more rounds would settle it, or whether they are simply two good loads. Plus fixes: your load keeps the name you typed (6.5mm no longer becomes 65mm), the Home screen names the load that is actually open, the Import button no longer looks stuck after an import finishes, reworking a load keeps its cartridge, and the Tools menu points to the right place."
     }
   }
 }
