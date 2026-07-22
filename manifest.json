@@ -1,22 +1,22 @@
 {
-  "app_version": "1.5.0",
+  "app_version": "1.5.1",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v1.5.0 - Installing Loadscope is now one step: open the download, double-click the single Loadscope icon, and it sets itself up and lands in your Dock -- no dragging, no second icon. Right after you buy, an Activate Loadscope button on the download page opens the app with your license key already filled in. When two charges finish neck and neck, the Results screen names the runner-up and tells you whether more rounds would settle it or whether they are simply two good loads. Plus fixes: your load keeps the name you typed (6.5mm no longer becomes 65mm), the Home screen names the load that is actually open, the Import button no longer looks stuck after an import finishes, reworking a load keeps its cartridge, and the Tools menu points to the right place.",
+  "app_release_notes": "v1.5.1 - Clearer Results wording. When two or more charges are too close in speed to separate, Loadscope now tells you straight that your group sizes -- mean radius and vertical spread -- make the call, instead of naming an impractical number of extra shots. Same winner, clearer why.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "1.5.0",
+      "app_version": "1.5.1",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v1.5.0 - Installing Loadscope is now one step: open the download, double-click the single Loadscope icon, and it sets itself up and lands in your Dock -- no dragging, no second icon. Right after you buy, an Activate Loadscope button on the download page opens the app with your license key already filled in. When two charges finish neck and neck, the Results screen names the runner-up and tells you whether more rounds would settle it or whether they are simply two good loads. Plus fixes: your load keeps the name you typed (6.5mm no longer becomes 65mm), the Home screen names the load that is actually open, the Import button no longer looks stuck after an import finishes, reworking a load keeps its cartridge, and the Tools menu points to the right place."
+      "app_release_notes": "v1.5.1 - Clearer Results wording. When two or more charges are too close in speed to separate, Loadscope now tells you straight that your group sizes -- mean radius and vertical spread -- make the call, instead of naming an impractical number of extra shots. Same winner, clearer why."
     },
     "mac_arm64": {
-      "app_version": "1.5.0",
+      "app_version": "1.5.1",
       "app_download_file": "Loadscope-arm64.zip",
-      "app_release_notes": "v1.5.0 - Installing Loadscope is now one step: open the download, double-click the single Loadscope icon, and it sets itself up and lands in your Dock -- no dragging, no second icon. Right after you buy, an Activate Loadscope button on the download page opens the app with your license key already filled in. When two charges finish neck and neck, the Results screen names the runner-up and tells you whether more rounds would settle it or whether they are simply two good loads. Plus fixes: your load keeps the name you typed (6.5mm no longer becomes 65mm), the Home screen names the load that is actually open, the Import button no longer looks stuck after an import finishes, reworking a load keeps its cartridge, and the Tools menu points to the right place."
+      "app_release_notes": "v1.5.1 - Clearer Results wording. When two or more charges are too close in speed to separate, Loadscope now tells you straight that your group sizes -- mean radius and vertical spread -- make the call, instead of naming an impractical number of extra shots. Same winner, clearer why."
     },
     "windows": {
       "app_version": "1.5.0",
