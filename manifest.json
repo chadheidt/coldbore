@@ -19,10 +19,10 @@
       "app_release_notes": "v1.5.1 - Clearer Results wording. When two or more charges are too close in speed to separate, Loadscope now tells you straight that your group sizes -- mean radius and vertical spread -- make the call, instead of naming an impractical number of extra shots. Same winner, clearer why."
     },
     "windows": {
-      "app_version": "1.5.0",
+      "app_version": "1.5.1",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.5.0/Loadscope-Setup.exe",
-      "app_release_notes": "v1.5.0 - Activating is easier: right after you buy, the download page has an Activate Loadscope button that opens the app with your license key already filled in -- no digging through email. When two charges finish neck and neck, the Results screen names the runner-up and tells you whether more rounds would settle it, or whether they are simply two good loads. Plus fixes: your load keeps the name you typed (6.5mm no longer becomes 65mm), the Home screen names the load that is actually open, the Import button no longer looks stuck after an import finishes, reworking a load keeps its cartridge, and the Tools menu points to the right place."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.5.1/Loadscope-Setup.exe",
+      "app_release_notes": "v1.5.1 - Clearer Results wording. When two or more charges are too close in speed to separate, Loadscope now tells you straight that your group sizes -- mean radius and vertical spread -- make the call, instead of naming an impractical number of extra shots. Same winner, clearer why."
     }
   }
 }
