@@ -1,22 +1,22 @@
 {
-  "app_version": "1.4.0",
+  "app_version": "1.5.0",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v1.4.0 - Loadscope now reads Garmin .FIT files straight off your chronograph: plug the Xero in and drag the Shot_Sessions folder in, no exporting session by session. Pick which sessions belong to the ladder on a new chooser screen. Targets sent from your phone now land on the right charge and count toward the best-load call. And if you drop chronograph files before planning a ladder, Loadscope stops and helps you plan it instead of guessing.",
+  "app_release_notes": "v1.5.0 - Installing Loadscope is now one step: open the download, double-click the single Loadscope icon, and it sets itself up and lands in your Dock -- no dragging, no second icon. Right after you buy, an Activate Loadscope button on the download page opens the app with your license key already filled in. When two charges finish neck and neck, the Results screen names the runner-up and tells you whether more rounds would settle it or whether they are simply two good loads. Plus fixes: your load keeps the name you typed (6.5mm no longer becomes 65mm), the Home screen names the load that is actually open, the Import button no longer looks stuck after an import finishes, reworking a load keeps its cartridge, and the Tools menu points to the right place.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "1.4.0",
+      "app_version": "1.5.0",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v1.4.0 - Loadscope now reads Garmin .FIT files straight off your chronograph: plug the Xero in and drag the Shot_Sessions folder in, no exporting session by session. Pick which sessions belong to the ladder on a new chooser screen. Targets sent from your phone now land on the right charge and count toward the best-load call. And if you drop chronograph files before planning a ladder, Loadscope stops and helps you plan it instead of guessing."
+      "app_release_notes": "v1.5.0 - Installing Loadscope is now one step: open the download, double-click the single Loadscope icon, and it sets itself up and lands in your Dock -- no dragging, no second icon. Right after you buy, an Activate Loadscope button on the download page opens the app with your license key already filled in. When two charges finish neck and neck, the Results screen names the runner-up and tells you whether more rounds would settle it or whether they are simply two good loads. Plus fixes: your load keeps the name you typed (6.5mm no longer becomes 65mm), the Home screen names the load that is actually open, the Import button no longer looks stuck after an import finishes, reworking a load keeps its cartridge, and the Tools menu points to the right place."
     },
     "mac_arm64": {
-      "app_version": "1.4.0",
+      "app_version": "1.5.0",
       "app_download_file": "Loadscope-arm64.zip",
-      "app_release_notes": "v1.4.0 - Loadscope now reads Garmin .FIT files straight off your chronograph: plug the Xero in and drag the Shot_Sessions folder in, no exporting session by session. Pick which sessions belong to the ladder on a new chooser screen. Targets sent from your phone now land on the right charge and count toward the best-load call. And if you drop chronograph files before planning a ladder, Loadscope stops and helps you plan it instead of guessing."
+      "app_release_notes": "v1.5.0 - Installing Loadscope is now one step: open the download, double-click the single Loadscope icon, and it sets itself up and lands in your Dock -- no dragging, no second icon. Right after you buy, an Activate Loadscope button on the download page opens the app with your license key already filled in. When two charges finish neck and neck, the Results screen names the runner-up and tells you whether more rounds would settle it or whether they are simply two good loads. Plus fixes: your load keeps the name you typed (6.5mm no longer becomes 65mm), the Home screen names the load that is actually open, the Import button no longer looks stuck after an import finishes, reworking a load keeps its cartridge, and the Tools menu points to the right place."
     },
     "windows": {
       "app_version": "1.4.0",

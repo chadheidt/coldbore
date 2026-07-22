@@ -29,7 +29,13 @@
 <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <meta property="og:title" content="Loadscope">
-<meta property="og:description" content="Precision rifle load development for Mac and Windows. Import your chronograph data and measure your target groups in-app; Loadscope finds your best powder charge and seating depth.">
+<!-- SHARE-CARD COPY. This is what Facebook renders when the link is shared and
+     what the Meta ad's preview card shows -- it is NOT read from the page body.
+     It lagged behind the 2026-07-19 Xero rewrite and still said "import your
+     chronograph data", promising the laborious workflow while the page it links
+     to promised plugging the Xero in. Leads with plug-it-in now, and with
+     best-load. Chad approved 2026-07-20. -->
+<meta property="og:description" content="Precision rifle load development for Mac and Windows. Plug your Garmin Xero in and Loadscope reads every session straight off it. Measure your groups in-app, and it names your best powder charge and seating depth.">
 <meta property="og:image" content="https://loadscope.app/assets/og-image.png?v=1">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -39,7 +45,7 @@
 <meta property="og:site_name" content="Loadscope">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Loadscope">
-<meta name="twitter:description" content="Precision rifle load development for Mac and Windows. Import your chronograph data and measure your target groups in-app; Loadscope finds your best powder charge and seating depth - automatically.">
+<meta name="twitter:description" content="Precision rifle load development for Mac and Windows. Plug your Garmin Xero in — Loadscope reads every session off it, measures your groups, and names your best load. No exporting, no spreadsheets.">
 <meta name="twitter:image" content="https://loadscope.app/assets/og-image.png?v=1">
 <meta property="og:type" content="website">
 <style>
@@ -897,7 +903,7 @@ header.hero .line2 {
   "softwareVersion": "0.18.0",
   "url": "https://loadscope.app/",
   "image": "https://loadscope.app/assets/og-image.png",
-  "description": "Loadscope imports your chronograph data (Garmin Xero, LabRadar) and measures your target groups from a photo — or imports them from optional target apps like BallisticX, OnTarget, ShotMarker, Silver Mountain — then scores your best powder charge and seating depth into a load-development workbook with predicted DOPE, on Mac and Windows.",
+  "description": "Loadscope reads your Garmin Xero over USB — every session at once, no exporting — and measures your target groups from a photo, or imports them from BallisticX, OnTarget, ShotMarker or Silver Mountain. It scores your best powder charge and seating depth into a load-development workbook with predicted DOPE, on Mac and Windows.",
   "keywords": "precision rifle load development, powder ladder test, seating depth test, ballistics calculator, Garmin Xero data, LabRadar, chronograph software, predicted DOPE, handloading software, reloading software, best rifle load, OCW test",
   "offers": {
     "@type": "Offer",
@@ -1151,12 +1157,12 @@ header.hero .line2 {
       <div class="step">
         <div class="num">2</div>
         <h3>Open the installer</h3>
-        <p><strong>Mac:</strong> double-click <strong>Loadscope.dmg</strong> in your Downloads folder. A window opens with the Loadscope icon and an Applications shortcut.<br><br><strong>Windows:</strong> double-click <strong>Loadscope-Setup.exe</strong> in your Downloads folder. The setup wizard opens.</p>
+        <p><strong>Mac:</strong> double-click <strong>Loadscope.dmg</strong> in your Downloads folder. A window opens with the Loadscope icon.<br><br><strong>Windows:</strong> double-click <strong>Loadscope-Setup.exe</strong> in your Downloads folder. The setup wizard opens.</p>
       </div>
       <div class="step">
         <div class="num">3</div>
         <h3>Install</h3>
-        <p><strong>Mac:</strong> drag <strong>Loadscope</strong> onto the <strong>Applications</strong> shortcut, eject the disk image, then open Loadscope from your Applications folder.<br><br><strong>Windows:</strong> click <strong>Next</strong> through the wizard. Loadscope installs to <strong>Program Files</strong> and a <strong>Start menu</strong> shortcut appears.</p>
+        <p><strong>Mac:</strong> double-click the <strong>Loadscope</strong> icon. It installs itself and tells you when it's done &mdash; you'll find it in your <strong>Dock</strong>.<br><br><strong>Windows:</strong> click <strong>Next</strong> through the wizard. Loadscope installs to <strong>Program Files</strong> and a <strong>Start menu</strong> shortcut appears.</p>
       </div>
     </div>
     </details>
@@ -1346,6 +1352,74 @@ header.hero .line2 {
         <button class="btn" id="downloadModalSubmit" onclick="submitAccessCode()">Download for Mac</button>
       </div>
     </div>
+
+    <!-- Tab 3: after the download starts. NOT a tab the user can click -- it
+         replaces the modal contents once the file is on its way.
+         Before this existed the modal simply CLOSED 800ms after the download
+         began, leaving a brand-new customer with a file in Downloads and no
+         idea what to do next. That is exactly how Ennio Staffini (bought
+         2026-07-17) lost three days: he ran Loadscope from inside the .dmg
+         window, it vanished when he closed it, and he came back to this page
+         -- which showed him the buy screen again. -->
+    <div class="tab-panel" id="panelAfterDownload">
+      <h3>Your download has started</h3>
+
+      <!-- THREE lines, one action each, no warnings, no folder navigation.
+           The earlier draft said "open Loadscope from your Downloads folder,
+           it will offer to install itself" and carried a red paragraph about
+           dragging an icon. Chad 2026-07-20: "This is still quite a fucking
+           confusing process the way you've got it worded."
+           He was right on both counts. The red warning only existed because
+           the .dmg still existed -- serving the .zip deletes the two-icon
+           window, so there is no trap left to warn about. And a customer
+           should never be sent navigating to a folder: the browser is already
+           showing them the file it just downloaded. -->
+      <p style="font-size:14px; color: var(--text-muted); margin:0 0 12px;">
+        Keep this page open &mdash; you&rsquo;ll come back to it in step 3.
+      </p>
+      <!-- One action per line, no browser-specific wording. An earlier draft
+           detected Safari/Chrome/Firefox to name the exact download button --
+           clever, but it was wrong about which filename each browser shows and
+           it breaks whenever a browser moves a button. "Open your Downloads
+           folder" is true everywhere and cannot go stale.
+           NOTE: no dragging anywhere. That is what the self-install buys. -->
+      <ol id="installStepsMac" style="display:none; font-size:15px; line-height:1.6; padding-left:20px; margin:0;">
+        <li style="margin-bottom:10px;">Open your <strong>Downloads</strong> folder and double-click <strong>Loadscope.dmg</strong>.</li>
+        <li style="margin-bottom:10px;">A window opens. Double-click the <strong>Loadscope</strong> icon inside it.</li>
+        <li style="margin-bottom:10px;">Loadscope installs itself and tells you when it's done. Click <strong>OK</strong>.</li>
+        <li>Come back to this page and click <strong>Activate Loadscope</strong> below.</li>
+      </ol>
+      <ol id="installStepsWin" style="display:none; font-size:15px; line-height:1.6; padding-left:20px; margin:0;">
+        <li style="margin-bottom:10px;">Open your <strong>Downloads</strong> folder and double-click <strong>Loadscope-Setup.exe</strong>.</li>
+        <li style="margin-bottom:10px;">Follow the installer. Loadscope opens when it finishes.</li>
+        <li>Come back to this page and click <strong>Activate Loadscope</strong> below.</li>
+      </ol>
+
+      <div style="margin-top:20px;">
+        <a class="btn" id="activateLink" href="#" style="display:inline-block;">Activate Loadscope</a>
+      </div>
+      <p style="font-size:13px; color: var(--text-muted); margin:10px 0 0;">
+        Your key fills in by itself &mdash; then click <strong>Unlock</strong> in Loadscope.
+        If your browser asks <em>&ldquo;Open Loadscope?&rdquo;</em>, click Allow.
+      </p>
+
+      <div style="margin-top:18px; padding-top:14px; border-top:1px solid #e5e7eb;">
+        <p style="font-size:13px; margin:0 0 6px; color: var(--text-muted);">
+          Button didn't work? Open Loadscope, click <strong>Enter License Key</strong>,
+          and paste this:
+        </p>
+        <!-- color is EXPLICIT on purpose. Inheriting the dark-theme text
+             colour put rgb(245,245,245) on a rgb(243,244,246) background --
+             the key was rendered but invisible, and this is the fallback a
+             customer reads precisely when the button has already failed them.
+             Caught by screenshotting; the DOM check said textContent was fine. -->
+        <code id="activateKeyText" style="display:block; padding:10px 12px; background:#f3f4f6; color:#111827; border:1px solid #d1d5db; border-radius:6px; font-size:15px; font-weight:600; letter-spacing:0.5px; word-break:break-all;"></code>
+      </div>
+
+      <div class="actions" style="margin-top:18px;">
+        <button class="btn btn-outline" onclick="closeDownloadModal()">Done</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1450,6 +1524,48 @@ function openDownloadModal(ev) {
 
 function closeDownloadModal() {
   document.getElementById("downloadModal").classList.remove("open");
+  // Restore the normal two-tab state. showAfterDownload() HIDES both tab
+  // buttons and swaps in the instructions panel; without this reset, the next
+  // person to open the modal gets a tabless dead end. Found by checking the
+  // reopen path rather than only the happy path.
+  const after = document.getElementById("panelAfterDownload");
+  if (after && after.classList.contains("active")) {
+    after.classList.remove("active");
+    const t1 = document.getElementById("tabHaveCode");
+    const t2 = document.getElementById("tabRequestAccess");
+    if (t1) t1.style.display = "";
+    if (t2) t2.style.display = "";
+    switchTab("have-code");
+  }
+}
+
+// After the download starts, swap the modal to install + unlock instructions
+// and hand the customer a one-click activation link carrying their own key.
+// The key is ALREADY in this page (they just typed it), so nothing new is
+// exposed -- it only saves them going back to the email to copy it.
+// "Click the file your browser just downloaded" was too vague -- Chad
+// 2026-07-20: "Where do they find this file?" He is right: every browser puts
+// it somewhere different, and a customer who has never done this does not know
+// to look at the top-right corner. The page already knows the browser, so it
+// can name the exact spot instead of making them hunt.
+function showAfterDownload(code) {
+  const norm = (code || "").trim().toUpperCase();
+  document.getElementById("panelHaveCode").classList.remove("active");
+  document.getElementById("panelRequestAccess").classList.remove("active");
+  const tabs = document.getElementById("tabHaveCode");
+  const tabs2 = document.getElementById("tabRequestAccess");
+  if (tabs) tabs.style.display = "none";
+  if (tabs2) tabs2.style.display = "none";
+  const isMac = selectedPlatform === "mac";
+  const m = document.getElementById("installStepsMac");
+  const w = document.getElementById("installStepsWin");
+  if (m) m.style.display = isMac ? "block" : "none";
+  if (w) w.style.display = isMac ? "none" : "block";
+  const link = document.getElementById("activateLink");
+  if (link) link.href = "loadscope://activate?key=" + encodeURIComponent(norm);
+  const keyText = document.getElementById("activateKeyText");
+  if (keyText) keyText.textContent = norm;
+  document.getElementById("panelAfterDownload").classList.add("active");
 }
 
 function switchTab(which) {
@@ -1501,8 +1617,11 @@ async function submitAccessCode() {
     }
     submitBtn.textContent = "Downloading...";
     window.location.href = data.url;
+    // Show "what to do next" instead of closing the modal. The old code just
+    // closed it after 800ms, which left a first-time buyer holding a file and
+    // guessing -- see the panelAfterDownload comment.
     setTimeout(() => {
-      closeDownloadModal();
+      showAfterDownload(code);
       submitBtn.disabled = false;
       submitBtn.textContent = "Download for " + label;
     }, 800);
