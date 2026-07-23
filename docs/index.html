@@ -1456,6 +1456,35 @@ function closeDemo() {
 // instead of being a dead end (Chad 2026-07-09 -- a sale came in with no way
 // to tell where it originated). Last-touch: a later visit with new UTM params
 // overwrites the stored ones, matching how the buyer actually arrived this time.
+// Referrer fallback (Chad 2026-07-23): a tag can only ride a link WE control, so
+// organic search was invisible -- every Google visitor landed in "direct/untagged"
+// alongside word-of-mouth, fliers, and typed-in URLs. The browser does tell us which
+// site sent them, so when no tag is present we derive the channel from the referrer.
+// Tagged links always win: this only fills in when utm_source is otherwise empty.
+function srcFromReferrer() {
+  try {
+    if (!document.referrer) return null;                    // typed in / bookmarked = truly direct
+    var h = new URL(document.referrer).hostname.replace(/^www\./, "").toLowerCase();
+    if (!h || h === location.hostname.replace(/^www\./, "").toLowerCase()) return null;  // our own pages
+    // Name the engine off the MATCH, not by position -- "google.co.uk" has the
+    // brand in the FIRST label, so counting back from the end yields "co".
+    var eng = h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave)\./);
+    if (eng) return { utm_source: eng[2], utm_medium: "organic", utm_campaign: "search" };
+    var KNOWN = {
+      "snipershide.com": ["snipershide", "forum"],
+      "accurateshooter.com": ["accurateshooter", "forum"],
+      "longrangehunting.com": ["longrangehunting", "forum"],
+      "reddit.com": ["reddit", "social"], "out.reddit.com": ["reddit", "social"],
+      "youtube.com": ["youtube", "video"], "youtu.be": ["youtube", "video"],
+      "facebook.com": ["facebook", "social"], "m.facebook.com": ["facebook", "social"],
+      "l.facebook.com": ["facebook", "social"], "lm.facebook.com": ["facebook", "social"],
+      "x.com": ["x", "social"], "t.co": ["x", "social"], "twitter.com": ["x", "social"]
+    };
+    if (KNOWN[h]) return { utm_source: KNOWN[h][0], utm_medium: KNOWN[h][1], utm_campaign: "referral" };
+    return { utm_source: h, utm_medium: "referral", utm_campaign: "referral" };
+  } catch (e) { return null; }
+}
+
 (function attributionCapture() {
   var UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
   try {
@@ -1464,6 +1493,10 @@ function closeDemo() {
       var v = params.get(k);
       if (v) sessionStorage.setItem(k, v);
     });
+    if (!sessionStorage.getItem("utm_source")) {           // nothing tagged, anywhere this session
+      var ref = srcFromReferrer();
+      if (ref) Object.keys(ref).forEach(function (k) { sessionStorage.setItem(k, ref[k]); });
+    }
     var link = document.getElementById("buyNowLink");
     if (link) {
       var url = new URL(link.href);
