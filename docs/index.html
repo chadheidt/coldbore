@@ -1158,7 +1158,7 @@ header.hero .line2 {
       <div class="step">
         <div class="num">2</div>
         <h3>Open the installer</h3>
-        <p><strong>Mac:</strong> double-click <strong>Loadscope.dmg</strong> in your Downloads folder. A window opens with the Loadscope icon.<br><br><strong>Windows:</strong> double-click <strong>Loadscope-Setup.exe</strong> in your Downloads folder. The setup wizard opens.</p>
+        <p><strong>Mac:</strong> double-click <strong>Loadscope</strong> in your Downloads folder &mdash; it installs itself and tells you when it&rsquo;s done.<br><br><strong>Windows:</strong> double-click <strong>Loadscope-Setup.exe</strong> in your Downloads folder. The setup wizard opens.</p>
       </div>
       <div class="step">
         <div class="num">3</div>
@@ -1387,8 +1387,7 @@ header.hero .line2 {
            folder" is true everywhere and cannot go stale.
            NOTE: no dragging anywhere. That is what the self-install buys. -->
       <ol id="installStepsMac" style="display:none; font-size:15px; line-height:1.6; padding-left:20px; margin:0;">
-        <li style="margin-bottom:10px;">Open your <strong>Downloads</strong> folder and double-click <strong>Loadscope.dmg</strong>.</li>
-        <li style="margin-bottom:10px;">A window opens. Double-click the <strong>Loadscope</strong> icon inside it.</li>
+        <li style="margin-bottom:10px;">Open your <strong>Downloads</strong> folder and double-click <strong>Loadscope</strong> (your browser unzips it for you).</li>
         <li style="margin-bottom:10px;">Loadscope installs itself and tells you when it's done. Click <strong>OK</strong>.</li>
         <li>Come back to this page and click <strong>Activate Loadscope</strong> below.</li>
       </ol>
@@ -1501,13 +1500,17 @@ function isAppleSilicon() {
     return /apple/i.test(r) && !/intel|amd|radeon|nvidia/i.test(r);
   } catch (e) { return false; }
 }
-const MAC_DMG = isAppleSilicon() ? "Loadscope-arm64.dmg" : "Loadscope.dmg";
+// Serve the .zip, not the .dmg: Safari auto-unzips, so the customer finds
+// "Loadscope" right in Downloads and double-clicks it -- the self-install
+// handles "running from Downloads". No disk-image window to explain (the
+// thing that confused Ennio). Both zips verified Gatekeeper-clean 2026-07-21.
+const MAC_ZIP = isAppleSilicon() ? "Loadscope-arm64.zip" : "Loadscope.zip";
 
 // Selected platform drives BOTH the request payload and which installer the
 // "I have a code" tab downloads. 'mac' | 'win'. Pre-set from the OS, but the
 // visitor can flip it (work Mac, home Windows PC, etc.).
 let selectedPlatform = IS_WINDOWS ? "win" : "mac";
-const PLATFORM_FILE = { mac: MAC_DMG, win: "Loadscope-Setup.exe" };
+const PLATFORM_FILE = { mac: MAC_ZIP, win: "Loadscope-Setup.exe" };
 const PLATFORM_LABEL = { mac: "Mac", win: "Windows" };
 
 function setPlatform(p) {
