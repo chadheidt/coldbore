@@ -797,11 +797,10 @@ header.hero .line2 {
    first-time visitor sees what Loadscope does at a glance (Chad 2026-06-23). */
 .hero-steps {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 8px 14px;
-  max-width: 1080px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  width: fit-content;
   margin: 26px auto 12px;
 }
 .hero-steps .hs {
@@ -823,9 +822,9 @@ header.hero .line2 {
   align-items: center;
   justify-content: center;
 }
-.hero-steps .hs .t { font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2; white-space: nowrap; }
-.hero-steps .hs .t span { display: block; font-size: 12.5px; font-weight: 500; color: var(--text-dim); letter-spacing: 0.2px; margin-top: 2px; white-space: nowrap; }
-.hero-steps .arrow { display: flex; align-items: center; color: var(--orange); font-size: 22px; font-weight: 700; }
+.hero-steps .hs .t { font-size: 18px; font-weight: 700; color: var(--text); line-height: 1.2; }
+.hero-steps .hs .t span { display: block; font-size: 12.5px; font-weight: 500; color: var(--text-dim); letter-spacing: 0.2px; margin-top: 2px; }
+.hero-steps .arrow { display: flex; align-items: center; color: var(--orange); font-size: 22px; font-weight: 700; transform: rotate(90deg); margin-left: 9px; }
 .hero-steps-tail {
   font-size: 20px;
   font-weight: 700;
@@ -833,12 +832,9 @@ header.hero .line2 {
   margin: 6px auto 0;
 }
 .hero-steps-tail span { color: var(--text-dim); font-weight: 500; font-size: 15.5px; display: block; margin-top: 3px; }
-/* Below the width that fits all three steps on one line, stack them
-   vertically (down-arrows) instead of an awkward 2-over-1 wrap. */
-@media (max-width: 1080px) {
-  .hero-steps { flex-direction: column; align-items: flex-start; flex-wrap: wrap; gap: 12px; width: fit-content; }
-  .hero-steps .arrow { transform: rotate(90deg); margin-left: 9px; }
-  .hero-steps .hs .t, .hero-steps .hs .t span { white-space: normal; }
+/* The 1-2-3 strip is a vertical stack at every width (Chad's call 2026-07-23);
+   just trim the step title a touch on small screens. */
+@media (max-width: 720px) {
   .hero-steps .hs .t { font-size: 17px; }
 }
 /* Two-up row: ballistic calculator + Load Card recipe side by side, each
