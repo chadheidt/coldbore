@@ -1,22 +1,22 @@
 {
-  "app_version": "1.5.1",
+  "app_version": "1.5.2",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v1.5.1 - Clearer Results wording. When two or more charges are too close in speed to separate, Loadscope now tells you straight that your group sizes -- mean radius and vertical spread -- make the call, instead of naming an impractical number of extra shots. Same winner, clearer why.",
+  "app_release_notes": "v1.5.2 - Athlon Rangecraft Velocity Pro files now import. If Loadscope was turning your Athlon exports away with \"no matching parser,\" that is fixed. Range files also line up in the right order now when a chronograph file carries no time stamp -- file 9 comes before file 10 -- which keeps your velocities on the right charges. Tidier menus: Support went from 14 items to 9, and Check for Updates now sits next to About with your version shown underneath.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "1.5.1",
+      "app_version": "1.5.2",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v1.5.1 - Clearer Results wording. When two or more charges are too close in speed to separate, Loadscope now tells you straight that your group sizes -- mean radius and vertical spread -- make the call, instead of naming an impractical number of extra shots. Same winner, clearer why."
+      "app_release_notes": "v1.5.2 - Athlon Rangecraft Velocity Pro files now import. If Loadscope was turning your Athlon exports away with \"no matching parser,\" that is fixed. Range files also line up in the right order now when a chronograph file carries no time stamp -- file 9 comes before file 10 -- which keeps your velocities on the right charges. Tidier menus: Support went from 14 items to 9, and Check for Updates now sits next to About with your version shown underneath."
     },
     "mac_arm64": {
-      "app_version": "1.5.1",
+      "app_version": "1.5.2",
       "app_download_file": "Loadscope-arm64.zip",
-      "app_release_notes": "v1.5.1 - Clearer Results wording. When two or more charges are too close in speed to separate, Loadscope now tells you straight that your group sizes -- mean radius and vertical spread -- make the call, instead of naming an impractical number of extra shots. Same winner, clearer why."
+      "app_release_notes": "v1.5.2 - Athlon Rangecraft Velocity Pro files now import. If Loadscope was turning your Athlon exports away with \"no matching parser,\" that is fixed. Range files also line up in the right order now when a chronograph file carries no time stamp -- file 9 comes before file 10 -- which keeps your velocities on the right charges. Tidier menus: Support went from 14 items to 9, and Check for Updates now sits next to About with your version shown underneath."
     },
     "windows": {
       "app_version": "1.5.1",
