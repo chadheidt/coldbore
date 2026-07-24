@@ -6,6 +6,12 @@
 <meta property="og:title" content="How to Get Data Off a Garmin Xero (USB, .FIT Files, or ShotView)"><meta property="og:description" content="Three ways to get your shot data off a Garmin Xero: plug it in over USB and copy the .FIT files, read it straight into Loadscope, or export a CSV from ShotView.">
 <meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/get-data-off-garmin-xero.html">
 <meta property="og:image" content="https://loadscope.app/assets/apple-touch-icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to Get Data Off a Garmin Xero (USB, .FIT Files, or ShotView)">
+<meta name="twitter:description" content="Three ways to get your shot data off a Garmin Xero C1 Pro: plug it in over USB and copy the .FIT files, read it straight into Loadscope, or export a CSV from the ShotView app. What each one gives you.">
+<meta name="twitter:image" content="https://loadscope.app/assets/icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How to Get Data Off a Garmin Xero (USB, .FIT Files, or ShotView)","description":"Three ways to get your shot data off a Garmin Xero C1 Pro: plug it in over USB and copy the .FIT files, read it straight into Loadscope, or export a CSV from the ShotView app. What each one gives you.","url":"https://loadscope.app/learn/get-data-off-garmin-xero.html","image":"https://loadscope.app/assets/icon.png","publisher":{"@type":"Organization","name":"Loadscope","logo":{"@type":"ImageObject","url":"https://loadscope.app/assets/icon.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loadscope.app/learn/get-data-off-garmin-xero.html"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://loadscope.app/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://loadscope.app/learn/"},{"@type":"ListItem","position":3,"name":"How to Get Data Off a Garmin Xero (USB, .FIT Files, or ShotView)","item":"https://loadscope.app/learn/get-data-off-garmin-xero.html"}]}</script>
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
 <style>
 :root{--orange:#d97706;--bg:#0e0f12;--bg-mid:#1a1c20;--bg-light:#252830;--text:#f5f5f5;--text-dim:#9ca3af;--text-muted:#6b7280;--border:#2d3036;}
@@ -20,6 +26,8 @@ nav .container{max-width:1080px;display:flex;align-items:center;justify-content:
 .nav-links a{color:var(--text-dim);text-decoration:none;margin-left:20px;font-size:15px}
 .nav-links a:hover{color:#fff}
 .btn{background:var(--orange);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:700}
+/*navfit*/@media(max-width:560px){nav .container{padding:0 14px}.logo{font-size:15px;letter-spacing:.5px;white-space:nowrap}.logo img{width:26px;height:26px}.nav-links{display:flex;align-items:center}.nav-links a{margin-left:12px;font-size:14px;white-space:nowrap}.nav-links a[href='/#faq'],.nav-links a[href='/#install']{display:none}.btn{padding:7px 11px;white-space:nowrap}}/*/navfit*/
+
 article{padding:48px 0 24px}
 .crumb{color:var(--text-muted);font-size:14px;margin-bottom:18px}
 .crumb a{color:var(--text-dim);text-decoration:none}
@@ -33,6 +41,8 @@ a{color:var(--orange)}
 .lead{font-size:19px;color:var(--text-dim);margin-bottom:8px}
 strong{color:#fff}
 code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:var(--bg-light);border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:#fff}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0 28px}
+.tablewrap table{margin:0;min-width:420px}
 table{width:100%;border-collapse:collapse;margin:18px 0;font-size:15px}
 th,td{border:1px solid var(--border);padding:10px 12px;text-align:left;vertical-align:top}
 th{background:var(--bg-mid);color:#fff}
@@ -57,12 +67,12 @@ footer a{color:var(--orange);text-decoration:none}
 <p class="lead">The Xero records every shot and holds your last 50 sessions. Getting that off the unit is easy once you know it mounts like a thumb drive &mdash; here are the three routes and what each one actually gives you.</p>
 
 <h2>The short answer</h2>
-<table>
+<div class="tablewrap"><table>
 <tr><th>Route</th><th>What you get</th><th>Best for</th></tr>
 <tr><td><strong>USB cable</strong></td><td>Every session still on the unit, as <code>.FIT</code> files</td><td>Getting a whole range day at once</td></tr>
 <tr><td><strong>ShotView app</strong></td><td>One session at a time, as a <code>.CSV</code> (or several as <code>.xlsx</code>)</td><td>When you don't have the cable</td></tr>
 <tr><td><strong>Straight into Loadscope</strong></td><td>The sessions you pick, already matched to your ladder</td><td>Load development</td></tr>
-</table>
+</table></div>
 
 <h2>1. Over the USB cable (everything at once)</h2>
 <p>The Xero mounts as a standard USB mass-storage device &mdash; no drivers, no Garmin software required.</p>

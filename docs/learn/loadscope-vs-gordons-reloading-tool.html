@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loadscope vs. Gordon's Reloading Tool: Prediction vs. Proof | Loadscope</title>
+<meta name="description" content="Gordon's Reloading Tool predicts pressure and velocity before you shoot. Loadscope scores what actually happened after you did. What each one is for, why they pair well, and what Mac shooters should know about running GRT.">
+<link rel="canonical" href="https://loadscope.app/learn/loadscope-vs-gordons-reloading-tool.html">
+<meta property="og:title" content="Loadscope vs. Gordon's Reloading Tool: Prediction vs. Proof"><meta property="og:description" content="Gordon's Reloading Tool predicts pressure and velocity before you shoot. Loadscope scores what actually happened after you did. What each one is for, why they pair well, and what Mac shooters should know about running GRT.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/loadscope-vs-gordons-reloading-tool.html">
+<meta property="og:image" content="https://loadscope.app/assets/icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Loadscope vs. Gordon's Reloading Tool: Prediction vs. Proof"><meta name="twitter:description" content="Gordon's Reloading Tool predicts pressure and velocity before you shoot. Loadscope scores what actually happened after you did. What each one is for, why they pair well, and what Mac shooters should know about running GRT.">
+<meta name="twitter:image" content="https://loadscope.app/assets/icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Loadscope vs. Gordon's Reloading Tool: Prediction vs. Proof","description":"Gordon's Reloading Tool predicts pressure and velocity before you shoot. Loadscope scores what actually happened after you did. What each one is for, why they pair well, and what Mac shooters should know about running GRT.","url":"https://loadscope.app/learn/loadscope-vs-gordons-reloading-tool.html","image":"https://loadscope.app/assets/icon.png","publisher":{"@type":"Organization","name":"Loadscope","logo":{"@type":"ImageObject","url":"https://loadscope.app/assets/icon.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loadscope.app/learn/loadscope-vs-gordons-reloading-tool.html"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://loadscope.app/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://loadscope.app/learn/"},{"@type":"ListItem","position":3,"name":"Loadscope vs. Gordon's Reloading Tool: Prediction vs. Proof","item":"https://loadscope.app/learn/loadscope-vs-gordons-reloading-tool.html"}]}</script>
+<style>
+:root{--orange:#d97706;--bg:#0e0f12;--bg-mid:#1a1c20;--bg-light:#252830;--text:#f5f5f5;--text-dim:#9ca3af;--text-muted:#6b7280;--border:#2d3036;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}
+.container{max-width:760px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;background:rgba(14,15,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10}
+nav .container{max-width:1080px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;color:#fff;text-decoration:none}
+.logo img{width:30px;height:30px;border-radius:7px}
+.nav-links a{color:var(--text-dim);text-decoration:none;margin-left:20px;font-size:15px}
+.nav-links a:hover{color:#fff}
+.btn{background:var(--orange);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:700}
+/*navfit*/@media(max-width:560px){nav .container{padding:0 14px}.logo{font-size:15px;letter-spacing:.5px;white-space:nowrap}.logo img{width:26px;height:26px}.nav-links{display:flex;align-items:center}.nav-links a{margin-left:12px;font-size:14px;white-space:nowrap}.nav-links a[href='/#faq'],.nav-links a[href='/#install']{display:none}.btn{padding:7px 11px;white-space:nowrap}}/*/navfit*/
+
+article{padding:48px 0 24px}
+.crumb{color:var(--text-muted);font-size:14px;margin-bottom:18px}
+.crumb a{color:var(--text-dim);text-decoration:none}
+h1{font-size:34px;line-height:1.2;margin-bottom:14px;letter-spacing:-.4px}
+h2{font-size:23px;margin:34px 0 10px;color:#fff}
+p{color:#dfe2e6;margin-bottom:16px}
+ul,ol{margin:0 0 16px 22px}
+li{color:#dfe2e6;margin-bottom:8px}
+a{color:var(--orange)}
+.lead{font-size:19px;color:var(--text-dim);margin-bottom:8px}
+strong{color:#fff}
+figure{margin:26px 0}
+figure img{width:100%;border:1px solid var(--border);border-radius:12px;display:block}
+figure.tight{max-width:380px;margin-left:auto;margin-right:auto}
+figcaption{color:var(--text-muted);font-size:14px;margin-top:8px;text-align:center}
+table{width:100%;border-collapse:collapse;margin:20px 0 28px;font-size:15px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);color:#dfe2e6;vertical-align:top}
+th{color:#fff;font-size:14px;text-transform:uppercase;letter-spacing:.03em}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0 28px}
+.tablewrap table{margin:0;min-width:420px}
+.cta{background:var(--bg-mid);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:12px;padding:22px 24px;margin:34px 0}
+.cta h3{color:#fff;font-size:19px;margin-bottom:8px}
+.cta .btn{display:inline-block;margin-top:6px;text-decoration:none}
+.related{border-top:1px solid var(--border);margin-top:40px;padding-top:24px}
+.related a{display:block;margin-bottom:8px;text-decoration:none;color:var(--text-dim)}
+.related a:hover{color:var(--orange)}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:28px 0;color:var(--text-muted);font-size:14px;text-align:center}
+footer a{color:var(--orange);text-decoration:none}
+</style></head><body><nav><div class="container">
+<a class="logo" href="/"><img src="/assets/icon.png" alt="Loadscope">LOADSCOPE&trade;</a>
+<div class="nav-links"><a href="/learn/">Learn</a><a href="/#faq">FAQ</a><a href="/#install">Install</a><a class="btn" href="/">Get Loadscope</a></div>
+</div></nav><div class="container"><article>
+<div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a> &rsaquo; Loadscope vs. Gordon&rsquo;s Reloading Tool</div>
+<h1>Loadscope vs. Gordon&rsquo;s Reloading Tool: Prediction vs. Proof</h1>
+
+<p class="lead">These two tools get compared constantly, and they should not be &mdash; they sit on opposite sides of the trigger pull. Gordon&rsquo;s Reloading Tool tells you what a load ought to do before you build it. Loadscope tells you what your loads actually did after you shot them, and which one won. Most serious handloaders have room for both.</p>
+
+<h2>What GRT actually is</h2>
+<p>Gordon&rsquo;s Reloading Tool is a free interior-ballistics simulator. You enter your cartridge, bullet, powder and charge, and it models the burn &mdash; projecting a pressure curve and a muzzle velocity. Its stated purpose is safety as much as performance: to help handloaders understand where a load sits relative to pressure limits before that load exists in a case. It has a deep component database, it is community-maintained, and it costs nothing.</p>
+<p>For working out sensible starting charges, sanity-checking a wildcat, or understanding why a powder behaves the way it does in a particular case, it is an excellent and genuinely respected tool.</p>
+
+<h2>What GRT is not for</h2>
+<ul>
+<li><strong>It is a model, not a measurement.</strong> A simulation predicts what a load should do in an idealized barrel. Your barrel, your brass, your lot of powder and the temperature that morning will all disagree with it to some degree. That gap is the entire reason you chronograph.</li>
+<li><strong>It does not score a ladder.</strong> Once you have gone and shot ten charges over a chronograph, GRT is not the tool that reads those ten strings and tells you which charge to keep.</li>
+<li><strong>It does not touch your target.</strong> Group size, mean radius, vertical spread &mdash; the numbers that decide between two loads that chronograph identically &mdash; are outside its scope entirely.</li>
+<li><strong>It does not run natively on a Mac.</strong> GRT is a Windows program with a Linux build. Mac users get there through CrossOver, Parallels, a virtual machine, or WINE &mdash; which works, but it is a workaround, and it is one of the most-asked questions about the tool on the shooting forums.</li>
+</ul>
+
+<h2>What Loadscope does with the other half</h2>
+<p>Loadscope starts where GRT stops &mdash; at the moment you come back from the range with real data. It imports your chronograph sessions directly (Garmin Xero over the cable, LabRadar, MagnetoSpeed, Athlon), <a href="/learn/measure-groups-from-a-photo.html">measures your target groups from a photograph</a>, and then scores every charge and seating depth you fired on four measures at once: <a href="/learn/powder-ladder-test.html">velocity flat-spot</a>, velocity SD, mean radius and vertical spread. It <strong>names your best load</strong>, tells you how firmly to hold that call given how many shots you fired, predicts your dope, and prints a pocket range card. It runs natively on Mac and Windows.</p>
+
+<div class="tablewrap"><table>
+<tr><th></th><th>Gordon&rsquo;s Reloading Tool</th><th>Loadscope</th></tr>
+<tr><td>When you use it</td><td>Before you load</td><td>After you shoot</td></tr>
+<tr><td>What it gives you</td><td>Predicted pressure &amp; velocity</td><td>Your measured results, scored</td></tr>
+<tr><td>Price</td><td>Free</td><td>$59 one-time</td></tr>
+<tr><td>Runs on macOS</td><td>Via CrossOver / VM only</td><td>Native (Intel &amp; Apple Silicon)</td></tr>
+<tr><td>Runs on Windows</td><td>Native</td><td>Native</td></tr>
+<tr><td>Reads your chronograph</td><td>No</td><td>Yes &mdash; Garmin, LabRadar, MagnetoSpeed, Athlon</td></tr>
+<tr><td>Measures target groups</td><td>No</td><td>Yes, from a photo</td></tr>
+<tr><td>Names your best load</td><td>No</td><td>Yes</td></tr>
+</table></div>
+
+<h2>Using them together</h2>
+<ol>
+<li><strong>Start in GRT.</strong> Model your component combination and get a sensible, safe charge range to test &mdash; then cross-check it against a current published manual, because a simulation is not load data either.</li>
+<li><strong>Shoot the ladder.</strong> Load a spread across that range, chronograph every string, and shoot each charge at a target you keep. <a href="/learn/powder-ladder-test.html">How to run and read a powder ladder &rarr;</a></li>
+<li><strong>Finish in Loadscope.</strong> Import the velocities and the targets, and let the scoring name the charge and seating depth that actually performed &mdash; then print the range card for it.</li>
+</ol>
+<p>Prediction narrows the search. Measurement settles it. Neither tool does the other&rsquo;s job, which is exactly why the pairing works.</p>
+
+<div class="cta"><h3>You modeled it. Now find out what it really did.</h3>
+<p>Loadscope reads your chronograph, measures your target groups from a photo, scores every powder charge and seating depth, names your best load, and prints a range card. Native on Mac and Windows, one-time $59, 30-day money-back.</p>
+<a class="btn" href="/">See how it works &rarr;</a></div>
+<div class="related"><strong style="color:#fff">Keep reading</strong><br><br><a href="/learn/loadscope-vs-chronoplotter.html">Loadscope vs. ChronoPlotter &rarr;</a><a href="/learn/loadscope-vs-gunr.html">Loadscope vs. GUNR &rarr;</a><a href="/learn/powder-ladder-test.html">How to read a powder ladder &rarr;</a><a href="/learn/spreadsheet-vs-software-load-development.html">Spreadsheet vs. software &rarr;</a></div>
+</article></div>
+<footer><div class="container">
+<p>&copy; 2026 Loadscope&trade;. Automated rifle load development for Mac &amp; Windows. &middot; <a href="/">loadscope.app</a></p>
+<p style="margin-top:6px"><a href="/learn/">Learn</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></p>
+</div></footer><!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2faa54a51efa477c9529f0c5bc14f3bf"}'></script><!-- End Cloudflare Web Analytics --><script>/* Attribution: stash any utm_* on landing so it survives the same-tab hop to the homepage checkout (see index.html attributionCapture + tools/attribution_links.md). */
+(function(){try{var K=["utm_source","utm_medium","utm_campaign","utm_content","utm_term"],p=new URLSearchParams(location.search);K.forEach(function(k){var v=p.get(k);if(v){try{sessionStorage.setItem(k,v);}catch(e){}}});if(!sessionStorage.getItem("utm_source")&&document.referrer){var h=new URL(document.referrer).hostname.replace(/^www\./,"").toLowerCase(),o=location.hostname.replace(/^www\./,"").toLowerCase();if(h&&h!==o){var s,m;var E=h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave)\./);if(E){s=E[2];m="organic";}else{var N={"snipershide.com":["snipershide","forum"],"accurateshooter.com":["accurateshooter","forum"],"longrangehunting.com":["longrangehunting","forum"],"reddit.com":["reddit","social"],"out.reddit.com":["reddit","social"],"youtube.com":["youtube","video"],"youtu.be":["youtube","video"],"facebook.com":["facebook","social"],"m.facebook.com":["facebook","social"],"l.facebook.com":["facebook","social"],"lm.facebook.com":["facebook","social"],"x.com":["x","social"],"t.co":["x","social"],"twitter.com":["x","social"]};s=N[h]?N[h][0]:h;m=N[h]?N[h][1]:"referral";}sessionStorage.setItem("utm_source",s);sessionStorage.setItem("utm_medium",m);sessionStorage.setItem("utm_campaign",m==="organic"?"search":"referral");}}}catch(e){}})();</script>
+</body></html>
