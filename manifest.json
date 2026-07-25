@@ -1,28 +1,28 @@
 {
-  "app_version": "1.5.3",
+  "app_version": "1.5.4",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v1.5.3 - Groups you measure in the Loadscope phone apps now drop onto the right charge automatically, matched by the order you shot them. Nothing to type on the phone -- measure your targets in the order you fired, and each one lines up with its charge on the desktop.",
+  "app_release_notes": "v1.5.4 - Plugging in a Garmin Xero now reads your sessions on Windows and Apple Silicon Macs. The \"read it right off the chronograph\" feature was turning the .FIT files away on those computers; now it imports them the way it always did on Intel Macs.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "1.5.3",
+      "app_version": "1.5.4",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v1.5.3 - Groups you measure in the Loadscope phone apps now drop onto the right charge automatically, matched by the order you shot them. Nothing to type on the phone -- measure your targets in the order you fired, and each one lines up with its charge on the desktop."
+      "app_release_notes": "v1.5.4 - Plugging in a Garmin Xero now reads your sessions on Windows and Apple Silicon Macs. The \"read it right off the chronograph\" feature was turning the .FIT files away on those computers; now it imports them the way it always did on Intel Macs."
     },
     "mac_arm64": {
-      "app_version": "1.5.3",
+      "app_version": "1.5.4",
       "app_download_file": "Loadscope-arm64.zip",
-      "app_release_notes": "v1.5.3 - Groups you measure in the Loadscope phone apps now drop onto the right charge automatically, matched by the order you shot them. Nothing to type on the phone -- measure your targets in the order you fired, and each one lines up with its charge on the desktop."
+      "app_release_notes": "v1.5.4 - Plugging in a Garmin Xero now reads your sessions on Windows and Apple Silicon Macs. The \"read it right off the chronograph\" feature was turning the .FIT files away on those computers; now it imports them the way it always did on Intel Macs."
     },
     "windows": {
-      "app_version": "1.5.3",
+      "app_version": "1.5.4",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.5.3/Loadscope-Setup.exe",
-      "app_release_notes": "v1.5.3 - Groups you measure in the Loadscope phone apps now drop onto the right charge automatically, matched by the order you shot them. Nothing to type on the phone -- measure your targets in the order you fired, and each one lines up with its charge on the desktop."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.5.4/Loadscope-Setup.exe",
+      "app_release_notes": "v1.5.4 - Plugging in a Garmin Xero now reads your sessions on Windows and Apple Silicon Macs. The \"read it right off the chronograph\" feature was turning the .FIT files away on those computers; now it imports them the way it always did on Intel Macs."
     }
   }
 }
