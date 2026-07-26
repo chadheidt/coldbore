@@ -1,0 +1,96 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How Many Shots Per Charge in a Load Ladder? (And How Many to Trust It) | Loadscope</title>
+<meta name="description" content="How many shots per charge in a powder ladder? A few finds the rough zone; you need about 10 at your finalist and 20-30 before you bet a match on the numbers. Why small samples lie, and a practical shot budget for load development.">
+<link rel="canonical" href="https://loadscope.app/learn/how-many-shots-per-charge.html">
+<meta property="og:title" content="How Many Shots Per Charge in a Load Ladder?"><meta property="og:description" content="A few shots finds the rough zone; ~10 at your finalist confirms it; 20-30 before you trust the numbers. Why small samples lie, and a practical shot budget.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/how-many-shots-per-charge.html">
+<meta property="og:image" content="https://loadscope.app/assets/icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How Many Shots Per Charge in a Load Ladder?">
+<meta name="twitter:description" content="A few shots finds the rough zone; ~10 at your finalist confirms it; 20-30 before you trust the numbers. Why small samples lie, and a practical shot budget.">
+<meta name="twitter:image" content="https://loadscope.app/assets/icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"How Many Shots Per Charge in a Load Ladder? (And How Many to Trust It)","description":"How many shots per charge in a powder ladder? A few finds the rough zone; you need about 10 at your finalist and 20-30 before you bet a match on the numbers. Why small samples lie, and a practical shot budget for load development.","url":"https://loadscope.app/learn/how-many-shots-per-charge.html","image":"https://loadscope.app/assets/icon.png","publisher":{"@type":"Organization","name":"Loadscope","logo":{"@type":"ImageObject","url":"https://loadscope.app/assets/icon.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loadscope.app/learn/how-many-shots-per-charge.html"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://loadscope.app/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://loadscope.app/learn/"},{"@type":"ListItem","position":3,"name":"How Many Shots Per Charge in a Load Ladder?","item":"https://loadscope.app/learn/how-many-shots-per-charge.html"}]}</script>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<style>
+:root{--orange:#d97706;--bg:#0e0f12;--bg-mid:#1a1c20;--bg-light:#252830;--text:#f5f5f5;--text-dim:#9ca3af;--text-muted:#6b7280;--border:#2d3036;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}
+.container{max-width:760px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;background:rgba(14,15,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10}
+nav .container{max-width:1080px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;color:#fff;text-decoration:none}
+.logo img{width:30px;height:30px;border-radius:7px}
+.nav-links a{color:var(--text-dim);text-decoration:none;margin-left:20px;font-size:15px}
+.nav-links a:hover{color:#fff}
+.btn{background:var(--orange);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:700}
+/*navfit*/@media(max-width:560px){nav .container{padding:0 14px}.logo{font-size:15px;letter-spacing:.5px;white-space:nowrap}.logo img{width:26px;height:26px}.nav-links{display:flex;align-items:center}.nav-links a{margin-left:12px;font-size:14px;white-space:nowrap}.nav-links a[href='/#faq'],.nav-links a[href='/#install']{display:none}.btn{padding:7px 11px;white-space:nowrap}}/*/navfit*/
+
+article{padding:48px 0 24px}
+.crumb{color:var(--text-muted);font-size:14px;margin-bottom:18px}
+.crumb a{color:var(--text-dim);text-decoration:none}
+h1{font-size:34px;line-height:1.2;margin-bottom:14px;letter-spacing:-.4px}
+h2{font-size:23px;margin:34px 0 10px;color:#fff}
+p{color:#dfe2e6;margin-bottom:16px}
+ul,ol{margin:0 0 16px 22px}
+li{color:#dfe2e6;margin-bottom:8px}
+a{color:var(--orange)}
+.lead{font-size:19px;color:var(--text-dim);margin-bottom:8px}
+strong{color:#fff}
+figure{margin:26px 0}
+figure img{width:100%;border:1px solid var(--border);border-radius:12px;display:block}
+figure.tight{max-width:380px;margin-left:auto;margin-right:auto}
+figcaption{color:var(--text-muted);font-size:14px;margin-top:8px;text-align:center}
+.cta{background:var(--bg-mid);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:12px;padding:22px 24px;margin:34px 0}
+.cta h3{color:#fff;font-size:19px;margin-bottom:8px}
+.cta .btn{display:inline-block;margin-top:6px;text-decoration:none}
+.related{border-top:1px solid var(--border);margin-top:40px;padding-top:24px}
+.related a{display:block;margin-bottom:8px;text-decoration:none;color:var(--text-dim)}
+.related a:hover{color:var(--orange)}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:28px 0;color:var(--text-muted);font-size:14px;text-align:center}
+footer a{color:var(--orange);text-decoration:none}
+</style></head><body><nav><div class="container">
+<a class="logo" href="/"><img src="/assets/icon.png" alt="Loadscope">LOADSCOPE&trade;</a>
+<div class="nav-links"><a href="/learn/">Learn</a><a href="/#faq">FAQ</a><a href="/#install">Install</a><a class="btn" href="/">Get Loadscope</a></div>
+</div></nav><div class="container"><article>
+<div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a> &rsaquo; How many shots per charge</div>
+<h1>How Many Shots Per Charge in a Load Ladder?</h1>
+
+<p class="lead">How many shots per charge? A few shots per charge (many shooters run 3) finds the rough zone in a first-pass ladder; to actually trust a load you want about <strong>10 shots at your finalist</strong>, and <strong>20&ndash;30</strong> before you bet a match on its numbers. The most common mistake in load development is deciding on too few shots.</p>
+
+<p>There&rsquo;s no single magic number &mdash; the honest answer is &ldquo;it depends on what you&rsquo;re asking the shots to prove.&rdquo; A ladder that&rsquo;s scouting for a promising charge window can get away with a few rounds each. A load you&rsquo;re about to load 200 of and shoot at distance needs a lot more before its velocity spread and group numbers mean anything. Match the shot count to the size of the decision.</p>
+
+<h2>The short answer, by what you&rsquo;re trying to learn</h2>
+<ul>
+<li><strong>Scouting a ladder (first pass):</strong> a few shots per charge across the range &mdash; enough to see where velocity settles and which charges group, not enough to crown a winner.</li>
+<li><strong>Confirming a finalist:</strong> around <strong>10 shots</strong> at the one or two charges that looked best. This is where the load earns the job.</li>
+<li><strong>Trusting the numbers for distance/matches:</strong> <strong>20&ndash;30 shots</strong> before you rely on a standard deviation figure or a group size to predict what happens at 600+.</li>
+</ul>
+
+<h2>Why a few shots finds the zone but can&rsquo;t pick the winner</h2>
+<p>A first-pass ladder is a search, not a verdict. A few rounds at each charge shows you the neighborhood &mdash; where velocity flattens out, which charges obviously scatter &mdash; and that&rsquo;s genuinely useful for narrowing 10 charges down to 2. What it <em>can&rsquo;t</em> do is tell you which of those 2 finalists is actually better, because at three shots each, luck is bigger than the difference between them.</p>
+
+<h2>Why the number climbs as the decision gets bigger</h2>
+<p>Every number you pull off a target &mdash; group size, <a href="/learn/mean-radius-vs-group-size.html">mean radius</a>, velocity <a href="/learn/standard-deviation-load-development.html">standard deviation</a> &mdash; is an estimate, and estimates get more honest the more shots feed them. A three-shot group can look tiny by luck and huge by one flier; neither is the load&rsquo;s true story. Standard deviation is the worst offender: off three or five shots it&rsquo;s mostly noise, and it doesn&rsquo;t settle down until you&rsquo;ve given it real rounds. So the bigger the bet you&rsquo;re placing on a load, the more shots it takes to place it honestly.</p>
+
+<h2>A practical shot budget</h2>
+<p>You don&rsquo;t have infinite barrel life, so spend rounds where they change the decision. Run a lean first ladder to find the promising charge window, then <strong>pour the rounds into your two finalists</strong> &mdash; ten each &mdash; instead of spreading them thin across a dozen charges you&rsquo;ll never load again. When one clearly wins, confirm it with a longer string before you commit. That&rsquo;s more shots on fewer charges, which is exactly backwards from how most people shoot a ladder &mdash; and it&rsquo;s why most ladders lie.</p>
+
+<h2>Where Loadscope fits</h2>
+<p>Loadscope reads the chronograph and target data from every charge you shot, computes the velocity flat-spot, SD, mean radius and vertical for each, and <strong>scores them to name your best load</strong> &mdash; on the shots you actually fired. Because it&rsquo;s doing the math instead of your eye, it won&rsquo;t be fooled by a lucky three-shot group the way you might be, and it makes it obvious when two charges are too close to separate on the rounds you gave them. <a href="/learn/how-loadscope-scores-a-load.html">See how the scoring works &rarr;</a></p>
+
+<div style="background:#221a14;border:1px solid #6b4e1e;border-radius:10px;padding:14px 18px;margin:28px 0;color:#e8cfa0;font-size:15px"><strong>The one rule to remember:</strong> a small ladder finds the zone; a bigger string picks the load. Don&rsquo;t crown a winner off three shots &mdash; confirm your finalist before you trust it.</div>
+
+<div class="cta"><h3>Stop guessing from too few shots</h3>
+<p>Loadscope scores every powder charge and seating depth you tested on velocity flat-spot, SD, mean radius and vertical, names your best load, and prints a range card &mdash; on Mac and Windows.</p>
+<a class="btn" href="/">See how it works &rarr;</a></div>
+<div class="related"><strong style="color:#fff">Keep reading</strong><br><br><a href="/learn/powder-ladder-test.html">How to read a powder ladder &rarr;</a><a href="/learn/standard-deviation-load-development.html">SD and ES: what&rsquo;s a good number? &rarr;</a><a href="/learn/mean-radius-vs-group-size.html">Mean radius vs group size &rarr;</a></div>
+</article></div>
+<footer><div class="container">
+<p>&copy; 2026 Loadscope&trade;. Automated rifle load development for Mac &amp; Windows. &middot; <a href="/">loadscope.app</a></p>
+<p style="margin-top:6px"><a href="/learn/">Learn</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></p>
+</div></footer><!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2faa54a51efa477c9529f0c5bc14f3bf"}'></script><!-- End Cloudflare Web Analytics --><script>/* Attribution: stash any utm_* on landing so it survives the same-tab hop to the homepage checkout (see index.html attributionCapture + tools/attribution_links.md). */
+(function(){try{var K=["utm_source","utm_medium","utm_campaign","utm_content","utm_term"],p=new URLSearchParams(location.search);K.forEach(function(k){var v=p.get(k);if(v){try{sessionStorage.setItem(k,v);}catch(e){}}});if(!sessionStorage.getItem("utm_source")&&document.referrer){var h=new URL(document.referrer).hostname.replace(/^www\./,"").toLowerCase(),o=location.hostname.replace(/^www\./,"").toLowerCase();if(h&&h!==o){var s,m;var E=h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave)\./);if(E){s=E[2];m="organic";}else{var N={"snipershide.com":["snipershide","forum"],"accurateshooter.com":["accurateshooter","forum"],"longrangehunting.com":["longrangehunting","forum"],"reddit.com":["reddit","social"],"out.reddit.com":["reddit","social"],"youtube.com":["youtube","video"],"youtu.be":["youtube","video"],"facebook.com":["facebook","social"],"m.facebook.com":["facebook","social"],"l.facebook.com":["facebook","social"],"lm.facebook.com":["facebook","social"],"x.com":["x","social"],"t.co":["x","social"],"twitter.com":["x","social"]};s=N[h]?N[h][0]:h;m=N[h]?N[h][1]:"referral";}sessionStorage.setItem("utm_source",s);sessionStorage.setItem("utm_medium",m);sessionStorage.setItem("utm_campaign",m==="organic"?"search":"referral");}}}catch(e){}})();</script>
+</body></html>
