@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The OCW (Optimal Charge Weight) Method Explained | Loadscope</title>
+<meta name="description" content="The OCW (Optimal Charge Weight) method explained: fire round-robin groups across several charge weights and find the charge where point of impact barely moves as you step the powder up or down. What it is, how the round-robin works, how it differs from a velocity ladder, and its limits.">
+<link rel="canonical" href="https://loadscope.app/learn/ocw-optimal-charge-weight.html">
+<meta property="og:title" content="The OCW (Optimal Charge Weight) Method Explained"><meta property="og:description" content="Fire round-robin groups across several charges and find the one where point of impact barely moves as you step the powder up or down - a forgiving charge. How it works and where it differs from a velocity ladder.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/ocw-optimal-charge-weight.html">
+<meta property="og:image" content="https://loadscope.app/assets/icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The OCW (Optimal Charge Weight) Method Explained">
+<meta name="twitter:description" content="Fire round-robin groups across several charges and find the one where point of impact barely moves as you step the powder up or down - a forgiving charge. How it works and where it differs from a velocity ladder.">
+<meta name="twitter:image" content="https://loadscope.app/assets/icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"The OCW (Optimal Charge Weight) Method Explained","description":"The OCW (Optimal Charge Weight) method explained: fire round-robin groups across several charge weights and find the charge where point of impact barely moves as you step the powder up or down. What it is, how the round-robin works, how it differs from a velocity ladder, and its limits.","url":"https://loadscope.app/learn/ocw-optimal-charge-weight.html","image":"https://loadscope.app/assets/icon.png","publisher":{"@type":"Organization","name":"Loadscope","logo":{"@type":"ImageObject","url":"https://loadscope.app/assets/icon.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loadscope.app/learn/ocw-optimal-charge-weight.html"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://loadscope.app/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://loadscope.app/learn/"},{"@type":"ListItem","position":3,"name":"The OCW (Optimal Charge Weight) Method Explained","item":"https://loadscope.app/learn/ocw-optimal-charge-weight.html"}]}</script>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<style>
+:root{--orange:#d97706;--bg:#0e0f12;--bg-mid:#1a1c20;--bg-light:#252830;--text:#f5f5f5;--text-dim:#9ca3af;--text-muted:#6b7280;--border:#2d3036;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}
+.container{max-width:760px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;background:rgba(14,15,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10}
+nav .container{max-width:1080px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;color:#fff;text-decoration:none}
+.logo img{width:30px;height:30px;border-radius:7px}
+.nav-links a{color:var(--text-dim);text-decoration:none;margin-left:20px;font-size:15px}
+.nav-links a:hover{color:#fff}
+.btn{background:var(--orange);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:700}
+/*navfit*/@media(max-width:560px){nav .container{padding:0 14px}.logo{font-size:15px;letter-spacing:.5px;white-space:nowrap}.logo img{width:26px;height:26px}.nav-links{display:flex;align-items:center}.nav-links a{margin-left:12px;font-size:14px;white-space:nowrap}.nav-links a[href='/#faq'],.nav-links a[href='/#install']{display:none}.btn{padding:7px 11px;white-space:nowrap}}/*/navfit*/
+
+article{padding:48px 0 24px}
+.crumb{color:var(--text-muted);font-size:14px;margin-bottom:18px}
+.crumb a{color:var(--text-dim);text-decoration:none}
+h1{font-size:34px;line-height:1.2;margin-bottom:14px;letter-spacing:-.4px}
+h2{font-size:23px;margin:34px 0 10px;color:#fff}
+p{color:#dfe2e6;margin-bottom:16px}
+ul,ol{margin:0 0 16px 22px}
+li{color:#dfe2e6;margin-bottom:8px}
+a{color:var(--orange)}
+.lead{font-size:19px;color:var(--text-dim);margin-bottom:8px}
+strong{color:#fff}
+figure{margin:26px 0}
+figure img{width:100%;border:1px solid var(--border);border-radius:12px;display:block}
+figure.tight{max-width:380px;margin-left:auto;margin-right:auto}
+figcaption{color:var(--text-muted);font-size:14px;margin-top:8px;text-align:center}
+.cta{background:var(--bg-mid);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:12px;padding:22px 24px;margin:34px 0}
+.cta h3{color:#fff;font-size:19px;margin-bottom:8px}
+.cta .btn{display:inline-block;margin-top:6px;text-decoration:none}
+.related{border-top:1px solid var(--border);margin-top:40px;padding-top:24px}
+.related a{display:block;margin-bottom:8px;text-decoration:none;color:var(--text-dim)}
+.related a:hover{color:var(--orange)}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:28px 0;color:var(--text-muted);font-size:14px;text-align:center}
+footer a{color:var(--orange);text-decoration:none}
+</style></head><body><nav><div class="container">
+<a class="logo" href="/"><img src="/assets/icon.png" alt="Loadscope">LOADSCOPE&trade;</a>
+<div class="nav-links"><a href="/learn/">Learn</a><a href="/#faq">FAQ</a><a href="/#install">Install</a><a class="btn" href="/">Get Loadscope</a></div>
+</div></nav><div class="container"><article>
+<div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a> &rsaquo; The OCW method</div>
+<h1>The OCW (Optimal Charge Weight) Method Explained</h1>
+
+<p class="lead">The OCW method hunts for a <strong>forgiving charge</strong>: you fire round-robin groups across several charge weights and find the one where the <strong>point of impact barely moves</strong> as you step the powder up or down. The theory is that a charge that&rsquo;s insensitive to small powder changes will also shrug off temperature swings and metering variation &mdash; so it holds zero across a season, not just on load-development day.</p>
+
+<p>Developed by Dan Newberry, OCW is less about the smallest group on the day and more about <em>repeatability</em>: a load that lands in the same place whether your powder throw is a touch heavy or light, or the afternoon warms up. Here&rsquo;s how it works and how it differs from a velocity ladder.</p>
+
+<h2>How the round-robin works</h2>
+<p>Load a few rounds each at several charge weights in small, even steps &mdash; always <strong>start low and work up</strong>, watching for pressure. Set a separate aiming point for each charge on the same target board. Then shoot <strong>round-robin</strong>: one shot at charge 1, one at charge 2, one at charge 3, and so on, then back to the top for the next rotation. Firing in rotation is the whole trick &mdash; any change in wind, mirage, barrel heat or your own hold spreads evenly across all the charges instead of piling onto one, so what&rsquo;s left on paper is the effect of the <em>powder</em>, not the conditions.</p>
+
+<h2>What you&rsquo;re looking for</h2>
+<p>Line up the group centers by charge weight and look for two or three neighboring charges that print to <strong>the same point of impact</strong> &mdash; a little cluster where bumping the powder up or down doesn&rsquo;t move where the group lands. That charge in the middle is the &ldquo;optimal charge weight&rdquo;: the one least fussy about a small powder change. Notice this is about <em>where the group goes</em>, not how small it is.</p>
+
+<h2>OCW vs a velocity ladder</h2>
+<p>They&rsquo;re after the same goal &mdash; a forgiving charge window &mdash; through different windows. A <a href="/learn/powder-ladder-test.html">velocity ladder</a> looks at your chronograph for a <strong>flat spot</strong> where velocity stops climbing; OCW looks at the target for a spot where <strong>point of impact stops moving</strong>. Velocity consistency and point-of-impact stability usually travel together, but not always, which is why plenty of shooters do both: run the ladder over a chronograph for the velocity story, and read the groups for the point-of-impact story.</p>
+
+<h2>The honest catch</h2>
+<p>OCW controls for conditions better than most tests, but it still leans on small groups and a fair amount of eyeballing &mdash; deciding which group centers &ldquo;line up&rdquo; is a judgment call, and three shots per charge is a thin sample. The round-robin is a real strength; the reading is where people disagree. As with any method, the fix is the same: use it to find a promising charge, then <a href="/learn/how-many-shots-per-charge.html">confirm your finalist</a> with enough rounds to trust it.</p>
+
+<h2>Where Loadscope fits</h2>
+<p>Loadscope takes the eyeball out of the read. It measures each group from a photo &mdash; point of impact, <a href="/learn/mean-radius-vs-group-size.html">mean radius</a> and vertical &mdash; lines them up with your chronograph velocities, and <strong>scores every charge to name your best load</strong> instead of leaving you to judge which centers cluster. Whether you shot an OCW test, a velocity ladder, or both, it reads the same data and gives you a number instead of an opinion. <a href="/learn/how-loadscope-scores-a-load.html">See how the scoring works &rarr;</a></p>
+
+<div style="background:#221a14;border:1px solid #6b4e1e;border-radius:10px;padding:14px 18px;margin:28px 0;color:#e8cfa0;font-size:15px"><strong>The one rule to remember:</strong> OCW is about a load that stays put when the powder or the weather drifts &mdash; a forgiving charge, not just a small group on a good day. Find it, then confirm it with real rounds.</div>
+
+<div class="cta"><h3>Read your test with numbers, not opinions</h3>
+<p>Loadscope reads your chronograph and target data, scores every powder charge and seating depth on velocity flat-spot, SD, mean radius and vertical, names your best load, and prints a range card &mdash; on Mac and Windows.</p>
+<a class="btn" href="/">See how it works &rarr;</a></div>
+<div class="related"><strong style="color:#fff">Keep reading</strong><br><br><a href="/learn/powder-ladder-test.html">How to read a powder ladder &rarr;</a><a href="/learn/satterlee-10-round-method.html">The Satterlee 10-round method &rarr;</a><a href="/learn/how-loadscope-scores-a-load.html">How Loadscope scores a load &rarr;</a></div>
+</article></div>
+<footer><div class="container">
+<p>&copy; 2026 Loadscope&trade;. Automated rifle load development for Mac &amp; Windows. &middot; <a href="/">loadscope.app</a></p>
+<p style="margin-top:6px"><a href="/learn/">Learn</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></p>
+</div></footer><!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2faa54a51efa477c9529f0c5bc14f3bf"}'></script><!-- End Cloudflare Web Analytics --><script>/* Attribution: stash any utm_* on landing so it survives the same-tab hop to the homepage checkout (see index.html attributionCapture + tools/attribution_links.md). */
+(function(){try{var K=["utm_source","utm_medium","utm_campaign","utm_content","utm_term"],p=new URLSearchParams(location.search);K.forEach(function(k){var v=p.get(k);if(v){try{sessionStorage.setItem(k,v);}catch(e){}}});if(!sessionStorage.getItem("utm_source")&&document.referrer){var h=new URL(document.referrer).hostname.replace(/^www\./,"").toLowerCase(),o=location.hostname.replace(/^www\./,"").toLowerCase();if(h&&h!==o){var s,m;var E=h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave)\./);if(E){s=E[2];m="organic";}else{var N={"snipershide.com":["snipershide","forum"],"accurateshooter.com":["accurateshooter","forum"],"longrangehunting.com":["longrangehunting","forum"],"reddit.com":["reddit","social"],"out.reddit.com":["reddit","social"],"youtube.com":["youtube","video"],"youtu.be":["youtube","video"],"facebook.com":["facebook","social"],"m.facebook.com":["facebook","social"],"l.facebook.com":["facebook","social"],"lm.facebook.com":["facebook","social"],"x.com":["x","social"],"t.co":["x","social"],"twitter.com":["x","social"]};s=N[h]?N[h][0]:h;m=N[h]?N[h][1]:"referral";}sessionStorage.setItem("utm_source",s);sessionStorage.setItem("utm_medium",m);sessionStorage.setItem("utm_campaign",m==="organic"?"search":"referral");}}}catch(e){}})();</script>
+</body></html>
