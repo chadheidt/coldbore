@@ -1487,6 +1487,7 @@ function srcFromReferrer() {
 
 (function attributionCapture() {
   var UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+  function cookie(n){ var m=document.cookie.match('(^|;)\\s*'+n+'\\s*=\\s*([^;]+)'); return m?m.pop():null; }
   try {
     var params = new URLSearchParams(window.location.search);
     UTM_KEYS.forEach(function (k) {
@@ -1497,6 +1498,17 @@ function srcFromReferrer() {
       var ref = srcFromReferrer();
       if (ref) Object.keys(ref).forEach(function (k) { sessionStorage.setItem(k, ref[k]); });
     }
+    // Meta ad-click identifiers. The pixel (loaded in <head>) drops _fbc when an
+    // fbclid is present and _fbp on every visit; carrying them through the
+    // checkout lets the server-side Purchase event (worker CAPI) be matched back
+    // to the AD CLICK -- which is what raises purchase match quality above the
+    // email-only 3.2/10 that was starving conversion optimization (Chad 7/26).
+    var fbc = cookie("_fbc");
+    if (!fbc) { var fbclid = params.get("fbclid"); if (fbclid) fbc = "fb.1." + Date.now() + "." + fbclid; }
+    if (fbc) sessionStorage.setItem("_fbc", fbc);
+    var fbp = cookie("_fbp");
+    if (fbp) sessionStorage.setItem("_fbp", fbp);
+
     var link = document.getElementById("buyNowLink");
     if (link) {
       var url = new URL(link.href);
@@ -1504,7 +1516,16 @@ function srcFromReferrer() {
         var v = sessionStorage.getItem(k);
         if (v) url.searchParams.set("checkout[custom][" + k + "]", v);
       });
+      var fbcv = sessionStorage.getItem("_fbc"); if (fbcv) url.searchParams.set("checkout[custom][fbc]", fbcv);
+      var fbpv = sessionStorage.getItem("_fbp"); if (fbpv) url.searchParams.set("checkout[custom][fbp]", fbpv);
       link.href = url.toString();
+      // Fire InitiateCheckout when they open the checkout, so the ad account has a
+      // high-volume, well-matched conversion event to optimize toward (Purchase
+      // alone is far too rare to learn on). The browser pixel supplies fbp/fbc/IP
+      // automatically, so IC match quality is strong.
+      link.addEventListener("click", function () {
+        try { if (window.fbq) fbq("track", "InitiateCheckout", { value: 59, currency: "USD" }); } catch (e) {}
+      });
     }
   } catch (e) { /* attribution is best-effort -- never block checkout */ }
 })();
