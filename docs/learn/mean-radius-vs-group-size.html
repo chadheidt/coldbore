@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mean Radius vs Group Size: Which Measures Accuracy Better? | Loadscope</title>
+<meta name="description" content="Mean radius vs group size explained: group size (extreme spread) is set by your two worst shots, while mean radius averages how far every shot lands from center &mdash; so it&rsquo;s far less fooled by a flier and more repeatable on small samples. What each number means, and how it fits load development.">
+<link rel="canonical" href="https://loadscope.app/learn/mean-radius-vs-group-size.html">
+<meta property="og:title" content="Mean Radius vs Group Size: Which Measures Accuracy Better?"><meta property="og:description" content="Group size is set by your two worst shots; mean radius averages every shot from center. Here&rsquo;s why mean radius is the more honest accuracy number, especially on small samples.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/mean-radius-vs-group-size.html">
+<meta property="og:image" content="https://loadscope.app/assets/icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mean Radius vs Group Size: Which Measures Accuracy Better?">
+<meta name="twitter:description" content="Group size is set by your two worst shots; mean radius averages every shot from center. Here’s why mean radius is the more honest accuracy number, especially on small samples.">
+<meta name="twitter:image" content="https://loadscope.app/assets/icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Mean Radius vs Group Size: Which Measures Accuracy Better?","description":"Group size (extreme spread) is set by your two worst shots, while mean radius averages how far every shot lands from center — so it is far less fooled by a flier and more repeatable on small samples. What each number means, and how it fits load development.","url":"https://loadscope.app/learn/mean-radius-vs-group-size.html","image":"https://loadscope.app/assets/icon.png","publisher":{"@type":"Organization","name":"Loadscope","logo":{"@type":"ImageObject","url":"https://loadscope.app/assets/icon.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loadscope.app/learn/mean-radius-vs-group-size.html"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://loadscope.app/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://loadscope.app/learn/"},{"@type":"ListItem","position":3,"name":"Mean Radius vs Group Size: Which Measures Accuracy Better?","item":"https://loadscope.app/learn/mean-radius-vs-group-size.html"}]}</script>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<style>
+:root{--orange:#d97706;--bg:#0e0f12;--bg-mid:#1a1c20;--bg-light:#252830;--text:#f5f5f5;--text-dim:#9ca3af;--text-muted:#6b7280;--border:#2d3036;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}
+.container{max-width:760px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;background:rgba(14,15,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10}
+nav .container{max-width:1080px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;color:#fff;text-decoration:none}
+.logo img{width:30px;height:30px;border-radius:7px}
+.nav-links a{color:var(--text-dim);text-decoration:none;margin-left:20px;font-size:15px}
+.nav-links a:hover{color:#fff}
+.btn{background:var(--orange);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:700}
+/*navfit*/@media(max-width:560px){nav .container{padding:0 14px}.logo{font-size:15px;letter-spacing:.5px;white-space:nowrap}.logo img{width:26px;height:26px}.nav-links{display:flex;align-items:center}.nav-links a{margin-left:12px;font-size:14px;white-space:nowrap}.nav-links a[href='/#faq'],.nav-links a[href='/#install']{display:none}.btn{padding:7px 11px;white-space:nowrap}}/*/navfit*/
+
+article{padding:48px 0 24px}
+.crumb{color:var(--text-muted);font-size:14px;margin-bottom:18px}
+.crumb a{color:var(--text-dim);text-decoration:none}
+h1{font-size:34px;line-height:1.2;margin-bottom:14px;letter-spacing:-.4px}
+h2{font-size:23px;margin:34px 0 10px;color:#fff}
+p{color:#dfe2e6;margin-bottom:16px}
+ul,ol{margin:0 0 16px 22px}
+li{color:#dfe2e6;margin-bottom:8px}
+a{color:var(--orange)}
+.lead{font-size:19px;color:var(--text-dim);margin-bottom:8px}
+strong{color:#fff}
+figure{margin:26px 0}
+figure img{width:100%;border:1px solid var(--border);border-radius:12px;display:block}
+figure.tight{max-width:380px;margin-left:auto;margin-right:auto}
+figcaption{color:var(--text-muted);font-size:14px;margin-top:8px;text-align:center}
+.cta{background:var(--bg-mid);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:12px;padding:22px 24px;margin:34px 0}
+.cta h3{color:#fff;font-size:19px;margin-bottom:8px}
+.cta .btn{display:inline-block;margin-top:6px;text-decoration:none}
+.related{border-top:1px solid var(--border);margin-top:40px;padding-top:24px}
+.related a{display:block;margin-bottom:8px;text-decoration:none;color:var(--text-dim)}
+.related a:hover{color:var(--orange)}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:28px 0;color:var(--text-muted);font-size:14px;text-align:center}
+footer a{color:var(--orange);text-decoration:none}
+</style></head><body><nav><div class="container">
+<a class="logo" href="/"><img src="/assets/icon.png" alt="Loadscope">LOADSCOPE&trade;</a>
+<div class="nav-links"><a href="/learn/">Learn</a><a href="/#faq">FAQ</a><a href="/#install">Install</a><a class="btn" href="/">Get Loadscope</a></div>
+</div></nav><div class="container"><article>
+<div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a> &rsaquo; Mean radius vs group size</div>
+<h1>Mean Radius vs Group Size: Which Measures Accuracy Better?</h1>
+
+<p class="lead">Mean radius measures accuracy more honestly than group size. Group size (extreme spread) is set by your two worst shots, while mean radius averages how far <em>every</em> shot lands from the group&rsquo;s center &mdash; so it&rsquo;s far less fooled by a single flier and far more repeatable across small samples. Here&rsquo;s what each number means and when to trust it.</p>
+
+<p>Two shooters can print the same &ldquo;half-inch group&rdquo; and have completely different loads. One drilled four shots into a cluster and threw the fifth; the other spread all five evenly across the same width. Group size can&rsquo;t tell them apart &mdash; but mean radius can. If you&rsquo;re developing a load and choosing between charges, that difference is the whole ballgame.</p>
+
+<h2>Group size: the number everyone quotes</h2>
+<p><strong>Group size</strong> &mdash; also called <strong>extreme spread</strong> &mdash; is the center-to-center distance between the two widest shots in the group. It&rsquo;s easy to measure with calipers and easy to picture, which is why it&rsquo;s the number in every range brag and every factory-ammo claim. But it has one fatal weakness for load development: <strong>it&rsquo;s decided entirely by your two worst shots.</strong> Every other hole in the group is ignored. Clip one flier and your group size can double while the load itself never changed.</p>
+
+<h2>Mean radius: what the whole group is doing</h2>
+<p><strong>Mean radius</strong> is the average distance of <em>every</em> shot from the group&rsquo;s center (its mathematical middle, or centroid). Five shots, five distances, averaged. Because it uses all of your data instead of just the two extremes, one flier <em>nudges</em> the number instead of detonating it &mdash; and a genuinely tight core reads as tight even if one shot wandered. It answers the question you actually care about: on average, how far from point of aim does this load put a bullet?</p>
+
+<h2>Why mean radius is the more honest number</h2>
+<p>The advantage isn&rsquo;t just philosophical &mdash; it&rsquo;s statistical. Extreme spread only gets <em>worse</em> as you shoot more (more chances to catch an outlier), so a 3-shot group and a 10-shot group aren&rsquo;t even measuring the same thing. Mean radius settles down as the sample grows and describes the same underlying load whether you shot five or twenty. That stability is why militaries and serious ballisticians quantify dispersion with mean radius and CEP (circular error probable) rather than a two-shot spread &mdash; they need a number that repeats. On the small strings most handloaders actually shoot, mean radius simply lies to you less.</p>
+
+<h2>When group size still makes sense</h2>
+<p>Group size isn&rsquo;t useless. It&rsquo;s a fast, caliper-friendly field check, it&rsquo;s the shared language of every forum and factory spec sheet, and for a quick &ldquo;is this rifle roughly on&rdquo; look it&rsquo;s fine. The trouble is only when you lean on it for a <em>decision</em> &mdash; ranking one charge against another on three or five shots each &mdash; because that&rsquo;s exactly where its flier-sensitivity turns a good load and a mediocre one into a coin flip.</p>
+
+<h2>What it means for load development</h2>
+<p>When you&rsquo;re comparing loads, you want the metric that ranks them reliably on the shots you actually fired &mdash; and that&rsquo;s mean radius, backed up by the vertical the load throws and its <a href="/learn/standard-deviation-load-development.html">velocity SD</a>. Judging a whole ladder on extreme-spread group size is how a lucky three-shot cluster gets crowned and a genuinely better load gets tossed. Mean radius, read alongside your chronograph numbers, keeps the ranking honest.</p>
+
+<p>That&rsquo;s how Loadscope reads your targets: you photograph each group, it <a href="/learn/measure-groups-from-a-photo.html">measures it from the photo</a> and computes <strong>mean radius</strong> (plus vertical spread), lines that up against the velocity data from your chronograph, and <strong>scores every charge and seating depth</strong> to name your best load &mdash; instead of leaving the call to whichever group happened to look smallest. <a href="/learn/how-loadscope-scores-a-load.html">See how the scoring works &rarr;</a></p>
+
+<div style="background:#221a14;border:1px solid #6b4e1e;border-radius:10px;padding:14px 18px;margin:28px 0;color:#e8cfa0;font-size:15px"><strong>The one rule to remember:</strong> group size is a headline; mean radius is the story. Brag with extreme spread if you like, but <em>decide</em> with mean radius &mdash; it counts every shot, not just your two worst.</div>
+
+<div class="cta"><h3>Rank your loads on mean radius, not luck</h3>
+<p>Loadscope measures your groups from a photo, computes mean radius and vertical, lines them up against your chronograph data, scores every powder charge and seating depth, names your best load, and prints a range card &mdash; on Mac and Windows.</p>
+<a class="btn" href="/">See how it works &rarr;</a></div>
+<div class="related"><strong style="color:#fff">Keep reading</strong><br><br><a href="/learn/measure-groups-from-a-photo.html">Measure your groups from a photo &rarr;</a><a href="/learn/how-loadscope-scores-a-load.html">How Loadscope scores a load &rarr;</a><a href="/learn/find-your-best-rifle-load.html">How to find your best rifle load &rarr;</a></div>
+</article></div>
+<footer><div class="container">
+<p>&copy; 2026 Loadscope&trade;. Automated rifle load development for Mac &amp; Windows. &middot; <a href="/">loadscope.app</a></p>
+<p style="margin-top:6px"><a href="/learn/">Learn</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></p>
+</div></footer><!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2faa54a51efa477c9529f0c5bc14f3bf"}'></script><!-- End Cloudflare Web Analytics --><script>/* Attribution: stash any utm_* on landing so it survives the same-tab hop to the homepage checkout (see index.html attributionCapture + tools/attribution_links.md). */
+(function(){try{var K=["utm_source","utm_medium","utm_campaign","utm_content","utm_term"],p=new URLSearchParams(location.search);K.forEach(function(k){var v=p.get(k);if(v){try{sessionStorage.setItem(k,v);}catch(e){}}});if(!sessionStorage.getItem("utm_source")&&document.referrer){var h=new URL(document.referrer).hostname.replace(/^www\./,"").toLowerCase(),o=location.hostname.replace(/^www\./,"").toLowerCase();if(h&&h!==o){var s,m;var E=h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave)\./);if(E){s=E[2];m="organic";}else{var N={"snipershide.com":["snipershide","forum"],"accurateshooter.com":["accurateshooter","forum"],"longrangehunting.com":["longrangehunting","forum"],"reddit.com":["reddit","social"],"out.reddit.com":["reddit","social"],"youtube.com":["youtube","video"],"youtu.be":["youtube","video"],"facebook.com":["facebook","social"],"m.facebook.com":["facebook","social"],"l.facebook.com":["facebook","social"],"lm.facebook.com":["facebook","social"],"x.com":["x","social"],"t.co":["x","social"],"twitter.com":["x","social"]};s=N[h]?N[h][0]:h;m=N[h]?N[h][1]:"referral";}sessionStorage.setItem("utm_source",s);sessionStorage.setItem("utm_medium",m);sessionStorage.setItem("utm_campaign",m==="organic"?"search":"referral");}}}catch(e){}})();</script>
+</body></html>
