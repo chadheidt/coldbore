@@ -19,10 +19,10 @@
       "app_release_notes": "v1.6.0 - Type in velocities by hand and edit any value on the Confirm page. Reading your chronograph is smoother (faster detection + a progress meter) and now starts clean, so older sessions can't mix into a new ladder and land on the wrong charge. Your Load Card shows the range-day temperature and notes. Trackpad scrolling no longer changes a dropdown or number by accident. Plus wizard and Measure polish."
     },
     "windows": {
-      "app_version": "1.5.4",
+      "app_version": "1.6.0",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.5.4/Loadscope-Setup.exe",
-      "app_release_notes": "v1.5.4 - Plugging in a Garmin Xero now reads your sessions on Windows and Apple Silicon Macs. The \"read it right off the chronograph\" feature was turning the .FIT files away on those computers; now it imports them the way it always did on Intel Macs."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.6.0/Loadscope-Setup.exe",
+      "app_release_notes": "v1.6.0 - Type in velocities by hand and edit any value on the Confirm page. Reading your chronograph is smoother (faster detection + a progress meter) and now starts clean, so older sessions can't mix into a new ladder and land on the wrong charge. Your Load Card shows the range-day temperature and notes. Trackpad scrolling no longer changes a dropdown or number by accident. Plus wizard and Measure polish."
     }
   }
 }
