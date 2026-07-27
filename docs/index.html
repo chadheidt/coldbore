@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head><!-- Google tag (gtag.js) --><script async src="https://www.googletagmanager.com/gtag/js?id=G-NVD1F3H412"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NVD1F3H412');</script>
 <meta charset="UTF-8">
 <!-- Meta (Facebook) Pixel — STAGED, INACTIVE.
      To activate: create a pixel at business.facebook.com -> Events Manager,
@@ -1557,6 +1557,7 @@ function srcFromReferrer() {
       // automatically, so IC match quality is strong.
       link.addEventListener("click", function () {
         try { if (window.fbq) fbq("track", "InitiateCheckout", { value: 59, currency: "USD" }); } catch (e) {}
+        try { if (window.gtag) gtag("event", "begin_checkout", { value: 59, currency: "USD" }); } catch (e) {}
       });
     }
   } catch (e) { /* attribution is best-effort -- never block checkout */ }
