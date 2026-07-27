@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>28 Nosler Load Development: A Practical Guide | Loadscope</title>
+<meta name="description" content="A practical 28 Nosler load development guide: the powders, bullets and brass long-range hunters start with, the powder-ladder and seating-depth process, and how to let your data pick your best load. Always start low and work up.">
+<link rel="canonical" href="https://loadscope.app/learn/28-nosler-load-development.html">
+<meta property="og:title" content="28 Nosler Load Development: A Practical Guide"><meta property="og:description" content="A practical 28 Nosler load development guide: the powders, bullets and brass long-range hunters start with, the powder-ladder and seating-depth process, and how to let your data pick your best load. Always start low and work up.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/28-nosler-load-development.html">
+<meta property="og:image" content="https://loadscope.app/assets/icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="28 Nosler Load Development: A Practical Guide">
+<meta name="twitter:description" content="A practical 28 Nosler load development guide: the powders, bullets and brass long-range hunters start with, the powder-ladder and seating-depth process, and how to let your data pick your best load. Always start low and work up.">
+<meta name="twitter:image" content="https://loadscope.app/assets/icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"28 Nosler Load Development: A Practical Guide","description":"A practical 28 Nosler load development guide: the powders, bullets and brass long-range hunters start with, the powder-ladder and seating-depth process, and how to let your data pick your best load. Always start low and work up.","url":"https://loadscope.app/learn/28-nosler-load-development.html","image":"https://loadscope.app/assets/icon.png","publisher":{"@type":"Organization","name":"Loadscope","logo":{"@type":"ImageObject","url":"https://loadscope.app/assets/icon.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loadscope.app/learn/28-nosler-load-development.html"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://loadscope.app/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://loadscope.app/learn/"},{"@type":"ListItem","position":3,"name":"28 Nosler Load Development: A Practical Guide","item":"https://loadscope.app/learn/28-nosler-load-development.html"}]}</script>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<style>
+:root{--orange:#d97706;--bg:#0e0f12;--bg-mid:#1a1c20;--bg-light:#252830;--text:#f5f5f5;--text-dim:#9ca3af;--text-muted:#6b7280;--border:#2d3036;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}
+.container{max-width:760px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;background:rgba(14,15,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10}
+nav .container{max-width:1080px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;color:#fff;text-decoration:none}
+.logo img{width:30px;height:30px;border-radius:7px}
+.nav-links a{color:var(--text-dim);text-decoration:none;margin-left:20px;font-size:15px}
+.nav-links a:hover{color:#fff}
+.btn{background:var(--orange);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:700}
+/*navfit*/@media(max-width:560px){nav .container{padding:0 14px}.logo{font-size:15px;letter-spacing:.5px;white-space:nowrap}.logo img{width:26px;height:26px}.nav-links{display:flex;align-items:center}.nav-links a{margin-left:12px;font-size:14px;white-space:nowrap}.nav-links a[href='/#faq'],.nav-links a[href='/#install']{display:none}.btn{padding:7px 11px;white-space:nowrap}}/*/navfit*/
+
+article{padding:48px 0 24px}
+.crumb{color:var(--text-muted);font-size:14px;margin-bottom:18px}
+.crumb a{color:var(--text-dim);text-decoration:none}
+h1{font-size:34px;line-height:1.2;margin-bottom:14px;letter-spacing:-.4px}
+h2{font-size:23px;margin:34px 0 10px;color:#fff}
+p{color:#dfe2e6;margin-bottom:16px}
+ul,ol{margin:0 0 16px 22px}
+li{color:#dfe2e6;margin-bottom:8px}
+a{color:var(--orange)}
+.lead{font-size:19px;color:var(--text-dim);margin-bottom:8px}
+strong{color:#fff}
+figure{margin:26px 0}
+figure img{width:100%;border:1px solid var(--border);border-radius:12px;display:block}
+figure.tight{max-width:380px;margin-left:auto;margin-right:auto}
+figcaption{color:var(--text-muted);font-size:14px;margin-top:8px;text-align:center}
+.cta{background:var(--bg-mid);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:12px;padding:22px 24px;margin:34px 0}
+.cta h3{color:#fff;font-size:19px;margin-bottom:8px}
+.cta .btn{display:inline-block;margin-top:6px;text-decoration:none}
+.related{border-top:1px solid var(--border);margin-top:40px;padding-top:24px}
+.related a{display:block;margin-bottom:8px;text-decoration:none;color:var(--text-dim)}
+.related a:hover{color:var(--orange)}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:28px 0;color:var(--text-muted);font-size:14px;text-align:center}
+footer a{color:var(--orange);text-decoration:none}
+</style></head><body><nav><div class="container">
+<a class="logo" href="/"><img src="/assets/icon.png" alt="Loadscope">LOADSCOPE&trade;</a>
+<div class="nav-links"><a href="/learn/">Learn</a><a href="/#faq">FAQ</a><a href="/#install">Install</a><a class="btn" href="/">Get Loadscope</a></div>
+</div></nav><div class="container"><article>
+<div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a> &rsaquo; 28 Nosler load development</div>
+<h1>28 Nosler Load Development: A Practical Guide</h1>
+
+<p class="lead">The 28 Nosler is a fast, beltless 7mm magnum that fits a standard-length action and throws high-BC bullets flatter and faster than almost anything in its class. It is a long-range hunter&rsquo;s cartridge &mdash; and a barrel burner &mdash; which is exactly why finding a settled load and stopping there matters.</p>
+
+<div style="background:#221a14;border:1px solid #6b4e1e;border-radius:10px;padding:14px 18px;margin:0 0 24px;color:#e8cfa0;font-size:15px"><strong>Safety first:</strong> everything below is a starting point, not load data. Always begin at the minimum charge in a current reloading manual for your exact bullet and powder, work up in small steps, and watch for pressure signs. Your rifle, brass, and components are not the ones in someone else&rsquo;s data.</div>
+
+<h2>Why the 28 Nosler rewards a settled load</h2>
+<p>Its large case drives 160&ndash;195-grain 7mm match and hunting bullets at high velocity, so a good load holds energy and bucks wind far downrange from a rifle that still fits a standard action. The trade-off is throat wear &mdash; it is not a cartridge to burn on an endless ladder, so clean data that names your load quickly is worth real money in barrel life. A fast twist keeps the heaviest, highest-BC bullets stable.</p>
+
+<h2>What shooters reach for (starting points)</h2>
+<ul>
+<li><strong>Powder:</strong> Reloder 26, Reloder 33, Retumbo, H1000 and Vihtavuori N565/N570 are popular 28 Nosler powders; the big case wants slow-burning magnum powders &mdash; match them to your bullet weight and barrel length.</li>
+<li><strong>Bullets:</strong> 160&ndash;168-grain hunting bullets (Nosler AccuBond Long Range, Hornady ELD-X) for game, and 175&ndash;195-grain high-BC match bullets (Berger 180/184/195, Hornady 180 ELD-M) for reaching out; the heaviest hold wind best.</li>
+<li><strong>Brass:</strong> Nosler, ADG and Peterson make good 28 Nosler brass; uniform, well-prepped brass tightens your velocity spread before you touch the load.</li>
+<li><strong>Primers:</strong> large rifle magnum &mdash; Federal 215M, CCI 250 and similar light the big charges consistently.</li>
+</ul>
+
+<h2>The process &mdash; same as any cartridge, 28 Nosler flavored</h2>
+<ol>
+<li><strong>Pick your components</strong> and look up the published min and max for that bullet/powder pair.</li>
+<li><strong>Run a powder ladder.</strong> Load a few charges across the safe range and chronograph them to find the <strong>velocity flat-spot</strong> &mdash; the charge window where small powder changes barely move velocity. <a href="/learn/powder-ladder-test.html">How to read a powder ladder &rarr;</a></li>
+<li><strong>Run a seating-depth test</strong> at your chosen charge to tune how the bullet jumps to the lands and tighten the group. <a href="/learn/seating-depth-test.html">How to run a seating-depth test &rarr;</a></li>
+<li><strong>Confirm at distance</strong> and record your dope, so the load proves itself where it counts &mdash; a fast magnum earns its keep at distance, so confirm the load and its dope where you actually hunt or compete.</li>
+</ol>
+
+<h2>Let the data pick your best load</h2>
+<p>The hard part isn&rsquo;t shooting the ladder &mdash; it&rsquo;s reading it honestly. Import your chronograph CSV (Garmin Xero, LabRadar, MagnetoSpeed) and your target groups, and Loadscope scores every charge and seating depth on velocity flat-spot, velocity SD, <a href="/learn/measure-groups-from-a-photo.html">mean radius</a> and vertical, then <strong>names your best load</strong> and prints a pocket range card. No retyping velocities, no eyeballing which charge won. <a href="/learn/how-loadscope-scores-a-load.html">How the scoring works &rarr;</a></p>
+
+<div class="cta"><h3>Develop your 28 Nosler load the data-driven way</h3>
+<p>Loadscope reads your chronograph, measures your target groups, scores every powder charge and seating depth, names your best load, and prints a range card &mdash; on Mac and Windows, one-time $59.</p>
+<a class="btn" href="/">See how it works &rarr;</a></div>
+<div class="related"><strong style="color:#fff">Keep reading</strong><br><br><a href="/learn/7mm-rem-mag-load-development.html">7mm Rem Mag load development &rarr;</a><a href="/learn/7mm-prc-load-development.html">7mm PRC load development &rarr;</a><a href="/learn/standard-deviation-load-development.html">SD and ES: what&rsquo;s a good number? &rarr;</a></div>
+</article></div>
+<footer><div class="container">
+<p>&copy; 2026 Loadscope&trade;. Automated rifle load development for Mac &amp; Windows. &middot; <a href="/">loadscope.app</a></p>
+<p style="margin-top:6px"><a href="/learn/">Learn</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></p>
+</div></footer><!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2faa54a51efa477c9529f0c5bc14f3bf"}'></script><!-- End Cloudflare Web Analytics --><script>/* Attribution: stash any utm_* on landing so it survives the same-tab hop to the homepage checkout (see index.html attributionCapture + tools/attribution_links.md). */
+(function(){try{var K=["utm_source","utm_medium","utm_campaign","utm_content","utm_term"],p=new URLSearchParams(location.search);K.forEach(function(k){var v=p.get(k);if(v){try{sessionStorage.setItem(k,v);}catch(e){}}});if(!sessionStorage.getItem("utm_source")&&document.referrer){var h=new URL(document.referrer).hostname.replace(/^www\./,"").toLowerCase(),o=location.hostname.replace(/^www\./,"").toLowerCase();if(h&&h!==o){var s,m;var E=h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave)\./);if(E){s=E[2];m="organic";}else{var N={"snipershide.com":["snipershide","forum"],"accurateshooter.com":["accurateshooter","forum"],"longrangehunting.com":["longrangehunting","forum"],"reddit.com":["reddit","social"],"out.reddit.com":["reddit","social"],"youtube.com":["youtube","video"],"youtu.be":["youtube","video"],"facebook.com":["facebook","social"],"m.facebook.com":["facebook","social"],"l.facebook.com":["facebook","social"],"lm.facebook.com":["facebook","social"],"x.com":["x","social"],"t.co":["x","social"],"twitter.com":["x","social"]};s=N[h]?N[h][0]:h;m=N[h]?N[h][1]:"referral";}sessionStorage.setItem("utm_source",s);sessionStorage.setItem("utm_medium",m);sessionStorage.setItem("utm_campaign",m==="organic"?"search":"referral");}}}catch(e){}})();</script>
+</body></html>
