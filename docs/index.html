@@ -1398,6 +1398,20 @@ header.hero .line2 {
       <p>Paste the access code from your purchase email to start the download.</p>
       <input type="text" id="accessCodeInput" placeholder="CBORE-XXXX-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
       <div class="feedback" id="accessCodeFeedback"></div>
+      <div id="macArchChoice" style="margin: 12px 0 2px;">
+        <div style="font-size: 13px; color: var(--text-dim); margin-bottom: 8px;">Which Mac do you have?</div>
+        <div class="platform-seg" role="group" aria-label="Choose your Mac chip">
+          <button type="button" class="platform-opt active" id="archIntel" onclick="setMacArch('intel')">
+            <span class="platform-opt-os">Intel</span>
+            <span class="platform-opt-sub">runs on any Mac</span>
+          </button>
+          <button type="button" class="platform-opt" id="archApple" onclick="setMacArch('apple')">
+            <span class="platform-opt-os">Apple Silicon</span>
+            <span class="platform-opt-sub">M1 / M2 / M3 / M4</span>
+          </button>
+        </div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Not sure? Choose Intel &mdash; it runs on every Mac. (Apple menu &rarr; About This Mac shows your chip.)</p>
+      </div>
       <div class="win-smartscreen-note" id="winSmartScreenNote" style="display:none;">
         Heads-up: because Loadscope is a new program, your browser may pause the download &mdash; look at the <strong>top-right corner</strong> for a small <strong>download icon</strong>, click it, and choose <strong>Keep</strong>. The file is safe and code-signed by <strong>Loadscope LLC</strong>. Then, the first time you run it, Windows SmartScreen may show a one-time blue <strong>"Windows protected your PC"</strong> box; click <strong>More info → Run anyway</strong> — the publisher reads "Loadscope LLC". Both fade as more people install.
       </div>
@@ -1589,31 +1603,36 @@ const WORKER_REQUEST_URL = "https://coldbore-download.cheidt182.workers.dev/requ
 const IS_WINDOWS = /Win(dows|32|64)/i.test(
   (navigator.userAgent || "") + " " + (navigator.platform || ""));
 
-// Apple Silicon detection (2026-07-14 dual build). navigator.userAgent ALWAYS
-// reports "Intel" on Mac (Apple spoofs it), so we read the WebGL GPU string:
-// Apple Silicon Macs report an "Apple" GPU; Intel Macs report Intel/AMD/Radeon.
-// CONSERVATIVE on purpose: only return arm64 when we're confident it's Apple
-// Silicon; anything unknown falls back to the x86_64 build, which runs on EVERY
-// Mac (natively on Intel, via Rosetta on Apple Silicon). So an Intel Mac can
-// never be handed an arm64 build it can't run.
-function isAppleSilicon() {
+// Mac chip: read the WebGL GPU string. Chrome names the real chip ("Apple M1",
+// "Intel(R) ...") -- but Safari PRIVACY-MASKS it to a generic "Apple GPU" on
+// EVERY Mac, Intel included. The old detect matched any "apple", so an Intel
+// Mac on Safari (the default browser) was handed the arm64 build it can't run
+// -> macOS "not supported" (Corey B, 2026-07-27).
+function macRenderer() {
   try {
     const c = document.createElement("canvas");
     const gl = c.getContext("webgl") || c.getContext("experimental-webgl");
-    if (!gl) return false;
+    if (!gl) return "";
     const ext = gl.getExtension("WEBGL_debug_renderer_info");
-    const r = String(ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
-                          : (gl.getParameter(gl.RENDERER) || ""));
-    return /apple/i.test(r) && !/intel|amd|radeon|nvidia/i.test(r);
-  } catch (e) { return false; }
+    return String(ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
+                      : (gl.getParameter(gl.RENDERER) || ""));
+  } catch (e) { return ""; }
 }
-const MAC_DMG = isAppleSilicon() ? "Loadscope-arm64.dmg" : "Loadscope.dmg";
+// Only PRE-SELECT Apple Silicon when the string names a specific M-series chip
+// (reliable in Chrome). Safari's generic "Apple GPU" is ambiguous, so we default
+// to the universal Intel build, which runs on ANY Mac (native on Intel, Rosetta
+// on Apple Silicon) -- and the buyer can override with the chip picker in the
+// download modal. Nobody gets a "not supported" file this way.
+let selectedMacArch = /apple\s*m\d/i.test(macRenderer()) ? "apple" : "intel";
+function macFile() {
+  return selectedMacArch === "apple" ? "Loadscope-arm64.dmg" : "Loadscope.dmg";
+}
 
 // Selected platform drives BOTH the request payload and which installer the
 // "I have a code" tab downloads. 'mac' | 'win'. Pre-set from the OS, but the
 // visitor can flip it (work Mac, home Windows PC, etc.).
 let selectedPlatform = IS_WINDOWS ? "win" : "mac";
-const PLATFORM_FILE = { mac: MAC_DMG, win: "Loadscope-Setup.exe" };
+const PLATFORM_FILE = { win: "Loadscope-Setup.exe" };  // mac resolved via macFile() (chip-aware)
 const PLATFORM_LABEL = { mac: "Mac", win: "Windows" };
 
 function setPlatform(p) {
@@ -1626,6 +1645,18 @@ function setPlatform(p) {
   // SmartScreen heads-up shows only for Windows (only on the download tab).
   const note = document.getElementById("winSmartScreenNote");
   if (note) note.style.display = (selectedPlatform === "win") ? "block" : "none";
+  // Mac chip picker: shown only for Mac, synced to the current selection.
+  const arch = document.getElementById("macArchChoice");
+  if (arch) arch.style.display = (selectedPlatform === "mac") ? "block" : "none";
+  const ai = document.getElementById("archIntel"), aa = document.getElementById("archApple");
+  if (ai) ai.classList.toggle("active", selectedMacArch === "intel");
+  if (aa) aa.classList.toggle("active", selectedMacArch === "apple");
+}
+
+function setMacArch(a) {
+  selectedMacArch = (a === "apple") ? "apple" : "intel";
+  document.getElementById("archIntel").classList.toggle("active", selectedMacArch === "intel");
+  document.getElementById("archApple").classList.toggle("active", selectedMacArch === "apple");
 }
 
 function openDownloadModal(ev) {
@@ -1707,7 +1738,7 @@ async function submitAccessCode() {
   const code = document.getElementById("accessCodeInput").value.trim();
   const feedback = document.getElementById("accessCodeFeedback");
   const submitBtn = document.getElementById("downloadModalSubmit");
-  const file = PLATFORM_FILE[selectedPlatform];
+  const file = (selectedPlatform === "win") ? "Loadscope-Setup.exe" : macFile();
   const label = PLATFORM_LABEL[selectedPlatform];
 
   if (!code) {
