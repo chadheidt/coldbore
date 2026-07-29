@@ -1,28 +1,28 @@
 {
-  "app_version": "1.6.1",
+  "app_version": "1.6.2",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v1.6.1 - After you finish Create New Load and import your chronograph, Loadscope always shows the 'your best load is ready' prompt so you know exactly where to go next. Before, that step could quietly skip and leave you on the import screen.",
+  "app_release_notes": "v1.6.2 - Seating numbers now carry the right label. When you plan a seating ladder in the New Ladder wizard you are varying your jump off the lands, not a CBTO measurement -- but Share a load, the printed Load Card, Compare Loads and the Library detail all called it 'CBTO'. The number never changed; now the label matches it.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "1.6.1",
+      "app_version": "1.6.2",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v1.6.1 - After you finish Create New Load and import your chronograph, Loadscope always shows the 'your best load is ready' prompt so you know exactly where to go next. Before, that step could quietly skip and leave you on the import screen."
+      "app_release_notes": "v1.6.2 - Seating numbers now carry the right label. When you plan a seating ladder in the New Ladder wizard you are varying your jump off the lands, not a CBTO measurement -- but Share a load, the printed Load Card, Compare Loads and the Library detail all called it 'CBTO'. The number never changed; now the label matches it."
     },
     "mac_arm64": {
-      "app_version": "1.6.1",
+      "app_version": "1.6.2",
       "app_download_file": "Loadscope-arm64.zip",
-      "app_release_notes": "v1.6.1 - After you finish Create New Load and import your chronograph, Loadscope always shows the 'your best load is ready' prompt so you know exactly where to go next. Before, that step could quietly skip and leave you on the import screen."
+      "app_release_notes": "v1.6.2 - Seating numbers now carry the right label. When you plan a seating ladder in the New Ladder wizard you are varying your jump off the lands, not a CBTO measurement -- but Share a load, the printed Load Card, Compare Loads and the Library detail all called it 'CBTO'. The number never changed; now the label matches it."
     },
     "windows": {
-      "app_version": "1.6.1",
+      "app_version": "1.6.2",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.6.1/Loadscope-Setup.exe",
-      "app_release_notes": "v1.6.1 - After you finish Create New Load and import your chronograph, Loadscope always shows the 'your best load is ready' prompt so you know exactly where to go next. Before, that step could quietly skip and leave you on the import screen."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.6.2/Loadscope-Setup.exe",
+      "app_release_notes": "v1.6.2 - Seating numbers now carry the right label. When you plan a seating ladder in the New Ladder wizard you are varying your jump off the lands, not a CBTO measurement -- but Share a load, the printed Load Card, Compare Loads and the Library detail all called it 'CBTO'. The number never changed; now the label matches it."
     }
   }
 }
