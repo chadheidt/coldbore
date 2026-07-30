@@ -1429,7 +1429,15 @@ header.hero .line2 {
     <div class="tab-panel" id="panelHaveCode">
       <h3>Enter your code</h3>
       <p>Paste the access code from your purchase email to start the download.</p>
-      <input type="text" id="accessCodeInput" placeholder="CBORE-XXXX-XXXX-XXXX-XXXX" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <!-- NOT a format mask. The old "CBORE-XXXX-..." example was the retired
+           beta shape -- every key issued since 2026-07-09 is a Lemon Squeezy
+           UUID, so buyers saw an example nothing like the code in their email.
+           A UUID mask is not the fix either: at Menlo 15px + 0.5px letter-
+           spacing it renders ~343px, which fits the 460px desktop modal but
+           CLIPS on a ~375px phone (input has ~257px there). Both key shapes
+           still validate, so plain instructional text is correct for both and
+           fits every width. Keep it under ~24 characters. -->
+      <input type="text" id="accessCodeInput" placeholder="Paste your access code" autocomplete="off" autocapitalize="characters" spellcheck="false">
       <div class="feedback" id="accessCodeFeedback"></div>
       <div id="macArchChoice" style="margin: 12px 0 2px;">
         <div style="font-size: 13px; color: var(--text-dim); margin-bottom: 8px;">Which Mac do you have?</div>
