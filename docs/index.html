@@ -671,6 +671,31 @@ header.hero .line2 {
   min-height: 18px;
   margin-bottom: 14px;
 }
+/* Shown ONLY when the worker rejects the code. A buyer who pastes the wrong
+   number (a Lemon Squeezy sign-in code, an order number) otherwise has no way
+   to self-correct -- the error just says "contact support". Real case: a
+   paying customer, 2026-07-31. This BLOCK wraps, unlike the input placeholder,
+   so the full key shape is safe here at phone width (see commit 33c8116). */
+.download-modal .feedback-hint {
+  display: none;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-dim);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin: -6px 0 14px;
+}
+.download-modal .feedback-hint.show { display: block; }
+.download-modal .feedback-hint code {
+  display: block;
+  margin: 5px 0;
+  font-family: Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
 .download-modal .actions {
   display: flex;
   gap: 10px;
@@ -1434,6 +1459,13 @@ header.hero .line2 {
            33c8116. -->
       <input type="text" id="accessCodeInput" placeholder="Paste your access code" autocomplete="off" autocapitalize="characters" spellcheck="false">
       <div class="feedback" id="accessCodeFeedback"></div>
+      <div class="feedback-hint" id="accessCodeHint">
+        <strong>Your access code looks like this:</strong>
+        <code>A1B2C3D4-E5F6-4A7B-8C9D-E0F1A2B3C4D5</code>
+        It's in your purchase email, subject &ldquo;Welcome to Loadscope.&rdquo;
+        If you have a short number instead, that's a Lemon Squeezy sign-in code
+        for your receipt &mdash; not your Loadscope code.
+      </div>
       <div id="macArchChoice" style="margin: 12px 0 2px;">
         <div style="font-size: 13px; color: var(--text-dim); margin-bottom: 8px;">Which Mac do you have?</div>
         <div class="platform-seg" role="group" aria-label="Choose your Mac chip">
@@ -1699,6 +1731,7 @@ function openDownloadModal(ev) {
   if (ev) ev.preventDefault();
   document.getElementById("downloadModal").classList.add("open");
   document.getElementById("accessCodeFeedback").textContent = "";
+  showCodeHint(false);
   document.getElementById("requestAccessFeedback").textContent = "";
   setPlatform(selectedPlatform);   // sync toggle + button label + note to detected OS
   switchTab("request-access");     // new visitors land on the request form
@@ -1760,6 +1793,7 @@ function switchTab(which) {
   document.getElementById("panelRequestAccess").classList.toggle("active", !haveCode);
   // Reset feedbacks so users don't see stale errors after a switch
   document.getElementById("accessCodeFeedback").textContent = "";
+  showCodeHint(false);
   document.getElementById("requestAccessFeedback").textContent = "";
   // Focus the first input of whichever tab is now active
   setTimeout(() => {
@@ -1768,6 +1802,11 @@ function switchTab(which) {
       : document.getElementById("reqName");
     if (target) target.focus();
   }, 50);
+}
+
+function showCodeHint(on) {
+  const hint = document.getElementById("accessCodeHint");
+  if (hint) hint.classList.toggle("show", !!on);
 }
 
 async function submitAccessCode() {
@@ -1783,6 +1822,7 @@ async function submitAccessCode() {
   }
 
   feedback.textContent = "";
+  showCodeHint(false);
   submitBtn.disabled = true;
   submitBtn.textContent = "Validating...";
 
@@ -1795,6 +1835,9 @@ async function submitAccessCode() {
     const data = await r.json();
     if (!r.ok) {
       feedback.textContent = data.error || "Something went wrong. Please try again.";
+      // A rejected code is the one failure the buyer can fix themselves --
+      // show them what a real code looks like instead of only "contact support".
+      if (r.status === 403) showCodeHint(true);
       submitBtn.disabled = false;
       submitBtn.textContent = "Download for " + label;
       return;
