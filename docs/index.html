@@ -685,6 +685,20 @@ header.hero .line2 {
   margin: -6px 0 14px;
 }
 .download-modal .feedback-hint.show { display: block; }
+/* Support comes LAST, after the self-fix. If it leads, people read
+   "contact support" and stop reading. */
+.download-modal .feedback-hint .hint-support {
+  display: block;
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px solid var(--border);
+  font-size: 12.5px;
+}
+.download-modal .feedback-hint .hint-support a {
+  color: var(--orange);
+  text-decoration: none;
+}
+.download-modal .feedback-hint .hint-support a:hover { text-decoration: underline; }
 .download-modal .feedback-hint code {
   display: block;
   margin: 5px 0;
@@ -1460,6 +1474,9 @@ header.hero .line2 {
         <strong>Your access code looks like this:</strong>
         <code>A1B2C3D4-E5F6-4A7B-8C9D-E0F1A2B3C4D5</code>
         It's in your purchase email, subject &ldquo;Welcome to Loadscope.&rdquo;
+        <span class="hint-support">Still not working? Email
+          <a href="mailto:support@loadscope.app">support@loadscope.app</a>
+          and we'll get you running.</span>
       </div>
       <div id="macArchChoice" style="margin: 12px 0 2px;">
         <div style="font-size: 13px; color: var(--text-dim); margin-bottom: 8px;">Which Mac do you have?</div>
@@ -1829,10 +1846,15 @@ async function submitAccessCode() {
     });
     const data = await r.json();
     if (!r.ok) {
-      feedback.textContent = data.error || "Something went wrong. Please try again.";
-      // A rejected code is the one failure the buyer can fix themselves --
-      // show them what a real code looks like instead of only "contact support".
-      if (r.status === 403) showCodeHint(true);
+      // A rejected code is the one failure the buyer can fix themselves. Keep
+      // the red line SHORT and let the hint below carry the fix -- the worker's
+      // own message leads with "contact support", which stops people reading.
+      if (r.status === 403) {
+        feedback.textContent = "That code wasn't recognized.";
+        showCodeHint(true);
+      } else {
+        feedback.textContent = data.error || "Something went wrong. Please try again.";
+      }
       submitBtn.disabled = false;
       submitBtn.textContent = "Download for " + label;
       return;
