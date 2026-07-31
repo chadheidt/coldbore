@@ -665,6 +665,12 @@ header.hero .line2 {
   outline: none;
   border-color: var(--orange);
 }
+/* The email subject is the string people actually search their inbox for,
+   so it gets the accent colour and the weight. */
+.download-modal .hl {
+  color: var(--orange);
+  font-weight: 600;
+}
 .download-modal .feedback {
   color: var(--orange);
   font-size: 13.5px;
@@ -1464,7 +1470,7 @@ header.hero .line2 {
     <!-- Tab 2: enter existing access code -->
     <div class="tab-panel" id="panelHaveCode">
       <h3>Enter your code</h3>
-      <p>Paste the access code from your <strong>purchase email</strong> &mdash; subject &ldquo;Welcome to Loadscope.&rdquo;</p>
+      <p>Open the email we sent you &mdash; subject <span class="hl">&ldquo;Welcome to Loadscope&rdquo;</span>. Your access code is inside. Paste it below.</p>
       <!-- Placeholder is instructional, NOT a format mask: a full key mask
            clips on a phone. Keep it under ~24 characters. Rationale: commit
            33c8116. -->
