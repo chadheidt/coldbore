@@ -1,22 +1,22 @@
 {
-  "app_version": "1.6.2",
+  "app_version": "1.6.3",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v1.6.2 - Seating numbers now carry the right label. When you plan a seating ladder in the New Ladder wizard you are varying your jump off the lands, not a CBTO measurement -- but Share a load, the printed Load Card, Compare Loads and the Library detail all called it 'CBTO'. The number never changed; now the label matches it.",
+  "app_release_notes": "v1.6.3 - Import fixes. If you mark a cold-bore fouler on your chronograph, that string comes in shorter than the others -- and Loadscope was treating the whole rung as a fouler and leaving it out of your ladder. It now keeps it. On 'Confirm your range day' the count updates as you change a dropdown instead of showing the number it started with, and a leftover string can no longer be added twice to a rung that already has it. On the Measure screen a seating value like 0.025\" jump no longer gets cut off. If an access code is not recognized, the app now shows what a code looks like and where to find it. A seating-depth test now carries its group size to your Load Card, your Library and the file you share -- it was coming through blank even though the number was on your Seating Depth Log (powder ladders were never affected). And a barrel named with an inch mark, like PVA 22\", now reads correctly in the round-count question.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "1.6.2",
+      "app_version": "1.6.3",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v1.6.2 - Seating numbers now carry the right label. When you plan a seating ladder in the New Ladder wizard you are varying your jump off the lands, not a CBTO measurement -- but Share a load, the printed Load Card, Compare Loads and the Library detail all called it 'CBTO'. The number never changed; now the label matches it."
+      "app_release_notes": "v1.6.3 - Import fixes. If you mark a cold-bore fouler on your chronograph, that string comes in shorter than the others -- and Loadscope was treating the whole rung as a fouler and leaving it out of your ladder. It now keeps it. On 'Confirm your range day' the count updates as you change a dropdown instead of showing the number it started with, and a leftover string can no longer be added twice to a rung that already has it. On the Measure screen a seating value like 0.025\" jump no longer gets cut off. If an access code is not recognized, the app now shows what a code looks like and where to find it. A seating-depth test now carries its group size to your Load Card, your Library and the file you share -- it was coming through blank even though the number was on your Seating Depth Log (powder ladders were never affected). And a barrel named with an inch mark, like PVA 22\", now reads correctly in the round-count question."
     },
     "mac_arm64": {
-      "app_version": "1.6.2",
+      "app_version": "1.6.3",
       "app_download_file": "Loadscope-arm64.zip",
-      "app_release_notes": "v1.6.2 - Seating numbers now carry the right label. When you plan a seating ladder in the New Ladder wizard you are varying your jump off the lands, not a CBTO measurement -- but Share a load, the printed Load Card, Compare Loads and the Library detail all called it 'CBTO'. The number never changed; now the label matches it."
+      "app_release_notes": "v1.6.3 - Import fixes. If you mark a cold-bore fouler on your chronograph, that string comes in shorter than the others -- and Loadscope was treating the whole rung as a fouler and leaving it out of your ladder. It now keeps it. On 'Confirm your range day' the count updates as you change a dropdown instead of showing the number it started with, and a leftover string can no longer be added twice to a rung that already has it. On the Measure screen a seating value like 0.025\" jump no longer gets cut off. If an access code is not recognized, the app now shows what a code looks like and where to find it. A seating-depth test now carries its group size to your Load Card, your Library and the file you share -- it was coming through blank even though the number was on your Seating Depth Log (powder ladders were never affected). And a barrel named with an inch mark, like PVA 22\", now reads correctly in the round-count question."
     },
     "windows": {
       "app_version": "1.6.2",
