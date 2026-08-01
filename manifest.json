@@ -19,10 +19,10 @@
       "app_release_notes": "v1.6.3 - Import fixes. If you mark a cold-bore fouler on your chronograph, that string comes in shorter than the others -- and Loadscope was treating the whole rung as a fouler and leaving it out of your ladder. It now keeps it. On 'Confirm your range day' the count updates as you change a dropdown instead of showing the number it started with, and a leftover string can no longer be added twice to a rung that already has it. On the Measure screen a seating value like 0.025\" jump no longer gets cut off. If an access code is not recognized, the app now shows what a code looks like and where to find it. A seating-depth test now carries its group size to your Load Card, your Library and the file you share -- it was coming through blank even though the number was on your Seating Depth Log (powder ladders were never affected). And a barrel named with an inch mark, like PVA 22\", now reads correctly in the round-count question."
     },
     "windows": {
-      "app_version": "1.6.2",
+      "app_version": "1.6.3",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.6.2/Loadscope-Setup.exe",
-      "app_release_notes": "v1.6.2 - Seating numbers now carry the right label. When you plan a seating ladder in the New Ladder wizard you are varying your jump off the lands, not a CBTO measurement -- but Share a load, the printed Load Card, Compare Loads and the Library detail all called it 'CBTO'. The number never changed; now the label matches it."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.6.3/Loadscope-Setup.exe",
+      "app_release_notes": "v1.6.3 - Ten fixes, all of them problems that were already in the app. Marking a cold-bore fouler on your chronograph no longer costs you a rung -- that string comes back one shot short and Loadscope was setting the whole rung aside. Seating numbers are called a jump instead of a CBTO on every screen that had it wrong. A load you share now carries the powder; it was going out with the charge weight and no powder name. Picking chronograph sessions counts them correctly when two sessions are identical. The planner never suggests a charge you did not fire. A seating-depth test carries its group size to the Load Card, the Library and shared files. Plus: the Import screen no longer overlaps itself in a short window, a barrel named with an inch mark reads correctly, and closing the app no longer shows a crash box."
     }
   }
 }
