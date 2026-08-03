@@ -1,22 +1,22 @@
 {
-  "app_version": "1.8.0",
+  "app_version": "1.8.1",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v1.8.0 - Predicted DOPE now includes spin drift, Coriolis and aerodynamic jump. Range & DOPE is laid out like a range card, with your own distances and a Clicks column. New Basic and Technical views decide how much prints on your Pocket Card. Fixed: on a 1/8 or 1/4 MOA turret the click counts were wrong on the phone companion and on the printed Pocket Card. Fixed: the wind clock now reads as the direction the wind comes from.",
+  "app_release_notes": "v1.8.1 - Target photos now load in the order the shots were taken. Bringing in more photos asks whether to add them or start over, instead of replacing what you had. The per-target depth/charge box is visible again so you can correct one by hand.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "1.8.0",
+      "app_version": "1.8.1",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v1.8.0 - Predicted DOPE now includes spin drift, Coriolis and aerodynamic jump. Range & DOPE is laid out like a range card, with your own distances and a Clicks column. New Basic and Technical views decide how much prints on your Pocket Card. Fixed: on a 1/8 or 1/4 MOA turret the click counts were wrong on the phone companion and on the printed Pocket Card. Fixed: the wind clock now reads as the direction the wind comes from."
+      "app_release_notes": "v1.8.1 - Target photos now load in the order the shots were taken. Bringing in more photos asks whether to add them or start over, instead of replacing what you had. The per-target depth/charge box is visible again so you can correct one by hand."
     },
     "mac_arm64": {
-      "app_version": "1.8.0",
+      "app_version": "1.8.1",
       "app_download_file": "Loadscope-arm64.zip",
-      "app_release_notes": "v1.8.0 - Predicted DOPE now includes spin drift, Coriolis and aerodynamic jump. Range & DOPE is laid out like a range card, with your own distances and a Clicks column. New Basic and Technical views decide how much prints on your Pocket Card. Fixed: on a 1/8 or 1/4 MOA turret the click counts were wrong on the phone companion and on the printed Pocket Card. Fixed: the wind clock now reads as the direction the wind comes from."
+      "app_release_notes": "v1.8.1 - Target photos now load in the order the shots were taken. Bringing in more photos asks whether to add them or start over, instead of replacing what you had. The per-target depth/charge box is visible again so you can correct one by hand."
     },
     "windows": {
       "app_version": "1.8.0",
