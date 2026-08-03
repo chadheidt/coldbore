@@ -946,7 +946,7 @@ header.hero .line2 {
   "operatingSystem": "macOS, Windows",
   "applicationCategory": "UtilitiesApplication",
   "applicationSubCategory": "Precision rifle load development",
-  "softwareVersion": "1.7.0",
+  "softwareVersion": "1.8.0",
   "url": "https://loadscope.app/",
   "image": "https://loadscope.app/assets/og-image.png",
   "description": "Loadscope reads your Garmin Xero over USB — every session at once, no exporting — and measures your target groups from a photo, or imports them from BallisticX, OnTarget, ShotMarker or Silver Mountain. It scores your best powder charge and seating depth into a load-development workbook with predicted DOPE, on Mac and Windows.",
@@ -1220,7 +1220,7 @@ header.hero .line2 {
       <div class="step">
         <div class="num">1</div>
         <h3>Get Loadscope</h3>
-        <p>Click <strong>Get Loadscope</strong> at the top of the page, pick <strong>Mac</strong> or <strong>Windows</strong>, and paste the access code that will be emailed to you. The right installer for your computer starts downloading.</p>
+        <p>Click <strong>Get Loadscope</strong> at the top of the page, pick <strong>Mac</strong> or <strong>Windows</strong>, and paste the license key that will be emailed to you. The right installer for your computer starts downloading.</p>
       </div>
       <div class="step">
         <div class="num">2</div>
@@ -1300,7 +1300,7 @@ header.hero .line2 {
       </details>
       <details class="faq-item">
         <summary>How do I get my code, and how does buying work?</summary>
-        <p>Click <strong>Get Loadscope</strong>, check out for <strong>$59</strong>, and your access code is emailed to you right away — it unlocks both the download and the app itself. One purchase covers up to two computers. Questions? <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a>.</p>
+        <p>Click <strong>Get Loadscope</strong>, check out for <strong>$59</strong>, and your license key is emailed to you right away — it unlocks both the download and the app itself. One purchase covers up to two computers. Questions? <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a>.</p>
       </details>
       <details class="faq-item">
         <summary>Is Loadscope a subscription?</summary>
@@ -1447,7 +1447,7 @@ header.hero .line2 {
 
     <div class="modal-tabs">
       <button class="modal-tab active" id="tabRequestAccess" onclick="switchTab('request-access')">Buy Loadscope</button>
-      <button class="modal-tab" id="tabHaveCode" onclick="switchTab('have-code')">I have a code</button>
+      <button class="modal-tab" id="tabHaveCode" onclick="switchTab('have-code')">I have a key</button>
     </div>
 
     <!-- Tab 1: buy Loadscope -->
@@ -1464,20 +1464,20 @@ header.hero .line2 {
         <button class="btn btn-outline" onclick="closeDownloadModal()">Cancel</button>
         <a class="btn" id="buyNowLink" href="https://loadscope.lemonsqueezy.com/checkout/buy/83b4751b-90c2-4a93-966a-65e3aeda8ecb" target="_blank" rel="noopener">Buy now &mdash; $59</a>
       </div>
-      <p style="font-size: 13px; color: var(--text-muted); margin-top: 14px;">After checkout, your access code arrives by email &mdash; then use <strong>I have a code</strong> to download.</p>
+      <p style="font-size: 13px; color: var(--text-muted); margin-top: 14px;">After checkout, your license key arrives by email &mdash; then use <strong>I have a key</strong> to download.</p>
     </div>
 
-    <!-- Tab 2: enter existing access code -->
+    <!-- Tab 2: enter existing license key -->
     <div class="tab-panel" id="panelHaveCode">
       <h3>Enter your code</h3>
-      <p>Open the email we sent you &mdash; subject <span class="hl">&ldquo;Welcome to Loadscope&rdquo;</span>. Your access code is inside. Paste it below.</p>
+      <p>Open the email we sent you &mdash; subject <span class="hl">&ldquo;Welcome to Loadscope&rdquo;</span>. Your license key is inside. Paste it below.</p>
       <!-- Placeholder is instructional, NOT a format mask: a full key mask
            clips on a phone. Keep it under ~24 characters. Rationale: commit
            33c8116. -->
-      <input type="text" id="accessCodeInput" placeholder="Paste your access code" autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <input type="text" id="accessCodeInput" placeholder="Paste your license key" autocomplete="off" autocapitalize="characters" spellcheck="false">
       <div class="feedback" id="accessCodeFeedback"></div>
       <div class="feedback-hint" id="accessCodeHint">
-        <strong>Your access code looks like this:</strong>
+        <strong>Your license key looks like this:</strong>
         <code>A1B2C3D4-E5F6-4A7B-8C9D-E0F1A2B3C4D5</code>
         <span class="hint-support">Still not working? Email
           <a href="mailto:support@loadscope.app">support@loadscope.app</a>
@@ -1834,7 +1834,7 @@ async function submitAccessCode() {
   const label = PLATFORM_LABEL[selectedPlatform];
 
   if (!code) {
-    feedback.textContent = "Please enter your access code.";
+    feedback.textContent = "Please enter your license key.";
     return;
   }
 
@@ -1957,7 +1957,7 @@ async function submitRequestAccess() {
     // Success state: replace the form panel with a thank-you message.
     document.getElementById("panelRequestAccess").innerHTML = `
       <h3>Request received</h3>
-      <p>${data.message || "Thanks. You'll get an email with your access code once approved."}</p>
+      <p>${data.message || "Thanks. You'll get an email with your license key once approved."}</p>
       <div class="actions">
         <button class="btn" onclick="closeDownloadModal()">Done</button>
       </div>
