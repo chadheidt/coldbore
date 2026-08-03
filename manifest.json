@@ -19,10 +19,10 @@
       "app_release_notes": "v1.8.0 - Predicted DOPE now includes spin drift, Coriolis and aerodynamic jump. Range & DOPE is laid out like a range card, with your own distances and a Clicks column. New Basic and Technical views decide how much prints on your Pocket Card. Fixed: on a 1/8 or 1/4 MOA turret the click counts were wrong on the phone companion and on the printed Pocket Card. Fixed: the wind clock now reads as the direction the wind comes from."
     },
     "windows": {
-      "app_version": "1.7.0",
+      "app_version": "1.8.0",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.7.0/Loadscope-Setup.exe",
-      "app_release_notes": "v1.7.0 - Plan a seating ladder by CBTO. Knowing your jump means knowing where your lands are -- an OAL gauge, a modified case, and a number that moves as the throat erodes. A CBTO you can measure on a loaded round with a comparator. The New Ladder screen now asks how you measure it and starts on CBTO; jump is still there and works exactly as before. Because the two run in opposite directions, the screen shows the actual seating depth of every rung before you load a round and says which way the bullet moves. Also: picking \"Seating depth\" on Rifle & Setup now sticks -- it was opening the planner on Powder ladder and resetting when you left the screen; the planner opens with your powder and held charge already filled in, where the powder used to come up blank unless you had opened the workbook in Excel; and every button now shows the pointing finger when you hover it."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.8.0/Loadscope-Setup.exe",
+      "app_release_notes": "v1.8.0 - Predicted DOPE now includes spin drift, Coriolis and aerodynamic jump. Range & DOPE is laid out like a range card, with your own distances and a Clicks column. New Basic and Technical views decide how much prints on your Pocket Card. Fixed: on a 1/8 or 1/4 MOA turret the click counts were wrong on the phone companion and on the printed Pocket Card. Fixed: the wind clock now reads as the direction the wind comes from."
     }
   }
 }
