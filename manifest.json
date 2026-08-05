@@ -1,5 +1,5 @@
 {
-  "app_version": "1.8.2",
+  "app_version": "1.9.0",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
@@ -9,12 +9,12 @@
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "1.8.2",
+      "app_version": "1.9.0",
       "app_download_file": "Loadscope.zip",
       "app_release_notes": "v1.8.2 - Target photos are now genuinely ordered by the time each shot was taken. In 1.8.1 that read never ran in the installed app, so photos fell back to filename order."
     },
     "mac_arm64": {
-      "app_version": "1.8.2",
+      "app_version": "1.9.0",
       "app_download_file": "Loadscope-arm64.zip",
       "app_release_notes": "v1.8.2 - Target photos are now genuinely ordered by the time each shot was taken. In 1.8.1 that read never ran in the installed app, so photos fell back to filename order."
     },
