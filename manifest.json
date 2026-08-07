@@ -19,10 +19,10 @@
       "app_release_notes": "v1.8.2 - Target photos are now genuinely ordered by the time each shot was taken. In 1.8.1 that read never ran in the installed app, so photos fell back to filename order."
     },
     "windows": {
-      "app_version": "1.9.1",
+      "app_version": "1.10.0",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.9.1/Loadscope-Setup.exe",
-      "app_release_notes": "v1.9.1 - Target photos are now genuinely ordered by the time each shot was taken. In 1.8.1 that read never ran in the installed app, so photos fell back to filename order."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.10.0/Loadscope-Setup.exe",
+      "app_release_notes": "v1.10.0 - Measure your targets in inches, MOA or mil. Factory ammo is now a load you can save and compare. Loadscope reopens at the size you left it. Plus fixes to seating-depth tests: the powder charge now shows on the printed cards, DOPE works on a seating-only load, and a CBTO ladder no longer reads as a jump."
     }
   }
 }
