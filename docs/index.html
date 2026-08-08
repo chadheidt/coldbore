@@ -1659,6 +1659,18 @@ function srcFromReferrer() {
     var fbp = cookie("_fbp");
     if (fbp) sessionStorage.setItem("_fbp", fbp);
 
+    // Google Ads click identifier + GA4 client id. Same purpose as fbc/fbp above:
+    // carrying these through checkout lets the server-side purchase report (worker
+    // -> GA4 Measurement Protocol -> linked Google Ads account) be matched back to
+    // the AD CLICK instead of reporting an unattributed conversion.
+    var gclid = params.get("gclid");
+    if (gclid) sessionStorage.setItem("gclid", gclid);
+    var gaCookie = cookie("_ga");
+    if (gaCookie) {
+      var gaParts = gaCookie.split(".");
+      if (gaParts.length >= 4) sessionStorage.setItem("_ga_cid", gaParts[gaParts.length - 2] + "." + gaParts[gaParts.length - 1]);
+    }
+
     var link = document.getElementById("buyNowLink");
     if (link) {
       var url = new URL(link.href);
@@ -1668,6 +1680,8 @@ function srcFromReferrer() {
       });
       var fbcv = sessionStorage.getItem("_fbc"); if (fbcv) url.searchParams.set("checkout[custom][fbc]", fbcv);
       var fbpv = sessionStorage.getItem("_fbp"); if (fbpv) url.searchParams.set("checkout[custom][fbp]", fbpv);
+      var gclidv = sessionStorage.getItem("gclid"); if (gclidv) url.searchParams.set("checkout[custom][gclid]", gclidv);
+      var gacidv = sessionStorage.getItem("_ga_cid"); if (gacidv) url.searchParams.set("checkout[custom][ga_cid]", gacidv);
       link.href = url.toString();
       // Fire InitiateCheckout when they open the checkout, so the ad account has a
       // high-volume, well-matched conversion event to optimize toward (Purchase
