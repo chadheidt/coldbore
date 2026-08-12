@@ -1,22 +1,22 @@
 {
-  "app_version": "1.10.0",
+  "app_version": "1.11.0",
   "app_download_endpoint": "https://coldbore-download.cheidt182.workers.dev/authorize",
   "app_download_file": "Loadscope.zip",
   "app_website_url": "https://loadscope.app/",
-  "app_release_notes": "v1.8.2 - Target photos are now genuinely ordered by the time each shot was taken. In 1.8.1 that read never ran in the installed app, so photos fell back to filename order.",
+  "app_release_notes": "v1.11.0 - Shot the rest of your ladder on a second range day? Import the new rungs into the same load and they are added to it, with your first day kept and the whole ladder scored together. Score your ladder at any distance out to 1500 yards. ShotMarker groups import in the order they were fired. Angular figures use the distance recorded on your targets. Plus fixes to staged files, the Measure distance, and CBTO decimals.",
   "template_version": "1.0",
   "template_download_url": "",
   "template_release_notes": "",
   "platforms": {
     "mac": {
-      "app_version": "1.10.0",
+      "app_version": "1.11.0",
       "app_download_file": "Loadscope.zip",
-      "app_release_notes": "v1.8.2 - Target photos are now genuinely ordered by the time each shot was taken. In 1.8.1 that read never ran in the installed app, so photos fell back to filename order."
+      "app_release_notes": "v1.11.0 - Shot the rest of your ladder on a second range day? Import the new rungs into the same load and they are added to it, with your first day kept and the whole ladder scored together. Score your ladder at any distance out to 1500 yards. ShotMarker groups import in the order they were fired. Angular figures use the distance recorded on your targets. Plus fixes to staged files, the Measure distance, and CBTO decimals."
     },
     "mac_arm64": {
-      "app_version": "1.10.0",
+      "app_version": "1.11.0",
       "app_download_file": "Loadscope-arm64.zip",
-      "app_release_notes": "v1.8.2 - Target photos are now genuinely ordered by the time each shot was taken. In 1.8.1 that read never ran in the installed app, so photos fell back to filename order."
+      "app_release_notes": "v1.11.0 - Score your ladder at any distance out to 1500 yards. ShotMarker groups now import in the order they were fired. Angular figures use the distance recorded on your targets. Plus fixes to clearing a staged file, the Measure distance, and CBTO decimals."
     },
     "windows": {
       "app_version": "1.10.0",
