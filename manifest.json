@@ -19,10 +19,10 @@
       "app_release_notes": "v1.11.2 - Your license key now works even when Loadscope can't reach the license server, and Loadscope now checks your license on an address that security software and network filters do not block."
     },
     "windows": {
-      "app_version": "1.11.0",
+      "app_version": "1.11.2",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.11.0/Loadscope-Setup.exe",
-      "app_release_notes": "v1.11.0 - Score your ladder at any distance out to 1500 yards. ShotMarker groups now import in the order they were fired. Angular figures use the distance recorded on your targets. Plus fixes to clearing a staged file, the Measure distance, and CBTO decimals."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.11.2/Loadscope-Setup.exe",
+      "app_release_notes": "v1.11.2 - Your license key now works even when Loadscope can't reach the license server, and Loadscope now checks your license on an address that security software and network filters do not block."
     }
   }
 }
