@@ -78,7 +78,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
     <section class="doc" id="overview">
       <h2>Welcome to Loadscope</h2>
       <p class="lede">What the app does, in one breath.</p>
-      <p>Loadscope turns your range data into a finished load. You shoot a powder ladder and (optionally) a seating-depth ladder, import your chronograph data, and measure your target groups right in the app (or import them from a target app if you use one). Loadscope <b>scores every powder charge and seating depth</b>, picks the winner, and builds you a printable load card and a predicted DOPE chart.</p>
+      <p>Loadscope turns your range data into a finished load. You shoot a powder ladder and (optionally) a seating-depth ladder, import your chronograph data, and measure your target groups right in the app (or import them from a target app if you use one). Loadscope <b>scores every powder charge, seating depth and tuner setting</b>, picks the winner, and builds you a printable load card and a predicted DOPE chart.</p>
       <h3>The workflow at a glance</h3>
       <ul>
         <li><b>1. Set up your rifle</b> once (the <b>Rifle &amp; Setup</b> page).</li>
@@ -106,7 +106,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
         <li><span class="btn">❓ Quick Guide</span> — pinned at the bottom; opens the illustrated quick-start.</li>
         <li><span class="btn">Create New Load</span> — the guided way to start a load: plan a ladder, shoot it in order, import your data (also at the bottom).</li>
       </ul>
-      <p>Each button has a keyboard shortcut too: <b>Cmd+1</b> Rifle &amp; Setup, <b>Cmd+2</b> Import, <b>Cmd+3</b> Results, <b>Cmd+4</b> Range &amp; DOPE, <b>Cmd+5</b> Pocket Card, <b>Cmd+6</b> Libraries.</p>
+      <p>Each button has a keyboard shortcut too: <b>Cmd+1</b> Rifle &amp; Setup, <b>Cmd+2</b> Import, <b>Cmd+3</b> Results, <b>Cmd+4</b> Range &amp; DOPE, <b>Cmd+5</b> Pocket Card, <b>Cmd+6</b> Libraries, <b>Cmd+7</b> Load Card.</p>
     </section>
 
     <section class="doc" id="setup">
@@ -160,10 +160,10 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <h3>How it works</h3>
       <ul>
         <li><b>Bring in your target groups.</b> Two ways: tap <span class="btn">Import from phone</span> to pull groups you measured on the <a href="#companion">Loadscope Ballistics</a> app straight off your phone over Wi-Fi (paired to your charges in order) &mdash; or <span class="btn">Choose target photos</span> to measure on the desktop. For desktop measuring, pick a photo for each charge, or one photo of a whole sheet with a bull per charge, with a known reference in frame (a ruler, or a 1" grid).</li>
-        <li><b>Set the scale.</b> Drag a line across something a known distance apart &mdash; a ruler, or a 1" grid square &mdash; then click <span class="btn">Set length</span> and type how far it really is. That turns pixels into real inches. Let off early? Just drag again before you confirm.</li>
+        <li><b>Set the scale.</b> Drag a line across something a known distance apart &mdash; a ruler, or a 1" grid square &mdash; then click <span class="btn">Set length</span> and type how far it really is. Measure in <b>inches, MOA or mil</b> &mdash; pick whichever your target is printed in, and Loadscope converts the rest. Let off early? Just drag again before you confirm.</li>
         <li><b>Mark your aim, then tap each shot.</b> Loadscope does the geometry as you go.</li>
         <li><b>Add a bull for each charge.</b> Shooting a whole ladder on one target sheet? Click <span class="btn">+ Add group</span> to drop another bull on the same photo; each bull is numbered and keeps its own charge or seating depth, labeled right on the target and editable. <span class="btn">Remove group</span> takes one back off.</li>
-        <li><b>Pick the ladder kind.</b> A <b>Powder/Seating</b> toggle sets whether each bull is a charge (grains) or a seating depth (CBTO), and any caliber can be typed in if it's not in the list. For seating, a jam reads back plainly: positive is <b>jump</b> off the lands, negative is <b>jam</b> into them, zero is <b>touching</b>.</li>
+        <li><b>Pick the ladder kind.</b> A <b>Powder / Seating / Barrel tuner</b> choice sets whether each bull is a charge (grains), a seating depth (CBTO) or a tuner setting, and any caliber can be typed in if it's not in the list. For seating, a jam reads back plainly: positive is <b>jump</b> off the lands, negative is <b>jam</b> into them, zero is <b>touching</b>.</li>
         <li><b>Save the target.</b> Each saved bull lands in your scored Results under its charge; your best load is named on the Results page.</li>
       </ul>
       <div class="note">Measuring a whole ladder on one target sheet? Use <span class="btn">+ Add group</span> for each bull and tell Loadscope which charge it is &mdash; no handwriting to read. The same works for a seating-depth ladder, one bull per depth.</div>
@@ -177,21 +177,22 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <h3>What you see</h3>
       <ul>
         <li><b>Best-load hero</b> — the suggested charge and CBTO, with measured velocity, SD, group and mean radius.</li>
-        <li><b>Charts</b> — velocity vs. charge with shot-to-shot spread bars; the flat-spot pops where the bars tighten.</li>
-        <li><b>Powder Charge / Seating Depth sub-tabs</b> — each charge or depth scored and ranked, winner tagged.</li>
+        <li><b>Scoring</b> — velocity vs. charge with shot-to-shot spread bars; the flat-spot pops where the bars tighten. This is also where you adjust the weights.</li>
+        <li><b>Powder Charges / Seating Depths sub-tabs</b> — each charge or depth scored and ranked, winner tagged. (The full worksheet name sits on the section title inside each tab, for anyone who does open the workbook in Excel.)</li>
+        <li><b>Barrel Tuner</b> — appears when you shoot a tuner test. Each setting is scored on group height and mean radius, and Loadscope names your best setting along with the plateau of good settings beside it.</li>
       </ul>
       <h3>Actions</h3>
       <ul>
         <li><span class="btn">Save this load to Library</span> — keeps the winning load in your Loads library.</li>
         <li><span class="btn">Generate Load Card</span> — a one-page printable recipe in your browser.</li>
         <li><span class="btn">Save as PDF…</span> — save that card as a PDF.</li>
-        <li><b>Weight tuning</b> — adjust how much each metric counts; Loadscope re-scores instantly from your existing data, no re-import.</li>
+        <li><b>Weights</b> — on the Scoring tab, adjust how much each metric counts; Loadscope re-scores instantly from your existing data, no re-import.</li>
       </ul>
     </section>
 
     <section class="doc" id="dope">
       <h2>Range &amp; DOPE</h2>
-      <p class="lede">A built-in ballistic calculator, checked against two independent references &mdash; JBM Ballistics and Applied Ballistics' own published range card.</p>
+      <p class="lede">A built-in ballistic calculator, checked against Applied Ballistics' own published range card.</p>
       <p>Enter your muzzle velocity, ballistic coefficient, zero range, sight height and conditions, and Loadscope predicts your elevation and wind from 100 to 1000 yards. The solver is an industry-standard point-mass model with G1/G7 drag curves &mdash; the same class Strelok, GeoBallistics and the free Hornady and Berger calculators run. Measured-drag solvers like Applied Ballistics and Hornady 4DOF pull ahead deep in the transonic.</p>
       <h3>Inputs</h3>
       <ul>
@@ -227,7 +228,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <h3>Rifles</h3>
       <p>Every rifle setup you've saved. Building a rifle in <a href="#newladder">Create New Load</a> files it here automatically, so you can reopen it to start a new load anytime. You can also right-click any saved rifle to start a new load with it, see or compare its loads, print a DOPE card, or duplicate, rename, or delete it. Delete a rifle you've sold or retired.</p>
       <h3>Barrels</h3>
-      <p>Every barrel with a saved round count, with an editable count. Editing it here updates the same number you see in Rifle &amp; Setup and on the phone companion — one count, everywhere. Delete a barrel you no longer shoot.</p>
+      <p>Every barrel with a saved round count, with an editable count. Editing it here updates the same number you see in Rifle &amp; Setup right away; the phone picks it up the next time you sync. Delete a barrel you no longer shoot.</p>
     </section>
 
     <section class="doc" id="companion">
@@ -278,7 +279,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <h2>The menus (top bar)</h2>
       <p class="lede">Everything else lives up here.</p>
       <h3>Settings</h3>
-      <p>App preferences &mdash; including whether Loadscope checks for updates when it launches.</p>
+      <p>App preferences &mdash; including whether Loadscope checks for updates when it launches, and <b>Change&hellip;</b> to point Loadscope at a different loads folder (it saves and restarts; nothing is moved or deleted).</p>
       <h3>Workbook &amp; Folders</h3>
       <p>Open your workbook in Excel (optional — the app does not need it), and manage your project folder and import folders.</p>
       <h3>Support</h3>
@@ -339,7 +340,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <h2>Troubleshooting</h2>
       <p class="lede">If something is not working.</p>
       <ul>
-        <li><b>An import did nothing</b> — check the file names match a charge or seating depth (the app shows a naming warning).</li>
+        <li><b>An import did nothing</b> — check the files are actually in your import folders, and that you shot the ladder in order, lowest charge to highest. Loadscope matches each string to its charge by shot order and time; you never have to name or label a file.</li>
         <li><b>Results look empty</b> — you need at least the minimum data; make sure a chronograph file imported and you have at least one group (measured or imported).</li>
         <li><b>The phone will not find the computer</b> — confirm <b>Phone Sync</b> is on and both devices are on the same Wi-Fi.</li>
         <li><b>Still stuck</b> — email <a href="mailto:support@loadscope.app">support@loadscope.app</a> and we will help.</li>

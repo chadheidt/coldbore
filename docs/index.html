@@ -1065,7 +1065,7 @@ header.hero .line2 {
     <div class="split">
       <div class="split-text">
         <h2>Plan it <span class="accent">once</span>.</h2>
-        <p class="section-sub">Enter your ladder &mdash; powder or seating depth, start, step, how many. Loadscope lays out every load so you just shoot it in order, then matches each result to its charge. No naming files, no typing velocities, no spreadsheet wrangling.</p>
+        <p class="section-sub">Enter your ladder &mdash; powder charge, seating depth or barrel tuner, start, step, how many. Loadscope lays out every load so you just shoot it in order, then matches each result to its charge. No naming files, no typing velocities, no spreadsheet wrangling.</p>
       </div>
       <div class="screenshot-wrap">
         <img src="assets/demo/gd-ladder.webp" width="1800" height="940" fetchpriority="high" decoding="async" alt="Loadscope Create New Load wizard, Step 2 of 3 - Plan your ladder: a powder ladder for a Tikka T3X CTR 6.5 Creedmoor with H4350, start charge 41.0 gr, 0.2 gr steps, 8 steps, 5 shots per string, and a live preview of the eight loads P1 41.0 through P8 42.4 gr">
@@ -1231,7 +1231,7 @@ header.hero .line2 {
 <section id="install" class="install">
   <div class="container">
     <h2>Install in <span class="accent">three steps</span>.</h2>
-    <p class="section-sub">Tested on macOS Sonoma &amp; Sequoia and Windows 10 &amp; 11.</p>
+    <p class="section-sub">Tested on macOS Sonoma, Sequoia &amp; Tahoe and Windows 10 &amp; 11.</p>
     <details class="install-collapse">
       <summary>Show the three steps &middot; about a minute</summary>
     <div class="steps">
@@ -1319,7 +1319,8 @@ header.hero .line2 {
         <p>No single number tells you a load is good — a tight group that wanders in velocity will betray you at distance, and a flat velocity string over a wide group won't hold either. So Loadscope doesn't pick your best powder charge or seating depth on one stat. It scores every charge and every seating depth you tested across four things that actually show up on target.</p>
         <p>Those four: <b>mean radius</b> (true group center, not one flier — falls back to group size when only that's available), <b>velocity SD</b> (shot-to-shot consistency), <b>vertical</b> (vertical dispersion — what costs you elevation at distance), and a light <b>flat-spot</b> signal (how little your average velocity moves across nearby charges).</p>
         <p>Each metric is put on the same 0-to-1 scale (lower is better) so they're comparable, then blended into one <b>composite score</b>. Lowest composite wins — Loadscope tags it 🥇 and writes the winning charge or CBTO to the top of the tab. Every candidate also earns a "Best in:" tag for any single metric it topped, even if it didn't win overall.</p>
-        <p>The four aren't weighted equally, and the mix isn't a fixed table — <b>Loadscope sets it from the distance you tested at</b>. Up close, mean radius leads and velocity barely counts; at 1000 yards velocity SD takes over, because that's where a few fps of spread opens real vertical. Seating-depth tests lean on mean radius, since seating tunes group shape, not speed. Every weight is still yours — the app's Scoring tab is a set of sliders, and <b>Use recommended weights</b> hands the dial back to Loadscope. <a href="/learn/how-loadscope-scores-a-load.html">Read the full method &rarr;</a></p>
+        <p>The four aren't weighted equally, and the mix isn't a fixed table — <b>Loadscope sets it from the distance you tested at</b>. Up close, mean radius leads and velocity barely counts; at 1000 yards velocity SD takes over, because that's where a few fps of spread opens real vertical. Seating-depth tests lean on mean radius, since seating tunes group shape, not speed. Every weight is still yours — the app's Scoring tab lets you type a percentage against each metric, and <b>Use recommended weights</b> hands the dial back to Loadscope. <a href="/learn/how-loadscope-scores-a-load.html">Read the full method &rarr;</a></p>
+        <p>A <b>barrel tuner test is scored differently</b>, because the four metrics above do not apply to it. Loadscope scores each setting on group height and mean radius, then names your best setting and the plateau of good settings beside it &mdash; a run of adjacent settings that all shoot well beats a lone winner. That weighting is adjustable too.</p>
       </details>
       <details class="faq-item">
         <summary>How do I get my code, and how does buying work?</summary>
@@ -1347,7 +1348,7 @@ header.hero .line2 {
       </details>
       <details class="faq-item">
         <summary>What chronographs and target apps does it read?</summary>
-        <p><strong>Chronographs:</strong> <strong>Garmin Xero</strong> &mdash; either plug it into your computer with its USB cable and Loadscope reads the sessions straight off it, or import a ShotView CSV export; both work, and neither one replaces the other &mdash; plus <strong>LabRadar</strong>, <strong>MagnetoSpeed</strong> and <strong>Athlon Velocity Pro</strong>. <strong>Target apps:</strong> BallisticX, OnTarget (PC/TDS), Silver Mountain (SMT) and ShotMarker &mdash; or skip the target app entirely and measure your groups from a photo right in Loadscope. The parser system is pluggable, so a new chronograph or target app is quick to add — send a sample export to support@loadscope.app and we'll fold it in.</p>
+        <p><strong>Chronographs:</strong> <strong>Garmin Xero</strong> &mdash; either plug it into your computer with its USB cable and Loadscope reads the sessions straight off it, or import a ShotView CSV export; both work, and neither one replaces the other &mdash; plus <strong>LabRadar</strong>, <strong>MagnetoSpeed</strong> and <strong>Athlon Rangecraft</strong> (these last two are experimental, so check the numbers against your own). <strong>Target apps:</strong> BallisticX, OnTarget (PC/TDS), Silver Mountain (SMT) and ShotMarker &mdash; or skip the target app entirely and measure your groups from a photo right in Loadscope. The parser system is pluggable, so a new chronograph or target app is quick to add — send a sample export to support@loadscope.app and we'll fold it in.</p>
       </details>
       <details class="faq-item">
         <summary>Do I still need ShotView to get my Xero data in?</summary>
@@ -1485,7 +1486,7 @@ header.hero .line2 {
       <p>One-time purchase. Yours forever, with free updates. Works on Mac and Windows. 30-day money-back guarantee.</p>
       <ul style="margin: 4px 0 18px; padding-left: 20px; color: var(--text-dim); line-height: 1.75;">
         <li>Measure your target groups right in the app &mdash; or import a target app's export</li>
-        <li>Scores every powder charge &amp; seating depth, calls your best load</li>
+        <li>Scores every powder charge, seating depth &amp; tuner setting, calls your best load</li>
         <li>Predicts your full DOPE and prints a Pocket Range Card</li>
       </ul>
       <div class="feedback" id="requestAccessFeedback"></div>
