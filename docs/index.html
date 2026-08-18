@@ -820,6 +820,24 @@ header.hero .line2 {
   color: var(--text-dim);
 }
 .win-smartscreen-note strong { color: var(--text); }
+/* Shown ONLY on a phone or tablet, above the platform picker. An iPad reports
+   itself as a Macintosh (Apple made Safari request desktop sites in iPadOS 13),
+   so the OS sniff below it silently picked "Mac" and handed tablet visitors a
+   .dmg they cannot open. Three Windows customers hit that in the four days to
+   2026-08-18 -- twelve failed download attempts between them, one of whom asked
+   for a refund believing his own PC was broken. Calm, not alarming: it is a
+   signpost, not an error. */
+.desktop-only-note {
+  background: rgba(96, 165, 250, 0.10);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 11px 13px;
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-dim);
+}
+.desktop-only-note strong { color: var(--text); }
 /* Install-section signing note, lifted out of fine print into a calm bordered
    callout (Chad 2026-06-23: the plain grey footnote was too buried). Leads with
    the positive "Signed & notarized" so it reassures rather than alarms. */
@@ -1439,6 +1457,12 @@ header.hero .line2 {
     <!-- Platform picker: drives both the request and the download. Auto-set
          from the visitor's OS (overridable). One button, one modal, platform
          handled inside — see Chad 2026-05-31 UI decision. -->
+    <!-- Handheld visitors only; unhidden by applyHandheldNotice() on load. -->
+    <div class="desktop-only-note" id="desktopOnlyNote" style="display:none;">
+      <strong>Loadscope is desktop software.</strong> It runs on a Mac or Windows
+      computer, not on a phone or tablet. Pick the computer you'll install it on
+      to get the right installer, or just open this page on that computer instead.
+    </div>
     <div class="platform-seg" role="group" aria-label="Choose your computer">
       <button type="button" class="platform-opt" id="platMac" onclick="setPlatform('mac')">
         <span class="platform-opt-os">Mac</span>
@@ -1743,12 +1767,51 @@ function macFile() {
 // Selected platform drives BOTH the request payload and which installer the
 // "I have a code" tab downloads. 'mac' | 'win'. Pre-set from the OS, but the
 // visitor can flip it (work Mac, home Windows PC, etc.).
-let selectedPlatform = IS_WINDOWS ? "win" : "mac";
+// 🔴 IS THE VISITOR ON A PHONE OR TABLET? (2026-08-18)
+// An iPad is NOT detectable from the user-agent: since iPadOS 13 Safari asks for
+// desktop sites by default and reports "Macintosh; Intel Mac OS X 10_15_7" --
+// character-for-character what a real Mac sends. So IS_WINDOWS was false, the
+// line below picked "mac", and the tablet was handed Loadscope.dmg with nothing
+// on the page saying it could not run there.
+// The reliable tell is TOUCH: a real Mac reports maxTouchPoints === 0, an iPad
+// reports 5. Phones are caught by the plain UA test.
+// ⚠️ A touchscreen WINDOWS laptop also has maxTouchPoints > 1 -- which is exactly
+// what Jordan Balzer's Surface Pro is -- so the touch test is deliberately gated
+// behind /Macintosh/. A Surface must keep reading as a computer, or this fix
+// would break the very customer who reported it.
+const IS_IPADOS  = /Macintosh/.test(navigator.userAgent || "") &&
+                   (navigator.maxTouchPoints || 0) > 1;
+const IS_HANDHELD = IS_IPADOS ||
+                    /iPhone|iPod|iPad|Android|Mobile/i.test(navigator.userAgent || "");
+
+// On a handheld nothing is pre-selected: guessing is what caused the bug, so the
+// visitor chooses. `null` until they do.
+let selectedPlatform = IS_HANDHELD ? null : (IS_WINDOWS ? "win" : "mac");
 const PLATFORM_FILE = { win: "Loadscope-Setup.exe" };  // mac resolved via macFile() (chip-aware)
 const PLATFORM_LABEL = { mac: "Mac", win: "Windows" };
 
+function applyHandheldNotice() {
+  const note = document.getElementById("desktopOnlyNote");
+  if (note) note.style.display = IS_HANDHELD ? "block" : "none";
+}
+
 function setPlatform(p) {
+  // Handheld + nothing chosen yet: show neither as active and make the download
+  // button say so, rather than quietly defaulting to Mac.
+  if (p !== "mac" && p !== "win") {
+    document.getElementById("platMac").classList.remove("active");
+    document.getElementById("platWin").classList.remove("active");
+    const dl0 = document.getElementById("downloadModalSubmit");
+    if (dl0) { dl0.textContent = "Choose Mac or Windows"; dl0.disabled = true; }
+    const n0 = document.getElementById("winSmartScreenNote");
+    if (n0) n0.style.display = "none";
+    const a0 = document.getElementById("macArchChoice");
+    if (a0) a0.style.display = "none";
+    return;
+  }
   selectedPlatform = (p === "win") ? "win" : "mac";
+  const dlEnable = document.getElementById("downloadModalSubmit");
+  if (dlEnable) dlEnable.disabled = false;
   document.getElementById("platMac").classList.toggle("active", selectedPlatform === "mac");
   document.getElementById("platWin").classList.toggle("active", selectedPlatform === "win");
   // Download button label tracks the chosen platform.
@@ -1777,6 +1840,7 @@ function openDownloadModal(ev) {
   document.getElementById("accessCodeFeedback").textContent = "";
   showCodeHint(false);
   document.getElementById("requestAccessFeedback").textContent = "";
+  applyHandheldNotice();           // phone/tablet: say so BEFORE they pick
   setPlatform(selectedPlatform);   // sync toggle + button label + note to detected OS
   switchTab("request-access");     // new visitors land on the request form
   const n = document.getElementById("reqName");
@@ -1857,6 +1921,12 @@ async function submitAccessCode() {
   const code = document.getElementById("accessCodeInput").value.trim();
   const feedback = document.getElementById("accessCodeFeedback");
   const submitBtn = document.getElementById("downloadModalSubmit");
+  // Belt-and-braces: on a handheld nothing is pre-selected, and `null` must never
+  // fall through to macFile() -- that fallthrough IS the bug this fixes.
+  if (selectedPlatform !== "mac" && selectedPlatform !== "win") {
+    feedback.textContent = "Choose Mac or Windows first.";
+    return;
+  }
   const file = (selectedPlatform === "win") ? "Loadscope-Setup.exe" : macFile();
   const label = PLATFORM_LABEL[selectedPlatform];
 
