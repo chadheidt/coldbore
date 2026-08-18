@@ -27,24 +27,26 @@
 <nav><div class="container"><a class="logo" href="index.html">LOADSCOPE™</a></div></nav>
 <div class="container">
   <h1>Privacy Policy</h1>
-  <div class="updated">Last updated: June 6, 2026</div>
+  <div class="updated">Last updated: August 18, 2026</div>
 
-  <p>This policy covers <strong>Loadscope</strong> for macOS and Windows, <strong>Loadscope Ballistics</strong> for iPhone and iPad, and our website (loadscope.app), all operated by Loadscope LLC ("we", "us"). It explains what information is and is not collected. Our apps are built to be local-first: your load and shooting data stays on your own device.</p>
+  <p>This policy covers <strong>Loadscope</strong> for macOS and Windows, <strong>Loadscope Ballistics</strong> and <strong>Loadscope Measure</strong> for iPhone and iPad, and our website (loadscope.app), all operated by Loadscope LLC ("we", "us"). It explains what information is and is not collected. Our apps are built to be local-first: your load and shooting data stays on your own device.</p>
 
   <h2>The desktop app (Mac &amp; Windows)</h2>
   <ul>
     <li><strong>No account.</strong> Loadscope has no sign-up, login, or user account.</li>
     <li><strong>Your data stays on your computer.</strong> The app reads the CSV files you provide and writes to a standard Excel workbook stored locally on your computer. We never receive, transmit, or store your load data, chronograph data, or shooting data.</li>
-    <li><strong>No telemetry or analytics.</strong> The app does not track usage or send analytics.</li>
+    <li><strong>What the app checks in.</strong> Once your license is active, Loadscope contacts our license server each time it opens. It sends your license key, a <strong>device ID</strong> &mdash; a scrambled fingerprint of your computer, so a reinstall counts as the same machine and the real value never leaves it &mdash; and the version and platform, like <code>1.12.0 (windows)</code>. We keep a record of when a device first and last checked in, how many times it has opened, and the country the request came from. That is what runs the two-computer limit, shuts off a refunded key, and tells us which version you are on when you ask us for help. <strong>None of your load, chronograph or shooting data is in it &mdash; that never leaves your computer.</strong></li>
+    <li><strong>No advertising or third-party analytics in the app.</strong> The desktop app contains no advertising, no analytics SDKs, and nothing that tracks you across other apps or websites.</li>
     <li><strong>Update checks.</strong> To offer one-click updates, the app periodically requests a small public version file over the internet. This request contains no personal data beyond the standard network information (such as an IP address) inherent to any web request.</li>
-    <li><strong>License validation.</strong> If you purchase a license, the app may verify the license key you enter against our license server. Only the license key (and a non-identifying check) is sent; no personal data or load data is transmitted.</li>
+    <li><strong>License validation.</strong> The app checks your license key against our license server when you enter it and on the check-in described above. Only the key and the device ID are sent; no personal data and no load data is transmitted.</li>
   </ul>
 
-  <h2>The iOS app (Loadscope Ballistics)</h2>
+  <h2>The iPhone &amp; iPad apps (Loadscope Ballistics and Loadscope Measure)</h2>
   <ul>
-    <li><strong>No account.</strong> There is no sign-up, login, or user account. Your loads, conditions, and round counts are stored only on your device.</li>
-    <li><strong>Location (optional).</strong> Only if you choose the "Nearest weather station" conditions source, the app uses your device location to find the closest U.S. National Weather Service station and request current conditions from <strong>weather.gov</strong>. Your coordinates are used for that lookup and are not stored by us or used for anything else. If you never select that source, the app does not access your location.</li>
-    <li><strong>Direct Wi-Fi sync (optional).</strong> Loads can sync directly between your phone and your own computer over your local network. The data goes device-to-device with no cloud and no account; we never receive it.</li>
+    <li><strong>No account with us.</strong> There is no Loadscope sign-up, login, or user account.</li>
+    <li><strong>Your devices stay in step through your own iCloud.</strong> If you use these apps on both an iPhone and an iPad, your loads, DOPE cards, barrels, measured target groups and their photos, and your trued velocity and round counts sync between them through <strong>your own private iCloud storage</strong>, under your Apple account. It is private to you: <strong>we have no access to it and never see what is in it.</strong> Signing out of iCloud on a device stops it.</li>
+    <li><strong>Location (optional).</strong> Only if you choose the "Nearest weather station" conditions source, the app uses your device location to find the closest U.S. National Weather Service station and request current conditions from <strong>weather.gov</strong>. The app may also send those same coordinates to the <strong>U.S. Geological Survey</strong> (epqs.nationalmap.gov) to look up the ground elevation where you are standing, which the solver needs. Your coordinates are used for those lookups and are not stored by us or used for anything else. If you never select that source, the app does not access your location.</li>
+    <li><strong>Direct Wi-Fi sync (optional).</strong> Loads can sync directly between your phone and your own computer over your local network. That transfer goes straight from device to device over your own network &mdash; it does not pass through iCloud or any server of ours, and we never receive it.</li>
     <li><strong>License validation.</strong> If you unlock with a Loadscope license key (or import a load that carries one), the app verifies that key against our license server. Only the key is sent — no personal data or load data.</li>
     <li><strong>No telemetry, analytics, ads, or tracking.</strong> The app contains no third-party analytics or advertising SDKs and does not track you across apps or websites.</li>
   </ul>
@@ -53,7 +55,9 @@
   <ul>
     <li><strong>Downloads.</strong> To download Loadscope you enter your license key so our server can authorize the download. The key is not personal information, and we do not link your download to your identity.</li>
     <li><strong>Bot protection.</strong> The site uses Cloudflare Turnstile to help block automated abuse. Cloudflare processes this under its own privacy terms.</li>
-    <li><strong>Advertising measurement (Meta Pixel).</strong> When we run ads, the website uses the Meta (Facebook) Pixel to measure ad performance and show relevant ads. It may set cookies and share basic visit information (such as the pages you view on loadscope.app) with Meta. We do not collect your shooting or load data this way, and we do not sell your information. You can limit or opt out through your <a href="https://www.facebook.com/settings?tab=ads">Meta ad preferences</a> or your browser's cookie controls. The Pixel is the only such tool on the site &mdash; there is no other third-party analytics.</li>
+    <li><strong>Advertising measurement (Meta Pixel).</strong> When we run ads, the website uses the Meta (Facebook) Pixel to measure ad performance and show relevant ads. It may set cookies and share basic visit information (such as the pages you view on loadscope.app) with Meta. We do not collect your shooting or load data this way, and we do not sell your information. You can limit or opt out through your <a href="https://www.facebook.com/settings?tab=ads">Meta ad preferences</a> or your browser's cookie controls. </li>
+    <li><strong>Website analytics (Google Analytics).</strong> The website uses Google Analytics to count visits and see which pages people read. It sets cookies and shares basic visit information with Google. It is on the website only &mdash; there is none of it inside the apps.</li>
+    <li><strong>Where you came from.</strong> When you arrive from an ad, a search result or a link on another site, the website notes that and passes it to checkout, so we can tell which ads and articles actually bring people in. It is kept with your order record.</li>
   </ul>
 
   <h2>Purchases</h2>
@@ -61,7 +65,7 @@
   <p>The in-app purchase in <strong>Loadscope Ballistics</strong> for iOS is processed by <strong>Apple</strong> through the App Store under Apple's privacy policy and terms. We do not see or store your payment information; we receive only confirmation that the unlock was purchased.</p>
 
   <h2>Data requests</h2>
-  <p>Because we hold almost no personal data (essentially only your name and email from your Loadscope order via Lemon Squeezy), requests are simple. To ask what we have, or to have it deleted, email <a href="mailto:support@loadscope.app">support@loadscope.app</a>.</p>
+  <p>We hold very little about you: your name, email and order details from your Loadscope purchase via Lemon Squeezy, where you came from when you bought, and the license check-in records described above (device ID, launch count, app version, country, and which installer you downloaded). We do not hold any of your load, chronograph or shooting data. Requests are simple. To ask what we have, or to have it deleted, email <a href="mailto:support@loadscope.app">support@loadscope.app</a>.</p>
 
   <h2>Changes</h2>
   <p>We may update this policy as the product evolves. The "last updated" date above will change accordingly.</p>
