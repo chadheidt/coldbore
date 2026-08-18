@@ -1700,8 +1700,16 @@ function srcFromReferrer() {
   } catch (e) { /* attribution is best-effort -- never block checkout */ }
 })();
 
-const WORKER_AUTHORIZE_URL = "https://coldbore-download.cheidt182.workers.dev/authorize";
-const WORKER_REQUEST_URL = "https://coldbore-download.cheidt182.workers.dev/request-access";
+// 🔴 api.loadscope.app, NOT *.workers.dev (2026-08-18). Consumer DNS filters
+// blocklist workers.dev because it is abused for phishing -- that is what broke
+// Mike Sowa's activation on 08-13. This is the DOWNLOAD button on the "I have a
+// key" tab, so on a filtered network a customer who has already PAID cannot get
+// the installer at all. Same host swap as manifest.json's app_download_endpoint.
+// (WORKER_REQUEST_URL only feeds submitRequestAccess(), which is dead -- the buy
+// modal goes straight to Lemon Squeezy and no requestAccessSubmit button exists
+// in the markup. Repointed rather than deleted to keep this change one-line-safe.)
+const WORKER_AUTHORIZE_URL = "https://api.loadscope.app/authorize";
+const WORKER_REQUEST_URL = "https://api.loadscope.app/request-access";
 
 // Auto-detect the visitor's OS to pre-select the platform toggle (overridable).
 const IS_WINDOWS = /Win(dows|32|64)/i.test(
