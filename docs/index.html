@@ -1655,9 +1655,19 @@ function srcFromReferrer() {
     if (!document.referrer) return null;                    // typed in / bookmarked = truly direct
     var h = new URL(document.referrer).hostname.replace(/^www\./, "").toLowerCase();
     if (!h || h === location.hostname.replace(/^www\./, "").toLowerCase()) return null;  // our own pages
+    // AI assistants get their OWN medium. Folding them into "organic" would bury
+    // the channel just as it starts to matter -- "perplexity / ai" is readable in
+    // the roster, "perplexity / organic" is indistinguishable from a Google click.
+    // Checked BEFORE the engine list on purpose, so gemini.google.com reads as
+    // gemini rather than being swallowed by the google rule below.
+    var ai = h.match(/(^|\.)(chatgpt|openai|perplexity|claude|copilot|gemini)\./);
+    if (ai) return { utm_source: ai[2], utm_medium: "ai", utm_campaign: "ai_search" };
     // Name the engine off the MATCH, not by position -- "google.co.uk" has the
     // brand in the FIRST label, so counting back from the end yields "co".
-    var eng = h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave)\./);
+    // kagi added 2026-08-20: a real buyer arrived from Kagi on 08-19 and landed in
+    // the generic referral bucket as "kagi.com / referral" -- it is a search engine
+    // (a paid, ad-free one), the name was just missing from this list.
+    var eng = h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave|kagi)\./);
     if (eng) return { utm_source: eng[2], utm_medium: "organic", utm_campaign: "search" };
     var KNOWN = {
       "snipershide.com": ["snipershide", "forum"],
