@@ -19,9 +19,9 @@
       "app_release_notes": "v1.12.0 - New: barrel tuner testing -- Loadscope scores every setting and recommends one. You can now change your loads folder from Settings, and a missing loads folder says where it was instead of starting over."
     },
     "windows": {
-      "app_version": "1.12.0",
+      "app_version": "1.13.0",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.12.0/Loadscope-Setup.exe",
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.13.0/Loadscope-Setup.exe",
       "app_release_notes": "v1.12.0 - New: barrel tuner testing -- Loadscope scores every setting and recommends one. Uninstalling Loadscope no longer removes your license key, and you can now change your loads folder from Settings."
     }
   }
