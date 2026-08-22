@@ -2117,11 +2117,40 @@ document.getElementById("accessCodeInput").addEventListener("keydown", (e) => {
     var el = document.querySelector(location.hash);
     if (el && el.tagName === 'DETAILS') {
       el.open = true;
-      el.scrollIntoView({ block: 'center' });
+      // 🔴 scrollIntoView() IS A NO-OP ON THIS PAGE. Verified in real Chrome
+      // 2026-08-22: from scrollY 0, with the element 7,859px down and 1.5s
+      // allowed for the smooth animation, window.scrollY stayed 0. So
+      // loadscope.app/#windows-blocked opened the right answer and left the
+      // reader at the top of the homepage with 7,859px to scroll -- which is
+      // exactly what Chad reported ("i dont see that link in my chrome").
+      //
+      // window.scrollTo() DOES work here (proven in the same session:
+      // scrollTo({top:5000}) landed at 5000, while scrollingElement.scrollTop
+      // = 3000 stayed 0). So compute the offset and use that instead.
+      //
+      // ⚠️ I called this a harness artifact on 2026-08-21 and REVERTED a
+      // correct fix. The reasoning was: `scrollTop = 3000` did nothing in the
+      // preview browser, so the preview must not scroll. It does not -- but
+      // `scrollTop =` assignment does nothing in REAL Chrome on this page
+      // either, because of scroll-behavior: smooth. Right observation, wrong
+      // conclusion, and only clicking the live link in a real browser caught
+      // it. Do not "simplify" this back to scrollIntoView.
+      var rect = el.getBoundingClientRect();
+      var top = rect.top + window.scrollY
+                - (window.innerHeight / 2)
+                + Math.min(rect.height, window.innerHeight) / 2;
+      window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
     }
   }
   window.addEventListener('hashchange', openFromHash);
   document.addEventListener('DOMContentLoaded', openFromHash);
+  // 🔴 AND AGAIN ON `load`. DOMContentLoaded fires before the images below the
+  // fold have height, so the offset computed then is short -- measured on the
+  // fixed page 2026-08-22: it scrolled to 6,485 but the answer had drifted to
+  // 1,290px BELOW the fold as the images filled in. Re-running once everything
+  // has its real height lands it. Cheap, idempotent, and invisible when the
+  // first pass was already right.
+  window.addEventListener('load', openFromHash);
   openFromHash();
 })();
 </script>
