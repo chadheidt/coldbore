@@ -1377,6 +1377,20 @@ header.hero .line2 {
         <p><strong>Mac:</strong> yes. Signed with a Developer ID Application certificate and notarized by Apple. macOS opens it without security warnings on the first launch — the same as any commercial app.</p>
         <p><strong>Windows:</strong> yes. Signed by Loadscope LLC with a Certum code-signing certificate and timestamped. Because the certificate is new, Windows SmartScreen may still show a one-time <strong>More info &rarr; Run anyway</strong> prompt until it builds reputation — the publisher reads &ldquo;Loadscope LLC&rdquo;.</p>
       </details>
+      <!-- Anchored on purpose: loadscope.app/#windows-blocked is a link we can
+           paste into a support reply, a forum answer, or the licence email. The
+           older guidance lived ONLY inside the download modal, so a buyer who
+           came back from his licence email had nowhere to read it. Two paying
+           customers were stopped by this in one week (2026-08-17/18) and one was
+           refunded. -->
+      <details class="faq-item" id="windows-blocked">
+        <summary>Windows blocked or deleted my download &mdash; what now?</summary>
+        <p>Three different things can happen, and each needs a different fix. Loadscope is signed by <strong>Loadscope LLC</strong>, so in every case you can check the publisher name before you allow anything.</p>
+        <p><strong>1. Your browser paused it.</strong> Look at the <strong>top-right corner</strong> of your browser for a small <strong>download icon</strong>, click it, and choose <strong>Keep</strong>.</p>
+        <p><strong>2. The file downloaded, then disappeared.</strong> That is Windows Security deleting it after it lands, which is why &ldquo;Keep&rdquo; does not help. It was a false alarm on our installer and it has been cleared &mdash; so <strong>download it again first</strong>, and it should stay put. If it still vanishes, open <strong>Windows Security &rarr; Protection history</strong>, find the Loadscope entry, and choose <strong>Allow on device</strong>. Check it says Loadscope LLC before you allow it.</p>
+        <p><strong>3. It runs, but you get a blue &ldquo;Windows protected your PC&rdquo; box.</strong> Click <strong>More info</strong>, then <strong>Run anyway</strong>. The publisher reads &ldquo;Loadscope LLC&rdquo;. This is a one-time prompt that appears because our certificate is still new.</p>
+        <p>Still stuck? Email <a href="mailto:support@loadscope.app">support@loadscope.app</a> and we will sort it out.</p>
+      </details>
       <details class="faq-item">
         <summary>What hardware does Loadscope run on?</summary>
         <p><strong>Mac:</strong> macOS 10.13 or newer. Runs natively on both Intel and Apple Silicon (M-series) Macs &mdash; no Rosetta needed.</p>
@@ -1584,7 +1598,7 @@ header.hero .line2 {
       <ol id="installStepsWin" style="display:none; font-size:15px; line-height:1.6; padding-left:20px; margin:0;">
         <li style="margin-bottom:10px;">If your browser pauses the download (it does this because Loadscope is new to it), look at the <strong>top-right corner</strong> of your browser for a small <strong>download icon</strong>, click it, and choose <strong>Keep</strong> next to <strong>Loadscope-Setup.exe</strong>. The file is safe and signed by us.</li>
         <li style="margin-bottom:10px;">Open your <strong>Downloads</strong> folder and double-click <strong>Loadscope-Setup.exe</strong>.</li>
-        <li style="margin-bottom:10px;">Follow the installer. Loadscope opens when it finishes.</li>
+        <li style="margin-bottom:10px;">Follow the installer. If Windows shows a blue <strong>&ldquo;Windows protected your PC&rdquo;</strong> box, click <strong>More info</strong> then <strong>Run anyway</strong> &mdash; the publisher reads &ldquo;Loadscope LLC&rdquo;. Loadscope opens when it finishes.</li>
         <li>Come back to this page and click <strong>Activate Loadscope</strong> below.</li>
       </ol>
 
