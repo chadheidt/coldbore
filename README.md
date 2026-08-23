@@ -21,7 +21,7 @@ Website and downloads: **https://loadscope.app**
 - **Score every rung on four metrics** — velocity flat-spot, velocity standard
   deviation, mean radius and vertical SD — weighted for the distance you are
   shooting, out to 1500 yards. Lowest composite wins.
-- **Carry it to the range.** Printed recipe cards and DOPE cards, a ballistic
+- **Carry it to the range.** Printed load cards and pocket cards, a ballistic
   solver with live conditions, and free iPhone companion apps
   ([Loadscope Ballistics](https://apps.apple.com/app/loadscope-ballistics/id6777277349),
   [Loadscope Measure](https://apps.apple.com/app/loadscope-measure/id6785319358)).
