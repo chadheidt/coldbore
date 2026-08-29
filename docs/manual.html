@@ -95,14 +95,16 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p class="lede">Your whole workflow, top to bottom.</p>
       <p>The buttons on the left move you through the app in order:</p>
       <ul>
+        <li><span class="btn">Home</span> — where you land, with your current load and what to do next.</li>
         <li><span class="btn">Rifle &amp; Setup</span> — your rifle, cartridge, components, and barrel.</li>
-        <li><span class="btn">Import Data</span> — import your chronograph data (and a target app's export, if you use one) and run the import.</li>
         <li><span class="btn">Measure Target</span> — measure your target groups from a photo, right in the app. Scores in like an import.</li>
+        <li><span class="btn">Import Data</span> — import your chronograph data (and a target app's export, if you use one) and run the import.</li>
         <li><span class="btn">Results</span> — the scored ladder and your winning load.</li>
         <li><span class="btn">Range &amp; DOPE</span> — the built-in ballistic calculator (predicted dial).</li>
         <li><span class="btn">DOPE Card</span> — a printable range card.</li>
-        <li><span class="btn">Compare Loads</span> — pick saved loads from the same rifle and see which powder and charge shot best.</li>
+        <li><span class="btn">Recipe Card</span> — a printable sheet of the load itself: components, charge, seating.</li>
         <li><span class="btn">Libraries</span> — your saved Loads, the Bullets reference, your Rifles, and Barrels round counts. Delete anything you no longer want.</li>
+        <li><span class="btn">Compare Loads</span> — pick saved loads from the same rifle and see which powder and charge shot best.</li>
         <li><span class="btn">❓ User Guide</span> — pinned at the bottom; opens the illustrated guide.</li>
         <li><span class="btn">Create New Load</span> — the guided way to start a load: plan a ladder, shoot it in order, import your data (also at the bottom).</li>
       </ul>
@@ -147,7 +149,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p>Import individual files, or point Loadscope at a <b>whole range-day folder</b> and it pulls every chronograph and target file inside (subfolders included) &mdash; CSV, XLSX, Garmin <code>.fit</code> and ShotMarker <code>.tar</code> alike. Prefer not to drag? Use <span class="btn">Browse files…</span> or <span class="btn">Browse folder…</span> instead.</p>
 
       <h3>Supported chronograph &amp; target apps</h3>
-      <p>Garmin Xero, LabRadar, BallisticX, OnTarget, Silver Mountain / ShotMarker &mdash; plus MagnetoSpeed and Athlon Rangecraft (these last two are experimental, so verify the numbers). The format of every file is detected automatically; you never have to sort them.</p>
+      <p>Garmin Xero, LabRadar, BallisticX, OnTarget, Silver Mountain / ShotMarker &mdash; plus Athlon Rangecraft, and MagnetoSpeed (still in testing, so verify those numbers). The format of every file is detected automatically; you never have to sort them.</p>
 
       <h3>Where your files go after import</h3>
       <p>On a successful import, Loadscope moves the consumed CSVs into a dated <b>Imported CSVs</b> folder (outside your import folders) so your import folders stay clean and the same files never re-import by accident.</p>
@@ -207,6 +209,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <h2>DOPE Card</h2>
       <p class="lede">A range card that fits your pocket.</p>
       <p>The DOPE Card lays out your predicted elevation, wind, drop, velocity and energy from 100 to 1000 yards on a clean card. <span class="btn">Print</span> it for the bench binder, or <span class="btn">Save as PDF</span>. It prints true to size — two 4×6 cards per page with cut guides.</p>
+      <p><b>Whose number is it.</b> Grey italic is our prediction. A number you dialled yourself prints solid, and is never changed. Once you have dialled two ranges, the ranges between them are worked out from your own corrections and print on a shaded row — and your correction is carried a little past your longest, to 600 yards and no further. Beyond that the card goes back to a plain prediction rather than guessing. A line under the table says how many ranges you have confirmed and where that stops.</p>
     </section>
 
     <section class="doc" id="compare">
@@ -222,7 +225,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p class="lede">Loads, Bullets, Rifles, and Barrels — in one place.</p>
       <p>The Libraries page has four tabs. Each one has a <span class="btn">Delete</span> button so you can clear out anything you no longer want.</p>
       <h3>Loads</h3>
-      <p>Your whole library of saved loads — every load you crowned a winner, gathered from every workbook into one list. Active loads plus past ones: loads you have archived, or that came up from your phone, show here too, marked <b>Archived</b> or <b>New (phone)</b> and dimmed so you can tell them apart at a glance. Type in the filter box to find a load by name, rifle, or powder. Pick a load and use <span class="btn">View Recipe Card</span> or <span class="btn">View DOPE Card</span> for its recipe or dial card; right-click a row to rename or open it, and use <span class="btn">Delete load</span> to remove one. <span class="btn">Print library</span> prints the whole table as a bench reference. The list refreshes on its own after you import loads from your phone. A load that came up from your phone keeps the name you gave it there (or its recipe, if you left that blank).</p>
+      <p>Your whole library of saved loads — every load you crowned a winner, gathered from every workbook into one list. Active loads plus past ones: loads you have archived, or that came up from your phone, show here too, marked <b>Archived</b> or <b>New (phone)</b> and dimmed so you can tell them apart at a glance. Type in the filter box to find a load by name, rifle, or powder. Pick a load and use <span class="btn">View Recipe Card</span> or <span class="btn">View DOPE Card</span> for its recipe or dial card; right-click a row to rename it, to open it, or to choose <b>Enter your actual dials…</b> — which reopens that load on Range &amp; DOPE so you can type what you actually came up at each range, even on a load you already finished. Use <span class="btn">Delete load</span> to remove one. <span class="btn">Print library</span> prints the whole table as a bench reference. The list refreshes on its own after you import loads from your phone. A load that came up from your phone keeps the name you gave it there (or its recipe, if you left that blank).</p>
       <h3>Bullets</h3>
       <p>The reference library of bullets Loadscope can predict DOPE for, with each one's published BC and source. Search by maker, weight, or name. If yours is not listed, you can always type a custom BC in Rifle &amp; Setup.</p>
       <h3>Rifles</h3>
@@ -234,7 +237,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
     <section class="doc" id="companion">
       <h2>Loadscope Ballistics (the phone companion)</h2>
       <p class="lede">Your loads and dial in the field.</p>
-      <p>Loadscope Ballistics is the iPhone and iPad companion. It carries your loads, gives you a live DOPE dial that re-solves as conditions change, lets you true your dope from a real shot, and tracks barrel rounds. See <a href="#sync">Sync with your phone or iPad</a> to move loads between it and the desktop.</p>
+      <p>Loadscope Ballistics is the iPhone and iPad companion. It carries your loads, gives you a live DOPE dial that re-solves as conditions change, lets you record the elevation you actually dialled at each range, and tracks barrel rounds. See <a href="#sync">Sync with your phone or iPad</a> to move loads between it and the desktop.</p>
     </section>
 
     <section class="doc" id="sync">
@@ -250,7 +253,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       </ul>
       <h3>4. Send your range data back to the computer</h3>
       <ul>
-        <li><span class="btn">Send round counts &amp; truing</span> — pushes the rounds you shot and any trued velocity/BC back to the desktop. It <b>merges</b>: round counts add up and trued values update the matching load. It never overwrites or removes your loads.</li>
+        <li><span class="btn">Send round counts &amp; speeds</span> — pushes the rounds you shot and the elevations you actually dialled back to the desktop. It <b>merges</b>: round counts add up, and a dial you recorded lands on the matching load's DOPE card. A range you did not send is left alone, and it never overwrites or removes your loads.</li>
       </ul>
       <div class="note">It is all local. The data goes phone-to-computer directly over Wi-Fi; nothing is uploaded to a cloud or tied to an account.</div>
       <h3>If the phone can't find the computer</h3>
