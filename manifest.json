@@ -19,10 +19,10 @@
       "app_release_notes": "v1.14.0 - Type in what you actually dialed at the range, and it stays on your DOPE card. Plus fixes and improvements."
     },
     "windows": {
-      "app_version": "1.13.4",
+      "app_version": "1.14.0",
       "app_download_file": "Loadscope-Setup.exe",
-      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.13.4/Loadscope-Setup.exe",
-      "app_release_notes": "v1.13.4 - The Measure Target screen now walks you through it, the home screen tiles render in the right font, and moving your result badges no longer saves every target as the same picture. Plus fixes and improvements."
+      "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.14.0/Loadscope-Setup.exe",
+      "app_release_notes": "v1.14.0 - Type in what you actually dialed at the range, and it stays on your DOPE card. Plus fixes and improvements."
     }
   }
 }
