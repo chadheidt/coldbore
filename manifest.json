@@ -1,22 +1,22 @@
 {
- "app_version": "1.14.3",
+ "app_version": "1.15.0",
  "app_download_endpoint": "https://api.loadscope.app/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.14.3 - Berger bullets now use Berger's own published lengths, so stability and spin drift are measured instead of estimated. Plus fixes and improvements.",
+ "app_release_notes": "v1.15.0 - Ladders can now run from your highest charge down to your lowest, on powder, seating depth and barrel tuner tests. Print Ladder Sheet, under Tools, gives you a one-page range sheet of your planned charges. Newer Garmin Xero files import again. Plus fixes and improvements.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.14.3",
+   "app_version": "1.15.0",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.14.3 - Berger bullets now use Berger's own published lengths, so stability and spin drift are measured instead of estimated. Plus fixes and improvements."
+   "app_release_notes": "v1.15.0 - Ladders can now run from your highest charge down to your lowest, on powder, seating depth and barrel tuner tests. Print Ladder Sheet, under Tools, gives you a one-page range sheet of your planned charges. Newer Garmin Xero files import again. Plus fixes and improvements."
   },
   "mac_arm64": {
-   "app_version": "1.14.3",
+   "app_version": "1.15.0",
    "app_download_file": "Loadscope-arm64.zip",
-   "app_release_notes": "v1.14.3 - Berger bullets now use Berger's own published lengths, so stability and spin drift are measured instead of estimated. Plus fixes and improvements."
+   "app_release_notes": "v1.15.0 - Ladders can now run from your highest charge down to your lowest, on powder, seating depth and barrel tuner tests. Print Ladder Sheet, under Tools, gives you a one-page range sheet of your planned charges. Newer Garmin Xero files import again. Plus fixes and improvements."
   },
   "windows": {
    "app_version": "1.14.3",

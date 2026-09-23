@@ -132,10 +132,10 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p class="lede">Plug your chronograph in, or drop its export file here, and click Run. With a load already set up, there is no prep at all.</p>
 
       <h3>Start a new load first</h3>
-      <p>Click <span class="btn">Create New Load</span> in the sidebar, enter your ladder once (start charge, step, number of charges), and shoot it in order — lowest charge to highest. Then import your chronograph data &mdash; and your target app's export if you use one &mdash; and click <span class="btn">Run Import</span>. (No target app? <a href="#measure">Measure your target groups</a> from a photo instead.) Loadscope matches each string to the right charge by shot order and time. See <a href="#newladder">Create New Load</a> for the full walkthrough.</p>
+      <p>Click <span class="btn">Create New Load</span> in the sidebar, enter your ladder once (start charge, step, number of charges), and shoot it in order — lowest charge to highest (or highest to lowest, if you set the plan to High &rarr; Low). Then import your chronograph data &mdash; and your target app's export if you use one &mdash; and click <span class="btn">Run Import</span>. (No target app? <a href="#measure">Measure your target groups</a> from a photo instead.) Loadscope matches each string to the right charge by shot order and time. See <a href="#newladder">Create New Load</a> for the full walkthrough.</p>
 
       <h3>Straight off a Garmin Xero (the easy way)</h3>
-      <p>Plug the Xero into your computer with its USB cable. Loadscope notices it and shows a banner at the top of the Import Data page &mdash; <i>&ldquo;Garmin Xero connected &mdash; 12 sessions on it.&rdquo;</i> &mdash; with a <span class="btn">Choose your sessions &rarr;</span> button. No ShotView, no exporting one session at a time.</p>
+      <p>Plug the Xero into your computer with the USB cable that came with it &mdash; a charge-only cable has no data wires, so the Xero powers up and nothing ever appears. Loadscope notices it and shows a banner at the top of the Import Data page &mdash; <i>&ldquo;Garmin Xero connected &mdash; 12 sessions on it.&rdquo;</i> &mdash; with a <span class="btn">Choose your sessions &rarr;</span> button. No ShotView, no exporting one session at a time.</p>
       <p>Your Xero holds up to 50 sessions &mdash; usually several range days &mdash; so Loadscope asks which ones belong to <i>this</i> ladder. It lists them by time, shot count, average speed and SD, grouped by range day, and pre-selects the block that is most likely your ladder &mdash; check the selection, adjust if you shot two ladders that day, and confirm. Loadscope copies the sessions it needs; it never writes to or erases anything on the chronograph.</p>
       <div class="note"><b>You do not need the cable every time.</b> Plugging in is the fastest way, but the ShotView route works exactly as it always has &mdash; open a session in the ShotView app on your phone, share it out as a CSV (or several at once as .xlsx), and import that file the normal way below. Both paths produce the same result and score identically. Use whichever you have with you.</div>
 
@@ -162,7 +162,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <h3>How it works</h3>
       <ul>
         <li><b>Bring in your target groups.</b> Two ways: tap <span class="btn">Import from phone</span> to pull groups you measured on the <a href="#companion">Loadscope Ballistics</a> app straight off your phone over Wi-Fi (paired to your charges in order) &mdash; or <span class="btn">Choose target photos</span> to measure on the desktop. For desktop measuring, pick a photo for each charge, or one photo of a whole sheet with a bull per charge, with a known reference in frame (a ruler, or a 1" grid).</li>
-        <li><b>Set the scale.</b> Drag a line across something a known distance apart &mdash; a ruler, or a 1" grid square &mdash; then click <span class="btn">Set length</span> and type how far it really is. Measure in <b>inches, MOA or mil</b> &mdash; pick whichever your target is printed in, and Loadscope converts the rest. Let off early? Just drag again before you confirm.</li>
+        <li><b>Set the scale.</b> Drag a line across something a known distance apart &mdash; a ruler, or a 1" grid square &mdash; then click <span class="btn">Set length</span> and type how far it really is. Measure in <b>inches, mm, MOA or mil</b> &mdash; pick whichever your target is printed in, and Loadscope converts the rest. Let off early? Just drag again before you confirm.</li>
         <li><b>Mark your aim, then tap each shot.</b> Loadscope does the geometry as you go.</li>
         <li><b>Add a bull for each charge.</b> Shooting a whole ladder on one target sheet? Click <span class="btn">+ Add group</span> to drop another bull on the same photo; each bull is numbered and keeps its own charge or seating depth, labeled right on the target and editable. <span class="btn">Remove group</span> takes one back off.</li>
         <li><b>Pick the ladder kind.</b> A <b>Powder / Seating / Barrel tuner</b> choice sets whether each bull is a charge (grains), a seating depth (CBTO) or a tuner setting, and any caliber can be typed in if it's not in the list. For seating, a jam reads back plainly: positive is <b>jump</b> off the lands, negative is <b>jam</b> into them, zero is <b>touching</b>.</li>
@@ -261,6 +261,8 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <ul>
         <li>Confirm <b>Phone Sync</b> is ON on the computer (the sidebar button, or <b>Support &rarr; Phone Sync</b>).</li>
         <li>Confirm both devices are on the <b>same Wi-Fi</b>.</li>
+        <li><b>On the iPhone or iPad, allow Local Network.</b> Go to <b>Settings &rarr; Privacy &amp; Security &rarr; Local Network</b> and make sure <b>Loadscope Ballistics</b> is turned on. If it is off, the phone can&rsquo;t find the computer or reach it, even by address.</li>
+        <li><b>On Windows, allow Loadscope through the firewall.</b> The first time you turn Phone Sync on, Windows asks whether to allow Loadscope on public and private networks &mdash; click <b>Allow</b>. If it was cancelled, the phone can&rsquo;t reach the computer. To fix it, open <b>Windows Defender Firewall &rarr; Allow an app through Windows Defender Firewall</b>, find Loadscope, and tick both <b>Private</b> and <b>Public</b>. Still can&rsquo;t connect? Search the Start menu for <b>Windows Defender Firewall with Advanced Security</b>, click <b>Inbound Rules</b>, and delete any Loadscope rule with a red circle, then turn Phone Sync off and back on.</li>
         <li><b>Same license key on both.</b> The phone and the computer must use the <b>same</b> Loadscope license key. If you see &ldquo;that computer didn&rsquo;t accept your license key,&rdquo; make them match: on the phone&rsquo;s Sync screen tap <span class="btn">Change license key</span>, or on the computer use <b>Support &rarr; License Key &rarr; Change Key</b>. (Your one license activates on up to two computers, so use that same key everywhere.)</li>
         <li><b>Connect by address.</b> Some networks (office or guest Wi-Fi) block automatic discovery. When you turn Phone Sync on, the computer shows an address like <code>192.168.1.42:53740</code>. On the phone&rsquo;s Sync screen, tap <span class="btn">Connect by address</span> and type it in.</li>
       </ul>
@@ -273,9 +275,9 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <ol>
         <li><b>Rifle &amp; setup</b> — pick a saved rifle from the dropdown, or fill it in once.</li>
         <li><b>Plan your ladder</b> — enter your starting charge, the step between charges, and how many charges (or a seating-depth test). Loadscope lays out every load for you.</li>
-        <li><b>Shoot &amp; import</b> — shoot the ladder from the lowest charge to the highest, in order, then import your chronograph data and measure your target groups (or import a target app's export), and click <span class="btn">Run Import</span>. Loadscope matches each string to the right charge by shot order and time.</li>
+        <li><b>Shoot &amp; import</b> — shoot the ladder in order (lowest charge to highest, or highest to lowest if you set the plan to High &rarr; Low), then import your chronograph data and measure your target groups (or import a target app's export), and click <span class="btn">Run Import</span>. Loadscope matches each string to the right charge by shot order and time.</li>
       </ol>
-      <p>Each new load auto-names itself from your cartridge and bullet (like <b>6.5 Creedmoor 140 ELD-M</b>) &mdash; keep it or rename it. Loadscope keeps <b>one active load</b> at a time: starting a fresh load files your current one away and readies a clean workbook, and a <b>Working on:</b> bar across the top always shows which load you're in. Nothing is deleted &mdash; reopen any earlier load from <span class="btn">Past Loads</span> on the Home screen. If you have an unsaved winner, Loadscope warns you first.</p>
+      <p>Each new load auto-names itself from your cartridge and bullet (like <b>6.5 Creedmoor 140 ELD-M</b>) &mdash; keep it or rename it. Loadscope keeps <b>one active load</b> at a time: starting a fresh load files your current one away and readies a clean workbook, and a <b>Working on:</b> bar across the top always shows which load you're in. Nothing is deleted &mdash; reopen any earlier load with the <span class="btn">Past Loads…</span> button on the Import Data screen (next to the <b>Working on:</b> name at the top) or on the Loads tab in Libraries. (Libraries lists only loads you saved with <span class="btn">Save this load to Library</span>; Past Loads lists every load you have filed away.) If you have an unsaved winner, Loadscope warns you first.</p>
       <p><b>Reworking a saved load?</b> Use <span class="btn">Rework a Saved Load</span> on the Home screen. It opens Create New Load with that load's rifle and setup already filled in — just enter the new charges and import. Your original is kept.</p>
     </section>
 
@@ -284,15 +286,22 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p class="lede">Everything else lives up here.</p>
       <h3>Settings</h3>
       <p>App preferences &mdash; including whether Loadscope checks for updates when it launches, and <b>Change&hellip;</b> to point Loadscope at a different loads folder (it saves and restarts; nothing is moved or deleted).</p>
-      <h3>Workbook &amp; Folders</h3>
-      <p>Open your workbook in Excel (optional — the app does not need it), and manage your project folder and import folders.</p>
+      <p><b>Units</b> &mdash; pick <b>Imperial</b> or <b>Metric</b> in one click, or set each measurement on its own: velocity (fps or m/s), distance (yards or metres), group size (inches or mm), cartridge lengths such as CBTO, OAL and jump (inches or mm), sight height, temperature, pressure, altitude and wind. Mix them however you like &mdash; the setting then reads <b>Custom</b>. Powder and bullet weights stay in grains. Changing units only changes what you see and type: your saved loads, scores and workbook are not touched, and the Excel workbook itself stays in inches, yards and fps. A brand-new install asks once whether you shoot imperial or metric.</p>
+      <h3>Tools</h3>
+      <ul>
+        <li><b>Plan a Ladder</b> — enter or change the ladder for the load you're working on.</li>
+        <li><b>Print Ladder Sheet</b> — a one-page range sheet listing your planned charges (or seating depths) in the order you'll shoot them, with blank spaces to write in speeds and conditions. Powder and seating-depth ladders.</li>
+        <li><b>Phone Sync</b> — turn on syncing with the Loadscope Ballistics phone app over Wi-Fi.</li>
+        <li><b>Open Workbook in Excel</b> / <b>Print Workbook</b> — optional; the app does not need Excel.</li>
+      </ul>
+      <h3>Folders</h3>
+      <p>Open your project folder, your import folders and your backups.</p>
       <h3>Support</h3>
       <ul>
         <li><b>User Guide</b> — the illustrated, step-by-step guide. This
             document is the searchable version of the same material.</li>
         <li><b>Frequently Asked Questions</b> — common questions answered.</li>
         <li><b>License Key</b> — view, copy, or <b>change</b> your license (use the same key on the phone and every computer so they can sync).</li>
-        <li><b>Phone Sync</b> — turn on syncing with the Loadscope Ballistics phone app over Wi-Fi.</li>
         <li><b>What's New</b> — what changed in recent versions.</li>
         <li><b>Contact Support</b> — email us at support@loadscope.app.</li>
       </ul>
@@ -344,9 +353,9 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <h2>Troubleshooting</h2>
       <p class="lede">If something is not working.</p>
       <ul>
-        <li><b>An import did nothing</b> — check the files are actually in your import folders, and that you shot the ladder in order, lowest charge to highest. Loadscope matches each string to its charge by shot order and time; you never have to name or label a file.</li>
+        <li><b>An import did nothing</b> — check the files are actually in your import folders, and that you shot the ladder in the order you planned it (lowest charge to highest, unless you set it to High &rarr; Low). Loadscope matches each string to its charge by shot order and time; you never have to name or label a file.</li>
         <li><b>Results look empty</b> — you need at least the minimum data; make sure a chronograph file imported and you have at least one group (measured or imported).</li>
-        <li><b>The phone will not find the computer</b> — confirm <b>Phone Sync</b> is on and both devices are on the same Wi-Fi.</li>
+        <li><b>The phone will not find the computer</b> — confirm <b>Phone Sync</b> is on and both devices are on the same Wi-Fi. On the phone, make sure <b>Local Network</b> is on for Loadscope Ballistics, and on Windows, that Windows Firewall is not blocking Loadscope (see <a href="#sync">If the phone can&rsquo;t find the computer</a>).</li>
         <li><b>Still stuck</b> — email <a href="mailto:support@loadscope.app">support@loadscope.app</a> and we will help.</li>
       </ul>
     </section>
