@@ -104,6 +104,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
         <li><span class="btn">DOPE Card</span> — a printable range card.</li>
         <li><span class="btn">Recipe Card</span> — a printable sheet of the load itself: components, charge, seating.</li>
         <li><span class="btn">Libraries</span> — your saved Loads, the Bullets reference, your Rifles, and Barrels round counts. Delete anything you no longer want.</li>
+        <li><span class="btn">Add a Past Load</span> — type in a load you worked up before Loadscope, so it has a Recipe Card and a DOPE Card in your Library.</li>
         <li><span class="btn">Compare Loads</span> — pick saved loads from the same rifle and see which powder and charge shot best.</li>
         <li><span class="btn">❓ User Guide</span> — pinned at the bottom; opens the illustrated guide.</li>
         <li><span class="btn">Create New Load</span> — the guided way to start a load: plan a ladder, shoot it in order, import your data (also at the bottom).</li>
@@ -121,6 +122,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
         <li><b>Bullet</b> — pick from the library (its BC fills in) or type a custom bullet and BC.</li>
         <li><b>Powder + test charges</b> — the powder and the charge weights you loaded for the ladder.</li>
         <li><b>Primer / Brass</b> — for your records and the recipe card.</li>
+        <li><b>Zero distance</b> — the range your scope is zeroed at (under Rifle). The DOPE Card and Range &amp; DOPE work from it, and it travels with the rifle to your next load. <b>Test distance</b> (under Test Session) is a different number: how far you shot this ladder.</li>
         <li><b>Round count</b> — set or add to this barrel's count. It is shared with the Barrels library and the phone companion.</li>
       </ul>
       <div class="note">You only set this up once per load. After that you just import range data.</div>
@@ -218,7 +220,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p class="lede">Which powder and charge actually shot best?</p>
       <p>Open <span class="btn">Compare Loads</span> from the sidebar, select two or more loads you've saved for the <b>same rifle</b>, and click <span class="btn">Compare selected</span>. Loadscope scores each load on <b>velocity SD</b>, <b>mean radius</b>, and <b>vertical SD</b>, then names the winner in plain language.</p>
       <p>It is confidence-aware: when the top two loads are within the measurement noise, it says <b>too close to call &mdash; shoot more</b> instead of crowning a false winner. This is the honest way to answer "which powder is best in this rifle and bullet" from your real measured results &mdash; comparing loads that differ by powder, bullet, or charge.</p>
-      <div class="note">Compare only loads from the same rifle. Comparing across different rifles is apples-to-oranges, so Loadscope warns you and won't score it.</div>
+      <div class="note">Compare only loads from the same rifle. Comparing across different rifles is apples-to-oranges, so Loadscope warns you and won't score it. Loads you typed in with <a href="#pastload">Add a Past Load</a> or brought over from your phone are listed but not scored &mdash; Compare ranks only groups Loadscope measured.</div>
     </section>
 
     <section class="doc" id="libraries">
@@ -226,13 +228,20 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p class="lede">Loads, Bullets, Rifles, and Barrels — in one place.</p>
       <p>The Libraries page has four tabs. Each one has a <span class="btn">Delete</span> button so you can clear out anything you no longer want.</p>
       <h3>Loads</h3>
-      <p>Your whole library of saved loads — every load you crowned a winner, gathered from every workbook into one list. Active loads plus past ones: loads you have archived, or that came up from your phone, show here too, marked <b>Archived</b> or <b>New (phone)</b> and dimmed so you can tell them apart at a glance. Type in the filter box to find a load by name, rifle, or powder. Pick a load and use <span class="btn">View Recipe Card</span> or <span class="btn">View DOPE Card</span> for its recipe or dial card; right-click a row to rename it, to open it, or to choose <b>Enter your actual dials…</b> — which reopens that load on Range &amp; DOPE so you can type what you actually came up at each range, even on a load you already finished. Use <span class="btn">Delete load</span> to remove one. <span class="btn">Print library</span> prints the whole table as a bench reference. The list refreshes on its own after you import loads from your phone. A load that came up from your phone keeps the name you gave it there (or its recipe, if you left that blank).</p>
+      <p>Your whole library of saved loads — every load you crowned a winner, gathered from every workbook into one list. Active loads plus past ones: loads you have archived, or that came up from your phone, show here too, marked <b>Archived</b>, <b>New (phone)</b> or <b>By hand</b> and dimmed so you can tell them apart at a glance. Type in the filter box to find a load by name, rifle, or powder. Pick a load and use <span class="btn">View Recipe Card</span> or <span class="btn">View DOPE Card</span> for its recipe or dial card; right-click a row to rename it, to open it, or to choose <b>Enter your actual dials…</b> — which reopens that load on Range &amp; DOPE so you can type what you actually came up at each range, even on a load you already finished. Use <span class="btn">Delete load</span> to remove one. <span class="btn">Print library</span> prints the whole table as a bench reference. The list refreshes on its own after you import loads from your phone. A load that came up from your phone keeps the name you gave it there (or its recipe, if you left that blank).</p>
       <h3>Bullets</h3>
       <p>The reference library of bullets Loadscope can predict DOPE for, with each one's published BC and source. Search by maker, weight, or name. If yours is not listed, you can always type a custom BC in Rifle &amp; Setup.</p>
       <h3>Rifles</h3>
       <p>Every rifle setup you've saved. Building a rifle in <a href="#newladder">Create New Load</a> files it here automatically, so you can reopen it to start a new load anytime. You can also right-click any saved rifle to start a new load with it, see or compare its loads, print a DOPE card, or duplicate, rename, or delete it. Delete a rifle you've sold or retired.</p>
       <h3>Barrels</h3>
       <p>Every barrel with a saved round count, with an editable count. Editing it here updates the same number you see in Rifle &amp; Setup right away; the phone picks it up the next time you sync. Delete a barrel you no longer shoot.</p>
+    </section>
+
+    <section class="doc" id="pastload">
+      <h2>Add a Past Load</h2>
+      <p class="lede">The loads you worked up before Loadscope.</p>
+      <p>Open <span class="btn">Add a Past Load</span> from the sidebar and type in a load you already know. Pick a saved rifle, or type the rifle, cartridge, barrel and optic. Then the bullet, powder, charge, primer, brass and seating depth. If you have them, add the muzzle velocity, SD, extreme spread and group size. Click <span class="btn">Save to Library</span>, or <span class="btn">Save &amp; add another</span> to keep the rifle filled in and type the next one.</p>
+      <p>The load goes into <a href="#libraries">Libraries</a> &rsaquo; Loads marked <b>By hand</b>, with its own <span class="btn">View Recipe Card</span> and <span class="btn">View DOPE Card</span>. The DOPE Card needs a muzzle velocity and a BC &mdash; from the bullet list, or typed in from the box if your bullet isn't listed. The load you're working on isn't touched.</p>
     </section>
 
     <section class="doc" id="companion">
@@ -279,6 +288,18 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       </ol>
       <p>Each new load auto-names itself from your cartridge and bullet (like <b>6.5 Creedmoor 140 ELD-M</b>) &mdash; keep it or rename it. Loadscope keeps <b>one active load</b> at a time: starting a fresh load files your current one away and readies a clean workbook, and a <b>Working on:</b> bar across the top always shows which load you're in. Nothing is deleted &mdash; reopen any earlier load with the <span class="btn">Past Loads…</span> button on the Import Data screen (next to the <b>Working on:</b> name at the top) or on the Loads tab in Libraries. (Libraries lists only loads you saved with <span class="btn">Save this load to Library</span>; Past Loads lists every load you have filed away.) To remove a filed-away load, pick it in Past Loads and click <span class="btn">Delete</span> &mdash; it goes to the Trash, so you can still get it back. If you have an unsaved winner, Loadscope warns you first.</p>
       <p><b>Reworking a saved load?</b> Use <span class="btn">Rework a Saved Load</span> on the Home screen. It opens Create New Load with that load's rifle and setup already filled in — just enter the new charges and import. Your original is kept.</p>
+    </section>
+
+    <section class="doc" id="factory">
+      <h2>Factory ammo</h2>
+      <p class="lede">Test a box of factory ammo, and compare boxes against each other or against your handloads.</p>
+      <p>Start with <span class="btn">+ Create New Load</span> (or open <a href="#setup">Rifle &amp; Setup</a>) and set the test to <b>Factory ammo</b>. Type what's on the box in the <b>Ammo</b> box, like <b>Hornady 140gr ELD Match</b> &mdash; that name is what marks the load as factory ammo. The lot number and BC are optional; with a BC the load gets its own DOPE Card. Click <span class="btn">Save this ammo</span>. There's no ladder to plan, because nothing is varied.</p>
+      <p>A box of ammo is <b>one group and one string</b>. Shoot a group over your chronograph, then bring both in:</p>
+      <ul>
+        <li><b>Target</b> &mdash; measure the photo in <a href="#measure">Measure Target</a>, or drop your target app's file on <a href="#import">Import Data</a>.</li>
+        <li><b>Velocities</b> &mdash; drop your chronograph file on Import Data. If it holds several sessions, pick the one you shot with this ammo. No file? Click <span class="btn">Enter data by hand…</span> and type the speeds.</li>
+      </ul>
+      <p><a href="#results">Results</a> shows the ammo's average velocity, SD, group size, mean radius and vertical SD. Save it to the Library, then use <a href="#compare">Compare Loads</a> to put boxes side by side, or a box against your handloads. For a second box or lot, start a new load, so each box keeps its own numbers.</p>
     </section>
 
     <section class="doc" id="menus">
