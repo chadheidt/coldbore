@@ -1414,7 +1414,9 @@ header.hero .line2 {
           <a href="/learn/how-many-shots-per-charge.html">How many shots per charge?</a><br>
           <a href="/learn/standard-deviation-load-development.html">Standard deviation &amp; extreme spread</a><br>
           <a href="/learn/mean-radius-vs-group-size.html">Mean radius vs group size</a><br>
-          <a href="/learn/how-loadscope-scores-a-load.html">How Loadscope scores a load</a>
+          <a href="/learn/how-loadscope-scores-a-load.html">How Loadscope scores a load</a><br>
+          <a href="/learn/new-chronograph-first-ladder.html">New chronograph? Your first load ladder</a><br>
+          <a href="/learn/score-a-barrel-tuner-test.html">How to score a barrel tuner test</a>
         </p>
       </div>
       <div>
@@ -1425,7 +1427,9 @@ header.hero .line2 {
           <a href="/learn/get-data-off-magnetospeed.html">Get data off a MagnetoSpeed</a><br>
           <a href="/learn/garmin-xero-data.html">Working with Garmin Xero data</a><br>
           <a href="/learn/how-to-read-a-chronograph.html">How to read a chronograph</a><br>
-          <a href="/learn/measure-groups-from-a-photo.html">Measure groups from a photo</a>
+          <a href="/learn/measure-groups-from-a-photo.html">Measure groups from a photo</a><br>
+          <a href="/learn/garmin-xero-what-picks-the-charge.html">Garmin Xero data: what picks the charge?</a><br>
+          <a href="/learn/shotmarker-strings-at-home.html">Use your ShotMarker strings at home</a>
         </p>
       </div>
       <div>
@@ -1436,6 +1440,8 @@ header.hero .line2 {
           <a href="/learn/find-your-best-rifle-load.html">Finding your best rifle load</a><br>
           <a href="/learn/spreadsheet-vs-software-load-development.html">Spreadsheet vs software</a><br>
           <a href="/learn/magnetospeed-vs-garmin-xero-vs-labradar.html">MagnetoSpeed vs Xero vs LabRadar</a><br>
+          <a href="/learn/loadscope-vs-gordons-reloading-tool.html">Gordon's Reloading Tool is gone: what now?</a><br>
+          <a href="/learn/jbm-ballistics-shut-down-alternatives.html">JBM Ballistics is gone: what to use instead</a><br>
           <a href="/learn/">All guides &rarr;</a>
         </p>
       </div>
@@ -1901,8 +1907,19 @@ function showAfterDownload(code) {
   const w = document.getElementById("installStepsWin");
   if (m) m.style.display = isMac ? "block" : "none";
   if (w) w.style.display = isMac ? "none" : "block";
+  // 🔴 THE KEY NEVER GOES IN AN <a href> (2026-10-08). Google Analytics records
+  // the address of every link a visitor clicks that leads off the site, and
+  // "loadscope://activate?key=..." is such an address -- 26 customers' licence
+  // keys had landed in GA4 that way. The link keeps href="#"; the click itself
+  // hands the key to the app. Same button, same result, nothing to record.
   const link = document.getElementById("activateLink");
-  if (link) link.href = "loadscope://activate?key=" + encodeURIComponent(norm);
+  if (link) {
+    link.setAttribute("href", "#");
+    link.onclick = function (ev) {
+      ev.preventDefault();
+      window.location.href = "loadscope://activate?key=" + encodeURIComponent(norm);
+    };
+  }
   const keyText = document.getElementById("activateKeyText");
   if (keyText) keyText.textContent = norm;
   document.getElementById("panelAfterDownload").classList.add("active");
