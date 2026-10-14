@@ -19,10 +19,10 @@
    "app_release_notes": "v1.16.0 - A cleaner, simpler layout that is easier to navigate. Fixes dials typed as clicks on Range & DOPE saving the wrong number. Powder charges now keep hundredths. Plus fixes and improvements."
   },
   "windows": {
-   "app_version": "1.15.2",
+   "app_version": "1.16.0",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.15.2/Loadscope-Setup.exe",
-   "app_release_notes": "v1.15.2 - Add a Past Load, and a Zero distance box your DOPE Card works from. Plus fixes and improvements."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.16.0/Loadscope-Setup.exe",
+   "app_release_notes": "v1.16.0 - A cleaner, simpler layout that is easier to navigate. Fixes dials typed as clicks on Range & DOPE saving the wrong number. Powder charges now keep hundredths. Plus fixes and improvements."
   }
  }
 }
