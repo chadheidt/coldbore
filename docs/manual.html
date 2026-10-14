@@ -96,7 +96,8 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p>The buttons on the left move you through the app in order:</p>
       <ul>
         <li><span class="btn">Home</span> — where you land, with your current load and what to do next.</li>
-        <li><span class="btn">Rifle &amp; Setup</span> — your rifle, cartridge, components, and barrel.</li>
+        <li><span class="btn">Rifle &amp; Setup</span> — the test you are running, your rifle, cartridge, components, and barrel.</li>
+        <li><span class="btn">Plan Your Ladder</span> — opens the ladder planner for the load you're on: the charges, seating depths or tuner settings you are going to shoot.</li>
         <li><span class="btn">Measure Target</span> — measure your target groups from a photo, right in the app. Scores in like an import.</li>
         <li><span class="btn">Import Data</span> — import your chronograph data (and a target app's export, if you use one) and run the import.</li>
         <li><span class="btn">Results</span> — the scored ladder and your winning load.</li>
@@ -115,6 +116,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
     <section class="doc" id="setup">
       <h2>Rifle &amp; Setup</h2>
       <p class="lede">Tell Loadscope about your rifle and load — once.</p>
+      <p>The first thing it asks is <b>What test are you running?</b> &mdash; powder ladder, seating depth, barrel tuner or factory ammo. Pick that first: it decides which boxes the rest of the page shows, and the other pages follow it.</p>
       <p>This page captures the constants for this load: the cartridge, the bullet (with its ballistic coefficient), the powder and your test charges, primer, brass, the rifle and barrel, and your optic. Loadscope remembers what you typed before and offers it as a dropdown next time.</p>
       <h3>Key fields</h3>
       <ul>
@@ -163,12 +165,12 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p>The <span class="btn">Measure Target</span> page measures your target groups from a photo, right in Loadscope &mdash; no separate target app required (though you can still import one if you use it). You load a photo of your target, mark your shots, and Loadscope works out the group &mdash; group size, <b>mean radius</b>, vertical &mdash; and how far it sits off your aim. Each measured target group flows through the <b>same scoring path</b> as a BallisticX import, so your Results look identical either way.</p>
       <h3>How it works</h3>
       <ul>
-        <li><b>Bring in your target groups.</b> Two ways: tap <span class="btn">Import from phone</span> to pull groups you measured on the <a href="#companion">Loadscope Ballistics</a> app straight off your phone over Wi-Fi (paired to your charges in order) &mdash; or <span class="btn">Choose target photos</span> to measure on the desktop. For desktop measuring, pick a photo for each charge, or one photo of a whole sheet with a bull per charge, with a known reference in frame (a ruler, or a 1" grid).</li>
+        <li><b>Bring in your target groups.</b> Two ways: tap <span class="btn">Import from phone</span> to pull groups you measured on the <a href="#companion">Loadscope Ballistics</a> app straight off your phone over Wi-Fi (paired to your charges in order) &mdash; or <span class="btn">Choose target photos</span> to measure on the desktop. For desktop measuring, pick a photo for each charge, or one photo of a whole sheet with a bull per charge, with a known reference in frame (a ruler, or a 1" grid). Until a photo is loaded the page shows only these buttons; the measuring tools appear once one is in.</li>
         <li><b>Set the scale.</b> Drag a line across something a known distance apart &mdash; a ruler, or a 1" grid square &mdash; then click <span class="btn">Set length</span> and type how far it really is. Measure in <b>inches, mm, MOA or mil</b> &mdash; pick whichever your target is printed in, and Loadscope converts the rest. Let off early? Just drag again before you confirm.</li>
         <li><b>Mark your aim, then tap each shot.</b> Loadscope does the geometry as you go.</li>
         <li><b>Add a bull for each charge.</b> Shooting a whole ladder on one target sheet? Click <span class="btn">+ Add group</span> to drop another bull on the same photo; each bull is numbered and keeps its own charge or seating depth, labeled right on the target and editable. <span class="btn">Remove group</span> takes one back off.</li>
-        <li><b>Pick the ladder kind.</b> A <b>Powder / Seating / Barrel tuner</b> choice sets whether each bull is a charge (grains), a seating depth (CBTO) or a tuner setting, and any caliber can be typed in if it's not in the list. For seating, a jam reads back plainly: positive is <b>jump</b> off the lands, negative is <b>jam</b> into them, zero is <b>touching</b>.</li>
-        <li><b>Save the target.</b> Each saved bull lands in your scored Results under its charge; your best load is named on the Results page.</li>
+        <li><b>The test comes from Rifle &amp; Setup.</b> Whether each bull is a charge (grains), a seating depth (CBTO) or a tuner setting follows the test you picked there, and so do the test distance and the bullet size the holes are drawn at. The line above Results shows all three, with a link to change them. A target will not save until a test distance is set. For seating, a jam reads back plainly: positive is <b>jump</b> off the lands, negative is <b>jam</b> into them, zero is <b>touching</b>.</li>
+        <li><b>Save the target.</b> When the last shot is marked, the bar above the photo tells you to press <span class="btn">Save this target</span> &mdash; nothing is saved until you do. Each saved bull lands in your scored Results under its charge; your best load is named on the Results page.</li>
       </ul>
       <div class="note">Measuring a whole ladder on one target sheet? Use <span class="btn">+ Add group</span> for each bull and tell Loadscope which charge it is &mdash; no handwriting to read. The same works for a seating-depth ladder, one bull per depth.</div>
       <p>Prefer to measure on your phone in the field? The <a href="#companion">Loadscope Ballistics</a> companion app has the same group-measuring tool, and there's a free, standalone <b>Loadscope Measure</b> app if all you want is a group number.</p>
@@ -203,7 +205,8 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
         <li><b>Muzzle velocity</b> — measured from your chronograph data, or enter it.</li>
         <li><b>Bullet / BC / drag model</b> — pulled from your setup.</li>
         <li><b>Zero range and sight height</b> — your rifle's setup.</li>
-        <li><b>Conditions</b> — temperature, pressure, humidity, and altitude (or density altitude).</li>
+        <li><b>Conditions</b> — temperature, and either the altitude where you shot or, if you carry a weather meter, its station pressure. The page opens on altitude and remembers the one you use.</li>
+        <li><b>View</b> — <b>Basic</b> shows elevation, clicks, wind and time of flight. <b>Technical</b> adds spin drift, Coriolis and lead, and a Latitude box for Coriolis.</li>
       </ul>
     </section>
 
@@ -280,13 +283,13 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
     <section class="doc" id="newladder">
       <h2>Create New Load</h2>
       <p class="lede">The guided way to start a load — plan a ladder, shoot it in order, import your data.</p>
-      <p>The <span class="btn">Create New Load</span> button (bottom of the sidebar) walks you through three steps:</p>
+      <p>The <span class="btn">Create New Load</span> button (bottom of the sidebar) walks you through two set-up steps, and then you shoot and import:</p>
       <ol>
         <li><b>Rifle &amp; setup</b> — pick a saved rifle from the dropdown, or fill it in once.</li>
         <li><b>Plan your ladder</b> — enter your starting charge, the step between charges, and how many charges (or a seating-depth test). Loadscope lays out every load for you.</li>
         <li><b>Shoot &amp; import</b> — shoot the ladder in order (lowest charge to highest, or highest to lowest if you set the plan to High &rarr; Low), then import your chronograph data and measure your target groups (or import a target app's export), and click <span class="btn">Run Import</span>. Loadscope matches each string to the right charge by shot order and time.</li>
       </ol>
-      <p>Each new load auto-names itself from your cartridge and bullet (like <b>6.5 Creedmoor 140 ELD-M</b>) &mdash; keep it or rename it. Loadscope keeps <b>one active load</b> at a time: starting a fresh load files your current one away and readies a clean workbook, and a <b>Working on:</b> bar across the top always shows which load you're in. Nothing is deleted &mdash; reopen any earlier load with the <span class="btn">Past Loads…</span> button on the Import Data screen (next to the <b>Working on:</b> name at the top) or on the Loads tab in Libraries. (Libraries lists only loads you saved with <span class="btn">Save this load to Library</span>; Past Loads lists every load you have filed away.) To remove a filed-away load, pick it in Past Loads and click <span class="btn">Delete</span> &mdash; it goes to the Trash, so you can still get it back. If you have an unsaved winner, Loadscope warns you first.</p>
+      <p>Each new load auto-names itself from your cartridge and bullet (like <b>6.5 Creedmoor 140 ELD-M</b>) &mdash; keep it or rename it. Loadscope keeps <b>one active load</b> at a time: starting a fresh load files your current one away and readies a clean workbook, and the window's title bar and the Home page always show which load you're in. Nothing is deleted &mdash; reopen any earlier load with the <span class="btn">Past Loads…</span> button on the Loads tab in Libraries. (Libraries lists only loads you saved with <span class="btn">Save this load to Library</span>; Past Loads lists every load you have filed away.) To remove a filed-away load, pick it in Past Loads and click <span class="btn">Delete</span> &mdash; it goes to the Trash, so you can still get it back. If you have an unsaved winner, Loadscope warns you first.</p>
       <p><b>Reworking a saved load?</b> Use <span class="btn">Rework a Saved Load</span> on the Home screen. It opens Create New Load with that load's rifle and setup already filled in — just enter the new charges and import. Your original is kept.</p>
     </section>
 
