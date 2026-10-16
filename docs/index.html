@@ -17,7 +17,7 @@
      to promised plugging the Xero in. Leads with plug-it-in now, and with
      best-load. Chad approved 2026-07-20. -->
 <meta property="og:description" content="Precision rifle load development for Mac and Windows. Plug your Garmin Xero in and Loadscope reads every session straight off it. Measure your groups in-app, and it names your best powder charge and seating depth.">
-<meta property="og:image" content="https://loadscope.app/assets/og-image.png?v=1">
+<meta property="og:image" content="https://loadscope.app/assets/og-image.png?v=2">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Loadscope - finds your best powder charge and seating depth, automatically. Mac and Windows.">
@@ -26,9 +26,8 @@
 <meta property="og:site_name" content="Loadscope">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Loadscope">
-<meta name="twitter:description" content="Precision rifle load development for Mac and Windows. Plug your Garmin Xero in — Loadscope reads every session off it, measures your groups, and names your best load. No exporting, no spreadsheets.">
-<meta name="twitter:image" content="https://loadscope.app/assets/og-image.png?v=1">
-<meta property="og:type" content="website">
+<meta name="twitter:description" content="Precision rifle load development for Mac and Windows. Plug your Garmin Xero in — Loadscope reads every session off it, measures your groups, and names your best load. No exporting, no spreadsheet wrangling.">
+<meta name="twitter:image" content="https://loadscope.app/assets/og-image.png?v=2">
 <style>
 :root {
   --orange: #d97706;
@@ -118,7 +117,7 @@ header.hero h1 {
   font-size: 44px;
   font-weight: 800;
   letter-spacing: -1px;
-  margin-bottom: 0;
+  margin-bottom: 12px;
   line-height: 1.1;
 }
 header.hero h1 .accent { color: var(--orange); }
@@ -204,6 +203,7 @@ header.hero .hero-windows-note strong { color: var(--text-dim); }
    already has its own bottom margin, so 48px stacked was reading as
    dead space. */
 header.hero .cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
+@media (max-width: 520px) { header.hero .cta-row .btn { width: 100%; max-width: 300px; box-sizing: border-box; text-align: center; } }
 header.hero .platform-note {
   margin-top: 20px;
   font-size: 14px;
@@ -252,6 +252,8 @@ section { padding: 30px 0; }
 section[id] { scroll-margin-top: 84px; }
 section h2 {
   font-size: 28px;
+  line-height: 1.2;
+  text-wrap: balance;
   font-weight: 700;
   letter-spacing: -0.5px;
   margin-bottom: 10px;
@@ -308,7 +310,7 @@ section .section-sub {
 }
 .steps {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
   margin-top: 22px;
 }
@@ -349,11 +351,13 @@ section .section-sub {
   color: var(--orange);
   font-weight: 600;
   font-size: 15px;
-  padding: 11px;
-  border: 1px solid var(--orange);
-  border-radius: 8px;
-  background: rgba(217, 119, 6, 0.10);
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg-mid);
 }
+.install-collapse summary::after { content: " \25BE"; }
+.install-collapse[open] summary::after { content: " \25B4"; }
 .install-collapse summary::-webkit-details-marker { display: none; }
 .install-collapse[open] summary { margin-bottom: 20px; }
 .video-modal {
@@ -442,9 +446,9 @@ footer p { margin-bottom: 8px; }
   background: var(--bg-mid);
   border: 1px solid var(--border);
   border-radius: 8px;
-  font-size: 11px;
+  font-size: 12.5px;
   line-height: 1.5;
-  color: var(--text-muted);
+  color: var(--text-dim);
   max-width: 760px;
   text-align: left;
 }
@@ -515,7 +519,7 @@ header.hero .line2 {
 #demo .section-sub { margin-bottom: 18px; }
 .demo-ctl { margin-top: 12px; }
 #ballistic .screenshot-wrap { max-width: 520px; }
-.screenshot-wrap.log-shot { max-width: 560px; }
+.screenshot-wrap.log-shot { max-width: 1000px; }
 .split { display: flex; align-items: center; gap: 44px; max-width: 1000px; margin: 0 auto; }
 .split .split-text { flex: 1 1 36%; }
 .split .split-text h2,
@@ -523,7 +527,7 @@ header.hero .line2 {
 .split .screenshot-wrap { flex: 1 1 64%; margin: 0; max-width: 580px; }
 .split.reverse { flex-direction: row-reverse; }
 @media (max-width: 760px) {
-  .split { flex-direction: column; gap: 20px; }
+  .split, .split.reverse { flex-direction: column; gap: 20px; }
   .split .split-text h2,
   .split .split-text .section-sub { text-align: center; }
 }
@@ -871,6 +875,7 @@ header.hero .line2 {
 .hero-steps .arrow { display: flex; align-items: center; color: var(--orange); font-size: 22px; font-weight: 700; transform: rotate(90deg); margin-left: 9px; }
 .hero-steps-tail {
   font-size: 20px;
+  line-height: 1.3;
   font-weight: 700;
   color: var(--orange);
   margin: 6px auto 0;
@@ -929,6 +934,10 @@ header.hero .line2 {
    3 + 2 (Chad 2026-06-23; grew to five when Compare loads was added
    2026-07-06). Scoped to #features so the 3-card Beta section, which reuses
    .features, keeps its own auto-fit layout. */
+#beta .features { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
+#beta .feature { flex: 1 1 280px; max-width: 320px; }
+footer .footer-links a { white-space: nowrap; }
+@media (max-width: 760px) { #companion .comp-cta { text-align: center !important; } }
 #features .features { grid-template-columns: repeat(3, 1fr); gap: 18px; }
 #features .feature { padding: 22px 20px; }
 @media (max-width: 880px) { #features .features { grid-template-columns: 1fr 1fr; } }
@@ -1007,11 +1016,11 @@ header.hero .line2 {
     </div>
     <div class="nav-links">
       <a href="#features">Features</a>
-      <a href="#install">Install</a>
-      <a href="#faq">FAQ</a>
-      <a href="learn/">Learn</a>
       <a href="#beta">Pricing</a>
-      <a href="#" class="btn" onclick="openDownloadModal(event)">Get Loadscope™</a>
+      <a href="#faq">FAQ</a>
+      <a href="#install">Install</a>
+      <a href="learn/">Learn</a>
+      <a href="#" class="btn" onclick="openDownloadModal(event)">Get Loadscope</a>
     </div>
   </div>
 </nav>
@@ -1027,30 +1036,29 @@ header.hero .line2 {
     <div class="hero-steps">
       <div class="hs"><span class="n">1</span><span class="t">Plan your ladder<span>powder, seating depth or tuner</span></span></div>
       <div class="arrow">&rarr;</div>
-      <div class="hs"><span class="n">2</span><span class="t">Shoot it in order<span>Loadscope matches them</span></span></div>
+      <div class="hs"><span class="n">2</span><span class="t">Shoot it in order<span>Loadscope matches each result to its load</span></span></div>
       <div class="arrow">&rarr;</div>
       <div class="hs"><span class="n">3</span><span class="t">Plug in &amp; measure<span>sessions off your chronograph + your target groups</span></span></div>
     </div>
-    <p class="hero-steps-tail">Loadscope does the rest.<span>Scored, ranked, and charted &mdash; your best load called out.</span></p>
+    <p class="hero-steps-tail">Loadscope scores every rung and names your best load.</p>
     <div class="cta-row">
-      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get Loadscope™</a>
+      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get Loadscope</a>
       <a href="#" class="btn btn-large btn-outline" onclick="openDemo(event)">Watch the walkthrough</a>
     </div>
-    <p class="beta-note"><strong>$79, one time</strong> &mdash; yours forever, free updates, no subscription. 30-day money back. Mac or Windows. Shoot metric? One switch in Settings.</p>
-    <div class="hero-companion-note" style="font-size:14px;color:var(--text-dim);margin-top:18px;">Plus <strong style="color:var(--text);">Loadscope Ballistics</strong> for iPhone &amp; iPad, included.</div>
-    <a class="hero-appstore" href="https://apps.apple.com/app/id6777277349" target="_blank" rel="noopener" style="display:inline-block;margin-top:10px;" aria-label="Download Loadscope Ballistics on the App Store"><img src="assets/download-on-the-app-store.svg" alt="Download on the App Store" height="44" style="height:44px;width:auto;display:block;"></a>
+    <p class="beta-note"><strong>$79, one time</strong> &mdash; yours forever, free updates, no subscription, 30-day money-back guarantee. For your Mac or Windows computer.</p>
+    <p class="hero-phone-buy" style="font-size:15.5px;color:var(--text);margin-top:10px;">Buying on your phone? Your license key is emailed to you &mdash; install Loadscope on your Mac or Windows computer when you&rsquo;re back at it.</p>
   </div>
 </header>
 
-<section>
+<section id="features">
   <div class="container">
     <div class="split">
       <div class="split-text">
         <h2>Plan it <span class="accent">once</span>.</h2>
-        <p class="section-sub">Enter your ladder &mdash; powder charge, seating depth or barrel tuner, start, step, how many. Loadscope lays out every load so you just shoot it in order, then matches each result to its charge. No naming files, no typing velocities, no spreadsheet wrangling.</p>
+        <p class="section-sub">Enter your ladder &mdash; powder charge, seating depth or barrel tuner, start, step, how many. Loadscope lays out every load so you just shoot it in order. No naming files, no typing velocities, no spreadsheet wrangling.</p>
       </div>
       <div class="screenshot-wrap">
-        <img src="assets/demo/gd-ladder.webp" width="1800" height="940" fetchpriority="high" decoding="async" alt="Loadscope Create New Load wizard, Step 2 of 3 - Plan your ladder: a powder ladder for a Tikka T3X CTR 6.5 Creedmoor with H4350, start charge 41.0 gr, 0.2 gr steps, 8 steps, 5 shots per string, and a live preview of the eight loads P1 41.0 through P8 42.4 gr">
+        <img src="assets/demo/gd-ladder.webp" width="1600" height="1088" fetchpriority="high" decoding="async" alt="Loadscope Create New Load, Step 2 of 2 - Plan your ladder: a powder ladder for a 7 SAUM with a Berger 175gr Elite Hunter, VihtaVuori N555, Federal 210M and ADG brass, start charge 58.6 gr, 0.2 gr steps, 3 steps, 4 shots per string, and the loads laid out as P1 58.6, P2 58.8, P3 59.0">
       </div>
     </div>
   </div>
@@ -1061,10 +1069,10 @@ header.hero .line2 {
     <div class="split reverse">
       <div class="split-text">
         <h2>Plug in your <span class="accent">chronograph</span>.</h2>
-        <p class="section-sub">Plug the Garmin Xero into your computer with its USB cable and Loadscope sees it &mdash; it tells you how many sessions are on it and asks which ones belong to this ladder, listed by time, shot count, speed and SD. No ShotView, no exporting one session at a time. Shooting something else? Drop a file or a whole folder and hit Run &mdash; the format is auto-detected, so there's nothing to format or label. Already shoot through a target app? Its export imports the same way.</p>
+        <p class="section-sub">Plug the Garmin Xero into your computer with its USB cable and Loadscope sees it &mdash; it tells you how many sessions are on it and asks which ones belong to this ladder, listed by time, shot count, speed and SD. No ShotView, no exporting one session at a time. Shooting something else? Drop a file or a whole folder and hit Run &mdash; the format is auto-detected, so there&rsquo;s nothing to format or label.</p>
       </div>
       <div class="screenshot-wrap">
-        <img src="assets/demo/gd-folder.webp" width="720" height="380" decoding="async" alt="Loadscope drop zone: 'Drop CSV files or a folder here, or click to browse', Browse files and Browse folder links, supported-device chips (Garmin Xero, BallisticX), the Run Import button, and a 'Drop files or a whole folder, format auto-detected' note">
+        <img src="assets/demo/gd-folder.webp" width="1584" height="696" decoding="async" alt="Loadscope Import drop zone: 'Drop your range files or a folder here', with Browse files, Browse folder and Enter data by hand buttons, a 'Shooting a Garmin Xero? Plug it into your computer' note, the Run Import button, and 'Drop files or a whole folder, format auto-detected'">
       </div>
     </div>
   </div>
@@ -1075,11 +1083,11 @@ header.hero .line2 {
     <div class="split">
       <div class="split-text">
         <h2>Measure your target groups, <span class="accent">right in Loadscope</span>.</h2>
-        <p class="section-sub">No separate target app needed. Photograph your target, set the scale, and tap your shots &mdash; Loadscope works out group size, <strong>mean radius</strong> and vertical, then scores it. Shoot a whole powder <em>or</em> seating-depth ladder on one sheet and measure every charge in a single pass. Prefer your phone? Measure at the target and pull the groups in over Wi-Fi. Already use a target app? Import its CSV instead.</p>
+        <p class="section-sub">No separate target app needed. Photograph your target, set the scale, and tap your shots &mdash; Loadscope works out group size, <strong>mean radius</strong> and vertical, then scores it. Already use a target app? Import its CSV instead.</p>
       </div>
       <div class="screenshot-wrap">
-        <img src="assets/measure-target.webp" width="3420" height="1876" loading="lazy" decoding="async" alt="Loadscope Measure Target screen: a barrel tuner test measured on one eight-bull target sheet photographed at 200 yards, each bull hand-numbered with its tuner setting from 0 to 35 and tagged with its group and mean radius in MOA, a Set scale / Move aim / Mark shots toolbar above, an Import from phone and Powder / Seating / Barrel tuner selector on the right, and live Results showing group size, mean radius and elevation off aim for the setting being marked.">
-        <p style="text-align:center;color:var(--text-dim);font-size:.82rem;margin:14px auto 0;">A real barrel tuner test &mdash; eight settings, 200 yards, measured in Loadscope.</p>
+        <img src="assets/measure-target.webp" width="3420" height="1868" loading="lazy" decoding="async" alt="Loadscope Measure Target screen: a real 7 SAUM powder ladder on one target sheet at 100 yards, the 59.0 gr target open with each charge measured and tagged on the photo (Bull 1 58.6 gr, Bull 2 58.8 gr, Bull 3 59.0 gr), Set scale / Move aim / Mark shots above, and Results showing the 59.0 gr group: 0.330 in (0.315 MOA), mean radius 0.140 in, with all three targets saved on the strip below">
+        <p style="text-align:center;color:var(--text-dim);font-size:.82rem;margin:14px auto 0;">A real 7 SAUM powder ladder &mdash; every charge on one sheet, measured in Loadscope.</p>
       </div>
     </div>
   </div>
@@ -1087,29 +1095,18 @@ header.hero .line2 {
 
 <section>
   <div class="container">
-    <h2>Scored <span class="accent">and</span> graphed.</h2>
-    <p class="section-sub">Every load scored into one winner — and charted so the flat-spot pops. Tune the weights and Loadscope re-scores from your existing data, no re-import.</p>
-    <div class="screenshot-wrap">
-      <img src="assets/demo/app-results-trim.webp" width="2960" height="790" loading="lazy" decoding="async" alt="Loadscope Results screen: the BEST LOAD - 42.4 gr of H4350 for a 6.5 Creedmoor with a 140gr ELD-M - scored across all four metrics (avg velocity 2763 fps, velocity SD 3.5 fps, mean radius, vertical SD)">
+    <h2>Your best load, <span class="accent">named</span>.</h2>
+    <p class="section-sub">Every charge is scored on velocity flat spot, SD, mean radius and vertical, and one winner is named. Change the weights and Loadscope re-scores from your existing data &mdash; no re-import.</p>
+    <div class="screenshot-wrap" style="max-width:860px;">
+      <img src="assets/demo/app-results-trim.webp" width="2227" height="722" loading="lazy" decoding="async" alt="Loadscope Results screen for a real 7 SAUM powder ladder: the BEST LOAD - 59.0 gr of VihtaVuori N555 under a Berger 175gr Elite Hunter, CBTO 2.335 in - scored across all four metrics (avg velocity 2754 fps, velocity SD 5.6 fps, mean radius 0.140 in, vertical SD 0.145 in)">
     </div>
-    <div class="screenshot-wrap" style="margin-top:14px;max-width:720px;">
-      <img src="assets/demo/gd-whiskers.webp" width="1200" height="340" loading="lazy" decoding="async" alt="Loadscope velocity flat-spot chart: ten powder charges plotted with plus-or-minus 1 SD whiskers, a clear flat-spot plateau where the line levels off, and the winning charge highlighted">
+    <div class="screenshot-wrap" style="margin-top:14px;max-width:860px;">
+      <img src="assets/demo/gd-whiskers.webp" width="1781" height="675" loading="lazy" decoding="async" alt="Loadscope velocity chart for the same 7 SAUM ladder: average velocity for 58.6, 58.8 and 59.0 gr with plus-or-minus 1 SD bars, speeds climbing steadily, and the 59.0 gr winner highlighted">
     </div>
-    <p style="text-align:center;color:var(--text-dim);font-size:.82rem;max-width:640px;margin:22px auto 0;">Sample data shown for demonstration only &mdash; not load data. Always work up from your published manual.</p>
-  </div>
-</section>
-
-<section style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-  <div class="container">
-    <div class="split">
-      <div class="split-text">
-        <h2>The <span class="accent">Powder Charge Log</span>.</h2>
-        <p class="section-sub">Every charge you tested, <strong>scored and ranked</strong> — your winner tagged at the top. Seating depth gets the same treatment in its own log.</p>
-      </div>
-      <div class="screenshot-wrap log-shot">
-        <img src="assets/demo/01-load-log.webp" width="2277" height="1489" loading="lazy" decoding="async" alt="Loadscope Powder Charge Log for a 6.5 Creedmoor load: each powder charge scored across velocity flat-spot, shot-to-shot SD, mean radius (or group size) and vertical SD, with the winning charge tagged at the top">
-      </div>
+    <div class="screenshot-wrap log-shot" style="margin-top:14px;max-width:860px;">
+      <img src="assets/demo/01-load-log.webp" width="1941" height="301" loading="lazy" decoding="async" alt="Loadscope Powder Charge Log for the same 7 SAUM ladder: 58.6, 58.8 and 59.0 gr, each with its four shot speeds, average velocity, ES, SD, mean radius, group, vertical and composite score, and 59.0 gr tagged WINNER">
     </div>
+    <p style="text-align:center;color:var(--text-dim);font-size:.82rem;max-width:640px;margin:22px auto 0;">The Powder Charge Log: every shot, every charge, one sheet (seating depth gets its own log) &mdash; a real 7 SAUM powder ladder, shown to illustrate the software, not load data. Always work up from your published manual.</p>
   </div>
 </section>
 
@@ -1119,14 +1116,14 @@ header.hero .line2 {
       <div class="up" id="ballistic">
         <h3>Built-in <span class="accent">ballistic calculator</span></h3>
         <div class="shot">
-          <img src="assets/pocket-card-hero.webp" width="1100" height="790" loading="lazy" decoding="async" alt="Loadscope DOPE Card: predicted elevation, wind, drop, velocity and energy from 100 to 1000 yards, checked against JBM Ballistics and Applied Ballistics">
+          <img src="assets/pocket-card-hero.webp" width="1114" height="742" loading="lazy" decoding="async" alt="Loadscope DOPE Card for the 7 SAUM load (Berger 175gr Elite Hunter, 59.0 gr, 2754 fps): predicted elevation, wind, drop, velocity and energy from 100 to 1000 yards, checked against JBM Ballistics (while it was online) and Applied Ballistics">
         </div>
         <p>Elevation, wind, drop, velocity and energy &mdash; 100 to 1000 yards, on a card that fits your pocket.</p>
       </div>
       <div class="up" id="loadcard">
         <h3>Keep the <span class="accent">recipe</span></h3>
         <div class="shot">
-          <img src="assets/demo/07-load-card-trim.webp" width="1468" height="1168" loading="lazy" decoding="async" alt="Loadscope Recipe Card recipe: a one-page printable showing the suggested winning powder charge and CBTO, the bullet, powder, primer, brass, plus the velocity, SD, group and mean radius the winning load produced.">
+          <img src="assets/demo/07-load-card-trim.webp" width="1695" height="1494" loading="lazy" decoding="async" alt="Loadscope Recipe Card for the 7 SAUM load: a one-page printable showing the suggested winning powder charge and CBTO, the bullet, powder, primer, brass, plus the velocity, SD, group and mean radius the winning load produced.">
         </div>
         <p>Every winning load gets a one-page Recipe Card &mdash; components, CBTO, and the numbers it actually produced. <strong>Print</strong> it or <strong>Save as PDF</strong>.</p>
       </div>
@@ -1169,17 +1166,18 @@ header.hero .line2 {
     <div class="split">
       <div class="split-text">
         <div class="comp-badge">New &middot; iPhone &amp; iPad</div>
-        <h2>Your best load &mdash; <span class="accent">in the field</span>.</h2>
-        <p class="section-sub"><strong>Loadscope Ballistics</strong> carries your best load to the range, re-solves your dial live as conditions change &mdash; real wind math, <strong>powered by Apple&nbsp;Weather</strong> &mdash; and <strong>measures your groups right at the target</strong>, syncing them back over your own Wi-Fi. No cloud, no account; works with no signal.</p>
-        <p class="section-sub" style="margin-top:10px;"><strong>Included with Loadscope</strong> &mdash; desktop owners unlock everything with their license key; on its own, phone-side load entry is a one-time <strong>$9.99</strong> unlock.</p>
+        <h2>Your load, <span class="accent">in the field</span>.</h2>
+        <p class="section-sub"><strong>Loadscope Ballistics</strong> carries your best load to the range, re-solves your dial live as conditions change &mdash; real wind math, <strong>powered by Apple&nbsp;Weather</strong> &mdash; and <strong>measures your groups right at the target</strong>, syncing them back to your computer over your own Wi-Fi. No Loadscope account and nothing goes to our servers; the solver runs on your phone, so your dial is there with no signal.</p>
+        <p class="section-sub" style="margin-top:10px;"><strong>The iPhone app comes free with your $79 license</strong> &mdash; your license key unlocks everything. Buying only the iPhone app? That&rsquo;s a separate <strong>$9.99</strong>.</p>
         <div class="comp-cta" style="text-align:left;margin-top:18px;">
           <a class="comp-appstore" href="https://apps.apple.com/app/id6777277349" target="_blank" rel="noopener" aria-label="Download Loadscope Ballistics on the App Store"><img src="assets/download-on-the-app-store.svg" alt="Download on the App Store" height="46" style="height:46px;width:auto;"></a>
           <div class="comp-cta-sub" style="margin-top:6px;">Just want a group number? There&rsquo;s a free, standalone <strong>Loadscope&nbsp;Measure</strong> app that does only that.</div>
         </div>
       </div>
       <div class="comp-phones">
-        <img src="assets/companion/phone-dope.webp" width="496" height="1080" loading="lazy" decoding="async" class="hero" alt="Loadscope Ballistics DOPE card on iPhone: a 6.5 Creedmoor load pulling current conditions from My location via Apple Weather (8 to 16 mph gusting at 3 o'clock, 59 degrees, 29.92 inHg, density altitude 17 ft) and an elevation and wind dial table from 100 to 1000 yards in mils, the wind column showing a low-to-high hold range for the gusts.">
-        <img src="assets/companion/phone-measure.webp" width="496" height="1078" loading="lazy" decoding="async" alt="Loadscope Ballistics Group results on iPhone: a locked six-bull 100-yard target sheet for a .264 caliber load, every bull badged with its own shot count, group size in MOA and inches, and mean radius, plus a Sync to Loadscope button that sends the measured groups back to the load on the desktop.">
+        <img src="assets/companion/phone-dope.webp" width="496" height="1021" loading="lazy" decoding="async" class="hero" alt="Loadscope Ballistics DOPE tab on iPhone for a 7 SAUM load: current conditions from My location via Apple Weather (4 mph at 3 o'clock, 68 degrees, 29.91 inHg, density altitude 642 ft), a stability readout with spin drift, and an elevation and wind dial table in mils with turret clicks from 50 to 400 yards.">
+        <img src="assets/companion/phone-measure.webp" width="496" height="1023" loading="lazy" decoding="async" alt="A three-shot group measured from a photo on iPhone at 200 yards: each hole circled, with group size, mean radius and elevation and windage off aim shown in MOA, mils and inches, and a Print button.">
+        <p class="comp-caption" style="flex-basis:100%;text-align:center;color:var(--text-dim);font-size:.82rem;margin:4px 0 0;">Left: the DOPE tab. Right: a 200-yard group measured on the phone.</p>
       </div>
     </div>
   </div>
@@ -1202,65 +1200,23 @@ header.hero .line2 {
         <figcaption style="margin-top: 14px; color: var(--text-dim); font-size: 14px;">&mdash; Terry L., precision reloader</figcaption>
       </figure>
       <figure style="flex: 1 1 380px; max-width: 460px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--orange); border-radius: 12px; padding: 24px 26px; margin: 0;">
-        <div style="color: var(--orange); font-size: 16px; letter-spacing: 3px; margin-bottom: 10px;" aria-label="Five out of five stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div style="color: var(--orange); font-size: 13px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 10px;">&#10003; APP STORE REVIEW &middot; &#9733;&#9733;&#9733;&#9733;&#9733;</div>
         <blockquote style="margin: 0; font-size: 18px; line-height: 1.6; color: var(--text);">&ldquo;Great app for load dev. One of the easier apps out there &mdash; even keeps load recipes and barrel rounds.&rdquo;</blockquote>
-        <figcaption style="margin-top: 14px; color: var(--text-dim); font-size: 14px;">&mdash; Verified App Store review, Loadscope for iPhone</figcaption>
+        <figcaption style="margin-top: 14px; color: var(--text-dim); font-size: 14px;">&mdash; App Store review, Loadscope Ballistics</figcaption>
       </figure>
-    </div>
-  </div>
-</section>
-
-<section id="install" class="install">
-  <div class="container">
-    <h2>Install in <span class="accent">three steps</span>.</h2>
-    <p class="section-sub">Tested on macOS Sonoma, Sequoia &amp; Tahoe and Windows 10 &amp; 11.</p>
-    <details class="install-collapse">
-      <summary>Show the three steps &middot; about a minute</summary>
-    <div class="steps">
-      <div class="step">
-        <div class="num">1</div>
-        <h3>Get Loadscope</h3>
-        <p>Click <strong>Get Loadscope</strong> at the top of the page, pick <strong>Mac</strong> or <strong>Windows</strong>, and paste the license key that will be emailed to you. The right installer for your computer starts downloading.</p>
-      </div>
-      <div class="step">
-        <div class="num">2</div>
-        <h3>Open the installer</h3>
-        <p><strong>Mac:</strong> double-click <strong>Loadscope.dmg</strong> in your Downloads folder. A window opens with the Loadscope icon.<br><br><strong>Windows:</strong> double-click <strong>Loadscope-Setup.exe</strong> in your Downloads folder. The setup wizard opens.</p>
-      </div>
-      <div class="step">
-        <div class="num">3</div>
-        <h3>Install</h3>
-        <p><strong>Mac:</strong> double-click the <strong>Loadscope</strong> icon. It installs itself and tells you when it's done &mdash; you'll find it in your <strong>Dock</strong>.<br><br><strong>Windows:</strong> click <strong>Next</strong> through the wizard. Loadscope installs to <strong>Program Files</strong> and a <strong>Start menu</strong> shortcut appears.</p>
-      </div>
-    </div>
-    </details>
-
-    <div class="install-note">
-      <strong>Signed &amp; notarized.</strong> Apple-signed and notarized on Mac &mdash; it opens and runs like any commercial app. On Windows it's code-signed by <strong>Loadscope LLC</strong>; because the certificate is new, Windows may still show a one-time security prompt (SmartScreen's <strong>More info &rarr; Run anyway</strong>) until it builds reputation.
     </div>
   </div>
 </section>
 
 <section id="beta" style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
   <div class="container">
-    <span id="features"></span>
-    <h2>What you <span class="accent">get</span>.</h2>
-    <p class="section-sub">A one-time <strong>$79</strong> purchase — the full app, yours forever, with free updates. No subscription, no account, no cloud — and it works fully offline.</p>
+        <h2>What you get for <span class="accent">$79</span>.</h2>
+    <p class="section-sub">One-time purchase &mdash; the full app on up to two computers, free updates, no subscription. Works fully offline, no account needed. 30-day money-back guarantee.</p>
     <div class="features">
-      <div class="feature">
-        <div class="icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-        <h3>Who it's for</h3>
-        <p>Shooters running powder ladders, seating-depth and barrel-tuner tests over a chronograph &mdash; groups measured right in Loadscope, or imported from a target app if you use one. If you're developing a load right now, you're who we built this for.</p>
-      </div>
       <div class="feature">
         <div class="icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
         <h3>Works with your gear</h3>
-        <p>Reads Garmin Xero, LabRadar and more; measures your target groups from a photo, or imports BallisticX, OnTarget, Silver Mountain or ShotMarker. Shooting a device we don't list yet? Send a sample CSV and we'll add it. Shoot metric? One switch in Settings &rarr; Units shows m/s, metres and millimetres.</p>
-      </div>
-      <div class="feature">
-        <div class="icon"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
-        <h3>What's included</h3>
-        <p>The full desktop app on Mac and Windows, free updates, and up to two computers per license. 30-day money-back guarantee. Loadscope Ballistics for iPhone &amp; iPad is included.</p>
+        <p>Reads Garmin Xero, LabRadar and more; measures your target groups from a photo, or imports BallisticX, OnTarget, Silver Mountain or ShotMarker.</p>
       </div>
       <div class="feature">
         <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="12" x2="12" y2="4.5"/><line x1="12" y1="1.5" x2="12" y2="3"/><line x1="20.5" y1="12" x2="22" y2="12"/><line x1="3.5" y1="12" x2="2" y2="12"/></svg></div>
@@ -1270,21 +1226,21 @@ header.hero .line2 {
       <div class="feature">
         <div class="icon"><svg viewBox="0 0 24 24"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
         <h3>Load Library</h3>
-        <p>Every winning load stays in the app &mdash; active and archived, in one searchable list. Pull any of them back up, or print the whole library or a single Recipe Card. <strong>Building on one?</strong> Rework it &mdash; a fresh ladder opens with that load&rsquo;s rifle and components filled in, your original untouched.</p>
+        <p>Every winning load stays in the app &mdash; active and archived, in one searchable list. Print the library or one Recipe Card, or <strong>Rework</strong> a load into a fresh ladder with its rifle and components filled in.</p>
       </div>
       <div class="feature">
         <div class="icon"><svg viewBox="0 0 24 24"><line x1="3" y1="21" x2="21" y2="21"/><rect x="5" y="11" width="3.5" height="9"/><rect x="10.25" y="5" width="3.5" height="15"/><rect x="15.5" y="14" width="3.5" height="6"/></svg></div>
         <h3>Compare loads</h3>
-        <p>Shot the same bullet over three powders? Select the saved loads from one rifle and Loadscope lines them up head-to-head &mdash; scoring velocity SD, group, and vertical &mdash; then calls which one shot best.</p>
+        <p>Shot the same bullet over three powders? Select the saved loads from one rifle and Loadscope lines them up head-to-head &mdash; scoring velocity SD, mean radius, and vertical &mdash; then calls which one shot best.</p>
       </div>
       <div class="feature">
         <div class="icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
         <h3>Barrel round count</h3>
-        <p>Loadscope tracks total rounds through each barrel. Set a starting count once; every imported session adds to it automatically, and a <strong>+ Add</strong> button logs the practice or match rounds you didn't import.</p>
+        <p>Loadscope tracks total rounds through each barrel. Set a starting count once; after each import Loadscope offers to add that session&rsquo;s rounds (you confirm, so a re-import never counts twice), and a <strong>+ Add</strong> button logs the practice or match rounds you didn&rsquo;t import.</p>
       </div>
     </div>
     <div style="text-align:center; margin-top:26px;">
-      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get Loadscope™</a>
+      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get Loadscope</a>
     </div>
   </div>
 </section>
@@ -1292,73 +1248,62 @@ header.hero .line2 {
 <section id="faq">
   <div class="container">
     <h2>Common <span class="accent">questions</span>.</h2>
-    <p class="section-sub">If you don't see your question here, email <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a>.</p>
+    <p class="section-sub">If you don&rsquo;t see your question here, email <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a>.</p>
     <details class="faq-toggle">
       <summary>Show the questions</summary>
       <div class="faq-grid">
-      <details class="faq-item">
-        <summary>How does Loadscope decide your best powder charge and seating depth?</summary>
-        <p>No single number tells you a load is good — a tight group that wanders in velocity will betray you at distance, and a flat velocity string over a wide group won't hold either. So Loadscope doesn't pick your best powder charge or seating depth on one stat. It scores every charge and every seating depth you tested across four things that actually show up on target.</p>
-        <p>Those four: <b>mean radius</b> (true group center, not one flier — falls back to group size when only that's available), <b>velocity SD</b> (shot-to-shot consistency), <b>vertical</b> (vertical dispersion — what costs you elevation at distance), and a light <b>flat-spot</b> signal (how little your average velocity moves across nearby charges).</p>
-        <p>Each metric is put on the same 0-to-1 scale (lower is better) so they're comparable, then blended into one <b>composite score</b>. Lowest composite wins — Loadscope tags it 🥇 and writes the winning charge or CBTO to the top of the tab. Every candidate also earns a "Best in:" tag for any single metric it topped, even if it didn't win overall.</p>
-        <p>The four aren't weighted equally, and the mix isn't a fixed table — <b>Loadscope sets it from the distance you tested at</b>. Up close, mean radius leads and velocity barely counts; at 1000 yards velocity SD takes over, because that's where a few fps of spread opens real vertical. Seating-depth tests lean on mean radius, since seating tunes group shape, not speed. Every weight is still yours — the app's Scoring tab lets you type a percentage against each metric, and <b>Use recommended weights</b> hands the dial back to Loadscope. <a href="/learn/how-loadscope-scores-a-load.html">Read the full method &rarr;</a></p>
-        <p>A <b>barrel tuner test is scored differently</b>, because the four metrics above do not apply to it. Loadscope scores each setting on group height and mean radius, then names your best setting and the plateau of good settings beside it &mdash; a run of adjacent settings that all shoot well beats a lone winner. That weighting is adjustable too.</p>
+      <!-- Research 2026-09-24 (voice of customer): six people mixed up the phone
+           apps and the desktop program -- a refund, a key never activated, an
+           accidental purchase. No answer here said plainly "you need a computer". -->
+      <details class="faq-item" id="phone-or-computer">
+        <summary>Is Loadscope a phone app? Is there an iPhone app?</summary>
+        <p><strong>No &mdash; Loadscope is a desktop program, so you need a Mac or Windows computer.</strong> That&rsquo;s where your chronograph and target data come in, every rung gets scored, and your best load is named. Loadscope Ballistics, the iPhone and iPad app included with your license, is a field companion that carries the load you settle on to the range &mdash; a DOPE dial that re-solves live as conditions change, your recipe at the bench, and round counts that sync back to the desktop. Desktop owners unlock it with their license key; on its own, phone-side load entry is a one-time $9.99 unlock. <a href="https://apps.apple.com/app/id6777277349" target="_blank" rel="noopener">See it on the App Store &rarr;</a> There&rsquo;s no Android app, and you don&rsquo;t need one &mdash; all of the load-development work happens on the computer.</p>
       </details>
       <details class="faq-item">
-        <summary>How do I get my code, and how does buying work?</summary>
-        <p>Click <strong>Get Loadscope</strong>, check out for <strong>$79</strong>, and your license key is emailed to you right away — it unlocks both the download and the app itself. One purchase covers up to two computers. Questions? <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a>.</p>
+        <summary>How does Loadscope decide your best powder charge and seating depth?</summary>
+        <p>No single number tells you a load is good — a tight group that wanders in velocity will cost you at distance, and a flat velocity string over a wide group won&rsquo;t hold either. So Loadscope doesn&rsquo;t pick your best powder charge or seating depth on one stat. It scores every charge and every seating depth you tested across four things that actually show up on target.</p>
+        <p>Those four: <b>mean radius</b> (the average distance of each shot from the group&rsquo;s center, so one flier doesn&rsquo;t wreck it — falls back to group size when only that&rsquo;s available), <b>velocity SD</b> (shot-to-shot consistency), <b>vertical</b> (vertical dispersion — what costs you elevation at distance), and a light <b>flat-spot</b> signal (how little your average velocity moves across nearby charges).</p>
+        <p>Each metric is put on the same 0-to-1 scale (lower is better) so they&rsquo;re comparable, then blended into one <b>composite score</b>. Lowest composite wins — Loadscope tags it 🥇 and writes the winning charge or CBTO to the top of the tab. Every candidate also earns a "Best in:" tag for any single metric it topped, even if it didn&rsquo;t win overall.</p>
+        <p>The four aren&rsquo;t weighted equally, and the mix isn&rsquo;t a fixed table — <b>Loadscope sets it from the distance you tested at</b>. Up close, mean radius leads and velocity counts for less; at 1000 yards velocity SD takes over, because that&rsquo;s where a few fps of spread opens real vertical. Seating-depth tests lean on mean radius, since seating tunes group shape, not speed. Every weight is still yours — the app&rsquo;s Scoring tab lets you type a percentage against each metric, and <b>Use recommended weights</b> hands the dial back to Loadscope. <a href="/learn/how-loadscope-scores-a-load.html">Read the full method &rarr;</a></p>
+        <p>A barrel tuner test is scored on group height and mean radius instead &mdash; <a href="/learn/score-a-barrel-tuner-test.html">how a tuner test is scored &rarr;</a></p>
+      </details>
+      <details class="faq-item">
+        <summary>How do I get my license key, and how does buying work?</summary>
+        <p>Click <strong>Get Loadscope</strong>, check out for <strong>$79</strong>, and your license key is emailed to you right away — it unlocks both the download and the app itself. One license covers up to two computers &mdash; say your bench PC and a range laptop. Moving to a new computer? Email us and we&rsquo;ll free up a slot. Questions? <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a>.</p>
       </details>
       <details class="faq-item">
         <summary>Is Loadscope a subscription?</summary>
-        <p>No. Loadscope is a <strong>one-time purchase</strong> — $79, once. Pay once and it's yours, with free updates, not a yearly subscription. It runs fully offline with no account and no cloud. Loadscope Ballistics for iPhone &amp; iPad is included.</p>
-      </details>
-      <details class="faq-item">
-        <summary>How many computers can I run one license on?</summary>
-        <p>Up to two — for example your bench PC and your range laptop. Both keep working offline once activated. If you move to a new computer and need to free a slot, email <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a> and we'll reset it.</p>
+        <p>No. It&rsquo;s a <strong>one-time purchase</strong> with free updates. It runs fully offline &mdash; no account, and no load data ever leaves your computer. The only thing it sends is a small license check when it opens.</p>
       </details>
       <details class="faq-item" id="metric">
         <summary>Does it work in metric? Can I buy from outside the US?</summary>
-        <p>Yes to both. <strong>Settings &rarr; Units</strong> switches the whole app to metric &mdash; velocity in m/s, distance in metres, group size, sight height and cartridge lengths in millimetres, temperature in &deg;C, pressure in hPa, wind in m/s or km/h &mdash; or set each measurement on its own. Powder and bullet weights stay in grains, the way load data and powder scales print them.</p>
-        <p>Garmin Xero files saved with European settings &mdash; decimal commas, semicolons, 24-hour times, day-first dates &mdash; import as they are, and the target scale can be set in millimetres.</p>
+        <p>Yes to both. <strong>Settings &rarr; Units</strong> switches the whole app to metric &mdash; velocity in m/s, distance in meters, group size, sight height and cartridge lengths in millimeters, temperature in &deg;C, pressure in hPa, wind in m/s or km/h &mdash; or set each measurement on its own. Powder and bullet weights stay in grains, the way load data and powder scales print them.</p>
+        <p>Garmin Xero files saved with European settings &mdash; decimal commas, semicolons, 24-hour times, day-first dates &mdash; import as they are, and the target scale can be set in millimeters.</p>
         <p>Loadscope sells worldwide for <strong>US$79</strong>. Checkout shows your total before you pay and adds VAT or GST where your country charges it &mdash; about US$95 in the UK. The app is in English. The 30-day money-back guarantee applies wherever you buy, which is longer than the 14-day cancellation window in the EU and UK.</p>
       </details>
       <details class="faq-item">
         <summary>How accurate is the predicted DOPE?</summary>
-        <p>Loadscope uses a G7/G1 point-mass ballistic solver — the same model class as Strelok, GeoBallistics and the free Hornady/Berger calculators — checked against two independent references, JBM Ballistics and Applied Ballistics' own published range card. Measured-drag solvers like Applied Ballistics and Hornady 4DOF pull ahead deep in the transonic. <strong>Predicted values are an estimate, not a measurement</strong> — always confirm by live fire at known distances before relying on them for a shot that matters.</p>
-      </details>
-      <details class="faq-item">
-        <summary>What's "predicted" vs "confirmed"?</summary>
-        <p>Grey italic numbers are predicted by the solver from your bullet, muzzle velocity and conditions. At the range you type what you actually dialed — that row turns solid white = confirmed. Click <strong>Save DOPE</strong> and Loadscope writes both to your workbook: predicted rows stay grey italic, confirmed rows print solid. Predictions never overwrite confirmed data (only the reverse), and your printed DOPE Card carries a "verify at the range" banner until every row is confirmed.</p>
-      </details>
-      <details class="faq-item">
-        <summary>Do I have to enter a ballistic coefficient?</summary>
-        <p>The most popular match bullets have their BCs built in. For any other bullet, type its BC off the box or the maker's site once. It's not a source of published load data — you still cross-reference charges against current reloading manuals. The bullet database grows over time with no app update needed.</p>
+        <p>Loadscope uses a G7/G1 point-mass ballistic solver &mdash; the same model class as Strelok and GeoBallistics &mdash; checked against JBM Ballistics (while it was online) and Applied Ballistics&rsquo; published range card. Measured-drag solvers like Applied Ballistics and Hornady 4DOF pull ahead deep in the transonic. <strong>Predicted values are an estimate, not a measurement</strong> &mdash; always confirm by live fire at known distances before relying on them for a shot that matters.</p>
+        <p><strong>Predicted vs confirmed:</strong> gray italic numbers are the solver&rsquo;s prediction. At the range you type what you actually dialed and that value turns from gray italic to solid text once confirmed. Predictions never overwrite confirmed data, and your printed DOPE Card carries a &ldquo;verify at the range&rdquo; banner until you confirm your first dial; after that, confirmed dials print in bold and the rest are the solver&rsquo;s prediction.</p>
+        <p><strong>Ballistic coefficient:</strong> the most popular match bullets have their BCs built in. For any other bullet, type its BC off the box or the maker&rsquo;s site once.</p>
       </details>
       <details class="faq-item">
         <summary>What chronographs and target apps does it read?</summary>
-        <p><strong>Chronographs:</strong> <strong>Garmin Xero</strong> &mdash; either plug it into your computer with its USB cable and Loadscope reads the sessions straight off it, or import a ShotView CSV export; both work, and neither one replaces the other &mdash; plus <strong>LabRadar</strong> and <strong>Athlon Rangecraft</strong>, and <strong>MagnetoSpeed</strong> (still in testing, so check those numbers against your own). <strong>Target apps:</strong> BallisticX, OnTarget (PC/TDS), Silver Mountain (SMT) and ShotMarker &mdash; or skip the target app entirely and measure your groups from a photo right in Loadscope. The parser system is pluggable, so a new chronograph or target app is quick to add — send a sample export to support@loadscope.app and we'll fold it in.</p>
+        <p><strong>Chronographs:</strong> <strong>Garmin Xero</strong> &mdash; either plug it into your computer with its USB cable and Loadscope reads the sessions straight off it, or import a ShotView CSV export; both work, and neither one replaces the other &mdash; plus <strong>LabRadar</strong> and <strong>Athlon Rangecraft</strong>, and <strong>MagnetoSpeed</strong> (still in testing, so check those numbers against your own). <strong>Target apps:</strong> BallisticX, OnTarget (PC/TDS), Silver Mountain (SMT) and ShotMarker &mdash; or skip the target app entirely and measure your groups from a photo right in Loadscope. New chronographs and target apps are quick to add &mdash; send a sample export to support@loadscope.app.</p>
       </details>
       <details class="faq-item">
         <summary>Do I still need ShotView to get my Xero data in?</summary>
-        <p>No. Plug the Xero into your Mac or PC with its USB cable and Loadscope notices it, tells you how many sessions are on it, and offers to read them &mdash; every session at once, straight off the chronograph. Since a Xero holds up to 50 sessions, it asks which ones belong to this ladder and lists them by time, shot count, average speed and SD, grouped by range day, with the likely block already picked for you. It never writes to or erases anything on the chronograph. The Xero stores its sessions as Garmin <code>.FIT</code> files, and Loadscope reads those directly &mdash; drag one in on its own if you've already copied them off.</p>
-        <p><strong>And you don't need the cable every time.</strong> The ShotView route works exactly as it always has: export a session as a CSV from the app on your phone and drop it on Loadscope. Both paths land in the same place and score the same way &mdash; use whichever you have with you that day. <a href="/learn/garmin-xero-data.html">Working with Garmin Xero data &rarr;</a></p>
+        <p>No. Plug the Xero into your Mac or Windows computer with its USB cable and Loadscope notices it, tells you how many sessions are on it, and offers to read them &mdash; every session at once, straight off the chronograph. Since a Xero holds up to 50 sessions, it asks which ones belong to this ladder and lists them by time, shot count, average speed and SD, grouped by range day, with the likely block already picked for you. It never writes to or erases anything on the chronograph. The Xero stores its sessions as Garmin <code>.FIT</code> files, and Loadscope reads those directly &mdash; drag one in on its own if you&rsquo;ve already copied them off.</p>
+        <p>No cable with you? Export the session as a CSV from the ShotView app on your phone and drop it on Loadscope &mdash; it scores the same way.</p>
+        <p><a href="/learn/garmin-xero-data.html">Working with Garmin Xero data &rarr;</a></p>
       </details>
       <details class="faq-item">
         <summary>Do I need a target app to measure my groups?</summary>
         <p>No. Loadscope has built-in <strong>group measurement</strong> &mdash; photograph your target, set the scale off a known reference, tap your shots, and it works out group size, mean radius and vertical for you, then scores it. Shoot a whole powder ladder &mdash; or a seating-depth ladder &mdash; on one target sheet and measure every bull in one pass; you tell it which bull is which. Or measure on the iPhone in the field and pull the target groups into the load over Wi-Fi. Already run a target app? Import its CSV instead &mdash; your call. <a href="/learn/measure-groups-from-a-photo.html">How measuring from a photo works &rarr;</a></p>
       </details>
       <details class="faq-item">
-        <summary>Is my data going to the cloud?</summary>
-        <p>No. Loadscope writes to a regular .xlsx file on your computer. No account, no sync, no telemetry. Your loads stay on your machine.</p>
-      </details>
-      <details class="faq-item">
         <summary>Do I need Microsoft Excel?</summary>
-        <p>No. Loadscope does the work itself — your scored results, best load, predicted DOPE, and printable Load &amp; DOPE Cards all appear right inside the app, no Excel required. Excel only matters if you want to open the underlying workbook and poke around the formulas yourself. Even then, the file is a standard <strong>.xlsx</strong> that opens just as well in <strong>Numbers</strong> (free on every Mac), Google Sheets, or LibreOffice. Excel is recommended for the full spreadsheet experience, but it's not required to use Loadscope.</p>
-      </details>
-      <details class="faq-item">
-        <summary>Is Loadscope code-signed?</summary>
-        <p><strong>Mac:</strong> yes. Signed with a Developer ID Application certificate and notarized by Apple. macOS opens it without security warnings on the first launch — the same as any commercial app.</p>
-        <p><strong>Windows:</strong> yes. Signed by Loadscope LLC with a Certum code-signing certificate and timestamped. Because the certificate is new, Windows SmartScreen may still show a one-time <strong>More info &rarr; Run anyway</strong> prompt until it builds reputation — the publisher reads &ldquo;Loadscope LLC&rdquo;.</p>
+        <p>No. Loadscope does the work itself — your scored results, best load, predicted DOPE, and printable Recipe and DOPE Cards all appear right inside the app, no Excel required. Excel only matters if you want to open the underlying workbook and poke around the formulas yourself. Even then, the file is a standard <strong>.xlsx</strong> that opens just as well in <strong>Numbers</strong> (free on every Mac), Google Sheets, or LibreOffice. Excel is recommended for the full spreadsheet experience, but it&rsquo;s not required to use Loadscope.</p>
       </details>
       <!-- Anchored on purpose: loadscope.app/#windows-blocked is a link we can
            paste into a support reply, a forum answer, or the licence email. The
@@ -1370,35 +1315,60 @@ header.hero .line2 {
         <summary>Windows blocked or deleted my download &mdash; what now?</summary>
         <p>Three different things can happen, and each needs a different fix. Loadscope is signed by <strong>Loadscope LLC</strong>, so in every case you can check the publisher name before you allow anything.</p>
         <p><strong>1. Your browser paused it.</strong> Look at the <strong>top-right corner</strong> of your browser for a small <strong>download icon</strong>, click it, and choose <strong>Keep</strong>.</p>
-        <p><strong>2. The file downloaded, then disappeared.</strong> That is Windows Security deleting it after it lands, which is why &ldquo;Keep&rdquo; does not help. It was a false alarm on our installer and it has been cleared &mdash; so <strong>download it again first</strong>, and it should stay put. If it still vanishes, open <strong>Windows Security &rarr; Protection history</strong>, find the Loadscope entry, and choose <strong>Allow on device</strong>. Check it says Loadscope LLC before you allow it.</p>
+        <p><strong>2. The file downloaded, then disappeared.</strong> That is Windows Security deleting it after it lands, which is why &ldquo;Keep&rdquo; does not help. It&rsquo;s a false alarm on our installer &mdash; so <strong>download it again first</strong>, and it should stay put. If it still vanishes, open <strong>Windows Security &rarr; Protection history</strong>, find the Loadscope entry, and choose <strong>Allow on device</strong>. Check it says Loadscope LLC before you allow it.</p>
         <p><strong>3. It runs, but you get a blue &ldquo;Windows protected your PC&rdquo; box.</strong> Click <strong>More info</strong>, then <strong>Run anyway</strong>. The publisher reads &ldquo;Loadscope LLC&rdquo;. This is a one-time prompt that appears because our certificate is still new.</p>
         <p>Still stuck? Email <a href="mailto:support@loadscope.app">support@loadscope.app</a> and we will sort it out.</p>
       </details>
       <details class="faq-item">
         <summary>What hardware does Loadscope run on?</summary>
-        <p><strong>Mac:</strong> macOS 10.13 or newer. Runs natively on both Intel and Apple Silicon (M-series) Macs &mdash; no Rosetta needed.</p>
-        <p><strong>Windows:</strong> Windows 10 or 11, 64-bit. No GPU required. Loadscope is a small app — runs fine on modest hardware.</p>
-      </details>
-      <!-- Research 2026-09-24 (voice of customer): six people mixed up the phone
-           apps and the desktop program -- a refund, a key never activated, an
-           accidental purchase. No answer here said plainly "you need a computer". -->
-      <details class="faq-item" id="phone-or-computer">
-        <summary>Is Loadscope a phone app? Do I need a computer?</summary>
-        <p><strong>Yes, you need a Mac or Windows computer.</strong> Loadscope is a desktop program: that's where your chronograph and target data come in, every rung gets scored, and your best load is named. Loadscope Ballistics, the iPhone &amp; iPad app included with your license, is a helper that carries the load you settle on to the range. There's no Android app, and you don't need one &mdash; all of the load-development work happens on the computer.</p>
-      </details>
-      <details class="faq-item">
-        <summary>Is there an iPhone app?</summary>
-        <p><strong>Loadscope Ballistics</strong> is <a href="https://apps.apple.com/app/id6777277349" target="_blank" rel="noopener">available on the App Store</a> for iPhone and iPad &mdash; a field companion, not a phone port of load development. It carries your confirmed load to the range: a DOPE dial that re-solves live as conditions change, real crosswind math, your recipe at the bench, and round counts that sync back to the desktop. It's <strong>included with Loadscope</strong> &mdash; desktop owners unlock everything with their license key. On its own, phone-side load entry is a one-time <strong>$9.99</strong> unlock. The desktop stays Mac &amp; Windows for the actual load-dev work.</p>
+        <p><strong>Mac:</strong> macOS 14 or newer. There are two Mac downloads: one built for Apple Silicon (M1 and later) and one for Intel. Not sure which chip you have? The Intel one runs on every Mac (Apple Silicon Macs run it through Rosetta).</p>
+        <p><strong>Windows:</strong> Windows 10 or newer, 64-bit. No GPU required. Loadscope is a small app — runs fine on modest hardware.</p>
       </details>
       </div>
     </details>
   </div>
 </section>
 
+<section id="install" class="install">
+  <div class="container">
+    <h2>Install in <span class="accent">four steps</span>.</h2>
+    <p class="section-sub">Runs on Mac and Windows.</p>
+    <details class="install-collapse">
+      <summary>Show the four steps &middot; about a minute</summary>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>Get Loadscope</h3>
+        <p>Click <strong>Get Loadscope</strong> at the top of the page, pick <strong>Mac</strong> or <strong>Windows</strong>, and paste the license key that will be emailed to you. The right installer for your computer starts downloading.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>Open the installer</h3>
+        <p><strong>Mac:</strong> double-click the Loadscope disk image in your Downloads folder (<strong>Loadscope.dmg</strong>, or <strong>Loadscope-arm64.dmg</strong> on Apple Silicon). A window opens with the Loadscope icon.<br><br><strong>Windows:</strong> double-click <strong>Loadscope-Setup.exe</strong> in your Downloads folder. The setup wizard opens.</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>Install</h3>
+        <p><strong>Mac:</strong> double-click the <strong>Loadscope</strong> icon. It installs itself and tells you when it&rsquo;s done &mdash; you&rsquo;ll find it in your <strong>Dock</strong>.<br><br><strong>Windows:</strong> click <strong>Next</strong> through the wizard. Loadscope installs and a <strong>Start menu</strong> shortcut appears.</p>
+      </div>
+      <div class="step">
+        <div class="num">4</div>
+        <h3>Unlock</h3>
+        <p>Back in the download window, click <strong>Activate Loadscope</strong>. Your license key fills in by itself &mdash; then click <strong>Unlock</strong> in Loadscope. You can also paste the key from your email straight into Loadscope.</p>
+      </div>
+    </div>
+    </details>
+
+    <div class="install-note">
+      <strong>Signed &amp; notarized.</strong> Apple-signed and notarized on Mac &mdash; it opens like any commercial app. On Windows it&rsquo;s code-signed by <strong>Loadscope LLC</strong>; because the certificate is new, Windows may still show a one-time security prompt (SmartScreen&rsquo;s <strong>More info &rarr; Run anyway</strong>) until it builds reputation.
+    </div>
+  </div>
+</section>
+
 <section id="guides" style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
   <div class="container">
     <h2>Load development, <span class="accent">explained</span>.</h2>
-    <p class="section-sub">Plain-English guides to the methods, the numbers, and getting your data in. No load data &mdash; method only.</p>
+    <p class="section-sub">Plain-English guides to the methods, the numbers, and getting your data in.</p>
 
     <div class="split" style="align-items: start; gap: 40px;">
       <div>
@@ -1409,8 +1379,6 @@ header.hero .line2 {
           <a href="/learn/how-many-shots-per-charge.html">How many shots per charge?</a><br>
           <a href="/learn/standard-deviation-load-development.html">Standard deviation &amp; extreme spread</a><br>
           <a href="/learn/mean-radius-vs-group-size.html">Mean radius vs group size</a><br>
-          <a href="/learn/how-loadscope-scores-a-load.html">How Loadscope scores a load</a><br>
-          <a href="/learn/new-chronograph-first-ladder.html">New chronograph? Your first load ladder</a><br>
           <a href="/learn/score-a-barrel-tuner-test.html">How to score a barrel tuner test</a>
         </p>
       </div>
@@ -1419,12 +1387,7 @@ header.hero .line2 {
         <p style="font-size:14.5px; line-height:2;">
           <a href="/learn/get-data-off-garmin-xero.html">Get data off a Garmin Xero</a><br>
           <a href="/learn/get-data-off-labradar.html">Get data off a LabRadar</a><br>
-          <a href="/learn/get-data-off-magnetospeed.html">Get data off a MagnetoSpeed</a><br>
-          <a href="/learn/garmin-xero-data.html">Working with Garmin Xero data</a><br>
-          <a href="/learn/how-to-read-a-chronograph.html">How to read a chronograph</a><br>
-          <a href="/learn/measure-groups-from-a-photo.html">Measure groups from a photo</a><br>
-          <a href="/learn/garmin-xero-what-picks-the-charge.html">Garmin Xero data: what picks the charge?</a><br>
-          <a href="/learn/shotmarker-strings-at-home.html">Use your ShotMarker strings at home</a>
+          <a href="/learn/get-data-off-magnetospeed.html">Get data off a MagnetoSpeed</a>
         </p>
       </div>
       <div>
@@ -1432,10 +1395,7 @@ header.hero .line2 {
         <p style="font-size:14.5px; line-height:2;">
           <a href="/learn/satterlee-10-round-method.html">The Satterlee 10-round method</a><br>
           <a href="/learn/ocw-optimal-charge-weight.html">OCW (optimal charge weight)</a><br>
-          <a href="/learn/find-your-best-rifle-load.html">Finding your best rifle load</a><br>
-          <a href="/learn/spreadsheet-vs-software-load-development.html">Spreadsheet vs software</a><br>
           <a href="/learn/magnetospeed-vs-garmin-xero-vs-labradar.html">MagnetoSpeed vs Xero vs LabRadar</a><br>
-          <a href="/learn/loadscope-vs-gordons-reloading-tool.html">Gordon's Reloading Tool is gone: what now?</a><br>
           <a href="/learn/jbm-ballistics-shut-down-alternatives.html">JBM Ballistics is gone: what to use instead</a><br>
           <a href="/learn/">All guides &rarr;</a>
         </p>
@@ -1446,12 +1406,11 @@ header.hero .line2 {
 
 <footer>
   <div class="container">
-    <p><strong>Loadscope™</strong> &middot; <a href="mailto:support@loadscope.app">support@loadscope.app</a></p>
-    <p>&copy; 2026 Loadscope™. All rights reserved.</p>
-    <p style="font-size:13px; color:var(--text-muted); margin-bottom:8px;">macOS 10.13+ (Intel &amp; Apple Silicon) &middot; Windows 10/11 (64-bit) &middot; $79 one-time</p>
-    <p style="font-size:13.5px; margin-bottom:8px;"><a href="learn/">Learn</a> &middot; <a href="terms.html">Terms of Service</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="refund.html">Refund Policy</a> &middot; <a href="disclaimer.html">Disclaimer</a></p>
+    <p><strong>Loadscope</strong> &middot; <a href="mailto:support@loadscope.app">support@loadscope.app</a></p>
+    <p>&copy; 2026 Loadscope LLC. All rights reserved.</p>
+    <p class="footer-links" style="font-size:13.5px; margin-bottom:8px;"><a href="learn/">Learn</a> &middot; <a href="terms.html">Terms of Service</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="refund.html">Refund Policy</a> &middot; <a href="disclaimer.html">Disclaimer</a></p>
     <div class="disclaimer">
-      <strong>Reloading safety:</strong> Loadscope is not a source of published load data, and its "suggested" winners are a statistical ranking of your own tested loads — not a safety-vetted recommendation. Always cross-reference current reloading manuals, watch for pressure signs, and start below maximum and work up. You assume all risk associated with handloading and shooting. <a href="disclaimer.html">Full disclaimer &rarr;</a>
+      <strong>Reloading safety:</strong> Loadscope is not a source of published load data, and its &ldquo;suggested&rdquo; winners are a statistical ranking of your own tested loads — not a safety-vetted recommendation. Always cross-reference current reloading manuals, watch for pressure signs, and start below maximum and work up. You assume all risk associated with handloading and shooting. <a href="disclaimer.html">Full disclaimer &rarr;</a>
     </div>
   </div>
 </footer>
@@ -1476,17 +1435,17 @@ header.hero .line2 {
     <!-- Handheld visitors only; unhidden by applyHandheldNotice() on load. -->
     <div class="desktop-only-note" id="desktopOnlyNote" style="display:none;">
       <strong>Loadscope is desktop software.</strong> It runs on a Mac or Windows
-      computer, not on a phone or tablet. Pick the computer you'll install it on
+      computer, not on a phone or tablet. Pick the computer you&rsquo;ll install it on
       to get the right installer, or just open this page on that computer instead.
     </div>
     <div class="platform-seg" role="group" aria-label="Choose your computer">
       <button type="button" class="platform-opt" id="platMac" onclick="setPlatform('mac')">
         <span class="platform-opt-os">Mac</span>
-        <span class="platform-opt-sub">macOS 10.13+</span>
+        <span class="platform-opt-sub">macOS 14 or newer</span>
       </button>
       <button type="button" class="platform-opt" id="platWin" onclick="setPlatform('win')">
         <span class="platform-opt-os">Windows</span>
-        <span class="platform-opt-sub">Windows 10/11</span>
+        <span class="platform-opt-sub">Windows 10 or newer</span>
       </button>
     </div>
 
@@ -1498,9 +1457,9 @@ header.hero .line2 {
     <!-- Tab 1: buy Loadscope -->
     <div class="tab-panel active" id="panelRequestAccess">
       <h3>Get Loadscope &mdash; $79</h3>
-      <p>One-time purchase. Yours forever, with free updates. <strong>Installs on your Mac or Windows computer</strong>; Loadscope Ballistics for iPhone &amp; iPad is included. 30-day money-back guarantee.</p>
+      <p>One-time purchase. Yours forever, with free updates. <strong>Installs on your Mac or Windows computer</strong>; Loadscope Ballistics for iPhone and iPad is included. 30-day money-back guarantee.</p>
       <ul style="margin: 4px 0 18px; padding-left: 20px; color: var(--text-dim); line-height: 1.75;">
-        <li>Measure your target groups right in the app &mdash; or import a target app's export</li>
+        <li>Measure your target groups right in the app &mdash; or import a target app&rsquo;s export</li>
         <li>Scores every powder charge, seating depth &amp; tuner setting, calls your best load</li>
         <li>Predicts your full DOPE and prints a DOPE Card</li>
       </ul>
@@ -1514,7 +1473,7 @@ header.hero .line2 {
 
     <!-- Tab 2: enter existing license key -->
     <div class="tab-panel" id="panelHaveCode">
-      <h3>Enter your code</h3>
+      <h3>Enter your license key</h3>
       <p>Open the email we sent you &mdash; subject <span class="hl">&ldquo;Welcome to Loadscope&rdquo;</span>. Your license key is inside. Paste it below.</p>
       <!-- Placeholder is instructional, NOT a format mask: a full key mask
            clips on a phone. Keep it under ~24 characters. Rationale: commit
@@ -1526,7 +1485,7 @@ header.hero .line2 {
         <code>A1B2C3D4-E5F6-4A7B-8C9D-E0F1A2B3C4D5</code>
         <span class="hint-support">Still not working? Email
           <a href="mailto:support@loadscope.app">support@loadscope.app</a>
-          and we'll get you running.</span>
+          and we&rsquo;ll get you running.</span>
       </div>
       <div id="macArchChoice" style="margin: 12px 0 2px;">
         <div style="font-size: 13px; color: var(--text-dim); margin-bottom: 8px;">Which Mac do you have?</div>
@@ -1537,13 +1496,13 @@ header.hero .line2 {
           </button>
           <button type="button" class="platform-opt" id="archApple" onclick="setMacArch('apple')">
             <span class="platform-opt-os">Apple Silicon</span>
-            <span class="platform-opt-sub">M1 / M2 / M3 / M4</span>
+            <span class="platform-opt-sub">M1 and later</span>
           </button>
         </div>
-        <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Not sure? Choose Intel &mdash; it runs on every Mac. (Apple menu &rarr; About This Mac shows your chip.)</p>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Not sure? Choose Intel &mdash; it runs on every Mac (Apple Silicon Macs run it through Rosetta). Apple menu &rarr; About This Mac shows your chip.</p>
       </div>
       <div class="win-smartscreen-note" id="winSmartScreenNote" style="display:none;">
-        Heads-up: because Loadscope is a new program, your browser may pause the download &mdash; look at the <strong>top-right corner</strong> for a small <strong>download icon</strong>, click it, and choose <strong>Keep</strong>. The file is safe and code-signed by <strong>Loadscope LLC</strong>. Then, the first time you run it, Windows SmartScreen may show a one-time blue <strong>"Windows protected your PC"</strong> box; click <strong>More info → Run anyway</strong> — the publisher reads "Loadscope LLC". Both fade as more people install.
+        Heads-up: because Loadscope is a new program, your browser may pause the download &mdash; look at the <strong>top-right corner</strong> for a small <strong>download icon</strong>, click it, and choose <strong>Keep</strong>. The file is safe and code-signed by <strong>Loadscope LLC</strong>. Then, the first time you run it, Windows SmartScreen may show a one-time blue <strong>&ldquo;Windows protected your PC&rdquo;</strong> box; click <strong>More info → Run anyway</strong> — the publisher reads &ldquo;Loadscope LLC&rdquo;. Both fade as more people install.
       </div>
       <div class="actions">
         <button class="btn btn-outline" onclick="closeDownloadModal()">Cancel</button>
@@ -1573,7 +1532,7 @@ header.hero .line2 {
            should never be sent navigating to a folder: the browser is already
            showing them the file it just downloaded. -->
       <p style="font-size:14px; color: var(--text-muted); margin:0 0 12px;">
-        Keep this page open &mdash; you&rsquo;ll come back to it in step 3.
+        Keep this page open &mdash; you&rsquo;ll come back to it in step 4.
       </p>
       <!-- One action per line, no browser-specific wording. An earlier draft
            detected Safari/Chrome/Firefox to name the exact download button --
@@ -1582,9 +1541,9 @@ header.hero .line2 {
            folder" is true everywhere and cannot go stale.
            NOTE: no dragging anywhere. That is what the self-install buys. -->
       <ol id="installStepsMac" style="display:none; font-size:15px; line-height:1.6; padding-left:20px; margin:0;">
-        <li style="margin-bottom:10px;">Open your <strong>Downloads</strong> folder and double-click <strong>Loadscope.dmg</strong>.</li>
+        <li style="margin-bottom:10px;">Open your <strong>Downloads</strong> folder and double-click the Loadscope disk image (<strong>Loadscope.dmg</strong>, or <strong>Loadscope-arm64.dmg</strong> on Apple Silicon).</li>
         <li style="margin-bottom:10px;">A window opens. Double-click the <strong>Loadscope</strong> icon inside it.</li>
-        <li style="margin-bottom:10px;">Loadscope installs itself and tells you when it's done. Click <strong>OK</strong>.</li>
+        <li style="margin-bottom:10px;">Loadscope installs itself and tells you when it&rsquo;s done. Click <strong>OK</strong>.</li>
         <li>Come back to this page and click <strong>Activate Loadscope</strong> below.</li>
       </ol>
       <ol id="installStepsWin" style="display:none; font-size:15px; line-height:1.6; padding-left:20px; margin:0;">
@@ -1604,7 +1563,7 @@ header.hero .line2 {
 
       <div style="margin-top:18px; padding-top:14px; border-top:1px solid #e5e7eb;">
         <p style="font-size:13px; margin:0 0 6px; color: var(--text-muted);">
-          Button didn't work? Open Loadscope, click <strong>Enter License Key</strong>,
+          Button didn&rsquo;t work? Open Loadscope, click <strong>Enter License Key</strong>,
           and paste this:
         </p>
         <!-- color is EXPLICIT on purpose. Inheriting the dark-theme text
@@ -1975,7 +1934,7 @@ async function submitAccessCode() {
       // the red line SHORT and let the hint below carry the fix -- the worker's
       // own message leads with "contact support", which stops people reading.
       if (r.status === 403) {
-        feedback.textContent = "That code wasn't recognized.";
+        feedback.textContent = "That license key wasn't recognized.";
         showCodeHint(true);
       } else {
         feedback.textContent = data.error || "Something went wrong. Please try again.";
