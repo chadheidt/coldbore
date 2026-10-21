@@ -1,6 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-<head><!-- Google tag (gtag.js) + EU/UK consent --><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',region:['AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES','SE','IS','LI','NO','GB','CH'],wait_for_update:500});gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'granted'});(function(){var c=null;try{c=localStorage.getItem('ls_consent');}catch(e){}if(c==='granted'){gtag('consent','update',{analytics_storage:'granted'});}var tz='';try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||'';}catch(e){}if(c||!/^(Europe\/|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe))/.test(tz)){return;}document.addEventListener('DOMContentLoaded',function(){var b=document.createElement('div');b.id='ls-consent';b.setAttribute('role','dialog');b.setAttribute('aria-label','Cookie notice');b.style.cssText='position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-width:560px;margin:0 auto;background:#1a1c20;color:#f5f5f5;border:1px solid #d97706;border-radius:10px;padding:14px 16px;font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.45)';b.innerHTML='We use Google Analytics to see which pages are useful to shooters. No ads, and nothing is sold. <a href="/privacy.html" style="color:#f59e0b">Privacy</a><div style="margin-top:10px;text-align:right"><button type="button" data-v="denied" style="background:none;border:1px solid #9ca3af;color:#f5f5f5;border-radius:7px;padding:7px 14px;margin-right:8px;cursor:pointer;font:inherit">No thanks</button><button type="button" data-v="granted" style="background:#d97706;border:0;color:#fff;border-radius:7px;padding:7px 18px;cursor:pointer;font:inherit;font-weight:600">OK</button></div>';b.addEventListener('click',function(ev){var v=ev.target&&ev.target.getAttribute&&ev.target.getAttribute('data-v');if(!v){return;}try{localStorage.setItem('ls_consent',v);}catch(e){}if(v==='granted'){gtag('consent','update',{analytics_storage:'granted'});}b.remove();});document.body.appendChild(b);});})();gtag('js',new Date());gtag('config','G-NVD1F3H412');</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-NVD1F3H412"></script>
+<head><script>
+window.dataLayer = window.dataLayer || [];
+
+function gtag() {
+    dataLayer.push(arguments);
+}
+
+gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    region: [ "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "IS", "LI", "NO", "GB", "CH" ],
+    wait_for_update: 500
+});
+
+gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "granted"
+});
+
+(function() {
+    var c = null;
+    try {
+        c = localStorage.getItem("ls_consent");
+    } catch (e) {}
+    if (c === "granted") {
+        gtag("consent", "update", {
+            analytics_storage: "granted"
+        });
+    }
+    var tz = "";
+    try {
+        tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    } catch (e) {}
+    if (c || !/^(Europe\/|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe))/.test(tz)) {
+        return;
+    }
+    document.addEventListener("DOMContentLoaded", (function() {
+        var b = document.createElement("div");
+        b.id = "ls-consent";
+        b.setAttribute("role", "dialog");
+        b.setAttribute("aria-label", "Cookie notice");
+        b.style.cssText = "position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-width:560px;margin:0 auto;background:#1a1c20;color:#f5f5f5;border:1px solid #d97706;border-radius:10px;padding:14px 16px;font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.45)";
+        b.innerHTML = 'We use Google Analytics to see which pages are useful to shooters. No ads, and nothing is sold. <a href="/privacy.html" style="color:#f59e0b">Privacy</a><div style="margin-top:10px;text-align:right"><button type="button" data-v="denied" style="background:none;border:1px solid #9ca3af;color:#f5f5f5;border-radius:7px;padding:7px 14px;margin-right:8px;cursor:pointer;font:inherit">No thanks</button><button type="button" data-v="granted" style="background:#d97706;border:0;color:#fff;border-radius:7px;padding:7px 18px;cursor:pointer;font:inherit;font-weight:600">OK</button></div>';
+        b.addEventListener("click", (function(ev) {
+            var v = ev.target && ev.target.getAttribute && ev.target.getAttribute("data-v");
+            if (!v) {
+                return;
+            }
+            try {
+                localStorage.setItem("ls_consent", v);
+            } catch (e) {}
+            if (v === "granted") {
+                gtag("consent", "update", {
+                    analytics_storage: "granted"
+                });
+            }
+            b.remove();
+        }));
+        document.body.appendChild(b);
+    }));
+})();
+
+gtag("js", new Date);
+
+gtag("config", "G-NVD1F3H412");
+</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-NVD1F3H412"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
@@ -10,12 +79,7 @@
 <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <meta property="og:title" content="Loadscope">
-<!-- SHARE-CARD COPY. This is what Facebook renders when the link is shared and
-     what the Meta ad's preview card shows -- it is NOT read from the page body.
-     It lagged behind the 2026-07-19 Xero rewrite and still said "import your
-     chronograph data", promising the laborious workflow while the page it links
-     to promised plugging the Xero in. Leads with plug-it-in now, and with
-     best-load. Chad approved 2026-07-20. -->
+
 <meta property="og:description" content="Precision rifle load development for Mac and Windows. Plug your Garmin Xero in and Loadscope reads every session straight off it. Measure your groups in-app, and it names your best powder charge and seating depth.">
 <meta property="og:image" content="https://loadscope.app/assets/og-image.png?v=2">
 <meta property="og:image:width" content="1200">
@@ -67,8 +131,7 @@ nav .container { display: flex; justify-content: space-between; align-items: cen
 @media (max-width: 720px) {
   .hero-logo img { width: 72px; height: 72px; }
 }
-/* Narrow phones: show just the logo icon so the nav CTA doesn't collide with
-   the wordmark (the brand name is right below in the hero anyway). */
+
 @media (max-width: 440px) {
   .logo-text { display: none; }
 }
@@ -91,11 +154,7 @@ nav .container { display: flex; justify-content: space-between; align-items: cen
 }
 .btn:hover { background: var(--orange-dark); }
 .btn-large { padding: 10px 26px; font-size: 14.5px; }
-/* Chad 2026-05-23: was 'transparent + dim border + white text' — barely
-   visible on the dark bg. Now a faint-orange tint with orange border +
-   orange text, matching the hero-beta-badge treatment so the secondary
-   CTA reads as 'related to Loadscope orange' not 'a button I forgot
-   to color'. Solid orange-fill on hover. */
+
 .btn-outline {
   background: rgba(217, 119, 6, 0.12);
   border: 1px solid var(--orange);
@@ -106,9 +165,7 @@ nav .container { display: flex; justify-content: space-between; align-items: cen
   color: white !important;
 }
 header.hero {
-  /* Chad 2026-05-23: tightened top padding from 52px -> 20px so the
-     logo sits closer to the nav bar — was reading as too much dead
-     space above the brand. */
+  
   padding: 20px 0 28px;
   text-align: center;
   border-bottom: 1px solid var(--border);
@@ -129,17 +186,12 @@ header.hero .tagline {
   margin-left: auto;
   margin-right: auto;
 }
-/* "Plus:" lead-in for the hero bullet list. Same color as the dim
-   tagline so the eye reads it as connective tissue, not a heading. */
+
 header.hero .tagline-plus {
   margin-bottom: 8px;
   font-weight: 600;
 }
-/* Bulleted "what you also get" list under the hero — centered card-
-   like rows with custom orange bullets so the default list margins
-   don't yank everything left. (Chad 2026-05-23: replaced the single-
-   line tagline with a 2-bullet treatment for the ballistic calculator
-   + Recipe Card recipe.) */
+
 header.hero .hero-plus-list {
   list-style: none;
   padding: 0;
@@ -199,9 +251,7 @@ header.hero .hero-windows-note {
   line-height: 1.5;
 }
 header.hero .hero-windows-note strong { color: var(--text-dim); }
-/* Chad 2026-05-23: cta-row margin-top 48 -> 16; the bullet list above
-   already has its own bottom margin, so 48px stacked was reading as
-   dead space. */
+
 header.hero .cta-row { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-top: 16px; }
 @media (max-width: 520px) { header.hero .cta-row .btn { width: 100%; max-width: 300px; box-sizing: border-box; text-align: center; } }
 header.hero .platform-note {
@@ -248,7 +298,7 @@ header.hero .beta-note strong { color: var(--text); }
   font-style: italic;
 }
 section { padding: 30px 0; }
-/* Offset anchor jumps so the sticky nav doesn't cover the section heading. */
+
 section[id] { scroll-margin-top: 84px; }
 section h2 {
   font-size: 28px;
@@ -540,9 +590,7 @@ header.hero .line2 {
   border-top: 1px solid var(--border);
 }
 .demo-cap b { color: var(--text); }
-/* App-UI slides (Rifle & Setup, DOPE) get a real Mac app-window frame so
-   they read as a polished native app and hold their own next to the
-   bright workbook slides. Workbook/Excel slides stay bare (no chrome). */
+
 .demo-win { position: relative; }
 .demo-titlebar { display: none; }
 .demo-stage.app {
@@ -650,8 +698,7 @@ header.hero .line2 {
   outline: none;
   border-color: var(--orange);
 }
-/* The email subject is the string people actually search their inbox for,
-   so it gets the accent colour and the weight. */
+
 .download-modal .hl {
   color: var(--orange);
   font-weight: 600;
@@ -662,8 +709,7 @@ header.hero .line2 {
   min-height: 18px;
   margin-bottom: 14px;
 }
-/* Shown only when a code is rejected. This block wraps, unlike the input
-   placeholder, so the full key shape is safe here at phone width. */
+
 .download-modal .feedback-hint {
   display: none;
   font-size: 13px;
@@ -676,8 +722,7 @@ header.hero .line2 {
   margin: -6px 0 14px;
 }
 .download-modal .feedback-hint.show { display: block; }
-/* Support comes LAST, after the self-fix. If it leads, people read
-   "contact support" and stop reading. */
+
 .download-modal .feedback-hint .hint-support {
   display: block;
   margin-top: 9px;
@@ -805,13 +850,7 @@ header.hero .line2 {
   color: var(--text-dim);
 }
 .win-smartscreen-note strong { color: var(--text); }
-/* Shown ONLY on a phone or tablet, above the platform picker. An iPad reports
-   itself as a Macintosh (Apple made Safari request desktop sites in iPadOS 13),
-   so the OS sniff below it silently picked "Mac" and handed tablet visitors a
-   .dmg they cannot open. Three Windows customers hit that in the four days to
-   2026-08-18 -- twelve failed download attempts between them, one of whom asked
-   for a refund believing his own PC was broken. Calm, not alarming: it is a
-   signpost, not an error. */
+
 .desktop-only-note {
   background: rgba(96, 165, 250, 0.10);
   border: 1px solid var(--border);
@@ -823,9 +862,7 @@ header.hero .line2 {
   color: var(--text-dim);
 }
 .desktop-only-note strong { color: var(--text); }
-/* Install-section signing note, lifted out of fine print into a calm bordered
-   callout (Chad 2026-06-23: the plain grey footnote was too buried). Leads with
-   the positive "Signed & notarized" so it reassures rather than alarms. */
+
 .install-note {
   max-width: 720px;
   margin: 22px auto 0;
@@ -840,9 +877,7 @@ header.hero .line2 {
   text-align: left;
 }
 .install-note strong { color: var(--text); }
-/* Hero "how it works" 3-step strip — the buried "plan once / shoot in
-   order / import files" line, promoted to a bold scannable flow so a
-   first-time visitor sees what Loadscope does at a glance (Chad 2026-06-23). */
+
 .hero-steps {
   display: flex;
   flex-direction: column;
@@ -881,14 +916,48 @@ header.hero .line2 {
   margin: 6px auto 0;
 }
 .hero-steps-tail span { color: var(--text-dim); font-weight: 500; font-size: 15.5px; display: block; margin-top: 3px; }
-/* The 1-2-3 strip is a vertical stack at every width (Chad's call 2026-07-23);
-   just trim the step title a touch on small screens. */
+
+.hero-phone-shot { display: none; }
+.hero-phone-shot img { width: 100%; max-width: 420px; height: auto; border-radius: 12px;
+  border: 1px solid rgba(217,119,6,.55); box-shadow: 0 12px 34px rgba(0,0,0,.45); }
+.hero-who { font-size: 15.5px; line-height: 1.5; color: var(--text-dim); max-width: 600px; margin: 14px auto 0; }
+.hero-share { display: none; margin: 6px 0 0; font-size: 15px; }
+.share-self { color: var(--orange); font-weight: 600; text-decoration: underline; }
+.desktop-only-note .share-self { display: inline-block; margin-top: 8px; }
+.hero-clip { margin: 26px auto 0; max-width: 340px; }
+.hero-clip video { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border);
+  background: #000; display: block; }
+.hero-clip figcaption { color: var(--text-dim); font-size: .85rem; margin-top: 8px; }
+.galli-link { text-align: center; color: var(--text-dim); font-size: 15px; max-width: 700px; margin: 22px auto 0; }
+.galli-link a { color: var(--orange); font-weight: 600; white-space: nowrap; }
+
+.download-modal.handheld.buy-tab .platform-seg { display: none; }
+@media (max-width: 720px) {
+  header.hero .container { display: flex; flex-direction: column; align-items: center; }
+  header.hero .hero-logo { display: none; }
+  header.hero .hero-beta-badge { order: 1; }
+  header.hero h1 { order: 2; font-size: 30px; }
+  header.hero .line2 { order: 3; margin-bottom: 16px; }
+  .hero-phone-shot { display: block; order: 4; width: 100%; }
+  header.hero .cta-row { order: 5; width: 100%; }
+  header.hero .beta-note { order: 6; }
+  header.hero .hero-phone-buy { order: 7; }
+  .hero-share { display: block; order: 8; }
+  .hero-clip { order: 9; }
+  .hero-steps { order: 10; }
+  .hero-steps-tail { order: 11; }
+  .hero-who { order: 12; }
+}
+.phone-only { display: none; }
+@media (max-width: 600px) {
+  .log-shot, .log-only { display: none; }
+  .phone-only { display: inline; }
+}
+
 @media (max-width: 720px) {
   .hero-steps .hs .t { font-size: 17px; }
 }
-/* Two-up row: ballistic calculator + Recipe Card recipe side by side, each
-   smaller, to free the vertical space two full sections used to eat
-   (Chad 2026-06-23). */
+
 .two-up {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -914,8 +983,7 @@ header.hero .line2 {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
   background: #fff;
 }
-/* Both cards render at the SAME height so the pair reads as matched
-   (Chad 2026-06-23) — each box hugs its image, centered in its column. */
+
 .two-up .up .shot img { display: block; height: 330px; width: auto; }
 @media (max-width: 880px) { .two-up .up .shot img { height: auto; width: 100%; } }
 .two-up .up p {
@@ -930,10 +998,7 @@ header.hero .line2 {
 @media (max-width: 760px) {
   .two-up { grid-template-columns: 1fr; gap: 34px; }
 }
-/* "Built by precision shooters" — 3 across so the five cards balance as
-   3 + 2 (Chad 2026-06-23; grew to five when Compare loads was added
-   2026-07-06). Scoped to #features so the 3-card Beta section, which reuses
-   .features, keeps its own auto-fit layout. */
+
 #beta .features { display: flex; flex-wrap: wrap; justify-content: center; gap: 18px; }
 #beta .feature { flex: 1 1 280px; max-width: 320px; }
 footer .footer-links a { white-space: nowrap; }
@@ -944,8 +1009,7 @@ footer .footer-links a { white-space: nowrap; }
 @media (max-width: 520px) { #features .features { grid-template-columns: 1fr; } }
 </style>
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
-<!-- Structured data (JSON-LD) — read by ALL search engines (Google, Bing, etc.),
-     not just Google. Helps them understand Loadscope is a Mac/Windows app. -->
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -954,7 +1018,7 @@ footer .footer-links a { white-space: nowrap; }
   "operatingSystem": "macOS, Windows",
   "applicationCategory": "UtilitiesApplication",
   "applicationSubCategory": "Precision rifle load development",
-  "softwareVersion": "1.16.0",
+  "softwareVersion": "1.17.0",
   "url": "https://loadscope.app/",
   "image": "https://loadscope.app/assets/og-image.png",
   "description": "Loadscope reads your Garmin Xero over USB — every session at once, no exporting — and measures your target groups from a photo, or imports them from BallisticX, OnTarget, ShotMarker or Silver Mountain. It scores your best powder charge and seating depth into a load-development workbook with predicted DOPE, on Mac and Windows.",
@@ -1033,6 +1097,8 @@ footer .footer-links a { white-space: nowrap; }
     <div class="hero-beta-badge">One-time &middot; $79</div>
     <h1>Loadscope &mdash; precision rifle load development<br>for <span class="accent">Mac &amp; Windows</span>.</h1>
     <div class="line2">Loadscope finds your best <span class="em">charge</span>, <span class="em">seating depth</span>, and <span class="em">tuner setting</span> &mdash; <span class="auto">automatically</span>.</div>
+    
+    <div class="hero-phone-shot"><img src="assets/demo/phone-winner.webp" width="900" height="540" fetchpriority="high" decoding="async" alt="Loadscope Results for a real 7 SAUM powder ladder: best load 59.0 gr, Your data backs this winner up, average velocity 2754 fps, velocity SD 5.6 fps, mean radius 0.140 in, vertical SD 0.145 in"></div>
     <div class="hero-steps">
       <div class="hs"><span class="n">1</span><span class="t">Plan your ladder<span>powder, seating depth or tuner</span></span></div>
       <div class="arrow">&rarr;</div>
@@ -1041,24 +1107,61 @@ footer .footer-links a { white-space: nowrap; }
       <div class="hs"><span class="n">3</span><span class="t">Plug in &amp; measure<span>sessions off your chronograph + your target groups</span></span></div>
     </div>
     <p class="hero-steps-tail">Loadscope scores every rung and names your best load.</p>
+    <p class="hero-who">For anyone who tests loads over a chronograph &mdash; PRS, F-Class, benchrest and hunting rifles alike. Powder ladders, seating depth or a barrel tuner, 3-shot groups or 10.</p>
     <div class="cta-row">
       <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get Loadscope</a>
-      <a href="#" class="btn btn-large btn-outline" onclick="openDemo(event)">Watch the walkthrough</a>
+      <a href="#" class="btn btn-large btn-outline" onclick="openDemo(event)">Full walkthrough (12 min)</a>
     </div>
     <p class="beta-note"><strong>$79, one time</strong> &mdash; yours forever, free updates, no subscription, 30-day money-back guarantee. For your Mac or Windows computer.</p>
-    <p class="hero-phone-buy" style="font-size:15.5px;color:var(--text);margin-top:10px;">Buying on your phone? Your license key is emailed to you &mdash; install Loadscope on your Mac or Windows computer when you&rsquo;re back at it.</p>
+    <p class="hero-phone-buy" style="font-size:15.5px;color:var(--text);margin-top:10px;"><strong>Loadscope is a computer program, not a phone app.</strong><span class="phone-only"> Buy here and your license key is emailed to you right away. Install it on your Mac or Windows computer when you&rsquo;re back at it.</span></p>
+    <p class="hero-share"><a href="#" class="share-self" onclick="shareSelf(event,'hero')">Send this page to myself</a></p>
+    
+    <figure class="hero-clip">
+      <video id="heroClip" src="assets/ladder-scored-20s.mp4" poster="assets/ladder-scored-20s-poster.webp" width="540" height="676" autoplay muted loop playsinline preload="metadata" aria-label="20-second clip: a real 7 SAUM ladder scored in Loadscope -- the winning charge, the measured groups, every charge scored, and the recipe card"></video>
+      <figcaption>A real ladder, scored &mdash; 20 seconds.</figcaption>
+    </figure>
   </div>
 </header>
+
+<section id="testimonials" style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+  <div class="container">
+    <h2>From <span class="accent">shooters</span> who use it.</h2>
+    <p class="section-sub">Real reloaders, real range days.</p>
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: flex-start; max-width: 940px; margin: 8px auto 0;">
+      <figure style="flex: 1 1 380px; max-width: 460px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--orange); border-radius: 12px; padding: 24px 26px; margin: 0;">
+        <div style="color: var(--orange); font-size: 13px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 10px;">&#10003; VERIFIED CUSTOMER</div>
+        <blockquote style="margin: 0; font-size: 18px; line-height: 1.6; color: var(--text);">&ldquo;Hand input works perfectly. Your system found this [load] also. I will be telling everyone about your software.&rdquo;</blockquote>
+        <figcaption style="margin-top: 14px; color: var(--text-dim); font-size: 14px;">&mdash; Dan S., precision reloader</figcaption>
+      </figure>
+      <figure style="flex: 1 1 380px; max-width: 460px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--orange); border-radius: 12px; padding: 24px 26px; margin: 0;">
+        <div style="color: var(--orange); font-size: 13px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 10px;">&#10003; VERIFIED CUSTOMER</div>
+        <blockquote style="margin: 0; font-size: 18px; line-height: 1.6; color: var(--text);">&ldquo;The first load test I did came up with the same result [as the load] I have been using, a lot faster than the testing process that I was using.&rdquo;</blockquote>
+        <figcaption style="margin-top: 14px; color: var(--text-dim); font-size: 14px;">&mdash; Terry L., precision reloader</figcaption>
+      </figure>
+      <figure style="flex: 1 1 380px; max-width: 460px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--orange); border-radius: 12px; padding: 24px 26px; margin: 0;">
+        <div style="color: var(--orange); font-size: 13px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 10px;">&#10003; VERIFIED CUSTOMER</div>
+        <blockquote style="margin: 0; font-size: 18px; line-height: 1.6; color: var(--text);">&ldquo;It&rsquo;s nice to buy product from a creator that&rsquo;s willing to go above and beyond the expectations of the customer.&rdquo;</blockquote>
+        <figcaption style="margin-top: 14px; color: var(--text-dim); font-size: 14px;">&mdash; Ardy R., precision reloader</figcaption>
+      </figure>
+      <figure style="flex: 1 1 380px; max-width: 460px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--orange); border-radius: 12px; padding: 24px 26px; margin: 0;">
+        <div style="color: var(--orange); font-size: 13px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 10px;">&#10003; APP STORE REVIEW &middot; &#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <blockquote style="margin: 0; font-size: 18px; line-height: 1.6; color: var(--text);">&ldquo;Great app for load dev. One of the easier apps out there &mdash; even keeps load recipes and barrel rounds.&rdquo;</blockquote>
+        <figcaption style="margin-top: 14px; color: var(--text-dim); font-size: 14px;">&mdash; App Store review, Loadscope Ballistics</figcaption>
+      </figure>
+    </div>
+    <p class="galli-link">Watch Frank Galli set Loadscope up live on TheHideTV (Sniper&rsquo;s Hide) &mdash; 27 minutes, start to finish. <a href="https://www.youtube.com/watch?v=zLpaTT9nehA" target="_blank" rel="noopener">Watch the stream</a></p>
+  </div>
+</section>
 
 <section id="features">
   <div class="container">
     <div class="split">
       <div class="split-text">
         <h2>Plan it <span class="accent">once</span>.</h2>
-        <p class="section-sub">Enter your ladder &mdash; powder charge, seating depth or barrel tuner, start, step, how many. Loadscope lays out every load so you just shoot it in order. No naming files, no typing velocities, no spreadsheet wrangling.</p>
+        <p class="section-sub">Enter your ladder &mdash; powder charge, seating depth or barrel tuner, start, step, how many. Loadscope lays out every load so you just shoot it in order. No naming files, no spreadsheet wrangling &mdash; and no typing velocities unless you&rsquo;d rather enter them by hand.</p>
       </div>
       <div class="screenshot-wrap">
-        <img src="assets/demo/gd-ladder.webp" width="1600" height="1088" fetchpriority="high" decoding="async" alt="Loadscope Create New Load, Step 2 of 2 - Plan your ladder: a powder ladder for a 7 SAUM with a Berger 175gr Elite Hunter, VihtaVuori N555, Federal 210M and ADG brass, start charge 58.6 gr, 0.2 gr steps, 3 steps, 4 shots per string, and the loads laid out as P1 58.6, P2 58.8, P3 59.0">
+        <picture><source media="(max-width: 600px)" srcset="assets/demo/gd-ladder-phone.webp" width="900" height="691"><img src="assets/demo/gd-ladder.webp" width="1600" height="1088" loading="lazy" decoding="async" alt="Loadscope Create New Load, Step 2 of 2 - Plan your ladder: a powder ladder for a 7 SAUM with a Berger 175gr Elite Hunter, VihtaVuori N555, Federal 210M and ADG brass, start charge 58.6 gr, 0.2 gr steps, 3 steps, 4 shots per string, and the loads laid out as P1 58.6, P2 58.8, P3 59.0"></picture>
       </div>
     </div>
   </div>
@@ -1086,7 +1189,7 @@ footer .footer-links a { white-space: nowrap; }
         <p class="section-sub">No separate target app needed. Photograph your target, set the scale, and tap your shots &mdash; Loadscope works out group size, <strong>mean radius</strong> and vertical, then scores it. Already use a target app? Import its CSV instead.</p>
       </div>
       <div class="screenshot-wrap">
-        <img src="assets/measure-target.webp" width="3420" height="1868" loading="lazy" decoding="async" alt="Loadscope Measure Target screen: a real 7 SAUM powder ladder on one target sheet at 100 yards, the 59.0 gr target open with each charge measured and tagged on the photo (Bull 1 58.6 gr, Bull 2 58.8 gr, Bull 3 59.0 gr), Set scale / Move aim / Mark shots above, and Results showing the 59.0 gr group: 0.330 in (0.315 MOA), mean radius 0.140 in, with all three targets saved on the strip below">
+        <picture><source media="(max-width: 600px)" srcset="assets/measure-target-phone.webp" width="900" height="714"><img src="assets/measure-target.webp" width="3420" height="1868" loading="lazy" decoding="async" alt="Loadscope Measure Target screen: a real 7 SAUM powder ladder on one target sheet at 100 yards, the 59.0 gr target open with each charge measured and tagged on the photo (Bull 1 58.6 gr, Bull 2 58.8 gr, Bull 3 59.0 gr), Set scale / Move aim / Mark shots above, and Results showing the 59.0 gr group: 0.330 in (0.315 MOA), mean radius 0.140 in, with all three targets saved on the strip below"></picture>
         <p style="text-align:center;color:var(--text-dim);font-size:.82rem;margin:14px auto 0;">A real 7 SAUM powder ladder &mdash; every charge on one sheet, measured in Loadscope.</p>
       </div>
     </div>
@@ -1098,7 +1201,7 @@ footer .footer-links a { white-space: nowrap; }
     <h2>Your best load, <span class="accent">named</span>.</h2>
     <p class="section-sub">Every charge is scored on velocity flat spot, SD, mean radius and vertical, and one winner is named. Change the weights and Loadscope re-scores from your existing data &mdash; no re-import.</p>
     <div class="screenshot-wrap" style="max-width:860px;">
-      <img src="assets/demo/app-results-trim.webp" width="2227" height="722" loading="lazy" decoding="async" alt="Loadscope Results screen for a real 7 SAUM powder ladder: the BEST LOAD - 59.0 gr of VihtaVuori N555 under a Berger 175gr Elite Hunter, CBTO 2.335 in - scored across all four metrics (avg velocity 2754 fps, velocity SD 5.6 fps, mean radius 0.140 in, vertical SD 0.145 in)">
+      <picture><source media="(max-width: 600px)" srcset="assets/demo/phone-winner.webp" width="900" height="540"><img src="assets/demo/app-results-trim.webp" width="2227" height="722" loading="lazy" decoding="async" alt="Loadscope Results screen for a real 7 SAUM powder ladder: the BEST LOAD - 59.0 gr of VihtaVuori N555 under a Berger 175gr Elite Hunter, CBTO 2.335 in - scored across all four metrics (avg velocity 2754 fps, velocity SD 5.6 fps, mean radius 0.140 in, vertical SD 0.145 in)"></picture>
     </div>
     <div class="screenshot-wrap" style="margin-top:14px;max-width:860px;">
       <img src="assets/demo/gd-whiskers.webp" width="1781" height="675" loading="lazy" decoding="async" alt="Loadscope velocity chart for the same 7 SAUM ladder: average velocity for 58.6, 58.8 and 59.0 gr with plus-or-minus 1 SD bars, speeds climbing steadily, and the 59.0 gr winner highlighted">
@@ -1106,7 +1209,7 @@ footer .footer-links a { white-space: nowrap; }
     <div class="screenshot-wrap log-shot" style="margin-top:14px;max-width:860px;">
       <img src="assets/demo/01-load-log.webp" width="1941" height="301" loading="lazy" decoding="async" alt="Loadscope Powder Charge Log for the same 7 SAUM ladder: 58.6, 58.8 and 59.0 gr, each with its four shot speeds, average velocity, ES, SD, mean radius, group, vertical and composite score, and 59.0 gr tagged WINNER">
     </div>
-    <p style="text-align:center;color:var(--text-dim);font-size:.82rem;max-width:640px;margin:22px auto 0;">The Powder Charge Log: every shot, every charge, one sheet (seating depth gets its own log) &mdash; a real 7 SAUM powder ladder, shown to illustrate the software, not load data. Always work up from your published manual.</p>
+    <p class="log-caption" style="text-align:center;color:var(--text-dim);font-size:.82rem;max-width:640px;margin:22px auto 0;"><span class="log-only">The Powder Charge Log: every shot, every charge, one sheet (seating depth gets its own log) &mdash; a</span><span class="phone-only">A</span> real 7 SAUM powder ladder, shown to illustrate the software, not load data. Always work up from your published manual.</p>
   </div>
 </section>
 
@@ -1131,15 +1234,12 @@ footer .footer-links a { white-space: nowrap; }
   </div>
 </section>
 
-
 <style>
   #companion .comp-badge{display:inline-block;background:rgba(217,119,6,.12);color:var(--orange);
     border:1px solid rgba(217,119,6,.4);border-radius:20px;padding:4px 14px;font-size:12px;
     font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin-bottom:16px;}
   #companion .comp-head{text-align:center;max-width:880px;margin:0 auto;}
-  /* Widen the lead paragraph so it wraps to fewer lines (Chad 2026-06-23:
-     the 6-line block ate too much vertical space) + tighten the gap to the
-     phones. */
+  
   #companion .comp-head .section-sub{margin:0 auto 12px;max-width:880px;line-height:1.5;}
   #companion .comp-phones{display:flex;justify-content:center;align-items:flex-end;gap:26px;
     margin:22px 0 26px;flex-wrap:wrap;}
@@ -1179,31 +1279,6 @@ footer .footer-links a { white-space: nowrap; }
         <img src="assets/companion/phone-measure.webp" width="496" height="1023" loading="lazy" decoding="async" alt="A three-shot group measured from a photo on iPhone at 200 yards: each hole circled, with group size, mean radius and elevation and windage off aim shown in MOA, mils and inches, and a Print button.">
         <p class="comp-caption" style="flex-basis:100%;text-align:center;color:var(--text-dim);font-size:.82rem;margin:4px 0 0;">Left: the DOPE tab. Right: a 200-yard group measured on the phone.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-
-<section id="testimonials" style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-  <div class="container">
-    <h2>What <span class="accent">shooters</span> are saying.</h2>
-    <p class="section-sub">Real reloaders, real range days.</p>
-    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; align-items: flex-start; max-width: 940px; margin: 8px auto 0;">
-      <figure style="flex: 1 1 380px; max-width: 460px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--orange); border-radius: 12px; padding: 24px 26px; margin: 0;">
-        <div style="color: var(--orange); font-size: 13px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 10px;">&#10003; VERIFIED CUSTOMER</div>
-        <blockquote style="margin: 0; font-size: 18px; line-height: 1.6; color: var(--text);">&ldquo;Hand input works perfectly. Your system found this [load] also. I will be telling everyone about your software.&rdquo;</blockquote>
-        <figcaption style="margin-top: 14px; color: var(--text-dim); font-size: 14px;">&mdash; Dan S., precision reloader</figcaption>
-      </figure>
-      <figure style="flex: 1 1 380px; max-width: 460px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--orange); border-radius: 12px; padding: 24px 26px; margin: 0;">
-        <div style="color: var(--orange); font-size: 13px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 10px;">&#10003; VERIFIED CUSTOMER</div>
-        <blockquote style="margin: 0; font-size: 18px; line-height: 1.6; color: var(--text);">&ldquo;The first load test I did came up with the same result [as the load] I have been using, a lot faster than the testing process that I was using.&rdquo;</blockquote>
-        <figcaption style="margin-top: 14px; color: var(--text-dim); font-size: 14px;">&mdash; Terry L., precision reloader</figcaption>
-      </figure>
-      <figure style="flex: 1 1 380px; max-width: 460px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--orange); border-radius: 12px; padding: 24px 26px; margin: 0;">
-        <div style="color: var(--orange); font-size: 13px; font-weight: 700; letter-spacing: 1.5px; margin-bottom: 10px;">&#10003; APP STORE REVIEW &middot; &#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <blockquote style="margin: 0; font-size: 18px; line-height: 1.6; color: var(--text);">&ldquo;Great app for load dev. One of the easier apps out there &mdash; even keeps load recipes and barrel rounds.&rdquo;</blockquote>
-        <figcaption style="margin-top: 14px; color: var(--text-dim); font-size: 14px;">&mdash; App Store review, Loadscope Ballistics</figcaption>
-      </figure>
     </div>
   </div>
 </section>
@@ -1252,12 +1327,14 @@ footer .footer-links a { white-space: nowrap; }
     <details class="faq-toggle">
       <summary>Show the questions</summary>
       <div class="faq-grid">
-      <!-- Research 2026-09-24 (voice of customer): six people mixed up the phone
-           apps and the desktop program -- a refund, a key never activated, an
-           accidental purchase. No answer here said plainly "you need a computer". -->
+      
       <details class="faq-item" id="phone-or-computer">
         <summary>Is Loadscope a phone app? Is there an iPhone app?</summary>
         <p><strong>No &mdash; Loadscope is a desktop program, so you need a Mac or Windows computer.</strong> That&rsquo;s where your chronograph and target data come in, every rung gets scored, and your best load is named. Loadscope Ballistics, the iPhone and iPad app included with your license, is a field companion that carries the load you settle on to the range &mdash; a DOPE dial that re-solves live as conditions change, your recipe at the bench, and round counts that sync back to the desktop. Desktop owners unlock it with their license key; on its own, phone-side load entry is a one-time $9.99 unlock. <a href="https://apps.apple.com/app/id6777277349" target="_blank" rel="noopener">See it on the App Store &rarr;</a> There&rsquo;s no Android app, and you don&rsquo;t need one &mdash; all of the load-development work happens on the computer.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Will Loadscope tell me what charge to load?</summary>
+        <p><strong>No.</strong> Loadscope never suggests a charge you haven&rsquo;t shot. It scores the loads you actually shot and names the one that shot best. Always work up from your published load manual.</p>
       </details>
       <details class="faq-item">
         <summary>How does Loadscope decide your best powder charge and seating depth?</summary>
@@ -1273,7 +1350,7 @@ footer .footer-links a { white-space: nowrap; }
       </details>
       <details class="faq-item">
         <summary>Is Loadscope a subscription?</summary>
-        <p>No. It&rsquo;s a <strong>one-time purchase</strong> with free updates. It runs fully offline &mdash; no account, and no load data ever leaves your computer. The only thing it sends is a small license check when it opens.</p>
+        <p>No. It&rsquo;s a <strong>one-time purchase</strong> with free updates. It runs fully offline &mdash; no account, and no load data ever leaves your computer. The only things it sends are a small license check when it opens and, if you choose to, a crash report.</p>
       </details>
       <details class="faq-item" id="metric">
         <summary>Does it work in metric? Can I buy from outside the US?</summary>
@@ -1305,12 +1382,7 @@ footer .footer-links a { white-space: nowrap; }
         <summary>Do I need Microsoft Excel?</summary>
         <p>No. Loadscope does the work itself — your scored results, best load, predicted DOPE, and printable Recipe and DOPE Cards all appear right inside the app, no Excel required. Excel only matters if you want to open the underlying workbook and poke around the formulas yourself. Even then, the file is a standard <strong>.xlsx</strong> that opens just as well in <strong>Numbers</strong> (free on every Mac), Google Sheets, or LibreOffice. Excel is recommended for the full spreadsheet experience, but it&rsquo;s not required to use Loadscope.</p>
       </details>
-      <!-- Anchored on purpose: loadscope.app/#windows-blocked is a link we can
-           paste into a support reply, a forum answer, or the licence email. The
-           older guidance lived ONLY inside the download modal, so a buyer who
-           came back from his licence email had nowhere to read it. Two paying
-           customers were stopped by this in one week (2026-08-17/18) and one was
-           refunded. -->
+      
       <details class="faq-item" id="windows-blocked">
         <summary>Windows blocked or deleted my download &mdash; what now?</summary>
         <p>Three different things can happen, and each needs a different fix. Loadscope is signed by <strong>Loadscope LLC</strong>, so in every case you can check the publisher name before you allow anything.</p>
@@ -1429,14 +1501,13 @@ footer .footer-links a { white-space: nowrap; }
 
 <div class="download-modal" id="downloadModal" onclick="if(event.target===this) closeDownloadModal()">
   <div class="box">
-    <!-- Platform picker: drives both the request and the download. Auto-set
-         from the visitor's OS (overridable). One button, one modal, platform
-         handled inside — see Chad 2026-05-31 UI decision. -->
-    <!-- Handheld visitors only; unhidden by applyHandheldNotice() on load. -->
+
     <div class="desktop-only-note" id="desktopOnlyNote" style="display:none;">
-      <strong>Loadscope is desktop software.</strong> It runs on a Mac or Windows
-      computer, not on a phone or tablet. Pick the computer you&rsquo;ll install it on
-      to get the right installer, or just open this page on that computer instead.
+      <strong>Buy now, install on your computer later.</strong> Loadscope runs on your Mac
+      or Windows computer, not on a phone or tablet. Check out here and your license key is
+      emailed to you right away &mdash; download it when you&rsquo;re at your computer.
+      30-day money-back guarantee.
+      <a href="#" class="share-self" onclick="shareSelf(event,'buybox')">Send this page to myself</a>
     </div>
     <div class="platform-seg" role="group" aria-label="Choose your computer">
       <button type="button" class="platform-opt" id="platMac" onclick="setPlatform('mac')">
@@ -1454,7 +1525,6 @@ footer .footer-links a { white-space: nowrap; }
       <button class="modal-tab" id="tabHaveCode" onclick="switchTab('have-code')">I have a key</button>
     </div>
 
-    <!-- Tab 1: buy Loadscope -->
     <div class="tab-panel active" id="panelRequestAccess">
       <h3>Get Loadscope &mdash; $79</h3>
       <p>One-time purchase. Yours forever, with free updates. <strong>Installs on your Mac or Windows computer</strong>; Loadscope Ballistics for iPhone and iPad is included. 30-day money-back guarantee.</p>
@@ -1471,13 +1541,10 @@ footer .footer-links a { white-space: nowrap; }
       <p style="font-size: 13px; color: var(--text-muted); margin-top: 14px;">After checkout, your license key arrives by email &mdash; then use <strong>I have a key</strong> to download. Prices are in US dollars; outside the US, checkout adds VAT or GST where your country charges it.</p>
     </div>
 
-    <!-- Tab 2: enter existing license key -->
     <div class="tab-panel" id="panelHaveCode">
       <h3>Enter your license key</h3>
       <p>Open the email we sent you &mdash; subject <span class="hl">&ldquo;Welcome to Loadscope&rdquo;</span>. Your license key is inside. Paste it below.</p>
-      <!-- Placeholder is instructional, NOT a format mask: a full key mask
-           clips on a phone. Keep it under ~24 characters. Rationale: commit
-           33c8116. -->
+      
       <input type="text" id="accessCodeInput" placeholder="Paste your license key" autocomplete="off" autocapitalize="characters" spellcheck="false">
       <div class="feedback" id="accessCodeFeedback"></div>
       <div class="feedback-hint" id="accessCodeHint">
@@ -1510,36 +1577,13 @@ footer .footer-links a { white-space: nowrap; }
       </div>
     </div>
 
-    <!-- Tab 3: after the download starts. NOT a tab the user can click -- it
-         replaces the modal contents once the file is on its way.
-         Before this existed the modal simply CLOSED 800ms after the download
-         began, leaving a brand-new customer with a file in Downloads and no
-         idea what to do next. That is exactly how Ennio Staffini (bought
-         2026-07-17) lost three days: he ran Loadscope from inside the .dmg
-         window, it vanished when he closed it, and he came back to this page
-         -- which showed him the buy screen again. -->
     <div class="tab-panel" id="panelAfterDownload">
       <h3>Your download has started</h3>
 
-      <!-- THREE lines, one action each, no warnings, no folder navigation.
-           The earlier draft said "open Loadscope from your Downloads folder,
-           it will offer to install itself" and carried a red paragraph about
-           dragging an icon. Chad 2026-07-20: "This is still quite a fucking
-           confusing process the way you've got it worded."
-           He was right on both counts. The red warning only existed because
-           the .dmg still existed -- serving the .zip deletes the two-icon
-           window, so there is no trap left to warn about. And a customer
-           should never be sent navigating to a folder: the browser is already
-           showing them the file it just downloaded. -->
       <p style="font-size:14px; color: var(--text-muted); margin:0 0 12px;">
         Keep this page open &mdash; you&rsquo;ll come back to it in step 4.
       </p>
-      <!-- One action per line, no browser-specific wording. An earlier draft
-           detected Safari/Chrome/Firefox to name the exact download button --
-           clever, but it was wrong about which filename each browser shows and
-           it breaks whenever a browser moves a button. "Open your Downloads
-           folder" is true everywhere and cannot go stale.
-           NOTE: no dragging anywhere. That is what the self-install buys. -->
+      
       <ol id="installStepsMac" style="display:none; font-size:15px; line-height:1.6; padding-left:20px; margin:0;">
         <li style="margin-bottom:10px;">Open your <strong>Downloads</strong> folder and double-click the Loadscope disk image (<strong>Loadscope.dmg</strong>, or <strong>Loadscope-arm64.dmg</strong> on Apple Silicon).</li>
         <li style="margin-bottom:10px;">A window opens. Double-click the <strong>Loadscope</strong> icon inside it.</li>
@@ -1566,11 +1610,7 @@ footer .footer-links a { white-space: nowrap; }
           Button didn&rsquo;t work? Open Loadscope, click <strong>Enter License Key</strong>,
           and paste this:
         </p>
-        <!-- color is EXPLICIT on purpose. Inheriting the dark-theme text
-             colour put rgb(245,245,245) on a rgb(243,244,246) background --
-             the key was rendered but invisible, and this is the fallback a
-             customer reads precisely when the button has already failed them.
-             Caught by screenshotting; the DOM check said textContent was fine. -->
+        
         <code id="activateKeyText" style="display:block; padding:10px 12px; background:#f3f4f6; color:#111827; border:1px solid #d1d5db; border-radius:6px; font-size:15px; font-weight:600; letter-spacing:0.5px; word-break:break-all;"></code>
       </div>
 
@@ -1582,524 +1622,478 @@ footer .footer-links a { white-space: nowrap; }
 </div>
 
 <script>
-// Demo video popup player.
-// The hero "Watch the walkthrough" button opens the Part-1 YouTube walkthrough
-// (youtu.be/8V-7lJBN_rE) in the lightbox. The iframe src is set on open and
-// cleared on close so the video only loads when asked and stops on close (a
-// YouTube iframe keeps playing audio otherwise). rel=0 drops the related-video
-// grid at the end. Standard youtube.com/embed, not youtube-nocookie -- the
-// latter throws a 153 config error on non-domain origins (e.g. a localhost preview).
 var YT_WALKTHROUGH = "https://www.youtube.com/embed/8V-7lJBN_rE?rel=0&autoplay=1&cc_load_policy=0";
+
 function openDemo(ev) {
-  if (ev) ev.preventDefault();
-  var m = document.getElementById("videoModal");
-  var f = document.getElementById("demoFrame");
-  if (f) f.src = YT_WALKTHROUGH;       // (re)load fresh each open
-  if (m) m.classList.add("open");
-}
-function closeDemo() {
-  var m = document.getElementById("videoModal");
-  var f = document.getElementById("demoFrame");
-  if (m) m.classList.remove("open");
-  if (f) f.src = "about:blank";        // stop playback
+    if (ev) ev.preventDefault();
+    var m = document.getElementById("videoModal");
+    var f = document.getElementById("demoFrame");
+    if (f) f.src = YT_WALKTHROUGH;
+    if (m) m.classList.add("open");
 }
 
-// Attribution: capture whatever UTM params a visitor arrived with (Meta ad,
-// forum link, social bio, etc.) and carry them into the Buy Now checkout link
-// as Lemon Squeezy custom data, so each order can be traced back to a channel
-// instead of being a dead end (Chad 2026-07-09 -- a sale came in with no way
-// to tell where it originated). Last-touch: a later visit with new UTM params
-// overwrites the stored ones, matching how the buyer actually arrived this time.
-// Referrer fallback (Chad 2026-07-23): a tag can only ride a link WE control, so
-// organic search was invisible -- every Google visitor landed in "direct/untagged"
-// alongside word-of-mouth, fliers, and typed-in URLs. The browser does tell us which
-// site sent them, so when no tag is present we derive the channel from the referrer.
-// Tagged links always win: this only fills in when utm_source is otherwise empty.
+function closeDemo() {
+    var m = document.getElementById("videoModal");
+    var f = document.getElementById("demoFrame");
+    if (m) m.classList.remove("open");
+    if (f) f.src = "about:blank";
+}
+
 function srcFromReferrer() {
-  try {
-    if (!document.referrer) return null;                    // typed in / bookmarked = truly direct
-    var h = new URL(document.referrer).hostname.replace(/^www\./, "").toLowerCase();
-    if (!h || h === location.hostname.replace(/^www\./, "").toLowerCase()) return null;  // our own pages
-    // AI assistants get their OWN medium. Folding them into "organic" would bury
-    // the channel just as it starts to matter -- "perplexity / ai" is readable in
-    // the roster, "perplexity / organic" is indistinguishable from a Google click.
-    // Checked BEFORE the engine list on purpose, so gemini.google.com reads as
-    // gemini rather than being swallowed by the google rule below.
-    var ai = h.match(/(^|\.)(chatgpt|openai|perplexity|claude|copilot|gemini)\./);
-    if (ai) return { utm_source: ai[2], utm_medium: "ai", utm_campaign: "ai_search" };
-    // Name the engine off the MATCH, not by position -- "google.co.uk" has the
-    // brand in the FIRST label, so counting back from the end yields "co".
-    // kagi added 2026-08-20: a real buyer arrived from Kagi on 08-19 and landed in
-    // the generic referral bucket as "kagi.com / referral" -- it is a search engine
-    // (a paid, ad-free one), the name was just missing from this list.
-    var eng = h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave|kagi)\./);
-    if (eng) return { utm_source: eng[2], utm_medium: "organic", utm_campaign: "search" };
-    var KNOWN = {
-      "snipershide.com": ["snipershide", "forum"],
-      "accurateshooter.com": ["accurateshooter", "forum"],
-      "longrangehunting.com": ["longrangehunting", "forum"],
-      "reddit.com": ["reddit", "social"], "out.reddit.com": ["reddit", "social"],
-      "youtube.com": ["youtube", "video"], "youtu.be": ["youtube", "video"],
-      "facebook.com": ["facebook", "social"], "m.facebook.com": ["facebook", "social"],
-      "l.facebook.com": ["facebook", "social"], "lm.facebook.com": ["facebook", "social"],
-      "x.com": ["x", "social"], "t.co": ["x", "social"], "twitter.com": ["x", "social"]
-    };
-    if (KNOWN[h]) return { utm_source: KNOWN[h][0], utm_medium: KNOWN[h][1], utm_campaign: "referral" };
-    return { utm_source: h, utm_medium: "referral", utm_campaign: "referral" };
-  } catch (e) { return null; }
+    try {
+        if (!document.referrer) return null;
+        var h = new URL(document.referrer).hostname.replace(/^www\./, "").toLowerCase();
+        if (!h || h === location.hostname.replace(/^www\./, "").toLowerCase()) return null;
+        var ai = h.match(/(^|\.)(chatgpt|openai|perplexity|claude|copilot|gemini)\./);
+        if (ai) return {
+            utm_source: ai[2],
+            utm_medium: "ai",
+            utm_campaign: "ai_search"
+        };
+        var eng = h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave|kagi)\./);
+        if (eng) return {
+            utm_source: eng[2],
+            utm_medium: "organic",
+            utm_campaign: "search"
+        };
+        var KNOWN = {
+            "snipershide.com": [ "snipershide", "forum" ],
+            "accurateshooter.com": [ "accurateshooter", "forum" ],
+            "longrangehunting.com": [ "longrangehunting", "forum" ],
+            "reddit.com": [ "reddit", "social" ],
+            "out.reddit.com": [ "reddit", "social" ],
+            "youtube.com": [ "youtube", "video" ],
+            "youtu.be": [ "youtube", "video" ],
+            "facebook.com": [ "facebook", "social" ],
+            "m.facebook.com": [ "facebook", "social" ],
+            "l.facebook.com": [ "facebook", "social" ],
+            "lm.facebook.com": [ "facebook", "social" ],
+            "x.com": [ "x", "social" ],
+            "t.co": [ "x", "social" ],
+            "twitter.com": [ "x", "social" ]
+        };
+        if (KNOWN[h]) return {
+            utm_source: KNOWN[h][0],
+            utm_medium: KNOWN[h][1],
+            utm_campaign: "referral"
+        };
+        return {
+            utm_source: h,
+            utm_medium: "referral",
+            utm_campaign: "referral"
+        };
+    } catch (e) {
+        return null;
+    }
 }
 
 (function attributionCapture() {
-  var UTM_KEYS = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
-  function cookie(n){ var m=document.cookie.match('(^|;)\\s*'+n+'\\s*=\\s*([^;]+)'); return m?m.pop():null; }
-  try {
-    var params = new URLSearchParams(window.location.search);
-    UTM_KEYS.forEach(function (k) {
-      var v = params.get(k);
-      if (v) sessionStorage.setItem(k, v);
-    });
-    if (!sessionStorage.getItem("utm_source")) {           // nothing tagged, anywhere this session
-      var ref = srcFromReferrer();
-      if (ref) Object.keys(ref).forEach(function (k) { sessionStorage.setItem(k, ref[k]); });
+    var UTM_KEYS = [ "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term" ];
+    function cookie(n) {
+        var m = document.cookie.match("(^|;)\\s*" + n + "\\s*=\\s*([^;]+)");
+        return m ? m.pop() : null;
     }
-    // Google Ads click identifier + GA4 client id. Same purpose as fbc/fbp above:
-    // carrying these through checkout lets the server-side purchase report (worker
-    // -> GA4 Measurement Protocol -> linked Google Ads account) be matched back to
-    // the AD CLICK instead of reporting an unattributed conversion.
-    var gclid = params.get("gclid");
-    if (gclid) sessionStorage.setItem("gclid", gclid);
-    var gaCookie = cookie("_ga");
-    if (gaCookie) {
-      var gaParts = gaCookie.split(".");
-      if (gaParts.length >= 4) sessionStorage.setItem("_ga_cid", gaParts[gaParts.length - 2] + "." + gaParts[gaParts.length - 1]);
-    }
-
-    var link = document.getElementById("buyNowLink");
-    if (link) {
-      var url = new URL(link.href);
-      UTM_KEYS.forEach(function (k) {
-        var v = sessionStorage.getItem(k);
-        if (v) url.searchParams.set("checkout[custom][" + k + "]", v);
-      });
-      var gclidv = sessionStorage.getItem("gclid"); if (gclidv) url.searchParams.set("checkout[custom][gclid]", gclidv);
-      var gacidv = sessionStorage.getItem("_ga_cid"); if (gacidv) url.searchParams.set("checkout[custom][ga_cid]", gacidv);
-      link.href = url.toString();
-      // Fire InitiateCheckout when they open the checkout, so the ad account has a
-      // high-volume, well-matched conversion event to optimize toward (Purchase
-      // alone is far too rare to learn on). The browser pixel supplies fbp/fbc/IP
-      // automatically, so IC match quality is strong.
-      link.addEventListener("click", function () {
-        try { if (window.gtag) gtag("event", "begin_checkout", { value: 79, currency: "USD" }); } catch (e) {}
-      });
-    }
-  } catch (e) { /* attribution is best-effort -- never block checkout */ }
+    try {
+        var params = new URLSearchParams(window.location.search);
+        UTM_KEYS.forEach((function(k) {
+            var v = params.get(k);
+            if (v) sessionStorage.setItem(k, v);
+        }));
+        if (!sessionStorage.getItem("utm_source")) {
+            var ref = srcFromReferrer();
+            if (ref) Object.keys(ref).forEach((function(k) {
+                sessionStorage.setItem(k, ref[k]);
+            }));
+        }
+        var gclid = params.get("gclid");
+        if (gclid) sessionStorage.setItem("gclid", gclid);
+        var gaCookie = cookie("_ga");
+        if (gaCookie) {
+            var gaParts = gaCookie.split(".");
+            if (gaParts.length >= 4) sessionStorage.setItem("_ga_cid", gaParts[gaParts.length - 2] + "." + gaParts[gaParts.length - 1]);
+        }
+        var link = document.getElementById("buyNowLink");
+        if (link) {
+            var url = new URL(link.href);
+            UTM_KEYS.forEach((function(k) {
+                var v = sessionStorage.getItem(k);
+                if (v) url.searchParams.set("checkout[custom][" + k + "]", v);
+            }));
+            var gclidv = sessionStorage.getItem("gclid");
+            if (gclidv) url.searchParams.set("checkout[custom][gclid]", gclidv);
+            var gacidv = sessionStorage.getItem("_ga_cid");
+            if (gacidv) url.searchParams.set("checkout[custom][ga_cid]", gacidv);
+            link.href = url.toString();
+            link.addEventListener("click", (function() {
+                try {
+                    if (window.gtag) gtag("event", "begin_checkout", {
+                        value: 79,
+                        currency: "USD"
+                    });
+                } catch (e) {}
+            }));
+        }
+    } catch (e) {}
 })();
 
-// 🔴 api.loadscope.app, NOT *.workers.dev (2026-08-18). Consumer DNS filters
-// blocklist workers.dev because it is abused for phishing -- that is what broke
-// Mike Sowa's activation on 08-13. This is the DOWNLOAD button on the "I have a
-// key" tab, so on a filtered network a customer who has already PAID cannot get
-// the installer at all. Same host swap as manifest.json's app_download_endpoint.
-// (WORKER_REQUEST_URL only feeds submitRequestAccess(), which is dead -- the buy
-// modal goes straight to Lemon Squeezy and no requestAccessSubmit button exists
-// in the markup. Repointed rather than deleted to keep this change one-line-safe.)
 const WORKER_AUTHORIZE_URL = "https://api.loadscope.app/authorize";
+
 const WORKER_REQUEST_URL = "https://api.loadscope.app/request-access";
 
-// Auto-detect the visitor's OS to pre-select the platform toggle (overridable).
-const IS_WINDOWS = /Win(dows|32|64)/i.test(
-  (navigator.userAgent || "") + " " + (navigator.platform || ""));
+const IS_WINDOWS = /Win(dows|32|64)/i.test((navigator.userAgent || "") + " " + (navigator.platform || ""));
 
-// Mac chip: read the WebGL GPU string. Chrome names the real chip ("Apple M1",
-// "Intel(R) ...") -- but Safari PRIVACY-MASKS it to a generic "Apple GPU" on
-// EVERY Mac, Intel included. The old detect matched any "apple", so an Intel
-// Mac on Safari (the default browser) was handed the arm64 build it can't run
-// -> macOS "not supported" (Corey B, 2026-07-27).
 function macRenderer() {
-  try {
-    const c = document.createElement("canvas");
-    const gl = c.getContext("webgl") || c.getContext("experimental-webgl");
-    if (!gl) return "";
-    const ext = gl.getExtension("WEBGL_debug_renderer_info");
-    return String(ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
-                      : (gl.getParameter(gl.RENDERER) || ""));
-  } catch (e) { return ""; }
+    try {
+        const c = document.createElement("canvas");
+        const gl = c.getContext("webgl") || c.getContext("experimental-webgl");
+        if (!gl) return "";
+        const ext = gl.getExtension("WEBGL_debug_renderer_info");
+        return String(ext ? gl.getParameter(ext.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER) || "");
+    } catch (e) {
+        return "";
+    }
 }
-// Only PRE-SELECT Apple Silicon when the string names a specific M-series chip
-// (reliable in Chrome). Safari's generic "Apple GPU" is ambiguous, so we default
-// to the universal Intel build, which runs on ANY Mac (native on Intel, Rosetta
-// on Apple Silicon) -- and the buyer can override with the chip picker in the
-// download modal. Nobody gets a "not supported" file this way.
+
 let selectedMacArch = /apple\s*m\d/i.test(macRenderer()) ? "apple" : "intel";
+
 function macFile() {
-  return selectedMacArch === "apple" ? "Loadscope-arm64.dmg" : "Loadscope.dmg";
+    return selectedMacArch === "apple" ? "Loadscope-arm64.dmg" : "Loadscope.dmg";
 }
 
-// Selected platform drives BOTH the request payload and which installer the
-// "I have a code" tab downloads. 'mac' | 'win'. Pre-set from the OS, but the
-// visitor can flip it (work Mac, home Windows PC, etc.).
-// 🔴 IS THE VISITOR ON A PHONE OR TABLET? (2026-08-18)
-// An iPad is NOT detectable from the user-agent: since iPadOS 13 Safari asks for
-// desktop sites by default and reports "Macintosh; Intel Mac OS X 10_15_7" --
-// character-for-character what a real Mac sends. So IS_WINDOWS was false, the
-// line below picked "mac", and the tablet was handed Loadscope.dmg with nothing
-// on the page saying it could not run there.
-// The reliable tell is TOUCH: a real Mac reports maxTouchPoints === 0, an iPad
-// reports 5. Phones are caught by the plain UA test.
-// ⚠️ A touchscreen WINDOWS laptop also has maxTouchPoints > 1 -- which is exactly
-// what Jordan Balzer's Surface Pro is -- so the touch test is deliberately gated
-// behind /Macintosh/. A Surface must keep reading as a computer, or this fix
-// would break the very customer who reported it.
-const IS_IPADOS  = /Macintosh/.test(navigator.userAgent || "") &&
-                   (navigator.maxTouchPoints || 0) > 1;
-const IS_HANDHELD = IS_IPADOS ||
-                    /iPhone|iPod|iPad|Android|Mobile/i.test(navigator.userAgent || "");
+const IS_IPADOS = /Macintosh/.test(navigator.userAgent || "") && (navigator.maxTouchPoints || 0) > 1;
 
-// On a handheld nothing is pre-selected: guessing is what caused the bug, so the
-// visitor chooses. `null` until they do.
-let selectedPlatform = IS_HANDHELD ? null : (IS_WINDOWS ? "win" : "mac");
-const PLATFORM_FILE = { win: "Loadscope-Setup.exe" };  // mac resolved via macFile() (chip-aware)
-const PLATFORM_LABEL = { mac: "Mac", win: "Windows" };
+const IS_HANDHELD = IS_IPADOS || /iPhone|iPod|iPad|Android|Mobile/i.test(navigator.userAgent || "");
+
+let selectedPlatform = IS_HANDHELD ? null : IS_WINDOWS ? "win" : "mac";
+
+const PLATFORM_FILE = {
+    win: "Loadscope-Setup.exe"
+};
+
+const PLATFORM_LABEL = {
+    mac: "Mac",
+    win: "Windows"
+};
 
 function applyHandheldNotice() {
-  const note = document.getElementById("desktopOnlyNote");
-  if (note) note.style.display = IS_HANDHELD ? "block" : "none";
+    const note = document.getElementById("desktopOnlyNote");
+    if (note) note.style.display = IS_HANDHELD ? "block" : "none";
+    const m = document.getElementById("downloadModal");
+    if (m) m.classList.toggle("handheld", IS_HANDHELD);
+}
+
+document.addEventListener("DOMContentLoaded", (function() {
+    var v = document.getElementById("heroClip");
+    if (!v) return;
+    var sent = false;
+    v.addEventListener("timeupdate", (function() {
+        if (sent || v.currentTime < 10) return;
+        sent = true;
+        try {
+            if (window.gtag) gtag("event", "video_half", {
+                video: "ladder_20s"
+            });
+        } catch (e) {}
+    }));
+}));
+
+function shareSelf(ev, where) {
+    if (ev) ev.preventDefault();
+    try {
+        if (window.gtag) gtag("event", "share_self", {
+            where: where || ""
+        });
+    } catch (e) {}
+    var url = "https://loadscope.app/?utm_source=share_self&utm_medium=" + encodeURIComponent(where || "page");
+    var text = "Loadscope - finds your best load from your chronograph and target data. Install on my computer.";
+    function mailIt() {
+        window.location.href = "mailto:?subject=" + encodeURIComponent("Loadscope - install on my computer") + "&body=" + encodeURIComponent(text + "\n\n" + url);
+    }
+    if (navigator.share) {
+        navigator.share({
+            title: "Loadscope",
+            text: text,
+            url: url
+        }).catch((function(e) {
+            if (!e || e.name !== "AbortError") mailIt();
+        }));
+    } else {
+        mailIt();
+    }
 }
 
 function setPlatform(p) {
-  // Handheld + nothing chosen yet: show neither as active and make the download
-  // button say so, rather than quietly defaulting to Mac.
-  if (p !== "mac" && p !== "win") {
-    document.getElementById("platMac").classList.remove("active");
-    document.getElementById("platWin").classList.remove("active");
-    const dl0 = document.getElementById("downloadModalSubmit");
-    if (dl0) { dl0.textContent = "Choose Mac or Windows"; dl0.disabled = true; }
-    const n0 = document.getElementById("winSmartScreenNote");
-    if (n0) n0.style.display = "none";
-    const a0 = document.getElementById("macArchChoice");
-    if (a0) a0.style.display = "none";
-    return;
-  }
-  selectedPlatform = (p === "win") ? "win" : "mac";
-  const dlEnable = document.getElementById("downloadModalSubmit");
-  if (dlEnable) dlEnable.disabled = false;
-  document.getElementById("platMac").classList.toggle("active", selectedPlatform === "mac");
-  document.getElementById("platWin").classList.toggle("active", selectedPlatform === "win");
-  // Download button label tracks the chosen platform.
-  const dl = document.getElementById("downloadModalSubmit");
-  if (dl) dl.textContent = "Download for " + PLATFORM_LABEL[selectedPlatform];
-  // SmartScreen heads-up shows only for Windows (only on the download tab).
-  const note = document.getElementById("winSmartScreenNote");
-  if (note) note.style.display = (selectedPlatform === "win") ? "block" : "none";
-  // Mac chip picker: shown only for Mac, synced to the current selection.
-  const arch = document.getElementById("macArchChoice");
-  if (arch) arch.style.display = (selectedPlatform === "mac") ? "block" : "none";
-  const ai = document.getElementById("archIntel"), aa = document.getElementById("archApple");
-  if (ai) ai.classList.toggle("active", selectedMacArch === "intel");
-  if (aa) aa.classList.toggle("active", selectedMacArch === "apple");
+    if (p !== "mac" && p !== "win") {
+        document.getElementById("platMac").classList.remove("active");
+        document.getElementById("platWin").classList.remove("active");
+        const dl0 = document.getElementById("downloadModalSubmit");
+        if (dl0) {
+            dl0.textContent = "Choose Mac or Windows";
+            dl0.disabled = true;
+        }
+        const n0 = document.getElementById("winSmartScreenNote");
+        if (n0) n0.style.display = "none";
+        const a0 = document.getElementById("macArchChoice");
+        if (a0) a0.style.display = "none";
+        return;
+    }
+    selectedPlatform = p === "win" ? "win" : "mac";
+    const dlEnable = document.getElementById("downloadModalSubmit");
+    if (dlEnable) dlEnable.disabled = false;
+    document.getElementById("platMac").classList.toggle("active", selectedPlatform === "mac");
+    document.getElementById("platWin").classList.toggle("active", selectedPlatform === "win");
+    const dl = document.getElementById("downloadModalSubmit");
+    if (dl) dl.textContent = "Download for " + PLATFORM_LABEL[selectedPlatform];
+    const note = document.getElementById("winSmartScreenNote");
+    if (note) note.style.display = selectedPlatform === "win" ? "block" : "none";
+    const arch = document.getElementById("macArchChoice");
+    if (arch) arch.style.display = selectedPlatform === "mac" ? "block" : "none";
+    const ai = document.getElementById("archIntel"), aa = document.getElementById("archApple");
+    if (ai) ai.classList.toggle("active", selectedMacArch === "intel");
+    if (aa) aa.classList.toggle("active", selectedMacArch === "apple");
 }
 
 function setMacArch(a) {
-  selectedMacArch = (a === "apple") ? "apple" : "intel";
-  document.getElementById("archIntel").classList.toggle("active", selectedMacArch === "intel");
-  document.getElementById("archApple").classList.toggle("active", selectedMacArch === "apple");
+    selectedMacArch = a === "apple" ? "apple" : "intel";
+    document.getElementById("archIntel").classList.toggle("active", selectedMacArch === "intel");
+    document.getElementById("archApple").classList.toggle("active", selectedMacArch === "apple");
 }
 
 function openDownloadModal(ev) {
-  if (ev) ev.preventDefault();
-  document.getElementById("downloadModal").classList.add("open");
-  document.getElementById("accessCodeFeedback").textContent = "";
-  showCodeHint(false);
-  document.getElementById("requestAccessFeedback").textContent = "";
-  applyHandheldNotice();           // phone/tablet: say so BEFORE they pick
-  setPlatform(selectedPlatform);   // sync toggle + button label + note to detected OS
-  switchTab("request-access");     // new visitors land on the request form
-  const n = document.getElementById("reqName");
-  setTimeout(() => { if (n) n.focus(); }, 50);
+    if (ev) ev.preventDefault();
+    document.getElementById("downloadModal").classList.add("open");
+    document.getElementById("accessCodeFeedback").textContent = "";
+    showCodeHint(false);
+    document.getElementById("requestAccessFeedback").textContent = "";
+    applyHandheldNotice();
+    try {
+        if (window.gtag) gtag("event", "buy_box_open", {
+            handheld: IS_HANDHELD ? "yes" : "no"
+        });
+    } catch (e) {}
+    setPlatform(selectedPlatform);
+    switchTab("request-access");
+    const n = document.getElementById("reqName");
+    setTimeout((() => {
+        if (n) n.focus();
+    }), 50);
 }
 
 function closeDownloadModal() {
-  document.getElementById("downloadModal").classList.remove("open");
-  // Restore the normal two-tab state. showAfterDownload() HIDES both tab
-  // buttons and swaps in the instructions panel; without this reset, the next
-  // person to open the modal gets a tabless dead end. Found by checking the
-  // reopen path rather than only the happy path.
-  const after = document.getElementById("panelAfterDownload");
-  if (after && after.classList.contains("active")) {
-    after.classList.remove("active");
-    const t1 = document.getElementById("tabHaveCode");
-    const t2 = document.getElementById("tabRequestAccess");
-    if (t1) t1.style.display = "";
-    if (t2) t2.style.display = "";
-    switchTab("have-code");
-  }
+    document.getElementById("downloadModal").classList.remove("open");
+    const after = document.getElementById("panelAfterDownload");
+    if (after && after.classList.contains("active")) {
+        after.classList.remove("active");
+        const t1 = document.getElementById("tabHaveCode");
+        const t2 = document.getElementById("tabRequestAccess");
+        if (t1) t1.style.display = "";
+        if (t2) t2.style.display = "";
+        switchTab("have-code");
+    }
 }
 
-// After the download starts, swap the modal to install + unlock instructions
-// and hand the customer a one-click activation link carrying their own key.
-// The key is ALREADY in this page (they just typed it), so nothing new is
-// exposed -- it only saves them going back to the email to copy it.
-// "Click the file your browser just downloaded" was too vague -- Chad
-// 2026-07-20: "Where do they find this file?" He is right: every browser puts
-// it somewhere different, and a customer who has never done this does not know
-// to look at the top-right corner. The page already knows the browser, so it
-// can name the exact spot instead of making them hunt.
 function showAfterDownload(code) {
-  const norm = (code || "").trim().toUpperCase();
-  document.getElementById("panelHaveCode").classList.remove("active");
-  document.getElementById("panelRequestAccess").classList.remove("active");
-  const tabs = document.getElementById("tabHaveCode");
-  const tabs2 = document.getElementById("tabRequestAccess");
-  if (tabs) tabs.style.display = "none";
-  if (tabs2) tabs2.style.display = "none";
-  const isMac = selectedPlatform === "mac";
-  const m = document.getElementById("installStepsMac");
-  const w = document.getElementById("installStepsWin");
-  if (m) m.style.display = isMac ? "block" : "none";
-  if (w) w.style.display = isMac ? "none" : "block";
-  // 🔴 THE KEY NEVER GOES IN AN <a href> (2026-10-08). Google Analytics records
-  // the address of every link a visitor clicks that leads off the site, and
-  // "loadscope://activate?key=..." is such an address -- 26 customers' licence
-  // keys had landed in GA4 that way. The link keeps href="#"; the click itself
-  // hands the key to the app. Same button, same result, nothing to record.
-  const link = document.getElementById("activateLink");
-  if (link) {
-    link.setAttribute("href", "#");
-    link.onclick = function (ev) {
-      ev.preventDefault();
-      window.location.href = "loadscope://activate?key=" + encodeURIComponent(norm);
-    };
-  }
-  const keyText = document.getElementById("activateKeyText");
-  if (keyText) keyText.textContent = norm;
-  document.getElementById("panelAfterDownload").classList.add("active");
+    const norm = (code || "").trim().toUpperCase();
+    document.getElementById("panelHaveCode").classList.remove("active");
+    document.getElementById("panelRequestAccess").classList.remove("active");
+    const tabs = document.getElementById("tabHaveCode");
+    const tabs2 = document.getElementById("tabRequestAccess");
+    if (tabs) tabs.style.display = "none";
+    if (tabs2) tabs2.style.display = "none";
+    const isMac = selectedPlatform === "mac";
+    const m = document.getElementById("installStepsMac");
+    const w = document.getElementById("installStepsWin");
+    if (m) m.style.display = isMac ? "block" : "none";
+    if (w) w.style.display = isMac ? "none" : "block";
+    const link = document.getElementById("activateLink");
+    if (link) {
+        link.setAttribute("href", "#");
+        link.onclick = function(ev) {
+            ev.preventDefault();
+            window.location.href = "loadscope://activate?key=" + encodeURIComponent(norm);
+        };
+    }
+    const keyText = document.getElementById("activateKeyText");
+    if (keyText) keyText.textContent = norm;
+    document.getElementById("panelAfterDownload").classList.add("active");
 }
 
 function switchTab(which) {
-  const haveCode = which === "have-code";
-  document.getElementById("tabHaveCode").classList.toggle("active", haveCode);
-  document.getElementById("tabRequestAccess").classList.toggle("active", !haveCode);
-  document.getElementById("panelHaveCode").classList.toggle("active", haveCode);
-  document.getElementById("panelRequestAccess").classList.toggle("active", !haveCode);
-  // Reset feedbacks so users don't see stale errors after a switch
-  document.getElementById("accessCodeFeedback").textContent = "";
-  showCodeHint(false);
-  document.getElementById("requestAccessFeedback").textContent = "";
-  // Focus the first input of whichever tab is now active
-  setTimeout(() => {
-    const target = haveCode
-      ? document.getElementById("accessCodeInput")
-      : document.getElementById("reqName");
-    if (target) target.focus();
-  }, 50);
+    const haveCode = which === "have-code";
+    document.getElementById("tabHaveCode").classList.toggle("active", haveCode);
+    document.getElementById("tabRequestAccess").classList.toggle("active", !haveCode);
+    document.getElementById("panelHaveCode").classList.toggle("active", haveCode);
+    document.getElementById("panelRequestAccess").classList.toggle("active", !haveCode);
+    document.getElementById("downloadModal").classList.toggle("buy-tab", !haveCode);
+    document.getElementById("accessCodeFeedback").textContent = "";
+    showCodeHint(false);
+    document.getElementById("requestAccessFeedback").textContent = "";
+    setTimeout((() => {
+        const target = haveCode ? document.getElementById("accessCodeInput") : document.getElementById("reqName");
+        if (target) target.focus();
+    }), 50);
 }
 
 function showCodeHint(on) {
-  const hint = document.getElementById("accessCodeHint");
-  if (hint) hint.classList.toggle("show", !!on);
+    const hint = document.getElementById("accessCodeHint");
+    if (hint) hint.classList.toggle("show", !!on);
 }
 
 async function submitAccessCode() {
-  const code = document.getElementById("accessCodeInput").value.trim();
-  const feedback = document.getElementById("accessCodeFeedback");
-  const submitBtn = document.getElementById("downloadModalSubmit");
-  // Belt-and-braces: on a handheld nothing is pre-selected, and `null` must never
-  // fall through to macFile() -- that fallthrough IS the bug this fixes.
-  if (selectedPlatform !== "mac" && selectedPlatform !== "win") {
-    feedback.textContent = "Choose Mac or Windows first.";
-    return;
-  }
-  const file = (selectedPlatform === "win") ? "Loadscope-Setup.exe" : macFile();
-  const label = PLATFORM_LABEL[selectedPlatform];
-
-  if (!code) {
-    feedback.textContent = "Please enter your license key.";
-    return;
-  }
-
-  feedback.textContent = "";
-  showCodeHint(false);
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Validating...";
-
-  try {
-    const r = await fetch(WORKER_AUTHORIZE_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code: code, file: file })
-    });
-    const data = await r.json();
-    if (!r.ok) {
-      // A rejected code is the one failure the buyer can fix themselves. Keep
-      // the red line SHORT and let the hint below carry the fix -- the worker's
-      // own message leads with "contact support", which stops people reading.
-      if (r.status === 403) {
-        feedback.textContent = "That license key wasn't recognized.";
-        showCodeHint(true);
-      } else {
-        feedback.textContent = data.error || "Something went wrong. Please try again.";
-      }
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Download for " + label;
-      return;
+    const code = document.getElementById("accessCodeInput").value.trim();
+    const feedback = document.getElementById("accessCodeFeedback");
+    const submitBtn = document.getElementById("downloadModalSubmit");
+    if (selectedPlatform !== "mac" && selectedPlatform !== "win") {
+        feedback.textContent = "Choose Mac or Windows first.";
+        return;
     }
-    submitBtn.textContent = "Downloading...";
-    window.location.href = data.url;
-    // Show "what to do next" instead of closing the modal. The old code just
-    // closed it after 800ms, which left a first-time buyer holding a file and
-    // guessing -- see the panelAfterDownload comment.
-    setTimeout(() => {
-      showAfterDownload(code);
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Download for " + label;
-    }, 800);
-  } catch (err) {
-    feedback.textContent = "Couldn't reach the server. Check your internet and try again.";
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Download for " + label;
-  }
+    const file = selectedPlatform === "win" ? "Loadscope-Setup.exe" : macFile();
+    const label = PLATFORM_LABEL[selectedPlatform];
+    if (!code) {
+        feedback.textContent = "Please enter your license key.";
+        return;
+    }
+    feedback.textContent = "";
+    showCodeHint(false);
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Validating...";
+    try {
+        const r = await fetch(WORKER_AUTHORIZE_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                code: code,
+                file: file
+            })
+        });
+        const data = await r.json();
+        if (!r.ok) {
+            if (r.status === 403) {
+                feedback.textContent = "That license key wasn't recognized.";
+                showCodeHint(true);
+            } else {
+                feedback.textContent = data.error || "Something went wrong. Please try again.";
+            }
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Download for " + label;
+            return;
+        }
+        submitBtn.textContent = "Downloading...";
+        window.location.href = data.url;
+        setTimeout((() => {
+            showAfterDownload(code);
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Download for " + label;
+        }), 800);
+    } catch (err) {
+        feedback.textContent = "Couldn't reach the server. Check your internet and try again.";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Download for " + label;
+    }
 }
 
-// Show the "please tell us where" box only when they pick Other.
 function toggleSourceOther() {
-  const sel = document.getElementById("reqSource");
-  const other = document.getElementById("reqSourceOther");
-  const isOther = sel.value === "Other";
-  other.style.display = isOther ? "block" : "none";
-  if (!isOther) other.value = "";
+    const sel = document.getElementById("reqSource");
+    const other = document.getElementById("reqSourceOther");
+    const isOther = sel.value === "Other";
+    other.style.display = isOther ? "block" : "none";
+    if (!isOther) other.value = "";
 }
 
 async function submitRequestAccess() {
-  const name = document.getElementById("reqName").value.trim();
-  const email = document.getElementById("reqEmail").value.trim();
-  const chronograph = document.getElementById("reqChrono").value;
-  const targetApp = document.getElementById("reqTargetApp").value;
-  const source = document.getElementById("reqSource").value;
-  const sourceOther = document.getElementById("reqSourceOther").value.trim();
-  const projectInfo = document.getElementById("reqProjectInfo").value.trim();
-  const feedback = document.getElementById("requestAccessFeedback");
-  const submitBtn = document.getElementById("requestAccessSubmit");
-
-  if (name.length < 2) {
-    feedback.textContent = "Please enter your name.";
-    return;
-  }
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    feedback.textContent = "Please enter a valid email address.";
-    return;
-  }
-  if (!source) {
-    feedback.textContent = "Please tell us where you heard about Loadscope.";
-    return;
-  }
-  if (source === "Other" && !sourceOther) {
-    feedback.textContent = "Please tell us where you heard about us.";
-    return;
-  }
-
-  // Cloudflare Turnstile token -- read from the rendered widget.
-  const turnstileToken = (typeof turnstile !== "undefined" && turnstile.getResponse)
-    ? turnstile.getResponse()
-    : "";
-  if (!turnstileToken) {
-    feedback.textContent = "Please complete the anti-bot check above.";
-    return;
-  }
-
-  feedback.textContent = "";
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Sending...";
-
-  try {
-    const r = await fetch(WORKER_REQUEST_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        name: name,
-        email: email,
-        chronograph: chronograph,
-        target_app: targetApp,
-        source: source,
-        source_other: sourceOther,
-        project_info: projectInfo,
-        platform: selectedPlatform,
-        turnstile_token: turnstileToken,
-      }),
-    });
-    const data = await r.json();
-    if (!r.ok) {
-      feedback.textContent = data.error || "Something went wrong. Please try again.";
-      submitBtn.disabled = false;
-      submitBtn.textContent = "Send request";
-      return;
+    const name = document.getElementById("reqName").value.trim();
+    const email = document.getElementById("reqEmail").value.trim();
+    const chronograph = document.getElementById("reqChrono").value;
+    const targetApp = document.getElementById("reqTargetApp").value;
+    const source = document.getElementById("reqSource").value;
+    const sourceOther = document.getElementById("reqSourceOther").value.trim();
+    const projectInfo = document.getElementById("reqProjectInfo").value.trim();
+    const feedback = document.getElementById("requestAccessFeedback");
+    const submitBtn = document.getElementById("requestAccessSubmit");
+    if (name.length < 2) {
+        feedback.textContent = "Please enter your name.";
+        return;
     }
-    // Success state: replace the form panel with a thank-you message.
-    document.getElementById("panelRequestAccess").innerHTML = `
-      <h3>Request received</h3>
-      <p>${data.message || "Thanks. You'll get an email with your license key once approved."}</p>
-      <div class="actions">
-        <button class="btn" onclick="closeDownloadModal()">Done</button>
-      </div>
-    `;
-  } catch (err) {
-    feedback.textContent = "Couldn't reach the server. Check your internet and try again.";
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Send request";
-  }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        feedback.textContent = "Please enter a valid email address.";
+        return;
+    }
+    if (!source) {
+        feedback.textContent = "Please tell us where you heard about Loadscope.";
+        return;
+    }
+    if (source === "Other" && !sourceOther) {
+        feedback.textContent = "Please tell us where you heard about us.";
+        return;
+    }
+    const turnstileToken = typeof turnstile !== "undefined" && turnstile.getResponse ? turnstile.getResponse() : "";
+    if (!turnstileToken) {
+        feedback.textContent = "Please complete the anti-bot check above.";
+        return;
+    }
+    feedback.textContent = "";
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Sending...";
+    try {
+        const r = await fetch(WORKER_REQUEST_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                chronograph: chronograph,
+                target_app: targetApp,
+                source: source,
+                source_other: sourceOther,
+                project_info: projectInfo,
+                platform: selectedPlatform,
+                turnstile_token: turnstileToken
+            })
+        });
+        const data = await r.json();
+        if (!r.ok) {
+            feedback.textContent = data.error || "Something went wrong. Please try again.";
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Send request";
+            return;
+        }
+        document.getElementById("panelRequestAccess").innerHTML = `\n      <h3>Request received</h3>\n      <p>${data.message || "Thanks. You'll get an email with your license key once approved."}</p>\n      <div class="actions">\n        <button class="btn" onclick="closeDownloadModal()">Done</button>\n      </div>\n    `;
+    } catch (err) {
+        feedback.textContent = "Couldn't reach the server. Check your internet and try again.";
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Send request";
+    }
 }
 
-document.getElementById("accessCodeInput").addEventListener("keydown", (e) => {
-  if (e.key === "Enter") submitAccessCode();
-  else if (e.key === "Escape") closeDownloadModal();
-});
-
+document.getElementById("accessCodeInput").addEventListener("keydown", (e => {
+    if (e.key === "Enter") submitAccessCode(); else if (e.key === "Escape") closeDownloadModal();
+}));
 </script>
 
-<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2faa54a51efa477c9529f0c5bc14f3bf"}'></script><!-- End Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2faa54a51efa477c9529f0c5bc14f3bf"}'></script>
 <script>
-// Open (and scroll to) a FAQ item when the URL points straight at it, so a link
-// straight to one question lands on the ANSWER rather than the top of the FAQ.
-(function () {
-  function openFromHash() {
-    if (!location.hash) return;
-    var el = document.querySelector(location.hash);
-    if (el && el.tagName === 'DETAILS') {
-      el.open = true;
-      // 🔴 scrollIntoView() IS A NO-OP ON THIS PAGE. Verified in real Chrome
-      // 2026-08-22: from scrollY 0, with the element 7,859px down and 1.5s
-      // allowed for the smooth animation, window.scrollY stayed 0. So
-      // loadscope.app/#windows-blocked opened the right answer and left the
-      // reader at the top of the homepage with 7,859px to scroll -- which is
-      // exactly what Chad reported ("i dont see that link in my chrome").
-      //
-      // window.scrollTo() DOES work here (proven in the same session:
-      // scrollTo({top:5000}) landed at 5000, while scrollingElement.scrollTop
-      // = 3000 stayed 0). So compute the offset and use that instead.
-      //
-      // ⚠️ I called this a harness artifact on 2026-08-21 and REVERTED a
-      // correct fix. The reasoning was: `scrollTop = 3000` did nothing in the
-      // preview browser, so the preview must not scroll. It does not -- but
-      // `scrollTop =` assignment does nothing in REAL Chrome on this page
-      // either, because of scroll-behavior: smooth. Right observation, wrong
-      // conclusion, and only clicking the live link in a real browser caught
-      // it. Do not "simplify" this back to scrollIntoView.
-      var rect = el.getBoundingClientRect();
-      var top = rect.top + window.scrollY
-                - (window.innerHeight / 2)
-                + Math.min(rect.height, window.innerHeight) / 2;
-      window.scrollTo({ top: Math.max(0, top), behavior: 'instant' });
+(function() {
+    function openFromHash() {
+        if (!location.hash) return;
+        var el = document.querySelector(location.hash);
+        if (el && el.tagName === "DETAILS") {
+            el.open = true;
+            var rect = el.getBoundingClientRect();
+            var top = rect.top + window.scrollY - window.innerHeight / 2 + Math.min(rect.height, window.innerHeight) / 2;
+            window.scrollTo({
+                top: Math.max(0, top),
+                behavior: "instant"
+            });
+        }
     }
-  }
-  window.addEventListener('hashchange', openFromHash);
-  document.addEventListener('DOMContentLoaded', openFromHash);
-  // 🔴 AND AGAIN ON `load`. DOMContentLoaded fires before the images below the
-  // fold have height, so the offset computed then is short -- measured on the
-  // fixed page 2026-08-22: it scrolled to 6,485 but the answer had drifted to
-  // 1,290px BELOW the fold as the images filled in. Re-running once everything
-  // has its real height lands it. Cheap, idempotent, and invisible when the
-  // first pass was already right.
-  window.addEventListener('load', openFromHash);
-  openFromHash();
+    window.addEventListener("hashchange", openFromHash);
+    document.addEventListener("DOMContentLoaded", openFromHash);
+    window.addEventListener("load", openFromHash);
+    openFromHash();
 })();
 </script>
 </body>

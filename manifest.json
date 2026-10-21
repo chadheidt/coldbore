@@ -1,22 +1,22 @@
 {
- "app_version": "1.16.0",
+ "app_version": "1.17.0",
  "app_download_endpoint": "https://api.loadscope.app/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.16.0 - A cleaner, simpler layout that is easier to navigate. Fixes dials typed as clicks on Range & DOPE saving the wrong number. Powder charges now keep hundredths. Plus fixes and improvements.",
+ "app_release_notes": "v1.17.0 - Print your Recipe Card at 3x5 to keep in the ammo box, or on 3x5 label sheets. Libraries now groups your loads by rifle, newest first, with the date each one was saved. Rename a rifle once and every load under it follows. Plus fixes and improvements.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.16.0",
+   "app_version": "1.17.0",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.16.0 - A cleaner, simpler layout that is easier to navigate. Fixes dials typed as clicks on Range & DOPE saving the wrong number. Powder charges now keep hundredths. Plus fixes and improvements."
+   "app_release_notes": "v1.17.0 - Print your Recipe Card at 3x5 to keep in the ammo box, or on 3x5 label sheets. Libraries now groups your loads by rifle, newest first, with the date each one was saved. Rename a rifle once and every load under it follows. Plus fixes and improvements."
   },
   "mac_arm64": {
-   "app_version": "1.16.0",
+   "app_version": "1.17.0",
    "app_download_file": "Loadscope-arm64.zip",
-   "app_release_notes": "v1.16.0 - A cleaner, simpler layout that is easier to navigate. Fixes dials typed as clicks on Range & DOPE saving the wrong number. Powder charges now keep hundredths. Plus fixes and improvements."
+   "app_release_notes": "v1.17.0 - Print your Recipe Card at 3x5 to keep in the ammo box, or on 3x5 label sheets. Libraries now groups your loads by rifle, newest first, with the date each one was saved. Rename a rifle once and every load under it follows. Plus fixes and improvements."
   },
   "windows": {
    "app_version": "1.16.0",
