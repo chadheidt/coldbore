@@ -1150,6 +1150,7 @@ footer .footer-links a { white-space: nowrap; }
       </figure>
     </div>
     <p class="galli-link">Watch Frank Galli set Loadscope up live on TheHideTV (Sniper&rsquo;s Hide) &mdash; 27 minutes, start to finish. <a href="https://www.youtube.com/watch?v=zLpaTT9nehA" target="_blank" rel="noopener">Watch the stream</a></p>
+    <p class="galli-link" style="margin-top: 10px;"><a href="https://www.youtube.com/watch?v=AKK8knBpYQ4&amp;t=1048s" target="_blank" rel="noopener" onclick="openDemo(event, YT_RILEY, 'Texas Reloaders: LoadScope Review')">&#9654; Watch the Texas Reloaders review</a> &mdash; 44 minutes, sponsored. Starts at the results (17:28).</p>
   </div>
 </section>
 
@@ -1624,12 +1625,23 @@ footer .footer-links a { white-space: nowrap; }
 <script>
 var YT_WALKTHROUGH = "https://www.youtube.com/embed/8V-7lJBN_rE?rel=0&autoplay=1&cc_load_policy=0";
 
-function openDemo(ev) {
+var YT_RILEY = "https://www.youtube-nocookie.com/embed/AKK8knBpYQ4?start=1048&autoplay=1&playsinline=1&rel=0";
+
+var demoLastFocus = null;
+
+function openDemo(ev, src, title) {
     if (ev) ev.preventDefault();
     var m = document.getElementById("videoModal");
     var f = document.getElementById("demoFrame");
-    if (f) f.src = YT_WALKTHROUGH;
+    demoLastFocus = document.activeElement;
+    if (f) {
+        if (!f.dataset.t) f.dataset.t = f.title;
+        f.title = title || f.dataset.t;
+        f.src = src || YT_WALKTHROUGH;
+    }
     if (m) m.classList.add("open");
+    var x = m && m.querySelector(".vclose");
+    if (x) x.focus();
 }
 
 function closeDemo() {
@@ -1637,7 +1649,15 @@ function closeDemo() {
     var f = document.getElementById("demoFrame");
     if (m) m.classList.remove("open");
     if (f) f.src = "about:blank";
+    if (demoLastFocus && demoLastFocus.focus) demoLastFocus.focus();
 }
+
+document.addEventListener("keydown", (function(e) {
+    if (e.key === "Escape") {
+        var m = document.getElementById("videoModal");
+        if (m && m.classList.contains("open")) closeDemo();
+    }
+}));
 
 function srcFromReferrer() {
     try {
