@@ -120,6 +120,7 @@ figcaption{color:var(--text-muted);font-size:14px;margin-top:8px;text-align:cent
 .related a:hover{color:var(--orange)}
 footer{border-top:1px solid var(--border);margin-top:48px;padding:28px 0;color:var(--text-muted);font-size:14px;text-align:center}
 footer a{color:var(--orange);text-decoration:none}
+table{width:100%;border-collapse:collapse;margin:20px 0 28px;font-size:15px}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);color:#dfe2e6;vertical-align:top}th{color:#fff;font-size:14px;text-transform:uppercase;letter-spacing:.03em}.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0 28px}.tablewrap table{margin:0;min-width:420px}
 </style></head><body><nav><div class="container">
 <a class="logo" href="/"><img src="/assets/icon.png" alt="Loadscope">LOADSCOPE&trade;</a>
 <div class="nav-links"><a href="/learn/">Learn</a><a href="/#faq">FAQ</a><a href="/#install">Install</a><a class="btn" href="/">Get Loadscope</a></div>
@@ -137,14 +138,25 @@ footer a{color:var(--orange);text-decoration:none}
 <h2>Mean radius: what the whole group is doing</h2>
 <p><strong>Mean radius</strong> is the average distance of <em>every</em> shot from the group&rsquo;s center (its mathematical middle, or centroid). Five shots, five distances, averaged. Because it uses all of your data instead of just the two extremes, one flier <em>nudges</em> the number instead of detonating it &mdash; and a genuinely tight core reads as tight even if one shot wandered. It answers the question you actually care about: on average, how far from point of aim does this load put a bullet?</p>
 
+<h2>A worked example, with the arithmetic</h2>
+<p>Here are two made-up five-shot groups at 100 yards, for illustration only. Group A is four shots in a tight cluster plus one flier. Group B is five shots spread evenly.</p>
+<div class="tablewrap"><table>
+<tr><th></th><th>Group A (one flier)</th><th>Group B (even spread)</th></tr>
+<tr><td>Group size (extreme spread)</td><td>0.73 in</td><td>0.61 in</td></tr>
+<tr><td>Mean radius</td><td>0.22 in</td><td>0.30 in</td></tr>
+<tr><td>Which one wins</td><td>Mean radius picks A</td><td>Group size picks B</td></tr>
+</table></div>
+<p>To get mean radius, find the center of the five holes, measure each hole&rsquo;s distance from that center, and average the five distances. Group A&rsquo;s distances are about 0.15, 0.02, 0.24, 0.19 and 0.51 inch, which average 0.22 inch. Take away the flier and A&rsquo;s group size falls from 0.73 to 0.27 inch, while B has no flier to blame. Group size ranks B ahead. Mean radius ranks A ahead, because four of its five shots sit close to the center, and that is usually the better bet on the next string.</p>
+<p>Mean radius is read in the same units as group size: inches at the test distance, or MOA. At 100 yards one MOA is about 1.05 inches, so A&rsquo;s 0.22 inch is about 0.21 MOA. Quote the distance whenever you quote either number.</p>
+
 <h2>Why mean radius is the more honest number</h2>
-<p>The advantage isn&rsquo;t just philosophical &mdash; it&rsquo;s statistical. Extreme spread only gets <em>worse</em> as you shoot more (more chances to catch an outlier), so a 3-shot group and a 10-shot group aren&rsquo;t even measuring the same thing. Mean radius settles down as the sample grows and describes the same underlying load whether you shot five or twenty. That stability is why militaries and serious ballisticians quantify dispersion with mean radius and CEP (circular error probable) rather than a two-shot spread &mdash; they need a number that repeats. On the small strings most handloaders actually shoot, mean radius simply lies to you less.</p>
+<p>The advantage isn&rsquo;t just philosophical &mdash; it&rsquo;s statistical. Extreme spread only gets <em>worse</em> as you shoot more (more chances to catch an outlier), so a 3-shot group and a 10-shot group aren&rsquo;t even measuring the same thing. Mean radius is far steadier than extreme spread as the sample grows, though it is still noisy at three shots. That steadiness is why CEP (circular error probable) and mean radius are standard ways to describe dispersion, rather than a two-shot spread &mdash; a number that repeats is worth more than one that jumps. On the small strings most handloaders actually shoot, mean radius simply lies to you less.</p>
 
 <h2>When group size still makes sense</h2>
 <p>Group size isn&rsquo;t useless. It&rsquo;s a fast, caliper-friendly field check, it&rsquo;s the shared language of every forum and factory spec sheet, and for a quick &ldquo;is this rifle roughly on&rdquo; look it&rsquo;s fine. The trouble is only when you lean on it for a <em>decision</em> &mdash; ranking one charge against another on three or five shots each &mdash; because that&rsquo;s exactly where its flier-sensitivity turns a good load and a mediocre one into a coin flip.</p>
 
 <h2>What it means for load development</h2>
-<p>When you&rsquo;re comparing loads, you want the metric that ranks them reliably on the shots you actually fired &mdash; and that&rsquo;s mean radius, backed up by the vertical the load throws and its <a href="/learn/standard-deviation-load-development.html">velocity SD</a>. Judging a whole ladder on extreme-spread group size is how a lucky three-shot cluster gets crowned and a genuinely better load gets tossed. Mean radius, read alongside your chronograph numbers, keeps the ranking honest.</p>
+<p>When you&rsquo;re comparing loads, you want the metric that ranks them reliably on the shots you actually fired &mdash; and that&rsquo;s mean radius. Loadscope&rsquo;s default powder-ladder score weighs four things: velocity flat spot (5%), <a href="/learn/standard-deviation-load-development.html">velocity SD</a> (20%), mean radius (40%) and vertical dispersion (35%), and you can change the weights. Seating-depth tests lean harder on vertical. Group size is shown beside them but is not scored. Judging a whole ladder on extreme-spread group size is how a lucky three-shot cluster gets crowned and a genuinely better load gets tossed. Mean radius, read alongside your chronograph numbers, keeps the ranking honest.</p>
 
 <p>That&rsquo;s how Loadscope reads your targets: you photograph each group, it <a href="/learn/measure-groups-from-a-photo.html">measures it from the photo</a> and computes <strong>mean radius</strong> (plus vertical spread), lines that up against the velocity data from your chronograph, and <strong>scores every charge and seating depth</strong> to name your best load &mdash; instead of leaving the call to whichever group happened to look smallest. <a href="/learn/how-loadscope-scores-a-load.html">See how the scoring works &rarr;</a></p>
 
