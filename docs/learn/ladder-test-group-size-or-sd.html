@@ -1,0 +1,218 @@
+<!DOCTYPE html><html lang="en"><head><script>
+window.dataLayer = window.dataLayer || [];
+
+function gtag() {
+    dataLayer.push(arguments);
+}
+
+gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    region: [ "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "IS", "LI", "NO", "GB", "CH" ],
+    wait_for_update: 500
+});
+
+gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "granted"
+});
+
+(function() {
+    var c = null;
+    try {
+        c = localStorage.getItem("ls_consent");
+    } catch (e) {}
+    if (c === "granted") {
+        gtag("consent", "update", {
+            analytics_storage: "granted"
+        });
+    }
+    var tz = "";
+    try {
+        tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    } catch (e) {}
+    if (c || !/^(Europe\/|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe))/.test(tz)) {
+        return;
+    }
+    document.addEventListener("DOMContentLoaded", (function() {
+        var b = document.createElement("div");
+        b.id = "ls-consent";
+        b.setAttribute("role", "dialog");
+        b.setAttribute("aria-label", "Cookie notice");
+        b.style.cssText = "position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-width:560px;margin:0 auto;background:#1a1c20;color:#f5f5f5;border:1px solid #d97706;border-radius:10px;padding:14px 16px;font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.45)";
+        b.innerHTML = 'We use Google Analytics to see which pages are useful to shooters. No ads, and nothing is sold. <a href="/privacy.html" style="color:#f59e0b">Privacy</a><div style="margin-top:10px;text-align:right"><button type="button" data-v="denied" style="background:none;border:1px solid #9ca3af;color:#f5f5f5;border-radius:7px;padding:7px 14px;margin-right:8px;cursor:pointer;font:inherit">No thanks</button><button type="button" data-v="granted" style="background:#d97706;border:0;color:#fff;border-radius:7px;padding:7px 18px;cursor:pointer;font:inherit;font-weight:600">OK</button></div>';
+        b.addEventListener("click", (function(ev) {
+            var v = ev.target && ev.target.getAttribute && ev.target.getAttribute("data-v");
+            if (!v) {
+                return;
+            }
+            try {
+                localStorage.setItem("ls_consent", v);
+            } catch (e) {}
+            if (v === "granted") {
+                gtag("consent", "update", {
+                    analytics_storage: "granted"
+                });
+            }
+            b.remove();
+        }));
+        document.body.appendChild(b);
+    }));
+})();
+
+gtag("js", new Date);
+
+gtag("config", "G-NVD1F3H412");
+</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-NVD1F3H412"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reloading Ladder Test: Group Size or SD? | Loadscope</title>
+<meta name="description" content="Group size or velocity SD: which one picks the winner of a powder, seating depth or tuner ladder test, and how to weigh them together so the pick holds up.">
+<link rel="canonical" href="https://loadscope.app/learn/ladder-test-group-size-or-sd.html">
+<meta property="og:title" content="Reloading Ladder Test: Group Size or SD?"><meta property="og:description" content="Group size or velocity SD: which one picks the winner of a powder, seating depth or tuner ladder test, and how to weigh them together so the pick holds up.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/ladder-test-group-size-or-sd.html">
+<meta property="og:image" content="https://loadscope.app/assets/apple-touch-icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reloading Ladder Test: Group Size or SD?">
+<meta name="twitter:description" content="Group size or velocity SD: which one picks the winner of a powder, seating depth or tuner ladder test, and how to weigh them together so the pick holds up.">
+<meta name="twitter:image" content="https://loadscope.app/assets/icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Reloading Ladder Test: Group Size or SD?","description":"Group size or velocity SD: which one picks the winner of a powder, seating depth or tuner ladder test, and how to weigh them together so the pick holds up.","url":"https://loadscope.app/learn/ladder-test-group-size-or-sd.html","image":"https://loadscope.app/assets/icon.png","publisher":{"@type":"Organization","name":"Loadscope","logo":{"@type":"ImageObject","url":"https://loadscope.app/assets/icon.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loadscope.app/learn/ladder-test-group-size-or-sd.html"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://loadscope.app/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://loadscope.app/learn/"},{"@type":"ListItem","position":3,"name":"Reloading Ladder Test: Group Size or SD?","item":"https://loadscope.app/learn/ladder-test-group-size-or-sd.html"}]}</script>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<style>
+:root{--orange:#d97706;--bg:#0e0f12;--bg-mid:#1a1c20;--bg-light:#252830;--text:#f5f5f5;--text-dim:#9ca3af;--text-muted:#6b7280;--border:#2d3036;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}
+.container{max-width:760px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;background:rgba(14,15,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10}
+nav .container{max-width:1080px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;color:#fff;text-decoration:none}
+.logo img{width:30px;height:30px;border-radius:7px}
+.nav-links a{color:var(--text-dim);text-decoration:none;margin-left:20px;font-size:15px}
+.nav-links a:hover{color:#fff}
+.btn{background:var(--orange);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:700}
+@media(max-width:560px){nav .container{padding:0 14px}.logo{font-size:15px;letter-spacing:.5px;white-space:nowrap}.logo img{width:26px;height:26px}.nav-links{display:flex;align-items:center}.nav-links a{margin-left:12px;font-size:14px;white-space:nowrap}.nav-links a[href='/#faq'],.nav-links a[href='/#install']{display:none}.btn{padding:7px 11px;white-space:nowrap}}
+
+article{padding:48px 0 24px}
+.crumb{color:var(--text-muted);font-size:14px;margin-bottom:18px}
+.crumb a{color:var(--text-dim);text-decoration:none}
+h1{font-size:34px;line-height:1.2;margin-bottom:14px;letter-spacing:-.4px}
+h2{font-size:23px;margin:34px 0 10px;color:#fff}
+p{color:#dfe2e6;margin-bottom:16px}
+ul,ol{margin:0 0 16px 22px}
+li{color:#dfe2e6;margin-bottom:8px}
+a{color:var(--orange)}
+.lead{font-size:19px;color:var(--text-dim);margin-bottom:8px}
+strong{color:#fff}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;background:var(--bg-light);border:1px solid var(--border);border-radius:5px;padding:1px 6px;color:#fff}
+.cta{background:var(--bg-mid);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:12px;padding:22px 24px;margin:34px 0}
+.cta h3{color:#fff;font-size:19px;margin-bottom:8px}
+.cta .btn{display:inline-block;margin-top:6px;text-decoration:none}
+.related{border-top:1px solid var(--border);margin-top:40px;padding-top:24px}
+.related a{display:block;margin-bottom:8px;text-decoration:none;color:var(--text-dim)}
+.related a:hover{color:var(--orange)}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:28px 0;color:var(--text-muted);font-size:14px;text-align:center}
+footer a{color:var(--orange);text-decoration:none}
+table{width:100%;border-collapse:collapse;margin:20px 0 28px;font-size:15px}th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);color:#dfe2e6;vertical-align:top}th{color:#fff;font-size:14px;text-transform:uppercase;letter-spacing:.03em}.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0 28px}.tablewrap table{margin:0;min-width:420px}
+<div class="tablewrap"><table>
+</style></head><body>
+<nav><div class="container">
+<a class="logo" href="/"><img src="/assets/icon.png" alt="Loadscope">LOADSCOPE&trade;</a>
+<div class="nav-links"><a href="/learn/">Learn</a><a href="/#faq">FAQ</a><a href="/#install">Install</a><a class="btn" href="/">Get Loadscope</a></div>
+</div></nav>
+<div class="container"><article>
+<div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a> &rsaquo; Ladder test: group size or SD</div>
+<h1>Reloading ladder test: do you pick the tightest group or the lowest SD?</h1>
+<p class="lead">Neither one alone. Judge the groups and the velocity SD together, let the groups carry more of the weight, and use SD to throw out a step whose velocities are all over the place. Then confirm the finalist with a bigger group before you trust it.</p>
+
+<h2>Which group number: group size or mean radius?</h2>
+<p>Group size is set by your two worst shots, so one flier decides it. Mean radius averages every shot&rsquo;s distance from the center of the group, so it describes the whole group. On a ladder, where every step is only a few shots, mean radius is the steadier number. See the worked example with the arithmetic in <a href="/learn/mean-radius-vs-group-size.html">mean radius vs group size</a>.</p>
+
+<h2>Tightest group or lowest velocity SD?</h2>
+<p>They answer different questions. The group says where the shots landed. Velocity SD says how consistent the speeds were. A low SD does not make a small group, and a small group on three shots can be luck. When they disagree, the step that holds up on both is the safer pick. A tight group at a step with a high SD is usually a good spot on a bad day, and a low SD with an average group is a consistent load that isn&rsquo;t shooting small yet.</p>
+
+<h2>What if the velocity flat spot and the groups disagree?</h2>
+<p>Let the groups win. The flat spot (the stretch of charges that shoot about the same speed) is a tie-breaker, not the verdict. At a 100-yard test, Loadscope&rsquo;s powder-ladder weighting is mean radius 40%, vertical SD 35%, velocity SD 20% and the velocity flat spot 5%, and it shifts toward velocity SD as the distance grows. More on <a href="/learn/powder-ladder-test.html">reading a powder ladder</a> and <a href="/learn/standard-deviation-load-development.html">what a good velocity SD is</a>.</p>
+
+<h2>Seating depth: which depth wins?</h2>
+<p>Seating depth shapes the group, not the speed, so judge it on the groups, mostly mean radius, with vertical spread counting for more as the distance grows. Look for a small range of depths that all shoot well, not one lucky number. See <a href="/learn/seating-depth-test.html">how to run a seating depth test</a>.</p>
+
+<h2>Tuner: which setting wins?</h2>
+<p>A tuner doesn&rsquo;t change velocity, so don&rsquo;t score it on speed. Score each setting on vertical spread and mean radius, and look for a run of neighboring settings that all shoot well. See <a href="/learn/score-a-barrel-tuner-test.html">how to score a barrel tuner test</a>.</p>
+
+<h2>How many shots before you trust either?</h2>
+<p>Three shots can screen out the obviously bad steps. They can&rsquo;t pick a winner, because at that count luck is as big as the difference between two close steps. Take the one or two finalists and shoot a larger confirmation group. More in <a href="/learn/how-many-shots-per-charge.html">how many shots per charge</a>.</p>
+
+<h2>What to ignore</h2>
+<ul>
+<li>The single smallest group from three shots.</li>
+<li>The lowest SD from a three-shot string.</li>
+<li>The fastest step, on its own.</li>
+<li>One good step standing alone between two bad neighbors.</li>
+</ul>
+
+<div class="cta"><h3>Let Loadscope weigh them for you</h3>
+<p>Loadscope <strong>finds your best load</strong> from your chronograph and target data. It scores every powder charge, seating depth and tuner setting on the measures that count, names the winner, and shows how close the runners-up are.</p>
+<a class="btn" href="/">See how it works &rarr;</a></div>
+<div class="related"><strong style="color:#fff">Keep reading</strong><br><br><a href="/learn/how-loadscope-scores-a-load.html">How Loadscope scores a load &rarr;</a><a href="/learn/mean-radius-vs-group-size.html">Mean radius vs group size &rarr;</a><a href="/learn/powder-ladder-test.html">Powder ladder test &rarr;</a><a href="/learn/seating-depth-test.html">Seating depth test &rarr;</a><a href="/learn/score-a-barrel-tuner-test.html">Barrel tuner test &rarr;</a></div>
+</article></div>
+<footer><div class="container">
+<p>&copy; 2026 Loadscope&trade;. Automated rifle load development for Mac &amp; Windows. &middot; <a href="/">loadscope.app</a></p>
+<p style="margin-top:6px"><a href="/learn/">Learn</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></p>
+</div></footer><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2faa54a51efa477c9529f0c5bc14f3bf"}'></script><script>
+(function() {
+    try {
+        var K = [ "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term" ], p = new URLSearchParams(location.search);
+        K.forEach((function(k) {
+            var v = p.get(k);
+            if (v) {
+                try {
+                    sessionStorage.setItem(k, v);
+                } catch (e) {}
+            }
+        }));
+        if (!sessionStorage.getItem("utm_source") && document.referrer) {
+            var h = new URL(document.referrer).hostname.replace(/^www\./, "").toLowerCase(), o = location.hostname.replace(/^www\./, "").toLowerCase();
+            if (h && h !== o) {
+                var s, m;
+                var A = h.match(/(^|\.)(chatgpt|openai|perplexity|claude|copilot|gemini)\./);
+                var E = h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave|kagi)\./);
+                if (A) {
+                    s = A[2];
+                    m = "ai";
+                } else if (E) {
+                    s = E[2];
+                    m = "organic";
+                } else {
+                    var N = {
+                        "snipershide.com": [ "snipershide", "forum" ],
+                        "accurateshooter.com": [ "accurateshooter", "forum" ],
+                        "longrangehunting.com": [ "longrangehunting", "forum" ],
+                        "reddit.com": [ "reddit", "social" ],
+                        "out.reddit.com": [ "reddit", "social" ],
+                        "youtube.com": [ "youtube", "video" ],
+                        "youtu.be": [ "youtube", "video" ],
+                        "facebook.com": [ "facebook", "social" ],
+                        "m.facebook.com": [ "facebook", "social" ],
+                        "l.facebook.com": [ "facebook", "social" ],
+                        "lm.facebook.com": [ "facebook", "social" ],
+                        "x.com": [ "x", "social" ],
+                        "t.co": [ "x", "social" ],
+                        "twitter.com": [ "x", "social" ]
+                    };
+                    s = N[h] ? N[h][0] : h;
+                    m = N[h] ? N[h][1] : "referral";
+                }
+                sessionStorage.setItem("utm_source", s);
+                sessionStorage.setItem("utm_medium", m);
+                sessionStorage.setItem("utm_campaign", m === "organic" ? "search" : m === "ai" ? "ai_search" : "referral");
+            }
+        }
+    } catch (e) {}
+})();
+</script>
+</body></html>
