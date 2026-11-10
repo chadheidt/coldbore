@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script>
+window.dataLayer = window.dataLayer || [];
+
+function gtag() {
+    dataLayer.push(arguments);
+}
+
+gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    region: [ "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "IS", "LI", "NO", "GB", "CH" ],
+    wait_for_update: 500
+});
+
+gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "granted"
+});
+
+(function() {
+    var c = null;
+    try {
+        c = localStorage.getItem("ls_consent");
+    } catch (e) {}
+    if (c === "granted") {
+        gtag("consent", "update", {
+            analytics_storage: "granted"
+        });
+    }
+    var tz = "";
+    try {
+        tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    } catch (e) {}
+    if (c || !/^(Europe\/|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe))/.test(tz)) {
+        return;
+    }
+    document.addEventListener("DOMContentLoaded", (function() {
+        var b = document.createElement("div");
+        b.id = "ls-consent";
+        b.setAttribute("role", "dialog");
+        b.setAttribute("aria-label", "Cookie notice");
+        b.style.cssText = "position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-width:560px;margin:0 auto;background:#1a1c20;color:#f5f5f5;border:1px solid #d97706;border-radius:10px;padding:14px 16px;font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.45)";
+        b.innerHTML = 'We use Google Analytics to see which pages are useful to shooters. No ads, and nothing is sold. <a href="/privacy.html" style="color:#f59e0b">Privacy</a><div style="margin-top:10px;text-align:right"><button type="button" data-v="denied" style="background:none;border:1px solid #9ca3af;color:#f5f5f5;border-radius:7px;padding:7px 14px;margin-right:8px;cursor:pointer;font:inherit">No thanks</button><button type="button" data-v="granted" style="background:#d97706;border:0;color:#fff;border-radius:7px;padding:7px 18px;cursor:pointer;font:inherit;font-weight:600">OK</button></div>';
+        b.addEventListener("click", (function(ev) {
+            var v = ev.target && ev.target.getAttribute && ev.target.getAttribute("data-v");
+            if (!v) {
+                return;
+            }
+            try {
+                localStorage.setItem("ls_consent", v);
+            } catch (e) {}
+            if (v === "granted") {
+                gtag("consent", "update", {
+                    analytics_storage: "granted"
+                });
+            }
+            b.remove();
+        }));
+        document.body.appendChild(b);
+    }));
+})();
+
+gtag("js", new Date);
+
+gtag("config", "G-NVD1F3H412");
+</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-NVD1F3H412"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+<title>Loadscope Release Notes: What's New in Each Version</title>
+<meta name="description" content="Every Loadscope release since launch, with what changed. Updates are free for every owner.">
+<style>
+  :root { --orange:#d97706; --bg:#0e0f12; --bg-mid:#1a1c20; --text:#f5f5f5; --dim:#9ca3af; --border:#2d3036; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:16px}
+  .container{max-width:780px;margin:0 auto;padding:32px 24px 64px}
+  a{color:var(--orange);text-decoration:none}
+  a:hover{text-decoration:underline}
+  nav{border-bottom:1px solid var(--border);padding:16px 0;margin-bottom:32px}
+  nav .container{padding-top:0;padding-bottom:0}
+  .logo{font-size:18px;font-weight:700;color:var(--orange)}
+  h1{font-size:30px;margin-bottom:6px}
+  .updated{color:var(--dim);font-size:14px;margin-bottom:28px}
+  h2{font-size:19px;margin:28px 0 8px}
+  p,li{color:#d6d8dc;font-size:15px;margin-bottom:10px}
+  ul{margin:0 0 10px 22px}
+  .guarantee{background:rgba(217,119,6,0.1);border:1px solid var(--orange);border-radius:10px;padding:18px 22px;margin:16px 0;color:#f0d8b8;font-size:15px}
+  .guarantee strong{color:var(--orange)}
+  .back{display:inline-block;margin-top:32px;font-size:14px}
+  footer{border-top:1px solid var(--border);margin-top:40px;padding-top:20px;color:var(--dim);font-size:13px}
+</style>
+<link rel="canonical" href="https://loadscope.app/changelog.html">
+</head>
+<body>
+<nav><div class="container"><a class="logo" href="index.html">LOADSCOPE&trade;</a></div></nav>
+<div class="container">
+  <h1>Release notes</h1>
+  <div class="updated">Every Loadscope release since launch, newest first. Updates are free for every owner, and the app tells you when one is ready.</div>
+  <h2 id="v1-17-5">Version 1.17.5</h2>
+  <ul>
+    <li>Range &amp; DOPE now remembers the temperature and altitude you set, and your printed DOPE card uses them too.</li>
+    <li>Starting a different kind of test now asks one clear question, and brings your bullet along to the new load.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-17-4">Version 1.17.4</h2>
+  <ul>
+    <li>Adding your chronograph or target data to a load you already started no longer asks if it's a new test.</li>
+    <li>The DOPE card shows energy in joules when your speeds are in meters per second.</li>
+    <li>Plainer wording in the Results winner notes.</li>
+    <li>Starting a different kind of test on a load now offers a clean new load.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-17-3">Version 1.17.3</h2>
+  <ul>
+    <li>A different test now always gets its own load. Importing new charges into a load that already has speeds can no longer mix two tests together.</li>
+    <li>Compare Loads shows each load's name and length, so loads with the same powder and charge are easy to tell apart.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-17-2">Version 1.17.2</h2>
+  <ul>
+    <li>Barrel tuner: the recommended setting now always uses the same numbers as your settings table, and tuner tests count up from your start setting, the way tuner instructions run.</li>
+    <li>Enter your seating length as COAL as well as CBTO or a jump. Results and your Recipe Card say which one you measured.</li>
+    <li>New Every shot button on Results shows every shot's speed, and long strings now count every shot.</li>
+    <li>Double-click a load in Libraries to open it.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-17-1">Version 1.17.1</h2>
+  <ul>
+    <li>Barrel tuner: when two good settings sit side by side, Loadscope now recommends the mark between them, the way tuner makers advise.</li>
+    <li>Tuner plans now start at 5 shots a setting, so the best setting is easier to pick out.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-17-0">Version 1.17.0</h2>
+  <ul>
+    <li>Print your Recipe Card at 3x5 to keep in the ammo box, or on 3x5 label sheets.</li>
+    <li>Libraries now groups your loads by rifle, newest first, with the date each one was saved.</li>
+    <li>Rename a rifle once and every load under it follows.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-16-0">Version 1.16.0</h2>
+  <ul>
+    <li>A cleaner, simpler layout that is easier to navigate.</li>
+    <li>Plan Your Ladder now has its own spot on the left menu.</li>
+    <li>Powder charges can now be entered to the hundredth of a grain.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-15-2">Version 1.15.2</h2>
+  <ul>
+    <li>New: Add a Past Load (under Libraries) lets you type in a load you worked up before Loadscope.</li>
+    <li>Rifle &amp; Setup now has a Zero distance box, and your DOPE Card works from your real zero instead of always 100 yards.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-15-1">Version 1.15.1</h2>
+  <ul>
+    <li>Past Loads now has a Delete button. A deleted load goes to the Trash, so you can get it back if you change your mind.</li>
+    <li>After an import, a See your results button takes you straight to your best load.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-15-0">Version 1.15.0</h2>
+  <ul>
+    <li>You can now use metric units. In Settings, under Units, pick Imperial or Metric, or mix them one measurement at a time: m/s, metres, mm, °C. Powder and bullet weights stay in grains.</li>
+    <li>Ladders can now run from your highest charge down to your lowest, and Print Ladder Sheet (under the Tools menu) gives you a one-page range sheet with space to write in speeds.</li>
+    <li>Chronograph and target files import correctly whatever your computer's regional settings, including speeds written like 2,639 or 2639,4 and files saved in m/s or mm.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-14-3">Version 1.14.3</h2>
+  <ul>
+    <li>Berger bullets now carry Berger's own published lengths, so stability and spin drift are measured instead of estimated.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-14-2">Version 1.14.2</h2>
+  <ul>
+    <li>If a Loadscope window was taller than your screen, the bottom of it was cut off and you could not reach the buttons. Every window now fits your screen, whatever size it is.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-14-1">Version 1.14.1</h2>
+  <ul>
+    <li>On Windows, Loadscope now follows your display size setting -- if Windows is set to 125% or 150%, the text in Loadscope is now that much bigger.</li>
+    <li>A bull no longer saves itself. Mark your shots, nudge any that need it, then press Save this target.</li>
+    <li>Loadscope now tells you when a target has fewer shots than your plan asked for, instead of scoring it quietly.</li>
+    <li>A target you have marked but not saved is now marked in the strip, and Loadscope asks before you move off it.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-14-0">Version 1.14.0</h2>
+  <ul>
+    <li>Type in what you actually dialed at a range and it stays on your DOPE card, exactly as you typed it -- Loadscope never changes it.</li>
+    <li>Dial two ranges and the ranges between them are worked out from your own numbers, and your correction carries out to 600 yards.</li>
+    <li>Right-click any saved load in Libraries and choose Enter your actual dials to do this on a load you already finished.</li>
+    <li>Dials you record on your phone now come across to your computer.</li>
+    <li>Your printed DOPE card now shows the predicted dial beside the one you dialed, with clicks for both -- your own numbers are the bold ones.</li>
+    <li>Your DOPE card says where your bullet goes transonic, so you know which end of the card to trust.</li>
+    <li>Fixed: Start this target over again could quit the app.</li>
+    <li>Fixed: round counts sent from your phone could land on a barrel you do not have.</li>
+  </ul>
+
+  <h2 id="v1-13-4">Version 1.13.4</h2>
+  <ul>
+    <li>The Measure Target screen now walks you through it -- the step you need next is highlighted, and your target photo is no longer covered by instructions.</li>
+    <li>Fixed: moving your result badges could save every one of your targets as the same picture.</li>
+    <li>Loadscope now tells you when your ladder plan changed after you imported, so a charge you never loaded cannot end up on your target.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-13-3">Version 1.13.3</h2>
+  <ul>
+    <li>Pocket Card is now the DOPE Card, and Load Card is now the Recipe Card.</li>
+    <li>Your saved loads now stay with you when you start a new load.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
+  <h2 id="v1-13-2">Version 1.13.2</h2>
+  <ul>
+    <li>Fixed: changing the number of rungs on the Plan a Ladder screen could quit the app.</li>
+  </ul>
+
+  <h2 id="v1-13-1">Version 1.13.1</h2>
+  <ul>
+    <li>Fixed: the app could quit while you were marking the last shot on a bull. The bull you had just finished was already saved, so no groups were lost.</li>
+    <li>Fixed: removing a saved rifle or barrel name from a dropdown could quit the app.</li>
+  </ul>
+
+  <h2 id="v1-13-0">Version 1.13.0</h2>
+  <ul>
+    <li>Every heading in the app is the right size again -- a styling rule was quietly shrinking headings down to body text.</li>
+    <li>A bull now saves itself once it holds the shots your plan asked for, so you are not left wondering whether it took.</li>
+    <li>Plainer wording across every screen -- Home, Rifle &amp; Setup, Measure, Import, Results, Range &amp; DOPE, the cards and the Libraries.</li>
+    <li>The Import screen names your load once, and names the order to shoot your ladder in correctly.</li>
+    <li>Planning a ladder no longer says the plan was saved when nothing was written.</li>
+    <li>A new load's name box starts empty, so typing does not add to words already sitting in it.</li>
+    <li>The ladder preview shows every rung, including the first and the last.</li>
+    <li>A tuner setting reads as a mark on the dial, not as inches and not as a powder charge.</li>
+    <li>Compare Loads and the import Confirm window fit on your screen, with their buttons reachable.</li>
+    <li>Three columns that were being cut off now show in full.</li>
+  </ul>
+
+  <h2 id="v1-12-0">Version 1.12.0</h2>
+  <ul>
+    <li>New: test a barrel tuner. Plan a tuner ladder, measure a group at each setting, and Loadscope scores every setting and recommends one -- and it looks for a run of good settings next to each other rather than crowning a lone winner. The dial wraps, so the setting after 45 is 0.</li>
+    <li>You choose how the tuner is scored. The Scoring screen sets how much of the score is how tall the group is, with mean radius as the rest, and says on screen why the split is what it is.</li>
+    <li>If Loadscope cannot find your loads folder it now says so and shows you where it was, instead of starting over as if you were new.</li>
+    <li>You can now change your loads folder from Settings. Nothing is moved or deleted.</li>
+    <li>Uninstalling Loadscope on Windows no longer removes your license key.</li>
+    <li>Importing targets with no chronograph data no longer says your best load is ready. Loadscope tells you which half is still missing.</li>
+    <li>The Measure screen works out your bullet diameter from far more cartridges, so the marker ring matches your holes.</li>
+    <li>The Pocket Card now prints your scope instead of a dash.</li>
+    <li>Starting a new load now files the one you were on into Past Loads instead of leaving it half-open, and offers to save it to your Library first if it has a winner you never saved.</li>
+  </ul>
+
+  <h2 id="v1-11-2">Version 1.11.2</h2>
+  <ul>
+    <li>Your license key now works even when Loadscope can't reach the license server, and Loadscope now checks your license on an address that security software and network filters do not block.</li>
+  </ul>
+
+  <h2 id="v1-11-1">Version 1.11.1</h2>
+  <ul>
+    <li>Your license key now works even when Loadscope can't reach the license server. If security software or a filtered network is in the way, Loadscope takes your key and checks it the next time it gets through, instead of locking you out.</li>
+  </ul>
+
+  <h2 id="v1-11-0">Version 1.11.0</h2>
+  <ul>
+    <li>Shot the rest of your ladder on a second range day? Import the new rungs into the same load and they are added to it. Your first day is kept, and the whole ladder is scored together.</li>
+    <li>Score your ladder at another distance. Type a yardage on the Results screen and the same rungs re-rank on what matters at that range, out to 1500 yards. Your crowned load is not changed.</li>
+    <li>Groups from a ShotMarker target now come in in the order the shots were fired, not the order you drew the boxes.</li>
+    <li>Mean radius, group size and vertical now use the distance recorded on your targets, so a 200 yard test no longer reads double.</li>
+    <li>When your targets and Rifle &amp; Setup disagree about the distance, Results now says so and tells you which one it scored on.</li>
+    <li>The measuring distance now follows the distance in Rifle &amp; Setup.</li>
+    <li>Create New Load now asks before clearing files you still have staged, and Reset queue clears every kind -- including a ShotMarker .tar and a Garmin .fit.</li>
+    <li>Removing a target photo now offers to remove the groups measured on it, instead of leaving the picture behind.</li>
+    <li>A seating length now keeps its thousandths everywhere -- 2.200, not 2.2.</li>
+    <li>The import log no longer prints an empty-file warning underneath a message that already explained what to do.</li>
+  </ul>
+
+  <h2 id="v1-10-0">Version 1.10.0</h2>
+  <ul>
+    <li>Measure your targets in inches, MOA or mil -- pick the unit when you set the scale, so a mil grid works without converting anything.</li>
+    <li>Factory ammo is now a load. Save a box you did not hand-load and compare it against other boxes, or against your own handloads.</li>
+    <li>Loadscope reopens at the size you left it, instead of filling the screen every time.</li>
+    <li>An Intel copy of Loadscope running on an Apple Silicon Mac now moves itself to the native version at the next update, and tells you so.</li>
+    <li>A seating ladder planned by CBTO now reads as a length everywhere instead of being called a jump.</li>
+    <li>A seating-depth test on its own now shows your powder charge on the printed Load Card and Pocket Card, and can predict your DOPE.</li>
+    <li>Importing into a finished seating load now asks whether you are adding to it or starting a new one, the same as a powder load.</li>
+  </ul>
+
+  <h2 id="v1-9-1">Version 1.9.1</h2>
+  <ul>
+    <li>Buttons on the Measure Target screen no longer cut off their labels when the window is made very small.</li>
+  </ul>
+
+  <h2 id="v1-9-0">Version 1.9.0</h2>
+  <ul>
+    <li>ShotMarker targets now import -- both the CSV and the .tar export from the Review screen.</li>
+    <li>A ladder shot as several targets on one page comes in as separate groups, not one huge one -- if you drew boxes around them on the ShotMarker, Loadscope uses your boxes.</li>
+    <li>The Measure screen now points electronic-target shooters to Import Data, instead of only offering photos and phone.</li>
+    <li>Loading a target photo no longer clears groups that came in from a file or your phone.</li>
+    <li>Rework a Saved Load opens on the ladder that load actually ran, instead of the stock 45.0 gr default.</li>
+    <li>A ballistic coefficient you type for an unlisted bullet is remembered, and reaches the printed card.</li>
+    <li>A load you have not shot yet says so, instead of giving you instructions for a test you are not running.</li>
+    <li>The bullet dropdown no longer cuts off longer bullet names.</li>
+    <li>Create New Load now creates one. It could rename the load you had just finished instead, and hand its numbers to the new one.</li>
+    <li>Range &amp; DOPE fills in elevation and wind after you type a ballistic coefficient and press Update, not just the clicks.</li>
+    <li>Switching to the Technical view now reaches the Pocket Card you print, without restarting Loadscope.</li>
+  </ul>
+
+  <h2 id="v1-8-2">Version 1.8.2</h2>
+  <ul>
+    <li>Target photos are now genuinely ordered by the time each shot was taken -- in 1.8.1 that read never ran in the installed app, so photos fell back to filename order.</li>
+  </ul>
+
+  <h2 id="v1-8-1">Version 1.8.1</h2>
+  <ul>
+    <li>Target photos now load in the order the shots were taken.</li>
+    <li>Bringing in more photos asks whether to add them or start over -- it used to replace what you had.</li>
+    <li>The per-target depth/charge box is visible again, so you can correct one by hand.</li>
+  </ul>
+
+  <h2 id="v1-8-0">Version 1.8.0</h2>
+  <ul>
+    <li>Predicted DOPE now includes spin drift, Coriolis and aerodynamic jump. Coriolis is optional -- turn it on and set your latitude.</li>
+    <li>Range &amp; DOPE is laid out like a range card: your own distances, the headers other cards print, and a Clicks column beside elevation.</li>
+    <li>New Basic and Technical views. Whichever you pick is what prints on the Pocket Card.</li>
+    <li>Fixed: on a 1/8 or 1/4 MOA turret, the click counts were wrong on the phone companion and on the printed Pocket Card. Your velocities, groups and scoring were never affected.</li>
+    <li>Fixed: the wind clock now reads as the direction the wind comes from.</li>
+    <li>Fixed: if one string on your range day came up short, the charges after it were showing the wrong velocities.</li>
+    <li>Your phone can now pull any load you have saved, not just the one you have open. Update the phone app to see the full list.</li>
+    <li>Fixed: reopening a past load while you were on Import Data left the old load's name and ladder on the screen.</li>
+    <li>Fixed: a target sent from your phone now picks up its charge from the rung it lands on.</li>
+    <li>The Technical Pocket Card now prints Lead alongside SpnD and hCor.</li>
+    <li>Fixed: the Load Library's mean-radius column said MOA over a value in inches.</li>
+    <li>Fixed: a jump ladder no longer prints "CBTO" over its seating column.</li>
+    <li>The welcome screen now lists every chronograph the app reads.</li>
+  </ul>
+
+  <h2 id="v1-7-0">Version 1.7.0</h2>
+  <ul>
+    <li>Plan a seating ladder by CBTO instead of by jump off the lands. Jump still works exactly as before.</li>
+    <li>The planner now shows the seating depth of every rung, and which way the bullet moves, before you load a round.</li>
+    <li>Fixed: picking "Seating depth" on Rifle &amp; Setup now sticks.</li>
+    <li>Fixed: the ladder planner opens with your powder and held charge already filled in.</li>
+    <li>Every button now shows the pointing finger when you hover it.</li>
+  </ul>
+
+  <h2 id="v1-6-3">Version 1.6.3</h2>
+  <ul>
+    <li>Fixed: marking a cold-bore fouler on your chronograph no longer costs you a rung.</li>
+    <li>Fixed: on "Confirm your range day", the load count and summary now update as you change a dropdown.</li>
+    <li>Fixed: a leftover string can no longer be added twice to the same rung.</li>
+    <li>Fixed: a seating value like 0.025 in jump no longer gets cut off on the Measure screen.</li>
+    <li>An unrecognized access code now shows you what a code looks like and which email it arrived in.</li>
+    <li>Fixed: a seating-depth test run on its own now carries its group size to the Load Card, Library and shared files. Powder ladders were not affected.</li>
+    <li>Fixed: a barrel named with an inch mark, like PVA 22", now reads correctly in the round-count prompt.</li>
+    <li>Your Seating Depth Log now labels seating numbers Jump or CBTO to match how you planned the ladder. Existing workbooks are corrected on your next import.</li>
+    <li>The Load Card, Results and in-app guide no longer call a jump-planned load a CBTO.</li>
+    <li>Fixed: the chronograph session picker now counts duplicate sessions correctly.</li>
+    <li>Fixed: a shared load now carries the powder name, and starting a new cycle keeps it.</li>
+    <li>The Import Data screen now scrolls in a short window instead of overlapping itself.</li>
+  </ul>
+
+  <h2 id="v1-6-2">Version 1.6.2</h2>
+  <ul>
+    <li>Seating numbers now carry the right label. When you plan a seating ladder in the New Ladder wizard, the number you are varying is your jump off the lands -- not a CBTO measurement. Loadscope was still calling it "CBTO" when you shared a load, printed a Load Card, compared loads, or opened a saved load in your Library. The number itself never changed; now the label matches what it actually is.</li>
+  </ul>
+
+  <h2 id="v1-6-1">Version 1.6.1</h2>
+  <ul>
+    <li>After you finish "Create New Load" and import your chronograph, Loadscope now always shows the "your best load is ready" prompt so you know exactly where to go next. Before, that step could quietly skip and leave you on the import screen.</li>
+  </ul>
+
+  <h2 id="v1-6-0">Version 1.6.0</h2>
+  <ul>
+    <li>Type in your velocities by hand with the new "Enter data by hand" button, and edit any velocity, charge or seating right on the Confirm page.</li>
+    <li>Loadscope notices the Xero faster when you plug it in, and shows a progress meter while it reads.</li>
+    <li>Reading the chronograph now starts clean. If older files are still queued, Loadscope asks whether to replace them or add to them.</li>
+    <li>Your Load Card now shows the range-day temperature and notes from Rifle &amp; Setup.</li>
+    <li>Trackpad scrolling can no longer change a dropdown or a number by accident.</li>
+    <li>"Plan your ladder" keeps your start, step and shot count when you step away.</li>
+    <li>"Create New Load" opens on Rifle &amp; Setup, and a load you have not named reads "Unnamed load".</li>
+    <li>The Measure screen nudges you to set the scale.</li>
+    <li>Powder is now set in one place (Rifle &amp; Setup), and the import screen's text no longer gets cut off.</li>
+  </ul>
+
+  <h2 id="v1-5-4">Version 1.5.4</h2>
+  <ul>
+    <li>Plugging in a Garmin Xero now reads your sessions on every computer. On Windows and Apple Silicon Macs, the "read it right off the chronograph" feature was turning the .FIT files away with "no matching parser" -- now it imports them the way it always did on Intel Macs. Plug the Xero in, point Loadscope at it, and your sessions come in. Thank you to the customer who reported it.</li>
+  </ul>
+
+  <h2 id="v1-5-3">Version 1.5.3</h2>
+  <ul>
+    <li>Targets you measure in the Loadscope phone apps now land on the right charge on their own. Measure your bulls in the order you fired them, and each one lines up with its charge here -- there is nothing to type on the phone anymore. It follows the same shot-order rule Loadscope already uses everywhere else.</li>
+  </ul>
+
+  <h2 id="v1-5-2">Version 1.5.2</h2>
+  <ul>
+    <li>Athlon Rangecraft Velocity Pro files now import.</li>
+    <li>Fixed: chronograph files with no time stamp now sort by number, so file 9 comes before file 10 and your velocities land on the right charges.</li>
+    <li>Tidier menus: the guides are gathered under one "Help &amp; Guides" entry, and "Check for Updates" sits next to About with your version below it.</li>
+    <li>The Workbook menu is now called Tools.</li>
+    <li>A "Watch the walkthrough" link on the home screen.</li>
+  </ul>
+
+  <h2 id="v1-5-1">Version 1.5.1</h2>
+  <ul>
+    <li>Clearer Results wording. When two or more charges are too close in speed to separate, Loadscope now tells you straight that your group sizes -- mean radius and vertical spread -- make the call, instead of naming an impractical number of extra shots. Same winner, clearer why.</li>
+  </ul>
+
+  <h2 id="v1-5-0">Version 1.5.0</h2>
+  <ul>
+    <li>Installing is now one step: open the download and double-click the single Loadscope icon.</li>
+    <li>Right after you buy, an Activate Loadscope button on the download page opens the app with your license key already filled in.</li>
+    <li>When two charges finish neck and neck, Results names the runner-up and says whether it is worth shooting them head to head.</li>
+    <li>Fixes: your load keeps the name you typed; the Home screen names the load that is open; the Import button no longer looks stuck; and reworking a load keeps its cartridge.</li>
+  </ul>
+
+  <h2 id="v1-4-0">Version 1.4.0</h2>
+  <ul>
+    <li>Loadscope now reads Garmin .FIT files straight off your chronograph. Plug in the Xero, point Loadscope at the Shot_Sessions folder, and every session comes in at once.</li>
+    <li>A new screen asks which stored sessions belong to this ladder, showing each by time, shot count, average speed and SD.</li>
+    <li>Fixed: targets sent from your phone now land on the right charge and count toward the best-load call.</li>
+    <li>Drop chronograph files before planning a ladder and Loadscope helps you plan it, instead of guessing charges from file names.</li>
+    <li>A refunded license now unlocks back to the demo on the next launch.</li>
+  </ul>
+
+  <h2 id="v1-3-0">Version 1.3.0</h2>
+  <ul>
+    <li>Loadscope now sets the four scoring weights from the distance you tested at: up close your group on paper leads, and further out shot-to-shot velocity takes over.</li>
+    <li>Your saved loads do not change on their own. The new scoring applies when you re-score or run your next ladder.</li>
+    <li>The Measure screen's Distance box is now a dropdown, 50 to 1000 in 50-step increments, or type your own.</li>
+    <li>New under Support: "How Loadscope Scores" -- a plain-English write-up of the four measurements and the sources behind them.</li>
+    <li>The weight-tuning button now reads "Use recommended weights".</li>
+  </ul>
+
+  <h2 id="v1-2-29">Version 1.2.29</h2>
+  <ul>
+    <li>Results now tells you what the best-load call is worth: whether your ladder can back it up, or whether the charges were too close in speed to tell apart and how many shots each it would take to know.</li>
+    <li>The Measure screen reads back the scale value you entered, not just "Scale set".</li>
+    <li>Fixed: Loadscope was only reading the first 7 shots of each string. Your averages and spreads now use all of them.</li>
+    <li>Fixed: the confirm screen marked nearly every row "Review". It now flags only the rows that need one.</li>
+    <li>Fixed: Export Suggested Load saved a hidden file when your cartridge starts with a dot, like .308 Win.</li>
+    <li>Fixed: on a seating test, the best-load card could put a green check on a metric your winner did not win.</li>
+    <li>Seating tests planned by jump off the lands now say so on Results instead of calling that number a CBTO.</li>
+  </ul>
+
+  <h2 id="v1-2-28">Version 1.2.28</h2>
+  <ul>
+    <li>Loadscope now runs natively on Apple Silicon Macs, with no Rosetta. Intel Macs are unchanged.</li>
+    <li>Drag your target photos straight onto the Measure screen from Finder, the desktop or Photos.</li>
+    <li>Distance suggestions now go out to 1000 yd, and you can still type any value.</li>
+  </ul>
+
+  <h2 id="v1-2-27">Version 1.2.27</h2>
+  <ul>
+    <li>New "Why this WON" explainer on the Best Load card: how your winner ranked in each of the four scored tests, and why a balanced load beats one that topped a single test.</li>
+    <li>Fixed: the winner's green "best in" check now shows on the Best Load card again. Older saved loads pick this up on the next re-score.</li>
+    <li>The Loads tab now shows a name for every saved load instead of a blank.</li>
+  </ul>
+
+  <h2 id="v1-2-26">Version 1.2.26</h2>
+  <ul>
+    <li>Fixed the green check marks on the Best Load card. On a powder-only ladder (no seating test), the card could claim your winner was "best in all metrics" even when it only won one -- it was borrowing a leftover badge from the empty seating-depth log. It now shows exactly which categories the winning charge actually won. Your winner doesn't change -- it's still picked by the weighted score -- only the badge was wrong.</li>
+  </ul>
+
+  <h2 id="v1-2-25">Version 1.2.25</h2>
+  <ul>
+    <li>Your in-progress work now stays put. Stepping off Measure Target no longer wipes the targets and marks you were working on.</li>
+    <li>Compare Loads now shows a Composite score for each load and fills in the CBTO.</li>
+    <li>Manual charge entry starts blank with three rows and a "Delete this charge" button on each.</li>
+    <li>Clearer wording when one photo holds several groups.</li>
+    <li>Leaving Measure Target shows a saving indicator instead of looking frozen.</li>
+    <li>The Library tabs now highlight the instant you click them.</li>
+  </ul>
+
+  <h2 id="v1-2-24">Version 1.2.24</h2>
+  <ul>
+    <li>New: enter your own charges when your ladder isn't evenly spaced. In New Ladder setup, next to "Charges" pick "Enter my charges" and type each charge (or seating depth) in the order you'll shoot them -- no more forcing an even step and working around it. Loadscope checks they stay in shooting order and points out any that are out of place.</li>
+    <li>Fixed the Remove Group button. Removing a rung now keeps the right charge on every other rung, instead of shifting them all back to even spacing (which could make it look like it removed the wrong one).</li>
+  </ul>
+
+  <h2 id="v1-2-23">Version 1.2.23</h2>
+  <ul>
+    <li>You can now rename a load right from the Targets tab: right-click the load's header line (the one with the target count) and choose "Rename this load". Handy when a set of target photos isn't tied to a saved load you could rename from the Loads tab.</li>
+    <li>Renaming a load now shows up right away. The Loads and Targets tabs refresh when you switch to them, so a new name appears immediately instead of only after you leave Libraries and come back.</li>
+  </ul>
+
+  <h2 id="v1-2-22">Version 1.2.22</h2>
+  <ul>
+    <li>Fixed a crash: deleting a target photo (or a whole load's target photos) from the right-click menu in Libraries could close the app. Deleting is safe now -- your scored results were never affected.</li>
+    <li>Renaming a saved load now updates its name everywhere. Before, a rename showed up in the Loads tab but the Targets tab still showed the old name; the two tabs now always agree.</li>
+  </ul>
+
+  <h2 id="v1-2-21">Version 1.2.21</h2>
+  <ul>
+    <li>Fixed an update loop on Windows: if Loadscope was installed somewhere the automatic updater can't replace, it used to ask to update, download, fail to install, and ask again over and over. Now it tells you once and points you to loadscope.app to download it yourself, instead of getting stuck in a loop.</li>
+  </ul>
+
+  <h2 id="v1-2-20">Version 1.2.20</h2>
+  <ul>
+    <li>The Targets library can now print and delete. Right-click a target photo to Print it (a page opens in your browser with a Print button) or Delete it. Right-click a load's name to delete all of that load's target photos at once. Deleting a photo never changes your scored result -- it only removes the picture.</li>
+    <li>Left-click a target photo to view it full size; right-click for those options. Deleting one no longer collapses the list back up.</li>
+  </ul>
+
+  <h2 id="v1-2-19">Version 1.2.19</h2>
+  <ul>
+    <li>Settings: the "Workbook backups to keep" number was printed in cream on a white box, so you could see the arrows but not the number. It's readable now.</li>
+    <li>Settings no longer shows the "Update manifest URL" box. That was a developer field that pointed Loadscope's updater somewhere else. If you had set one, it still works and you can still see it.</li>
+  </ul>
+
+  <h2 id="v1-2-18">Version 1.2.18</h2>
+  <ul>
+    <li>Two Windows screens painted their text the same color as the background: the Settings window's title, and the Cancel button on Create New Load. Both are readable again.</li>
+    <li>Entering one of the old beta codes now tells you the code was retired and points you at the key from your purchase email, instead of saying it looks like a typo.</li>
+    <li>The Workbook menu now says Create New Load, matching the sidebar, the Home screen, and the wizard. It was the last place still calling it Start New Cycle.</li>
+  </ul>
+
+  <h2 id="v1-2-17">Version 1.2.17</h2>
+  <ul>
+    <li>Chronograph files holding sessions from more than one range day are no longer spliced into a single ladder. Loadscope builds from one day and tells you which.</li>
+    <li>Every session now shows its date on the confirm screen, not just the time.</li>
+    <li>Sessions from another range day are listed rather than dropped, and you can place any of them on a charge by hand.</li>
+    <li>Fixed the confirm screen on Windows, where a light background left the charge labels unreadable.</li>
+  </ul>
+
+  <h2 id="v1-2-16">Version 1.2.16</h2>
+  <ul>
+    <li>Measure Target: result badges drag and place cleanly, with no stray marks.</li>
+    <li>The "what's next" guidance is now a banner instead of a pop-up sitting on top of your target.</li>
+    <li>Start a new load now carries your rifle, powder, brass and distance forward.</li>
+    <li>"CSV" is now "files" throughout, since Loadscope reads Excel exports too.</li>
+    <li>Fixed: activation now accepts the license key from your purchase receipt.</li>
+  </ul>
+
+  <h2 id="v1-2-15">Version 1.2.15</h2>
+  <ul>
+    <li>"Create New Load" now files your current load to Past Loads and starts a genuinely fresh one at Step 1. (It previously re-showed the wizard in its old state -- it could look like the button did nothing.)</li>
+    <li>After you plan your ladder, Create New Load walks you to Measure Target to add your groups, then to Import your chronograph, then Results -- the full guided flow, measure first.</li>
+  </ul>
+
+  <h2 id="v1-2-14">Version 1.2.14</h2>
+  <ul>
+    <li>The sidebar's "New Ladder" button is now "Create New Load" -- clearer about what it does. It opens with a prominent picker so you can start a fresh load from a saved rifle in one click, or fill in a new rifle.</li>
+    <li>Right-click any saved rifle in Libraries for quick actions: create a new load with that rifle setup, see or compare its loads, print a DOPE card, or duplicate, rename, or delete it.</li>
+    <li>Refreshed the in-app User Guide, demo, and screenshots to match.</li>
+  </ul>
+
+  <h2 id="v1-2-13">Version 1.2.13</h2>
+  <ul>
+    <li>Fix an off-plan rung right on the Results screen. Click "Edit charges" or "Edit seating depths", type the real value, and Loadscope re-sorts the ladder and re-scores for you.</li>
+    <li>Your measured targets now come back when you return to the Measure Target screen.</li>
+    <li>Your winning load saves to the Library automatically once results come in, and updates that same row when you re-score.</li>
+    <li>Removed a dead "Print" button from the in-app load card.</li>
+  </ul>
+
+  <h2 id="v1-2-12">Version 1.2.12</h2>
+  <ul>
+    <li>Fixed a data-loss bug: your measured targets no longer disappear from a load after you import your chronograph. They now stay with the load and score together, so importing your velocities never wipes the target photos you already measured.</li>
+    <li>New: right-click any saved target in the Targets library and choose "Add to the load I'm working on" to attach an already-measured target to your current work-up.</li>
+    <li>The left menu now lists Measure Target above Import Data, so it reads in the same order as the guided flow: set up your rifle, measure your targets, then import your chronograph.</li>
+  </ul>
+
+  <h2 id="v1-2-11">Version 1.2.11</h2>
+  <ul>
+    <li>You can now remove the demo's sample rifle and barrel from Settings or the Workbook menu. It only touches the sample rifle.</li>
+    <li>The Measure screen now shows what chronograph data a load already has.</li>
+    <li>Plan a ladder on a load that already has chronograph data and Loadscope warns you first, and offers a one-click "Start a New Load".</li>
+    <li>The demo's sample rifle and barrel can no longer file themselves into your real Libraries.</li>
+  </ul>
+
+  <h2 id="v1-2-10">Version 1.2.10</h2>
+  <ul>
+    <li>"Save this target &amp; go to next" now shows a "Saving..." indicator while it writes and scores, so a slow save reads as working, not frozen.</li>
+    <li>The Barrels round-count buttons are now clear "-" and "+" buttons on every Mac (they were rendering as blank boxes for some setups).</li>
+    <li>The sample Tikka rifle and demo barrel no longer file themselves into your real Rifles and Barrels libraries when you look through the demo -- delete them once and they'll stay gone.</li>
+  </ul>
+
+  <h2 id="v1-2-9">Version 1.2.9</h2>
+  <ul>
+    <li>The Measure screen's caliber now matches your bullet -- 7mm rifles were showing the .264 default because the app read the cartridge name; it now reads your bullet's actual diameter, so the marker ring is right.</li>
+    <li>Fixed the elevation offset sign: a low group now reads as low (a negative number), matching what you actually shot -- it was flipped.</li>
+    <li>"Set scale" now tells you when a photo's scale is already set, so you don't re-do it for every group on a multi-target photo.</li>
+    <li>Deleting a rifle or barrel from your Libraries now sticks -- it no longer reappears after you leave the setup screen.</li>
+  </ul>
+
+  <h2 id="v1-2-8">Version 1.2.8</h2>
+  <ul>
+    <li>The Measure Target screen no longer repeats the charge fields you already set in New Ladder.</li>
+    <li>Undo, Clear and a new "Start this target over" button now sit next to Save. Start over clears one target, not your ladder.</li>
+    <li>Your point-of-aim offset now shows in your scope's dial unit, mils or MOA, so you can use it to sight in.</li>
+    <li>Fixed: your bullet no longer picks up a wrong default. If you do not choose one, it stays blank.</li>
+    <li>Saved target photos now group into collapsible folders by load in the Targets tab.</li>
+    <li>The "Set this scale" button is bigger, and the Barrels round-count buttons are visible again.</li>
+  </ul>
+
+  <h2 id="v1-2-7">Version 1.2.7</h2>
+  <ul>
+    <li>Loadscope now walks you through load development step by step, with a next-step prompt at each stage. Turn them off anytime.</li>
+    <li>Rifle &amp; Setup now has one clear button, "Next: Plan your ladder", and saves your setup when you move on.</li>
+    <li>If you measure a target and forget to save it, Loadscope saves it for you when you leave the screen.</li>
+    <li>New: a Targets tab in Libraries keeps your marked-up target photos, grouped by load.</li>
+    <li>The Load Card now shows the CBTO you pre-entered for a powder-charge test.</li>
+    <li>Clearer help for bringing in target photos, and friendlier import messages.</li>
+  </ul>
+
+  <h2 id="v1-2-6">Version 1.2.6</h2>
+  <ul>
+    <li>Compare Loads now shows every load you've saved -- across all your workbooks, grouped by rifle -- instead of only the load that's currently open. Pick any two same-rifle loads and compare them.</li>
+    <li>The Load Card now prints the correct group size, mean radius, and vertical SD for a powder-charge winner (they were reading from the wrong place before).</li>
+  </ul>
+
+  <h2 id="v1-2-5">Version 1.2.5</h2>
+  <ul>
+    <li>Fixed: your ladder now matches automatically even when you fired fewer shots per charge than your plan expected.</li>
+    <li>Dropping a Garmin file straight into Import Data now reads the charge from each session's name and posts it to your ladder.</li>
+    <li>Your target groups now line up with the right charge by the order you shot and measured them, so date-named BallisticX files score correctly.</li>
+    <li>A seating-depth test can now be saved to your Load Library on its own, using the powder charge from your rifle setup.</li>
+    <li>After importing velocities, Results shows a "Measure target photos" button.</li>
+    <li>Garmin Xero: reads the Excel files ShotView creates when you export several sessions at once.</li>
+    <li>"Start a new ladder" and "Reset queue" now genuinely clear staged files, moved to a recoverable folder rather than deleted.</li>
+  </ul>
+
+  <h2 id="v1-2-3">Version 1.2.3</h2>
+  <ul>
+    <li>Your Load Library now shows all your loads in one place, active and archived, and you can reopen or rework any of them from the list.</li>
+    <li>The library table fits your window with velocity, SD, group and mean radius always visible.</li>
+    <li>"Print library" now actually prints the page.</li>
+    <li>On the phone: you can give a load a name in the Loadscope Ballistics app, and it shows up here.</li>
+    <li>Loads sent from the phone appear in the library right after you import them.</li>
+  </ul>
+
+  <h2 id="v1-2-2">Version 1.2.2</h2>
+  <ul>
+    <li>Target groups sent from the Loadscope Ballistics phone app now land in their own review list. See each group, delete any you do not want, and add the rest to a load.</li>
+    <li>Both phone review lists now have a delete button on every row, and longer names wrap instead of hiding it.</li>
+    <li>The sidebar shortcuts for waiting phone items no longer clip their text.</li>
+    <li>On the phone: a send that does not go through now tells you why, instead of just "Failed".</li>
+  </ul>
+
+  <h2 id="v1-2-1">Version 1.2.1</h2>
+  <ul>
+    <li>Phone loads now announce themselves -- when you send loads from the Loadscope Ballistics phone app, the desktop pops up right away with a "Review and Import" button so you know they arrived. (Before, it only updated a small badge that was easy to miss.)</li>
+    <li>Easier to find -- a "Review phone loads" button now appears in the sidebar whenever loads are waiting, so you no longer have to hunt through the Support menu.</li>
+    <li>On the phone: the Send screen is clearer -- plain-language buttons, and you can now select exactly which loads to send.</li>
+  </ul>
+
+  <h2 id="v1-2-0">Version 1.2.0</h2>
+  <ul>
+    <li>Bring your phone loads over -- built a rifle and recipe in Loadscope Ballistics on your phone? Tap Computer, then "Send to Computer," and pick the loads to send. On the desktop they pop up to review, or open them any time from the "Review phone loads" button. They come in marked "from phone, not yet tested" so you can run a ladder to fill in the real numbers.</li>
+    <li>Nothing you already have is ever overwritten -- if a load looks like one you already saved, Loadscope tells you and lets you skip it or add it as a new one. Your developed loads are always safe.</li>
+  </ul>
+
+  <h2 id="v1-1-1">Version 1.1.1</h2>
+  <ul>
+    <li>Build a rifle, finish later -- when you set up a rifle it now saves to your Rifles library right away, so it's waiting there to run the ladder whenever you're ready. (Before, only the barrel saved and the rifle quietly didn't.)</li>
+    <li>Faster, clearer check for your saved loads -- starting a New Ladder or reopening a saved load no longer crawls through your workbooks, and the progress note now says what it's actually doing.</li>
+  </ul>
+
+  <h2 id="v1-1-0">Version 1.1.0</h2>
+  <ul>
+    <li>New Compare Loads page (left menu) -- pick two or more saved loads from the same rifle and see which powder and charge actually shot best. It scores each load on velocity SD, mean radius, and vertical SD, names a winner in plain English, and says "too close to call, shoot more" when the top loads are within the noise.</li>
+    <li>Library cleanup -- you can now delete saved loads, bullets, rifles, and barrels you no longer want, plus a new Rifles tab under Libraries.</li>
+  </ul>
+
+  <h2 id="v1-0-7">Version 1.0.7</h2>
+  <ul>
+    <li>Fixed progress bars that weren't showing on Mac -- the update download meter and the "Loading..." indicators are visible again (they were washing out against the dark theme).</li>
+  </ul>
+
+  <h2 id="v1-0-6">Version 1.0.6</h2>
+  <ul>
+    <li>A much bigger bullet library -- hundreds of current match and hunting bullets added across .22 through .338, each with a manufacturer-sourced ballistic coefficient.</li>
+    <li>More accurate predicted DOPE: when two bullets share the same name and weight in different calibers, the app now always uses the right one's BC.</li>
+  </ul>
+
+  <h2 id="v1-0-5">Version 1.0.5</h2>
+  <ul>
+    <li>Press and hold the minus / plus buttons when planning a ladder to spin through numbers fast -- a quick click still steps once.</li>
+    <li>Past Loads and Rework a Saved Load now show every load you've filed away, no matter how you saved it.</li>
+    <li>Refreshed the built-in User Guide and Help for the new Measure workflow (Add group, drag-to-set-scale, Move aim).</li>
+  </ul>
+
+  <h2 id="v1-0-4">Version 1.0.4</h2>
+  <ul>
+    <li>Polish pass on the 1.0.3 Measure-a-Ladder update: input fields no longer cut off long values (rifle/optic names, ladder charges), the seating jam/step boxes are roomier, and a few field hints read cleaner.</li>
+  </ul>
+
+  <h2 id="v1-0-3">Version 1.0.3</h2>
+  <ul>
+    <li>Measure a Ladder: put several groups on one target photo, each labeled by its charge, with new Add group and Remove group buttons.</li>
+    <li>Set scale is now a simple ruler: drag a line across a known length, then click "Set length".</li>
+    <li>Seating ladders now support a jam into the lands, not just a jump. Enter a negative number to jam.</li>
+    <li>You work on one load at a time, with older loads filed under "Past Loads". New loads name themselves from your rifle and cartridge.</li>
+    <li>A "Working on:" bar shows which load you are in, everywhere.</li>
+  </ul>
+
+  <a class="back" href="index.html">&larr; Back to Loadscope</a>
+  <footer>&copy; 2026 Loadscope&trade;. <a href="terms.html">Terms of Service</a> &middot; <a href="privacy.html">Privacy Policy</a></footer>
+</div>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2faa54a51efa477c9529f0c5bc14f3bf"}'></script><script>
+(function() {
+    try {
+        var K = [ "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term" ], p = new URLSearchParams(location.search);
+        K.forEach((function(k) {
+            var v = p.get(k);
+            if (v) {
+                try {
+                    sessionStorage.setItem(k, v);
+                } catch (e) {}
+            }
+        }));
+        if (!sessionStorage.getItem("utm_source") && document.referrer) {
+            var h = new URL(document.referrer).hostname.replace(/^www\./, "").toLowerCase(), o = location.hostname.replace(/^www\./, "").toLowerCase();
+            if (h && h !== o) {
+                var s, m;
+                var A = h.match(/(^|\.)(chatgpt|openai|perplexity|claude|copilot|gemini)\./);
+                var E = h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave|kagi)\./);
+                if (A) {
+                    s = A[2];
+                    m = "ai";
+                } else if (E) {
+                    s = E[2];
+                    m = "organic";
+                } else {
+                    var N = {
+                        "snipershide.com": [ "snipershide", "forum" ],
+                        "accurateshooter.com": [ "accurateshooter", "forum" ],
+                        "longrangehunting.com": [ "longrangehunting", "forum" ],
+                        "reddit.com": [ "reddit", "social" ],
+                        "out.reddit.com": [ "reddit", "social" ],
+                        "youtube.com": [ "youtube", "video" ],
+                        "youtu.be": [ "youtube", "video" ],
+                        "facebook.com": [ "facebook", "social" ],
+                        "m.facebook.com": [ "facebook", "social" ],
+                        "l.facebook.com": [ "facebook", "social" ],
+                        "lm.facebook.com": [ "facebook", "social" ],
+                        "x.com": [ "x", "social" ],
+                        "t.co": [ "x", "social" ],
+                        "twitter.com": [ "x", "social" ]
+                    };
+                    s = N[h] ? N[h][0] : h;
+                    m = N[h] ? N[h][1] : "referral";
+                }
+                sessionStorage.setItem("utm_source", s);
+                sessionStorage.setItem("utm_medium", m);
+                sessionStorage.setItem("utm_campaign", m === "organic" ? "search" : m === "ai" ? "ai_search" : "referral");
+            }
+        }
+    } catch (e) {}
+})();
+</script>
+</body>
+</html>

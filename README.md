@@ -1,6 +1,6 @@
 # Loadscope
 
-**Loadscope finds your best rifle load.** It is a desktop app for precision
+**Loadscope finds your best rifle load.** It is reloading software for precision
 rifle handloaders on **macOS and Windows** — it reads your chronograph and your
 target groups, scores every charge and seating depth you actually shot, and
 names the winner.

@@ -138,6 +138,9 @@ nav .container { display: flex; justify-content: space-between; align-items: cen
 .nav-links { display: flex; gap: 28px; align-items: center; }
 .nav-links a { color: var(--text-dim); text-decoration: none; font-size: 15px; transition: color 0.15s; }
 .nav-links a:hover { color: var(--text); }
+
+.nav-buy { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.nav-links .nav-buy a.nav-owner { display: inline; font-size: 12.5px; color: var(--orange); text-decoration: underline; text-underline-offset: 2px; }
 .btn {
   display: inline-block;
   padding: 12px 24px;
@@ -259,6 +262,7 @@ header.hero .platform-note {
   font-size: 14px;
   color: var(--text-muted);
 }
+html:not(.sale-over) .hero-beta-badge { display: none; }
 .hero-beta-badge {
   display: inline-block;
   margin: 0 auto 18px;
@@ -930,6 +934,8 @@ header.hero .line2 {
 .hero-clip figcaption { color: var(--text-dim); font-size: .85rem; margin-top: 8px; }
 .galli-link { text-align: center; color: var(--text-dim); font-size: 15px; max-width: 700px; margin: 22px auto 0; }
 .galli-link a { color: var(--orange); font-weight: 600; white-space: nowrap; }
+.hero-howtos a { color: var(--orange); font-weight: 500; white-space: nowrap; text-decoration: none; }
+.hero-howtos a:hover { text-decoration: underline; }
 
 .download-modal.handheld.buy-tab .platform-seg { display: none; }
 @media (max-width: 720px) {
@@ -943,12 +949,14 @@ header.hero .line2 {
   header.hero .beta-note { order: 6; }
   header.hero .hero-phone-buy { order: 7; }
   .hero-share { display: block; order: 8; }
-  .hero-clip { order: 9; }
+  header.hero .hero-howtos { order: 8; }
+  .hero-clip { order: 9; max-width: 100%; width: 100%; }
   .hero-steps { order: 10; }
   .hero-steps-tail { order: 11; }
   .hero-who { order: 12; }
 }
 .phone-only { display: none; }
+@media (max-width: 600px) { .desk-only { display: none; } }
 @media (max-width: 600px) {
   .log-shot, .log-only { display: none; }
   .phone-only { display: inline; }
@@ -1040,7 +1048,8 @@ footer .footer-links a { white-space: nowrap; }
 {
   "@context": "https://schema.org",
   "@type": "VideoObject",
-  "name": "Loadscope: Full Walkthrough — From Range Files to Your Best Load (Part 1)",
+  "name": "Find Your Best Rifle Load: Load Development Software Walkthrough (Loadscope)",
+  "duration": "PT12M32S",
   "description": "A full walkthrough of Loadscope: import your Garmin Xero chronograph files and your target groups, and it scores every powder charge and seating depth to name your best load and predict your DOPE — on Mac and Windows.",
   "thumbnailUrl": "https://i.ytimg.com/vi/8V-7lJBN_rE/maxresdefault.jpg",
   "uploadDate": "2026-07-22",
@@ -1052,6 +1061,10 @@ footer .footer-links a { white-space: nowrap; }
     "url": "https://loadscope.app/"
   }
 }
+</script>
+<script type="application/ld+json">
+[{"@context": "https://schema.org", "@type": "VideoObject", "name": "How to Export Garmin Xero Data to Your Computer, No ShotView | Loadscope", "description": "Plug a Garmin Xero into your computer and bring a ladder's sessions straight into Loadscope, no ShotView export.", "thumbnailUrl": "https://i.ytimg.com/vi/YwoDNi-PGGk/hqdefault.jpg", "uploadDate": "2026-11-09T15:40:00-08:00", "duration": "PT2M56S", "contentUrl": "https://www.youtube.com/watch?v=YwoDNi-PGGk", "embedUrl": "https://www.youtube.com/embed/YwoDNi-PGGk"},
+ {"@context": "https://schema.org", "@type": "VideoObject", "name": "How to Measure Group Size From a Photo on Your iPhone | Loadscope", "description": "Measure your groups on your iPhone with Loadscope Ballistics, send them to Loadscope on your computer, and they're scored with your chronograph data.", "thumbnailUrl": "https://i.ytimg.com/vi/ozrJYQ1Ljz0/hqdefault.jpg", "uploadDate": "2026-11-09T15:40:00-08:00", "duration": "PT4M50S", "contentUrl": "https://www.youtube.com/watch?v=ozrJYQ1Ljz0", "embedUrl": "https://www.youtube.com/embed/ozrJYQ1Ljz0"}]
 </script>
 <script type="application/ld+json">
 {
@@ -1069,8 +1082,23 @@ footer .footer-links a { white-space: nowrap; }
   ]
 }
 </script>
+<link rel="canonical" href="https://loadscope.app/">
+<style>
+.sale-off{display:none!important}
+html.sale-over .sale-on{display:none!important}
+html.sale-over .sale-off{display:inline!important}
+.sale-banner{background:var(--orange);color:#111;text-align:center;font-weight:600;font-size:14.5px;padding:8px 14px;line-height:1.4}
+</style>
+<script>
+(function() {
+    if (Date.now() >= Date.UTC(2027, 0, 1, 7, 59, 59)) {
+        document.documentElement.className += " sale-over";
+    }
+})();
+</script>
 </head>
 <body>
+<div class="sale-banner sale-on">Holiday price: $59 through December 31, 2026. Regular price $79.</div>
 
 <nav>
   <div class="container">
@@ -1084,7 +1112,10 @@ footer .footer-links a { white-space: nowrap; }
       <a href="#faq">FAQ</a>
       <a href="#install">Install</a>
       <a href="learn/">Learn</a>
-      <a href="#" class="btn" onclick="openDownloadModal(event)">Get Loadscope</a>
+      <div class="nav-buy">
+        <a href="#" class="btn" onclick="openDownloadModal(event)">Buy<span class="desk-only"> Loadscope</span> &mdash; <span class="sale-on">$59</span><span class="sale-off">$79</span></a>
+        <a href="#" class="nav-owner" onclick="openDownloadModal(event); switchTab('have-code');">Already bought? Download</a>
+      </div>
     </div>
   </div>
 </nav>
@@ -1094,7 +1125,7 @@ footer .footer-links a { white-space: nowrap; }
     <div class="hero-logo">
       <img src="assets/icon.png" alt="Loadscope™ logo">
     </div>
-    <div class="hero-beta-badge">One-time &middot; $79</div>
+    <div class="hero-beta-badge"><span class="sale-on">Holiday price &middot; $59 through Dec 31</span><span class="sale-off">One-time &middot; $79</span></div>
     <h1>Loadscope &mdash; precision rifle load development<br>for <span class="accent">Mac &amp; Windows</span>.</h1>
     <div class="line2">Loadscope finds your best <span class="em">charge</span>, <span class="em">seating depth</span>, and <span class="em">tuner setting</span> &mdash; <span class="auto">automatically</span>.</div>
     
@@ -1109,15 +1140,16 @@ footer .footer-links a { white-space: nowrap; }
     <p class="hero-steps-tail">Loadscope scores every rung and names your best load.</p>
     <p class="hero-who">For anyone who tests loads over a chronograph &mdash; PRS, F-Class, benchrest and hunting rifles alike. Powder ladders, seating depth or a barrel tuner, 3-shot groups or 10.</p>
     <div class="cta-row">
-      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get Loadscope</a>
       <a href="#" class="btn btn-large btn-outline" onclick="openDemo(event)">Full walkthrough (12 min)</a>
     </div>
-    <p class="beta-note"><strong>$79, one time</strong> &mdash; yours forever, free updates, no subscription, 30-day money-back guarantee. For your Mac or Windows computer.</p>
+    <p class="beta-note"><strong><span class="sale-on">$59 through December 31 (regular $79), one time</span><span class="sale-off">$79, one time</span></strong> &mdash; yours forever, free updates, no subscription, 30-day money-back guarantee. For your Mac or Windows computer.</p>
     <p class="hero-phone-buy" style="font-size:15.5px;color:var(--text);margin-top:10px;"><strong>Loadscope is a computer program, not a phone app.</strong><span class="phone-only"> Buy here and your license key is emailed to you right away. Install it on your Mac or Windows computer when you&rsquo;re back at it.</span></p>
     <p class="hero-share"><a href="#" class="share-self" onclick="shareSelf(event,'hero')">Send this page to myself</a></p>
     
+    <p class="hero-howtos" style="font-size:14.5px;color:var(--text-dim);margin-top:10px;">Short how-tos: <a href="https://youtu.be/YwoDNi-PGGk" onclick="openDemo(event, YT_XERO, 'How to Export Garmin Xero Data to Your Computer, No ShotView | Loadscope')">Plug in a Garmin Xero (3 min)</a> &middot; <a href="https://youtu.be/ozrJYQ1Ljz0" onclick="openDemo(event, YT_PHONE, 'How to Measure Group Size From a Photo on Your iPhone | Loadscope')">Send targets from your iPhone (5 min)</a></p>
+    
     <figure class="hero-clip">
-      <video id="heroClip" src="assets/ladder-scored-20s.mp4" poster="assets/ladder-scored-20s-poster.webp" width="540" height="676" autoplay muted loop playsinline preload="metadata" aria-label="20-second clip: a real 7 SAUM ladder scored in Loadscope -- the winning charge, the measured groups, every charge scored, and the recipe card"></video>
+      <video id="heroClip" src="assets/ladder-scored-20s.mp4#t=3.4" poster="assets/ladder-scored-20s-poster-groups.webp" width="540" height="676" autoplay muted loop playsinline preload="metadata" aria-label="20-second clip: a real 7 SAUM ladder scored in Loadscope -- the winning charge, the measured groups, every charge scored, and the recipe card"></video>
       <figcaption>A real ladder, scored &mdash; 20 seconds.</figcaption>
     </figure>
   </div>
@@ -1190,7 +1222,7 @@ footer .footer-links a { white-space: nowrap; }
         <p class="section-sub">No separate target app needed. Photograph your target, set the scale, and tap your shots &mdash; Loadscope works out group size, <strong>mean radius</strong> and vertical, then scores it. Already use a target app? Import its CSV instead.</p>
       </div>
       <div class="screenshot-wrap">
-        <picture><source media="(max-width: 600px)" srcset="assets/measure-target-phone.webp" width="900" height="714"><img src="assets/measure-target.webp" width="3420" height="1868" loading="lazy" decoding="async" alt="Loadscope Measure Target screen: a real 7 SAUM powder ladder on one target sheet at 100 yards, the 59.0 gr target open with each charge measured and tagged on the photo (Bull 1 58.6 gr, Bull 2 58.8 gr, Bull 3 59.0 gr), Set scale / Move aim / Mark shots above, and Results showing the 59.0 gr group: 0.330 in (0.315 MOA), mean radius 0.140 in, with all three targets saved on the strip below"></picture>
+        <picture><source media="(max-width: 600px)" srcset="assets/measure-target-phone.webp" width="900" height="714"><img src="assets/measure-target.webp" width="3420" height="1800" loading="lazy" decoding="async" alt="Loadscope Measure Target screen: a real 7 SAUM powder ladder on one target sheet at 100 yards, the 59.0 gr target open with each charge measured and tagged on the photo (Bull 1 58.6 gr, Bull 2 58.8 gr, Bull 3 59.0 gr), Set scale / Move aim / Mark shots above, and Results showing the 59.0 gr group: 0.330 in (0.315 MOA), mean radius 0.140 in, with all three targets saved on the strip below"></picture>
         <p style="text-align:center;color:var(--text-dim);font-size:.82rem;margin:14px auto 0;">A real 7 SAUM powder ladder &mdash; every charge on one sheet, measured in Loadscope.</p>
       </div>
     </div>
@@ -1269,7 +1301,7 @@ footer .footer-links a { white-space: nowrap; }
         <div class="comp-badge">New &middot; iPhone &amp; iPad</div>
         <h2>Your load, <span class="accent">in the field</span>.</h2>
         <p class="section-sub"><strong>Loadscope Ballistics</strong> carries your best load to the range, re-solves your dial live as conditions change &mdash; real wind math, <strong>powered by Apple&nbsp;Weather</strong> &mdash; and <strong>measures your groups right at the target</strong>, syncing them back to your computer over your own Wi-Fi. No Loadscope account and nothing goes to our servers; the solver runs on your phone, so your dial is there with no signal.</p>
-        <p class="section-sub" style="margin-top:10px;"><strong>The iPhone app comes free with your $79 license</strong> &mdash; your license key unlocks everything. Buying only the iPhone app? That&rsquo;s a separate <strong>$9.99</strong>.</p>
+        <p class="section-sub" style="margin-top:10px;"><strong>The iPhone app comes free with your <span class="sale-on">Loadscope</span><span class="sale-off">$79</span> license</strong> &mdash; your license key unlocks everything. Buying only the iPhone app? That&rsquo;s a separate <strong>$9.99</strong>.</p>
         <div class="comp-cta" style="text-align:left;margin-top:18px;">
           <a class="comp-appstore" href="https://apps.apple.com/app/id6777277349" target="_blank" rel="noopener" aria-label="Download Loadscope Ballistics on the App Store"><img src="assets/download-on-the-app-store.svg" alt="Download on the App Store" height="46" style="height:46px;width:auto;"></a>
           <div class="comp-cta-sub" style="margin-top:6px;">Just want a group number? There&rsquo;s a free, standalone <strong>Loadscope&nbsp;Measure</strong> app that does only that.</div>
@@ -1286,7 +1318,8 @@ footer .footer-links a { white-space: nowrap; }
 
 <section id="beta" style="background: var(--bg-mid); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
   <div class="container">
-        <h2>What you get for <span class="accent">$79</span>.</h2>
+        <h2>What you get for <span class="accent"><span class="sale-on">$59</span><span class="sale-off">$79</span></span>.</h2>
+        <p class="sale-on" style="margin-top:-6px;color:var(--orange);font-weight:600;">Holiday price through December 31. Regular price $79.</p>
     <p class="section-sub">One-time purchase &mdash; the full app on up to two computers, free updates, no subscription. Works fully offline, no account needed. 30-day money-back guarantee.</p>
     <div class="features">
       <div class="feature">
@@ -1316,7 +1349,7 @@ footer .footer-links a { white-space: nowrap; }
       </div>
     </div>
     <div style="text-align:center; margin-top:26px;">
-      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Get Loadscope</a>
+      <a href="#" class="btn btn-large" onclick="openDownloadModal(event)">Buy Loadscope &mdash; <span class="sale-on">$59</span><span class="sale-off">$79</span></a>
     </div>
   </div>
 </section>
@@ -1324,7 +1357,7 @@ footer .footer-links a { white-space: nowrap; }
 <section id="faq">
   <div class="container">
     <h2>Common <span class="accent">questions</span>.</h2>
-    <p class="section-sub">If you don&rsquo;t see your question here, email <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a>.</p>
+    <p class="section-sub">Don&rsquo;t see your question? <a href="/answers/" style="color: var(--orange);">Ask it on the answers page</a>, or email <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a>.</p>
     <details class="faq-toggle">
       <summary>Show the questions</summary>
       <div class="faq-grid">
@@ -1332,6 +1365,10 @@ footer .footer-links a { white-space: nowrap; }
       <details class="faq-item" id="phone-or-computer">
         <summary>Is Loadscope a phone app? Is there an iPhone app?</summary>
         <p><strong>No &mdash; Loadscope is a desktop program, so you need a Mac or Windows computer.</strong> That&rsquo;s where your chronograph and target data come in, every rung gets scored, and your best load is named. Loadscope Ballistics, the iPhone and iPad app included with your license, is a field companion that carries the load you settle on to the range &mdash; a DOPE dial that re-solves live as conditions change, your recipe at the bench, and round counts that sync back to the desktop. Desktop owners unlock it with their license key; on its own, phone-side load entry is a one-time $9.99 unlock. <a href="https://apps.apple.com/app/id6777277349" target="_blank" rel="noopener">See it on the App Store &rarr;</a> There&rsquo;s no Android app, and you don&rsquo;t need one &mdash; all of the load-development work happens on the computer.</p>
+      </details>
+      <details class="faq-item" id="other-reloading-software">
+        <summary>What other reloading software is there?</summary>
+        <p>Shooters use a manual for load data, QuickLOAD or LoadForge to predict pressure, and logbook apps like GUNR or LoadNode for records. Loadscope scores the ladder you shot. <a href="/learn/reloading-software-compared.html" style="color: var(--orange);">Here is what each one does &rarr;</a></p>
       </details>
       <details class="faq-item">
         <summary>Will Loadscope tell me what charge to load?</summary>
@@ -1347,17 +1384,17 @@ footer .footer-links a { white-space: nowrap; }
       </details>
       <details class="faq-item">
         <summary>How do I get my license key, and how does buying work?</summary>
-        <p>Click <strong>Get Loadscope</strong>, check out for <strong>$79</strong>, and your license key is emailed to you right away — it unlocks both the download and the app itself. One license covers up to two computers &mdash; say your bench PC and a range laptop. Moving to a new computer? Email us and we&rsquo;ll free up a slot. Questions? <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a>.</p>
+        <p>Click <strong>Buy Loadscope</strong>, check out for <strong><span class="sale-on">$59 (holiday price through December 31)</span><span class="sale-off">$79</span></strong>, and your license key is emailed to you right away — it unlocks both the download and the app itself. One license covers up to two computers &mdash; say your bench PC and a range laptop. Moving to a new computer? Email us and we&rsquo;ll free up a slot. Questions? <a href="mailto:support@loadscope.app" style="color: var(--orange);">support@loadscope.app</a>.</p>
       </details>
       <details class="faq-item">
         <summary>Is Loadscope a subscription?</summary>
-        <p>No. It&rsquo;s a <strong>one-time purchase</strong> with free updates. It runs fully offline &mdash; no account, and no load data ever leaves your computer. The only things it sends are a small license check when it opens and, if you choose to, a crash report.</p>
+        <p>No. It&rsquo;s a <strong>one-time purchase</strong> with free updates. It runs fully offline &mdash; no account, and your load data never goes to our servers (Phone Sync sends loads only to your own phone, over your own Wi-Fi). The only things it sends us are a small license check when it opens and, only if you press Send, a crash report, a question you ask, or your answers to a one-time, three-question survey.</p>
       </details>
       <details class="faq-item" id="metric">
         <summary>Does it work in metric? Can I buy from outside the US?</summary>
         <p>Yes to both. <strong>Settings &rarr; Units</strong> switches the whole app to metric &mdash; velocity in m/s, distance in meters, group size, sight height and cartridge lengths in millimeters, temperature in &deg;C, pressure in hPa, wind in m/s or km/h &mdash; or set each measurement on its own. Powder and bullet weights stay in grains, the way load data and powder scales print them.</p>
         <p>Garmin Xero files saved with European settings &mdash; decimal commas, semicolons, 24-hour times, day-first dates &mdash; import as they are, and the target scale can be set in millimeters.</p>
-        <p>Loadscope sells worldwide for <strong>US$79</strong>. Checkout shows your total before you pay and adds VAT or GST where your country charges it &mdash; about US$95 in the UK. The app is in English. The 30-day money-back guarantee applies wherever you buy, which is longer than the 14-day cancellation window in the EU and UK.</p>
+        <p>Loadscope sells worldwide for <strong><span class="sale-on">US$59 through December 31 (regular US$79)</span><span class="sale-off">US$79</span></strong>. Checkout shows your total before you pay and adds VAT or GST where your country charges it &mdash; about <span class="sale-on">US$71</span><span class="sale-off">US$95</span> in the UK. The app is in English. The 30-day money-back guarantee applies wherever you buy, which is longer than the 14-day cancellation window in the EU and UK.</p>
       </details>
       <details class="faq-item">
         <summary>How accurate is the predicted DOPE?</summary>
@@ -1367,11 +1404,11 @@ footer .footer-links a { white-space: nowrap; }
       </details>
       <details class="faq-item">
         <summary>What chronographs and target apps does it read?</summary>
-        <p><strong>Chronographs:</strong> <strong>Garmin Xero</strong> &mdash; either plug it into your computer with its USB cable and Loadscope reads the sessions straight off it, or import a ShotView CSV export; both work, and neither one replaces the other &mdash; plus <strong>LabRadar</strong> and <strong>Athlon Rangecraft</strong>, and <strong>MagnetoSpeed</strong> (still in testing, so check those numbers against your own). <strong>Target apps:</strong> BallisticX, OnTarget (PC/TDS), Silver Mountain (SMT) and ShotMarker &mdash; or skip the target app entirely and measure your groups from a photo right in Loadscope. New chronographs and target apps are quick to add &mdash; send a sample export to support@loadscope.app.</p>
+        <p><strong>Chronographs:</strong> <strong>Garmin Xero</strong> &mdash; either plug it into your computer with its USB cable and Loadscope reads the sessions straight off it, or import a ShotView CSV export; both work, and neither one replaces the other &mdash; plus <strong>LabRadar</strong> and <strong>Athlon Rangecraft</strong>, and <strong>MagnetoSpeed</strong> (the V3&rsquo;s LOG.CSV or the XFR app&rsquo;s export; still in testing, so check those numbers against your own). <strong>Target apps:</strong> BallisticX, OnTarget (PC/TDS), Silver Mountain (SMT) and ShotMarker &mdash; or skip the target app entirely and measure your groups from a photo right in Loadscope. New chronographs and target apps are quick to add &mdash; send a sample export to support@loadscope.app.</p>
       </details>
       <details class="faq-item">
         <summary>Do I still need ShotView to get my Xero data in?</summary>
-        <p>No. Plug the Xero into your Mac or Windows computer with its USB cable and Loadscope notices it, tells you how many sessions are on it, and offers to read them &mdash; every session at once, straight off the chronograph. Since a Xero holds up to 50 sessions, it asks which ones belong to this ladder and lists them by time, shot count, average speed and SD, grouped by range day, with the likely block already picked for you. It never writes to or erases anything on the chronograph. The Xero stores its sessions as Garmin <code>.FIT</code> files, and Loadscope reads those directly &mdash; drag one in on its own if you&rsquo;ve already copied them off.</p>
+        <p>No. Plug the Xero into your Mac or Windows computer with its USB cable and Loadscope notices it, tells you how many sessions are on it, and offers to read them &mdash; every session at once, straight off the chronograph. Since a Xero holds up to 50 sessions, it asks which ones belong to this ladder and lists them by time, shot count, average speed and SD, grouped by range day. When it can tell which sessions are this ladder, it picks them for you; when it can&rsquo;t, you tick them. It never writes to or erases anything on the chronograph. The Xero stores its sessions as Garmin <code>.FIT</code> files, and Loadscope reads those directly &mdash; drag one in on its own if you&rsquo;ve already copied them off.</p>
         <p>No cable with you? Export the session as a CSV from the ShotView app on your phone and drop it on Loadscope &mdash; it scores the same way.</p>
         <p><a href="/learn/garmin-xero-data.html">Working with Garmin Xero data &rarr;</a></p>
       </details>
@@ -1394,7 +1431,7 @@ footer .footer-links a { white-space: nowrap; }
       </details>
       <details class="faq-item">
         <summary>What hardware does Loadscope run on?</summary>
-        <p><strong>Mac:</strong> macOS 14 or newer. There are two Mac downloads: one built for Apple Silicon (M1 and later) and one for Intel. Not sure which chip you have? The Intel one runs on every Mac (Apple Silicon Macs run it through Rosetta).</p>
+        <p><strong>Mac:</strong> macOS 14 or newer. There are two Mac downloads: one built for Apple Silicon (M1 and later) and one for Intel. Not sure which chip you have? Click the Apple menu, then About This Mac: M1, M2, M3 or newer means Apple Silicon; Intel means Intel. Pick the one that matches.</p>
         <p><strong>Windows:</strong> Windows 10 or newer, 64-bit. No GPU required. Loadscope is a small app — runs fine on modest hardware.</p>
       </details>
       </div>
@@ -1412,7 +1449,7 @@ footer .footer-links a { white-space: nowrap; }
       <div class="step">
         <div class="num">1</div>
         <h3>Get Loadscope</h3>
-        <p>Click <strong>Get Loadscope</strong> at the top of the page, pick <strong>Mac</strong> or <strong>Windows</strong>, and paste the license key that will be emailed to you. The right installer for your computer starts downloading.</p>
+        <p>Click <strong>Buy Loadscope</strong> at the top of the page, pick <strong>Mac</strong> or <strong>Windows</strong>, and paste the license key that will be emailed to you. The right installer for your computer starts downloading.</p>
       </div>
       <div class="step">
         <div class="num">2</div>
@@ -1433,7 +1470,7 @@ footer .footer-links a { white-space: nowrap; }
     </details>
 
     <div class="install-note">
-      <strong>Signed &amp; notarized.</strong> Apple-signed and notarized on Mac &mdash; it opens like any commercial app. On Windows it&rsquo;s code-signed by <strong>Loadscope LLC</strong>; because the certificate is new, Windows may still show a one-time security prompt (SmartScreen&rsquo;s <strong>More info &rarr; Run anyway</strong>) until it builds reputation.
+      <strong>Signed &amp; notarized.</strong> Apple-signed and notarized on Mac &mdash; it opens like any commercial app. On Windows it&rsquo;s code-signed by <strong>Loadscope LLC</strong>; because the certificate is new, Windows may still show a one-time security prompt (SmartScreen&rsquo;s <strong>More info &rarr; Run anyway</strong>) until it builds reputation. If Windows or your antivirus still blocks it, email support@loadscope.app within 30 days of buying and we will refund you in full.
     </div>
   </div>
 </section>
@@ -1480,8 +1517,8 @@ footer .footer-links a { white-space: nowrap; }
 <footer>
   <div class="container">
     <p><strong>Loadscope</strong> &middot; <a href="mailto:support@loadscope.app">support@loadscope.app</a></p>
-    <p>&copy; 2026 Loadscope LLC. All rights reserved.</p>
-    <p class="footer-links" style="font-size:13.5px; margin-bottom:8px;"><a href="learn/">Learn</a> &middot; <a href="terms.html">Terms of Service</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="refund.html">Refund Policy</a> &middot; <a href="disclaimer.html">Disclaimer</a></p>
+    <p>&copy; 2026 Loadscope LLC, an Oregon company. All rights reserved.</p>
+    <p class="footer-links" style="font-size:13.5px; margin-bottom:8px;"><a href="learn/">Learn</a> &middot; <a href="about.html">Facts</a> &middot; <a href="terms.html">Terms of Service</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="refund.html">Refund Policy</a> &middot; <a href="disclaimer.html">Disclaimer</a></p>
     <div class="disclaimer">
       <strong>Reloading safety:</strong> Loadscope is not a source of published load data, and its &ldquo;suggested&rdquo; winners are a statistical ranking of your own tested loads — not a safety-vetted recommendation. Always cross-reference current reloading manuals, watch for pressure signs, and start below maximum and work up. You assume all risk associated with handloading and shooting. <a href="disclaimer.html">Full disclaimer &rarr;</a>
     </div>
@@ -1527,7 +1564,7 @@ footer .footer-links a { white-space: nowrap; }
     </div>
 
     <div class="tab-panel active" id="panelRequestAccess">
-      <h3>Get Loadscope &mdash; $79</h3>
+      <h3>Get Loadscope &mdash; <span class="sale-on">$59 <span style="font-size:15px;font-weight:500;color:var(--text-muted);">holiday price, regular $79</span></span><span class="sale-off">$79</span></h3>
       <p>One-time purchase. Yours forever, with free updates. <strong>Installs on your Mac or Windows computer</strong>; Loadscope Ballistics for iPhone and iPad is included. 30-day money-back guarantee.</p>
       <ul style="margin: 4px 0 18px; padding-left: 20px; color: var(--text-dim); line-height: 1.75;">
         <li>Measure your target groups right in the app &mdash; or import a target app&rsquo;s export</li>
@@ -1537,9 +1574,9 @@ footer .footer-links a { white-space: nowrap; }
       <div class="feedback" id="requestAccessFeedback"></div>
       <div class="actions">
         <button class="btn btn-outline" onclick="closeDownloadModal()">Cancel</button>
-        <a class="btn" id="buyNowLink" href="https://loadscope.lemonsqueezy.com/checkout/buy/83b4751b-90c2-4a93-966a-65e3aeda8ecb" target="_blank" rel="noopener">Buy now &mdash; $79</a>
+        <a class="btn" id="buyNowLink" href="https://loadscope.lemonsqueezy.com/checkout/buy/83b4751b-90c2-4a93-966a-65e3aeda8ecb?checkout[discount_code]=HOLIDAY2026" target="_blank" rel="noopener">Buy now &mdash; <span class="sale-on">$59</span><span class="sale-off">$79</span></a>
       </div>
-      <p style="font-size: 13px; color: var(--text-muted); margin-top: 14px;">After checkout, your license key arrives by email &mdash; then use <strong>I have a key</strong> to download. Prices are in US dollars; outside the US, checkout adds VAT or GST where your country charges it.</p>
+      <p style="font-size: 13px; color: var(--text-muted); margin-top: 14px;">After checkout, your license key arrives by email &mdash; then use <strong>I have a key</strong> to download. Prices are in US dollars. Checkout adds sales tax, VAT or GST where your state or country charges it.</p>
     </div>
 
     <div class="tab-panel" id="panelHaveCode">
@@ -1567,10 +1604,10 @@ footer .footer-links a { white-space: nowrap; }
             <span class="platform-opt-sub">M1 and later</span>
           </button>
         </div>
-        <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Not sure? Choose Intel &mdash; it runs on every Mac (Apple Silicon Macs run it through Rosetta). Apple menu &rarr; About This Mac shows your chip.</p>
+        <p style="font-size: 12px; color: var(--text-muted); margin-top: 8px;">Not sure? Apple menu &rarr; About This Mac shows your chip: M1 or newer means Apple Silicon, Intel means Intel. Pick the one that matches.</p>
       </div>
       <div class="win-smartscreen-note" id="winSmartScreenNote" style="display:none;">
-        Heads-up: because Loadscope is a new program, your browser may pause the download &mdash; look at the <strong>top-right corner</strong> for a small <strong>download icon</strong>, click it, and choose <strong>Keep</strong>. The file is safe and code-signed by <strong>Loadscope LLC</strong>. Then, the first time you run it, Windows SmartScreen may show a one-time blue <strong>&ldquo;Windows protected your PC&rdquo;</strong> box; click <strong>More info → Run anyway</strong> — the publisher reads &ldquo;Loadscope LLC&rdquo;. Both fade as more people install.
+        Heads-up: because Loadscope is a new program, your browser may pause the download &mdash; look at the <strong>top-right corner</strong> for a small <strong>download icon</strong>, click it, and choose <strong>Keep</strong>. The file is safe and code-signed by <strong>Loadscope LLC</strong>. Then, the first time you run it, Windows SmartScreen may show a one-time blue <strong>&ldquo;Windows protected your PC&rdquo;</strong> box; click <strong>More info → Run anyway</strong> — the publisher reads &ldquo;Loadscope LLC&rdquo;. Both fade as more people install. If it still will not run, email support@loadscope.app within 30 days of buying and we will refund you in full.
       </div>
       <div class="actions">
         <button class="btn btn-outline" onclick="closeDownloadModal()">Cancel</button>
@@ -1626,6 +1663,10 @@ footer .footer-links a { white-space: nowrap; }
 var YT_WALKTHROUGH = "https://www.youtube.com/embed/8V-7lJBN_rE?rel=0&autoplay=1&cc_load_policy=0";
 
 var YT_RILEY = "https://www.youtube-nocookie.com/embed/AKK8knBpYQ4?start=1048&autoplay=1&playsinline=1&rel=0";
+
+var YT_XERO = "https://www.youtube.com/embed/YwoDNi-PGGk?rel=0&autoplay=1&cc_load_policy=0";
+
+var YT_PHONE = "https://www.youtube.com/embed/ozrJYQ1Ljz0?rel=0&autoplay=1&cc_load_policy=0";
 
 var demoLastFocus = null;
 
@@ -1732,6 +1773,28 @@ function srcFromReferrer() {
             var gaParts = gaCookie.split(".");
             if (gaParts.length >= 4) sessionStorage.setItem("_ga_cid", gaParts[gaParts.length - 2] + "." + gaParts[gaParts.length - 1]);
         }
+        var FT = null;
+        try {
+            var tzn = "";
+            try {
+                tzn = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+            } catch (e) {}
+            var euTz = /^(Europe\/|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe))/.test(tzn);
+            var okStore = !euTz || localStorage.getItem("ls_consent") === "granted";
+            FT = JSON.parse(localStorage.getItem("ls_first") || "null");
+            if (FT && !(Date.now() - FT.t < 7776e6)) FT = null;
+            if (!FT && okStore && sessionStorage.getItem("utm_source")) {
+                FT = {
+                    t: Date.now(),
+                    s: sessionStorage.getItem("utm_source"),
+                    m: sessionStorage.getItem("utm_medium") || "",
+                    c: sessionStorage.getItem("utm_campaign") || ""
+                };
+                localStorage.setItem("ls_first", JSON.stringify(FT));
+            }
+        } catch (e) {
+            FT = null;
+        }
         var link = document.getElementById("buyNowLink");
         if (link) {
             var url = new URL(link.href);
@@ -1743,16 +1806,44 @@ function srcFromReferrer() {
             if (gclidv) url.searchParams.set("checkout[custom][gclid]", gclidv);
             var gacidv = sessionStorage.getItem("_ga_cid");
             if (gacidv) url.searchParams.set("checkout[custom][ga_cid]", gacidv);
+            if (FT) {
+                url.searchParams.set("checkout[custom][first_source]", FT.s);
+                if (FT.m) url.searchParams.set("checkout[custom][first_medium]", FT.m);
+                if (FT.c) url.searchParams.set("checkout[custom][first_campaign]", FT.c);
+                url.searchParams.set("checkout[custom][first_date]", new Date(FT.t).toISOString().slice(0, 10));
+            }
             link.href = url.toString();
             link.addEventListener("click", (function() {
                 try {
+                    var gc = cookie("_ga");
+                    if (gc) {
+                        var gp = gc.split(".");
+                        if (gp.length >= 4) {
+                            var u2 = new URL(link.href);
+                            u2.searchParams.set("checkout[custom][ga_cid]", gp[gp.length - 2] + "." + gp[gp.length - 1]);
+                            link.href = u2.toString();
+                        }
+                    }
+                } catch (e) {}
+                try {
                     if (window.gtag) gtag("event", "begin_checkout", {
-                        value: 79,
+                        value: Date.now() < Date.UTC(2027, 0, 1, 7, 59, 59) ? 59 : 79,
                         currency: "USD"
                     });
                 } catch (e) {}
             }));
         }
+    } catch (e) {}
+})();
+
+(function() {
+    try {
+        if (document.documentElement.className.indexOf("sale-over") < 0) return;
+        var l = document.getElementById("buyNowLink");
+        if (!l) return;
+        var u = new URL(l.href);
+        u.searchParams.delete("checkout[discount_code]");
+        l.href = u.toString();
     } catch (e) {}
 })();
 
