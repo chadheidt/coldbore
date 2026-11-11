@@ -1,0 +1,286 @@
+<!DOCTYPE html><html lang="en"><head><script>
+window.dataLayer = window.dataLayer || [];
+
+function gtag() {
+    dataLayer.push(arguments);
+}
+
+gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    region: [ "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "IS", "LI", "NO", "GB", "CH" ],
+    wait_for_update: 500
+});
+
+gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "granted"
+});
+
+(function() {
+    var c = null;
+    try {
+        c = localStorage.getItem("ls_consent");
+    } catch (e) {}
+    if (c === "granted") {
+        gtag("consent", "update", {
+            analytics_storage: "granted"
+        });
+    }
+    var tz = "";
+    try {
+        tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    } catch (e) {}
+    if (c || !/^(Europe\/|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe))/.test(tz)) {
+        return;
+    }
+    document.addEventListener("DOMContentLoaded", (function() {
+        var b = document.createElement("div");
+        b.id = "ls-consent";
+        b.setAttribute("role", "dialog");
+        b.setAttribute("aria-label", "Cookie notice");
+        b.style.cssText = "position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-width:560px;margin:0 auto;background:#1a1c20;color:#f5f5f5;border:1px solid #d97706;border-radius:10px;padding:14px 16px;font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.45)";
+        b.innerHTML = 'We use Google Analytics to see which pages are useful to shooters. No ads, and nothing is sold. <a href="/privacy.html" style="color:#f59e0b">Privacy</a><div style="margin-top:10px;text-align:right"><button type="button" data-v="denied" style="background:none;border:1px solid #9ca3af;color:#f5f5f5;border-radius:7px;padding:7px 14px;margin-right:8px;cursor:pointer;font:inherit">No thanks</button><button type="button" data-v="granted" style="background:#d97706;border:0;color:#fff;border-radius:7px;padding:7px 18px;cursor:pointer;font:inherit;font-weight:600">OK</button></div>';
+        b.addEventListener("click", (function(ev) {
+            var v = ev.target && ev.target.getAttribute && ev.target.getAttribute("data-v");
+            if (!v) {
+                return;
+            }
+            try {
+                localStorage.setItem("ls_consent", v);
+            } catch (e) {}
+            if (v === "granted") {
+                gtag("consent", "update", {
+                    analytics_storage: "granted"
+                });
+            }
+            b.remove();
+        }));
+        document.body.appendChild(b);
+    }));
+})();
+
+gtag("js", new Date);
+
+gtag("config", "G-NVD1F3H412");
+</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-NVD1F3H412"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Is a Velocity Flat Spot Real? A Ladder Test Study | Loadscope</title>
+<meta name="description" content="How often does a velocity ladder show a flat spot that isn&#x27;t there? A study built on 89 real Garmin Xero sessions, and how many shots per rung a ladder needs.">
+<link rel="canonical" href="https://loadscope.app/learn/velocity-flat-spot-study.html">
+<meta property="og:title" content="Flat Spot or Fluke? What your velocity ladder can really tell you, and how many shots per rung it needs"><meta property="og:description" content="How often does a velocity ladder show a flat spot that isn&#x27;t there? A study built on 89 real Garmin Xero sessions, and how many shots per rung a ladder needs.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/velocity-flat-spot-study.html">
+<meta property="og:image" content="https://loadscope.app/assets/icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Flat Spot or Fluke?">
+<meta name="twitter:description" content="How often does a velocity ladder show a flat spot that isn&#x27;t there? A study built on 89 real Garmin Xero sessions, and how many shots per rung a ladder needs.">
+<meta name="twitter:image" content="https://loadscope.app/assets/icon.png">
+<meta name="citation_title" content="Flat Spot or Fluke? What your velocity ladder can really tell you, and how many shots per rung it needs">
+<meta name="citation_author" content="Loadscope LLC">
+<meta name="citation_doi" content="10.5281/zenodo.24143852">
+<meta name="citation_publication_date" content="2026/11/11">
+<meta name="citation_pdf_url" content="https://loadscope.app/research/flat-spot-or-fluke.pdf">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "ScholarlyArticle", "headline": "Flat Spot or Fluke? What your velocity ladder can really tell you, and how many shots per rung it needs", "description": "How often does a velocity ladder show a flat spot that isn't there? A study built on 89 real Garmin Xero sessions, and how many shots per rung a ladder needs.", "url": "https://loadscope.app/learn/velocity-flat-spot-study.html", "image": "https://loadscope.app/assets/icon.png", "author": {"@type": "Organization", "name": "Loadscope LLC", "url": "https://loadscope.app/about.html"}, "identifier": {"@type": "PropertyValue", "propertyID": "DOI", "value": "10.5281/zenodo.24143852"}, "sameAs": "https://doi.org/10.5281/zenodo.24143852", "publisher": {"@type": "Organization", "name": "Loadscope LLC", "url": "https://loadscope.app/about.html", "logo": {"@type": "ImageObject", "url": "https://loadscope.app/assets/icon.png"}}, "datePublished": "2026-11-11", "dateModified": "2026-11-11", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://loadscope.app/learn/velocity-flat-spot-study.html"}, "about": ["velocity ladder", "load development", "chronograph", "shots per rung"]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How many shots per rung does a velocity ladder need?", "acceptedAnswer": {"@type": "Answer", "text": "It depends on your shot-to-shot SD. With rungs about 10 fps apart, a load with no flat spot still looked flat 32% of the time at three shots per rung on an average load (SD 11), 12% at five and 0.9% at ten. On a good load (SD 8) it was 9% at three shots and 1% at five. Drift during the session can still fool a ladder at any shot count."}}, {"@type": "Question", "name": "Is a one-shot-per-rung ladder reliable?", "acceptedAnswer": {"@type": "Answer", "text": "On a good or average load, no. At SD 8 with 10 fps rungs, a load with no flat spot showed one 51% of the time, about as often as a real flat spot was picked and looked flat (54%). Only a very consistent load (SD 5) did much better (12% fooled)."}}, {"@type": "Question", "name": "If my ladder shows a flat spot, is it real?", "acceptedAnswer": {"@type": "Answer", "text": "The ladder alone can't say. The study measured how often a ladder is fooled, not how likely a given flat spot is to be real. Treat a flat spot as a place to look, then check it separately: longer strings at the pick and at the rungs on either side of it, or the whole ladder fired again on another day."}}, {"@type": "Question", "name": "Is a rung that reads slower than the one before a problem?", "acceptedAnswer": {"@type": "Answer", "text": "Not by itself. With rungs adding 10 fps, at least one rung read slower than the one before in 91% of one-shot ladders from ordinary shot-to-shot variation alone. This study is about speed only and says nothing about pressure; watch for pressure signs as your load manual describes."}}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://loadscope.app/"}, {"@type": "ListItem", "position": 2, "name": "Learn", "item": "https://loadscope.app/learn/"}, {"@type": "ListItem", "position": 3, "name": "Flat Spot or Fluke?", "item": "https://loadscope.app/learn/velocity-flat-spot-study.html"}]}</script>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<style>
+:root{--orange:#d97706;--bg:#0e0f12;--bg-mid:#1a1c20;--bg-light:#252830;--text:#f5f5f5;--text-dim:#9ca3af;--text-muted:#6b7280;--border:#2d3036;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}
+.container{max-width:760px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;background:rgba(14,15,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10}
+nav .container{max-width:1080px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;color:#fff;text-decoration:none}
+.logo img{width:30px;height:30px;border-radius:7px}
+.nav-links a{color:var(--text-dim);text-decoration:none;margin-left:20px;font-size:15px}
+.nav-links a:hover{color:#fff}
+.btn{background:var(--orange);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:700}
+@media(max-width:560px){nav .container{padding:0 14px}.logo{font-size:15px;letter-spacing:.5px;white-space:nowrap}.logo img{width:26px;height:26px}.nav-links{display:flex;align-items:center}.nav-links a{margin-left:12px;font-size:14px;white-space:nowrap}.nav-links a[href='/#faq'],.nav-links a[href='/#install']{display:none}.btn{padding:7px 11px;white-space:nowrap}}
+
+article{padding:48px 0 24px}
+.crumb{color:var(--text-muted);font-size:14px;margin-bottom:18px}
+.crumb a{color:var(--text-dim);text-decoration:none}
+h1{font-size:34px;line-height:1.2;margin-bottom:14px;letter-spacing:-.4px}
+h2{font-size:23px;margin:34px 0 10px;color:#fff}
+p{color:#dfe2e6;margin-bottom:16px}
+ul,ol{margin:0 0 16px 22px}
+li{color:#dfe2e6;margin-bottom:8px}
+a{color:var(--orange)}
+.lead{font-size:19px;color:var(--text-dim);margin-bottom:8px}
+strong{color:#fff}
+figure{margin:26px 0}
+figure img{width:100%;border:1px solid var(--border);border-radius:12px;display:block}
+figure.tight{max-width:380px;margin-left:auto;margin-right:auto}
+figcaption{color:var(--text-muted);font-size:14px;margin-top:8px;text-align:center}
+.cta{background:var(--bg-mid);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:12px;padding:22px 24px;margin:34px 0}
+.cta h3{color:#fff;font-size:19px;margin-bottom:8px}
+.cta .btn{display:inline-block;margin-top:6px;text-decoration:none}
+.related{border-top:1px solid var(--border);margin-top:40px;padding-top:24px}
+.related a{display:block;margin-bottom:8px;text-decoration:none;color:var(--text-dim)}
+.related a:hover{color:var(--orange)}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:28px 0;color:var(--text-muted);font-size:14px;text-align:center}
+footer a{color:var(--orange);text-decoration:none}
+
+.study-hero{background:linear-gradient(180deg,#1d1f24 0%,#15171b 100%);border:1px solid var(--border);border-top:4px solid var(--orange);border-radius:14px;padding:34px 32px 30px;margin:0 0 34px;text-align:center}
+.study-hero .kicker{display:inline-block;color:var(--orange);font-size:13px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;border:1px solid #6b4e1e;border-radius:999px;padding:4px 14px;margin-bottom:16px}
+.study-hero h1{font-size:44px;line-height:1.1;letter-spacing:-.8px;margin:0 0 14px;color:#fff}
+.study-hero .subtitle{font-size:21px;line-height:1.4;font-style:italic;color:#f59e0b;max-width:560px;margin:0 auto 18px}
+.study-hero .byline{color:var(--text-dim);font-size:14px;margin:0 0 20px;letter-spacing:.3px}
+.study-hero .pdf-btn{display:inline-block;background:transparent;color:#fff;border:1px solid var(--orange);border-radius:8px;padding:9px 18px;font-size:15px;font-weight:600;text-decoration:none}
+.study-hero .pdf-btn:hover{background:var(--orange)}
+@media(max-width:560px){.study-hero{padding:26px 18px 22px}.study-hero h1{font-size:34px}.study-hero .subtitle{font-size:18px}}
+.tablewrap{overflow-x:auto;margin:10px 0 6px}
+table.big{border-collapse:collapse;width:100%;min-width:560px;font-size:15px}
+table.big th,table.big td{border:1px solid var(--border);padding:7px 8px;text-align:center;color:#dfe2e6}
+table.big th{color:#fff;font-weight:600;background:var(--bg-mid)}
+h3{font-size:18px;color:#fff;margin:20px 0 6px}
+.small{font-size:15px;color:var(--text-dim)}
+.note-box{background:#221a14;border:1px solid #6b4e1e;border-radius:10px;padding:14px 18px;margin:24px 0;color:#e8cfa0;font-size:15px}
+.note-box strong{color:#f5deb3}
+</style></head></head><body><nav><div class="container">
+<a class="logo" href="/"><img src="/assets/icon.png" alt="Loadscope">LOADSCOPE&trade;</a>
+<div class="nav-links"><a href="/learn/">Learn</a><a href="/#faq">FAQ</a><a href="/#install">Install</a><a class="btn" href="/">Buy Loadscope</a></div>
+</div></nav><div class="container"><article>
+<div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a></div>
+<header class="study-hero">
+<div class="kicker">Research study</div>
+<h1>Flat Spot or Fluke?</h1>
+<p class="subtitle">What your velocity ladder can really tell you, and how many shots per rung it needs</p>
+<p class="byline">Loadscope LLC &middot; November 11, 2026 &middot; DOI <a href="https://doi.org/10.5281/zenodo.24143852" style="color:inherit">10.5281/zenodo.24143852</a></p>
+<a class="pdf-btn" href="/research/flat-spot-or-fluke.pdf">Download the full study (PDF)</a>
+</header>
+
+<p>A velocity ladder loads a few charges in small steps and looks for a &ldquo;flat spot&rdquo;: a stretch where the
+speed stops climbing even though each rung adds powder. This study asked one question: <strong>when a ladder shows a
+flat spot, is it real, or is it ordinary shot-to-shot variation?</strong></p>
+<p>We took the shot-to-shot spread from 79 real Garmin Xero strings (89 sessions in the data
+file), then had a computer fire 20,000 ten-rung ladders with a real flat spot built in and
+20,000 without, for every combination of rung size, SD and shots per rung, and read each one the common way: find the three rungs in a row whose speed changed
+least from first to last, and call it flat if the first and third are within 5 fps.</p>
+
+<h2>The answer in one table</h2>
+<p>Rungs about 10 fps apart, no drift during the session. The &ldquo;real flat spot&rdquo; is three perfectly level
+rungs, the easiest kind to find. Both columns use the same test, so read each pair side by side.</p>
+<div class="tablewrap"><table class='big'><tr><th rowspan=2>Shots per rung</th><th colspan=2>Very consistent load (SD 5)</th><th colspan=2>Good load (SD 8)</th><th colspan=2>Author's average (SD 11)</th></tr><tr><th>No flat spot, looks flat anyway</th><th>Real flat spot, picked and looks flat</th><th>No flat spot, looks flat anyway</th><th>Real flat spot, picked and looks flat</th><th>No flat spot, looks flat anyway</th><th>Real flat spot, picked and looks flat</th></tr><tr><th>1 shot</th><td>12%</td><td>71%</td><td>51%</td><td>54%</td><td>64%</td><td>42%</td></tr><tr><th>3 shots</th><td>0.1%</td><td>83%</td><td>9%</td><td>73%</td><td>32%</td><td>63%</td></tr><tr><th>5 shots</th><td>&lt;0.1%</td><td>90%</td><td>1%</td><td>78%</td><td>12%</td><td>71%</td></tr><tr><th>10 shots</th><td>&lt;0.1%</td><td>98%</td><td>&lt;0.1%</td><td>86%</td><td>0.9%</td><td>78%</td></tr></table></div>
+<p class="small">A stricter reading, all three rungs within 5 fps of each other, gives the same answer for one shot per
+rung: at SD 8 a load with no flat spot looked flat 17% of the time, and a real flat spot was
+picked and looked flat 16% of the time.</p>
+
+<h2>What it means at the bench</h2>
+<ul>
+<li><strong>One shot per rung:</strong> on a good or average load, a load with no flat spot looked flat about as often
+as a load with one was read correctly (51% against 54% at
+SD 8; at SD 11 it was worse, 64% against 42%). Only a very
+consistent load did much better (12% fooled at SD 5).</li>
+<li><strong>Three to five shots per rung</strong> make a ladder much harder to fool, but how much depends on your SD:
+at five shots, 1% at SD 8 and 12% at SD 11.</li>
+<li><strong>A flat spot is a place to look, not an answer, at any number of shots.</strong> Check it separately: a
+longer strings at the pick and at the rungs on either side of it, or the whole ladder fired again on another day.
+Firing a one-shot ladder twice and keeping only a flat spot that showed up in the same place both times cut the false
+rate from 51% to 9% (SD 8), but it also read a real flat spot
+correctly less often (24% against 54%), and the model had no
+drift.</li>
+<li><strong>Two rungs at the same speed is weak evidence.</strong> On a load with no flat spot, the two closest
+neighbouring rungs were within 5 fps in 85% of five-shot ladders (SD 8).</li>
+<li><strong>Drift doesn't average out.</strong> A ladder is fired in order, so barrel heat, fouling and changing
+conditions are mixed in with the charge. With speed wandering an assumed 4 to 6 fps from rung to rung, even ten-shot
+ladders were fooled 9% to 29% of the time (SD 8, 10 fps rungs).</li>
+<li><strong>Don't read a flat spot into one slow rung.</strong> At least one rung read slower than the one before in
+91% of one-shot ladders, from ordinary variation alone.</li>
+</ul>
+<div class="note-box"><strong>Your charge range comes from published load data.</strong> Nothing here suggests
+charges, step sizes or going past published limits. More shots per rung means more rounds at the top of the ladder:
+fire from the lowest rung up, check for pressure signs as your load manual describes after every rung, and stop at the
+first sign.</div>
+
+<h2>Is a velocity flat spot real?</h2>
+<p>This study can't say whether your load has one. It says how often a ladder is fooled, which is a different
+question. Hornady, Applied Ballistics and Outdoor Life reported that, with larger samples, the flat spots their ladders
+showed mostly did not repeat; Applied Ballistics reported one statistically significant result, and experienced
+competitors report flat spots that hold up for them. If you have one you've confirmed across barrels and seasons,
+nothing here says it's a fluke.</p>
+
+<h2>Know your own numbers</h2>
+<ul>
+<li><strong>Your fps per rung:</strong> average speed of your top rung minus your bottom rung, divided by the number
+of steps between them.</li>
+<li><strong>Your real SD:</strong> from a string of 10 or more shots of one load at a steady pace, not from one
+three-shot rung. The author's Garmin Xero figured SD the &ldquo;divide by the number of shots&rdquo; way, so a
+three-shot rung read about 18% low: SD 6.5 on that Garmin is about SD 8 in this study. Other units
+may differ.</li>
+</ul>
+
+<h2>FAQ</h2>
+<h3>How many shots per rung does a velocity ladder need?</h3><p>It depends on your shot-to-shot SD. With rungs about 10 fps apart, a load with no flat spot still looked flat 32% of the time at three shots per rung on an average load (SD 11), 12% at five and 0.9% at ten. On a good load (SD 8) it was 9% at three shots and 1% at five. Drift during the session can still fool a ladder at any shot count.</p><h3>Is a one-shot-per-rung ladder reliable?</h3><p>On a good or average load, no. At SD 8 with 10 fps rungs, a load with no flat spot showed one 51% of the time, about as often as a real flat spot was picked and looked flat (54%). Only a very consistent load (SD 5) did much better (12% fooled).</p><h3>If my ladder shows a flat spot, is it real?</h3><p>The ladder alone can't say. The study measured how often a ladder is fooled, not how likely a given flat spot is to be real. Treat a flat spot as a place to look, then check it separately: longer strings at the pick and at the rungs on either side of it, or the whole ladder fired again on another day.</p><h3>Is a rung that reads slower than the one before a problem?</h3><p>Not by itself. With rungs adding 10 fps, at least one rung read slower than the one before in 91% of one-shot ladders from ordinary shot-to-shot variation alone. This study is about speed only and says nothing about pressure; watch for pressure signs as your load manual describes.</p>
+
+<h2>The full study</h2>
+<p>The PDF has the method, every table, the sensitivity checks, the limits and the references:
+<a href="/research/flat-spot-or-fluke.pdf">Flat Spot or Fluke? (PDF)</a>.</p>
+<p class="small"><strong>Disclosure:</strong> the author makes Loadscope, software that scores load development
+ladders. Loadscope gives velocity flat spot a 5% weight in its overall score by default (users can change it), a
+setting made in July 2026, before this study. No outside funding.</p>
+
+<div class="related"><strong style="color:#fff">Keep reading</strong><br><br><a href="/learn/how-many-shots-per-charge.html">How many shots per charge in a ladder test? &rarr;</a><a href="/learn/satterlee-10-round-method.html">The Satterlee 10-round method &rarr;</a><a href="/learn/powder-ladder-test.html">How to read a powder ladder &rarr;</a><a href="/learn/standard-deviation-load-development.html">SD and ES: what&rsquo;s a good number? &rarr;</a></div>
+</article></div>
+<footer><div class="container">
+<p>&copy; 2026 Loadscope&trade;. Automated rifle load development for Mac &amp; Windows. &middot; <a href="/">loadscope.app</a></p>
+<p style="margin-top:6px"><a href="/learn/">Learn</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></p>
+</div></footer><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2faa54a51efa477c9529f0c5bc14f3bf"}'></script><script>
+(function() {
+    try {
+        var K = [ "utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term" ], p = new URLSearchParams(location.search);
+        K.forEach((function(k) {
+            var v = p.get(k);
+            if (v) {
+                try {
+                    sessionStorage.setItem(k, v);
+                } catch (e) {}
+            }
+        }));
+        if (!sessionStorage.getItem("utm_source") && document.referrer) {
+            var h = new URL(document.referrer).hostname.replace(/^www\./, "").toLowerCase(), o = location.hostname.replace(/^www\./, "").toLowerCase();
+            if (h && h !== o) {
+                var s, m;
+                var A = h.match(/(^|\.)(chatgpt|openai|perplexity|claude|copilot|gemini)\./);
+                var E = h.match(/(^|\.)(google|bing|duckduckgo|yahoo|ecosia|startpage|qwant|brave|kagi)\./);
+                if (A) {
+                    s = A[2];
+                    m = "ai";
+                } else if (E) {
+                    s = E[2];
+                    m = "organic";
+                } else {
+                    var N = {
+                        "snipershide.com": [ "snipershide", "forum" ],
+                        "accurateshooter.com": [ "accurateshooter", "forum" ],
+                        "longrangehunting.com": [ "longrangehunting", "forum" ],
+                        "reddit.com": [ "reddit", "social" ],
+                        "out.reddit.com": [ "reddit", "social" ],
+                        "youtube.com": [ "youtube", "video" ],
+                        "youtu.be": [ "youtube", "video" ],
+                        "facebook.com": [ "facebook", "social" ],
+                        "m.facebook.com": [ "facebook", "social" ],
+                        "l.facebook.com": [ "facebook", "social" ],
+                        "lm.facebook.com": [ "facebook", "social" ],
+                        "x.com": [ "x", "social" ],
+                        "t.co": [ "x", "social" ],
+                        "twitter.com": [ "x", "social" ]
+                    };
+                    s = N[h] ? N[h][0] : h;
+                    m = N[h] ? N[h][1] : "referral";
+                }
+                sessionStorage.setItem("utm_source", s);
+                sessionStorage.setItem("utm_medium", m);
+                sessionStorage.setItem("utm_campaign", m === "organic" ? "search" : m === "ai" ? "ai_search" : "referral");
+            }
+        }
+    } catch (e) {}
+})();
+</script>
+</body></html>
