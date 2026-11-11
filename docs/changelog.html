@@ -83,9 +83,16 @@ gtag("config", "G-NVD1F3H412");
   .container{max-width:780px;margin:0 auto;padding:32px 24px 64px}
   a{color:var(--orange);text-decoration:none}
   a:hover{text-decoration:underline}
-  nav{border-bottom:1px solid var(--border);padding:16px 0;margin-bottom:32px}
-  nav .container{padding-top:0;padding-bottom:0}
-  .logo{font-size:18px;font-weight:700;color:var(--orange)}
+  
+  nav{position:sticky;top:0;background:rgba(14,15,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10;margin-bottom:8px}
+  nav .container{max-width:1080px;display:flex;align-items:center;justify-content:space-between;height:60px;padding-top:0;padding-bottom:0}
+  .logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;color:#fff;text-decoration:none;font-size:16px}
+  .logo:hover{text-decoration:none}
+  .logo img{width:30px;height:30px;border-radius:7px}
+  .nav-links a{color:var(--dim);text-decoration:none;margin-left:20px;font-size:15px}
+  .nav-links a:hover{color:#fff;text-decoration:none}
+  .nav-links .btn{background:var(--orange);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:700}
+  @media(max-width:560px){nav .container{padding:0 14px}.logo{font-size:15px;letter-spacing:.5px;white-space:nowrap}.logo img{width:26px;height:26px}.nav-links{display:flex;align-items:center}.nav-links a{margin-left:12px;font-size:14px;white-space:nowrap}.nav-links a[href='/#faq'],.nav-links a[href='/#install']{display:none}.nav-links .btn{padding:7px 11px;white-space:nowrap}}
   h1{font-size:30px;margin-bottom:6px}
   .updated{color:var(--dim);font-size:14px;margin-bottom:28px}
   h2{font-size:19px;margin:28px 0 8px}
@@ -103,6 +110,13 @@ gtag("config", "G-NVD1F3H412");
 <div class="container">
   <h1>Release notes</h1>
   <div class="updated">Every Loadscope release since launch, newest first. Updates are free for every owner, and the app tells you when one is ready.</div>
+  <h2 id="v1-17-6">Version 1.17.6</h2>
+  <ul>
+    <li>New Ask a question button: type a question in your own words and get the answer, right in the app.</li>
+    <li>The Recipe Card has an optional Case prep box for your brass numbers.</li>
+    <li>Plus fixes and improvements.</li>
+  </ul>
+
   <h2 id="v1-17-5">Version 1.17.5</h2>
   <ul>
     <li>Range &amp; DOPE now remembers the temperature and altitude you set, and your printed DOPE card uses them too.</li>
