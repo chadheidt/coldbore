@@ -19,10 +19,10 @@
    "app_release_notes": "v1.17.6 - New Ask a question button: type a question in your own words and get the answer, right in the app. The Recipe Card has an optional Case prep box for your brass numbers. Plus fixes and improvements."
   },
   "windows": {
-   "app_version": "1.17.5",
+   "app_version": "1.17.6",
    "app_download_file": "Loadscope-Setup.exe",
    "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.17.2/Loadscope-Setup.exe",
-   "app_release_notes": "v1.17.5 - Range & DOPE now remembers the temperature and altitude you set, and your printed DOPE card uses them too. Starting a different kind of test now asks one clear question, and brings your bullet along to the new load. Plus fixes and improvements."
+   "app_release_notes": "v1.17.6 - New Ask a question button: type a question in your own words and get the answer, right in the app. The Recipe Card has an optional Case prep box for your brass numbers. Plus fixes and improvements."
   }
  }
 }
