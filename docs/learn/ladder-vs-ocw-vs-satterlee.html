@@ -1,0 +1,182 @@
+<!DOCTYPE html><html lang="en"><head><script>
+window.dataLayer = window.dataLayer || [];
+
+function gtag() {
+    dataLayer.push(arguments);
+}
+
+gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    region: [ "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "IS", "LI", "NO", "GB", "CH" ],
+    wait_for_update: 500
+});
+
+gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "granted"
+});
+
+(function() {
+    var c = null;
+    try {
+        c = localStorage.getItem("ls_consent");
+    } catch (e) {}
+    if (c === "granted") {
+        gtag("consent", "update", {
+            analytics_storage: "granted"
+        });
+    }
+    var tz = "";
+    try {
+        tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    } catch (e) {}
+    if (c || !/^(Europe\/|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe))/.test(tz)) {
+        return;
+    }
+    document.addEventListener("DOMContentLoaded", (function() {
+        var b = document.createElement("div");
+        b.id = "ls-consent";
+        b.setAttribute("role", "dialog");
+        b.setAttribute("aria-label", "Cookie notice");
+        b.style.cssText = "position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-width:560px;margin:0 auto;background:#1a1c20;color:#f5f5f5;border:1px solid #d97706;border-radius:10px;padding:14px 16px;font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.45)";
+        b.innerHTML = 'We use Google Analytics to see which pages are useful to shooters. No ads, and nothing is sold. <a href="/privacy.html" style="color:#f59e0b">Privacy</a><div style="margin-top:10px;text-align:right"><button type="button" data-v="denied" style="background:none;border:1px solid #9ca3af;color:#f5f5f5;border-radius:7px;padding:7px 14px;margin-right:8px;cursor:pointer;font:inherit">No thanks</button><button type="button" data-v="granted" style="background:#d97706;border:0;color:#fff;border-radius:7px;padding:7px 18px;cursor:pointer;font:inherit;font-weight:600">OK</button></div>';
+        b.addEventListener("click", (function(ev) {
+            var v = ev.target && ev.target.getAttribute && ev.target.getAttribute("data-v");
+            if (!v) {
+                return;
+            }
+            try {
+                localStorage.setItem("ls_consent", v);
+            } catch (e) {}
+            if (v === "granted") {
+                gtag("consent", "update", {
+                    analytics_storage: "granted"
+                });
+            }
+            b.remove();
+        }));
+        document.body.appendChild(b);
+    }));
+})();
+
+gtag("js", new Date);
+
+gtag("config", "G-NVD1F3H412");
+</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-NVD1F3H412"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ladder vs OCW vs Satterlee Load Development | Loadscope</title>
+<meta name="description" content="A powder ladder, OCW and the Satterlee 10-round test answer different questions. What each one tells you, where each one misleads, and how to use them together.">
+<link rel="canonical" href="https://loadscope.app/learn/ladder-vs-ocw-vs-satterlee.html">
+<meta property="og:title" content="Ladder Test vs OCW vs Satterlee: Which Load Development Method Is Best?"><meta property="og:description" content="A powder ladder, OCW and the Satterlee 10-round test answer different questions. What each one tells you, where each one misleads, and how to use them together.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/ladder-vs-ocw-vs-satterlee.html">
+<meta property="og:image" content="https://loadscope.app/assets/icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ladder Test vs OCW vs Satterlee: Which Load Development Method Is Best?">
+<meta name="twitter:description" content="A powder ladder, OCW and the Satterlee 10-round test answer different questions. What each one tells you, where each one misleads, and how to use them together.">
+<meta name="twitter:image" content="https://loadscope.app/assets/icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Ladder Test vs OCW vs Satterlee: Which Load Development Method Is Best?","description":"A powder ladder, OCW and the Satterlee 10-round test answer different questions. What each one tells you, where each one misleads, and how to use them together.","url":"https://loadscope.app/learn/ladder-vs-ocw-vs-satterlee.html","image":"https://loadscope.app/assets/icon.png","publisher":{"@type":"Organization","name":"Loadscope","logo":{"@type":"ImageObject","url":"https://loadscope.app/assets/icon.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loadscope.app/learn/ladder-vs-ocw-vs-satterlee.html"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://loadscope.app/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://loadscope.app/learn/"},{"@type":"ListItem","position":3,"name":"Ladder Test vs OCW vs Satterlee: Which Load Development Method Is Best?","item":"https://loadscope.app/learn/ladder-vs-ocw-vs-satterlee.html"}]}</script>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<style>
+:root{--orange:#d97706;--bg:#0e0f12;--bg-mid:#1a1c20;--bg-light:#252830;--text:#f5f5f5;--text-dim:#9ca3af;--text-muted:#6b7280;--border:#2d3036;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}
+.container{max-width:760px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;background:rgba(14,15,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10}
+nav .container{max-width:1080px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;color:#fff;text-decoration:none}
+.logo img{width:30px;height:30px;border-radius:7px}
+.nav-links a{color:var(--text-dim);text-decoration:none;margin-left:20px;font-size:15px}
+.nav-links a:hover{color:#fff}
+.btn{background:var(--orange);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:700}
+@media(max-width:560px){nav .container{padding:0 14px}.logo{font-size:15px;letter-spacing:.5px;white-space:nowrap}.logo img{width:26px;height:26px}.nav-links{display:flex;align-items:center}.nav-links a{margin-left:12px;font-size:14px;white-space:nowrap}.nav-links a[href='/#faq'],.nav-links a[href='/#install']{display:none}.btn{padding:7px 11px;white-space:nowrap}}
+
+article{padding:48px 0 24px}
+.crumb{color:var(--text-muted);font-size:14px;margin-bottom:18px}
+.crumb a{color:var(--text-dim);text-decoration:none}
+h1{font-size:34px;line-height:1.2;margin-bottom:14px;letter-spacing:-.4px}
+h2{font-size:23px;margin:34px 0 10px;color:#fff}
+p{color:#dfe2e6;margin-bottom:16px}
+ul,ol{margin:0 0 16px 22px}
+li{color:#dfe2e6;margin-bottom:8px}
+a{color:var(--orange)}
+.lead{font-size:19px;color:var(--text-dim);margin-bottom:8px}
+strong{color:#fff}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0 28px}
+.tablewrap table{margin:0;min-width:420px}
+table{width:100%;border-collapse:collapse;margin:20px 0 28px;font-size:15px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);color:#dfe2e6;vertical-align:top}
+th{color:#fff;font-size:14px;text-transform:uppercase;letter-spacing:.03em}
+.cta{background:var(--bg-mid);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:12px;padding:22px 24px;margin:34px 0}
+.cta h3{color:#fff;font-size:19px;margin-bottom:8px}
+.cta .btn{display:inline-block;margin-top:6px;text-decoration:none}
+.related{border-top:1px solid var(--border);margin-top:40px;padding-top:24px}
+.related a{display:block;margin-bottom:8px;text-decoration:none;color:var(--text-dim)}
+.related a:hover{color:var(--orange)}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:28px 0;color:var(--text-muted);font-size:14px;text-align:center}
+footer a{color:var(--orange);text-decoration:none}
+</style></head><body><nav><div class="container">
+<a class="logo" href="/"><img src="/assets/icon.png" alt="Loadscope">LOADSCOPE&trade;</a>
+<div class="nav-links"><a href="/learn/">Learn</a><a href="/#faq">FAQ</a><a href="/#install">Install</a><a class="btn" href="/">Buy Loadscope</a></div>
+</div></nav><div class="container"><article>
+<div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a></div>
+<h1>Ladder Test vs OCW vs Satterlee: Which Load Development Method Is Best?</h1>
+
+<p class="lead">There is no single best load development method, because the three popular ones answer different questions. A powder ladder and the Satterlee 10-round test look at velocity over a chronograph. OCW looks at where your groups land. Here is what each one tells you, where each one misleads, and how to use them together.</p>
+
+<h2>What does each method actually measure?</h2>
+<div class="tablewrap"><table>
+<tr><th></th><th>Powder ladder</th><th>Satterlee 10-round</th><th>OCW (round-robin)</th></tr>
+<tr><td>What you shoot</td><td>Charges stepped up in weight, fired over a chronograph</td><td>10 rounds, one at each of 10 charge weights</td><td>A few rounds at each of several charges, fired in rotation</td></tr>
+<tr><td>What you look for</td><td>A velocity flat-spot, plus SD and groups</td><td>A run of charges where velocity barely changes</td><td>Neighboring charges that print to the same point of impact</td></tr>
+<tr><td>Where it misleads</td><td>A few shots per charge can show a flat spot that is luck</td><td>One shot per charge: a scouting tool, not a verdict</td><td>Deciding which centers &ldquo;line up&rdquo; is a judgment call, and three shots per charge is thin</td></tr>
+</table></div>
+<p>The detail on each: <a href="/learn/powder-ladder-test.html">how to read a powder ladder</a>, <a href="/learn/satterlee-10-round-method.html">the Satterlee 10-round method</a> and <a href="/learn/ocw-optimal-charge-weight.html">the OCW method</a>.</p>
+
+<h2>What is the difference between a ladder test and the Satterlee method?</h2>
+<p>The Satterlee method is a ladder with one shot per charge. That makes it fast: ten rounds and one range trip to point you at a promising charge, instead of shooting groups at a dozen charges. It also means every velocity is a single shot with all the normal round-to-round scatter, so a flat spot can appear by luck and vanish if you shot it again. A fuller ladder gives you more shots to read, but the same warning applies: a ladder gets fooled more often than most shooters expect.</p>
+
+<h2>How is OCW different?</h2>
+<p>OCW, developed by Dan Newberry, ignores the chronograph and reads the target. You shoot round-robin, one shot at each charge, then back to the top, so wind, mirage and barrel heat spread evenly across all the charges. You look for two or three neighboring charges that land in the same place. The goal is a forgiving charge, one least fussy about a small powder change, and not the smallest group on the day.</p>
+
+<h2>Which one is best?</h2>
+<p>The one that matches the question you are asking.</p>
+<ul>
+<li><strong>Where should I look?</strong> A ladder or the Satterlee test. Scout wide and cheap.</li>
+<li><strong>Which charge holds its point of impact?</strong> OCW, read off the target.</li>
+<li><strong>Which charge is consistent in speed?</strong> A ladder over a chronograph, read for flat spot and SD.</li>
+</ul>
+<p>Velocity consistency and point-of-impact stability usually travel together, but not always, which is why plenty of shooters do both.</p>
+
+<h2>Why do the methods disagree?</h2>
+<p>Mostly sample size. Every number you pull off a target or a chronograph is an estimate, and estimates get more honest the more shots feed them. A few shots per charge finds the rough zone but cannot pick the winner between two close charges. Standard deviation is the worst offender: off three or five shots it is mostly noise. We ran the numbers in <a href="/learn/velocity-flat-spot-study.html">our flat-spot study</a>, and <a href="/learn/how-many-shots-per-charge.html">how many shots per charge</a> lays out a practical budget.</p>
+
+<h2>A practical order to use them</h2>
+<ol>
+<li><strong>Scout wide and cheap.</strong> A short ladder or a Satterlee test narrows a dozen charges down to a window. Always start low and work up, watching for pressure.</li>
+<li><strong>Confirm your finalists.</strong> Pour the rounds into the one or two charges that looked best: about 10 shots each, and 20 to 30 before you bet a match on the numbers.</li>
+<li><strong>Read the target too.</strong> If you like OCW, check that your finalist holds its point of impact as the charge steps up or down.</li>
+</ol>
+<p>This page explains methods. It is not load data, and it does not tell you what charge is safe in your rifle.</p>
+
+<h2>Where Loadscope fits</h2>
+<p>Full disclosure before the pitch: we make Loadscope. Whichever test you shot, it reads the same data. It takes your chronograph file (Garmin Xero, LabRadar, MagnetoSpeed and Athlon) and your target data (or group measurements taken from a photo), scores every charge or seating depth on velocity flat-spot, standard deviation, mean radius and vertical, and <strong>names your best load</strong> instead of leaving you to judge by eye. It also makes it obvious when a flat spot is thin on shots and worth confirming. It never suggests a charge you did not shoot.</p>
+
+<div class="cta"><h3>Find your best load from the test you already shot.</h3>
+<p>Loadscope reads your chronograph and your target data, scores every charge and seating depth, and <strong>names your best load</strong> &mdash; then predicts its DOPE and prints a range card. Mac and Windows. One-time $79, no subscription, 30-day money-back.</p>
+<a class="btn" href="/">See how it works &rarr;</a></div>
+
+<div class="related"><strong style="color:#fff">Keep reading</strong><br><br><a href="/learn/powder-ladder-test.html">How to read a powder ladder &rarr;</a><a href="/learn/satterlee-10-round-method.html">The Satterlee 10-round method explained &rarr;</a><a href="/learn/ocw-optimal-charge-weight.html">Optimal Charge Weight (OCW) explained &rarr;</a><a href="/learn/how-many-shots-per-charge.html">How many shots per charge in a ladder test? &rarr;</a></div>
+</article></div>
+<footer><div class="container">
+<p>&copy; 2026 Loadscope&trade;. Automated rifle load development for Mac &amp; Windows. &middot; <a href="/">loadscope.app</a></p>
+<p style="margin-top:6px"><a href="/learn/">Learn</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></p>
+</div></footer>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2faa54a51efa477c9529f0c5bc14f3bf"}'></script>
+</body></html>
