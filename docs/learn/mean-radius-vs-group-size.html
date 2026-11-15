@@ -69,18 +69,18 @@ gtag("js", new Date);
 gtag("config", "G-NVD1F3H412");
 </script><script async src="https://www.googletagmanager.com/gtag/js?id=G-NVD1F3H412"></script>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Group Size vs Mean Radius: How to Calculate Mean Radius | Loadscope</title>
+<title>What Is Mean Radius? Calculate It vs Group Size | Loadscope</title>
 <meta name="description" content="Group size is set by your two worst shots. Mean radius averages how far every shot lands from center, so it is less fooled by a flier and repeats better.">
 <link rel="canonical" href="https://loadscope.app/learn/mean-radius-vs-group-size.html">
-<meta property="og:title" content="Mean Radius vs Group Size: Which Measures Accuracy Better?"><meta property="og:description" content="Group size is set by your two worst shots; mean radius averages every shot from center. Here&rsquo;s why mean radius is the more honest accuracy number, especially on small samples.">
+<meta property="og:title" content="What Is Mean Radius? Calculate It vs Group Size"><meta property="og:description" content="Group size is set by your two worst shots; mean radius averages every shot from center. Here&rsquo;s why mean radius is the more honest accuracy number, especially on small samples.">
 <meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/mean-radius-vs-group-size.html">
 <meta property="og:image" content="https://loadscope.app/assets/icon.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Mean Radius vs Group Size: Which Measures Accuracy Better?">
+<meta name="twitter:title" content="What Is Mean Radius? Calculate It vs Group Size">
 <meta name="twitter:description" content="Group size is set by your two worst shots; mean radius averages every shot from center. Here’s why mean radius is the more honest accuracy number, especially on small samples.">
 <meta name="twitter:image" content="https://loadscope.app/assets/icon.png">
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "Mean Radius vs Group Size: Which Measures Accuracy Better?", "description": "Group size (extreme spread) is set by your two worst shots, while mean radius averages how far every shot lands from center — so it is far less fooled by a flier and more repeatable on small samples. What each number means, and how it fits load development.", "url": "https://loadscope.app/learn/mean-radius-vs-group-size.html", "image": "https://loadscope.app/assets/icon.png", "publisher": {"@type": "Organization", "name": "Loadscope", "logo": {"@type": "ImageObject", "url": "https://loadscope.app/assets/icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://loadscope.app/learn/mean-radius-vs-group-size.html"}, "dateModified": "2026-11-09", "author": {"@type": "Organization", "name": "Loadscope LLC", "url": "https://loadscope.app/about.html"}}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://loadscope.app/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://loadscope.app/learn/"},{"@type":"ListItem","position":3,"name":"Mean Radius vs Group Size: Which Measures Accuracy Better?","item":"https://loadscope.app/learn/mean-radius-vs-group-size.html"}]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Article", "headline": "What Is Mean Radius? Calculate It vs Group Size", "description": "Group size (extreme spread) is set by your two worst shots, while mean radius averages how far every shot lands from center — so it is far less fooled by a flier and more repeatable on small samples. What each number means, and how it fits load development.", "url": "https://loadscope.app/learn/mean-radius-vs-group-size.html", "image": "https://loadscope.app/assets/icon.png", "publisher": {"@type": "Organization", "name": "Loadscope", "logo": {"@type": "ImageObject", "url": "https://loadscope.app/assets/icon.png"}}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://loadscope.app/learn/mean-radius-vs-group-size.html"}, "dateModified": "2026-11-09", "author": {"@type": "Organization", "name": "Loadscope LLC", "url": "https://loadscope.app/about.html"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://loadscope.app/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://loadscope.app/learn/"},{"@type":"ListItem","position":3,"name":"What Is Mean Radius? Calculate It vs Group Size","item":"https://loadscope.app/learn/mean-radius-vs-group-size.html"}]}</script>
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
 <style>
 :root{--orange:#d97706;--bg:#0e0f12;--bg-mid:#1a1c20;--bg-light:#252830;--text:#f5f5f5;--text-dim:#9ca3af;--text-muted:#6b7280;--border:#2d3036;}
@@ -126,20 +126,20 @@ table{width:100%;border-collapse:collapse;margin:20px 0 28px;font-size:15px}th,t
 <div class="nav-links"><a href="/learn/">Learn</a><a href="/#faq">FAQ</a><a href="/#install">Install</a><a class="btn" href="/">Buy Loadscope</a></div>
 </div></nav><div class="container"><article>
 <div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a></div>
-<h1>Mean Radius vs Group Size in Shooting: Which Measures Accuracy Better?</h1>
+<h1>What Is Mean Radius? Calculate It vs Group Size</h1>
 <p class="updated-line" style="color:#9ca3af;font-size:14px;margin-top:-4px;">Updated November 9, 2026 &middot; Loadscope LLC</p>
 
-<p class="lead">Mean radius measures accuracy more honestly than group size. Group size (extreme spread) is set by your two worst shots, while mean radius averages how far <em>every</em> shot lands from the group&rsquo;s center &mdash; so it&rsquo;s far less fooled by a single flier and far more repeatable across small samples. Here&rsquo;s what each number means and when to trust it.</p>
+<p class="lead">Mean radius is the average distance from the center of a group to each shot, usually given in inches or MOA. It measures accuracy more honestly than group size: group size (extreme spread) is set by your two worst shots, while mean radius counts how far <em>every</em> shot lands from the center, so it&rsquo;s far less fooled by a single flier and far more repeatable across small samples. Here&rsquo;s what each number means and when to trust it.</p>
 
 <p>Two shooters can print the same &ldquo;half-inch group&rdquo; and have completely different loads. One drilled four shots into a cluster and threw the fifth; the other spread all five evenly across the same width. Group size can&rsquo;t tell them apart &mdash; but mean radius can. If you&rsquo;re developing a load and choosing between charges, that difference is the whole ballgame.</p>
 
 <h2>Group size: the number everyone quotes</h2>
 <p><strong>Group size</strong> &mdash; also called <strong>extreme spread</strong> &mdash; is the center-to-center distance between the two widest shots in the group. It&rsquo;s easy to measure with calipers and easy to picture, which is why it&rsquo;s the number in every range brag and every factory-ammo claim. But it has one fatal weakness for load development: <strong>it&rsquo;s decided entirely by your two worst shots.</strong> Every other hole in the group is ignored. Clip one flier and your group size can double while the load itself never changed.</p>
 
-<h2>Mean radius: what the whole group is doing</h2>
+<h2>What is mean radius?</h2>
 <p><strong>Mean radius</strong> is the average distance of <em>every</em> shot from the group&rsquo;s center (its mathematical middle, or centroid). Five shots, five distances, averaged. Because it uses all of your data instead of just the two extremes, one flier <em>nudges</em> the number instead of detonating it &mdash; and a genuinely tight core reads as tight even if one shot wandered. It answers the question you actually care about: on average, how far from point of aim does this load put a bullet?</p>
 
-<h2>A worked example, with the arithmetic</h2>
+<h2>How do you calculate mean radius? A worked example</h2>
 <p>Here are two made-up five-shot groups at 100 yards, for illustration only. Group A is four shots in a tight cluster plus one flier. Group B is five shots spread evenly.</p>
 <div class="tablewrap"><table>
 <tr><th></th><th>Group A (one flier)</th><th>Group B (even spread)</th></tr>

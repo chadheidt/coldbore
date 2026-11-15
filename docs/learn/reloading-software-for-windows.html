@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="en"><head><script>
+window.dataLayer = window.dataLayer || [];
+
+function gtag() {
+    dataLayer.push(arguments);
+}
+
+gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "denied",
+    region: [ "AT", "BE", "BG", "HR", "CY", "CZ", "DK", "EE", "FI", "FR", "DE", "GR", "HU", "IE", "IT", "LV", "LT", "LU", "MT", "NL", "PL", "PT", "RO", "SK", "SI", "ES", "SE", "IS", "LI", "NO", "GB", "CH" ],
+    wait_for_update: 500
+});
+
+gtag("consent", "default", {
+    ad_storage: "denied",
+    ad_user_data: "denied",
+    ad_personalization: "denied",
+    analytics_storage: "granted"
+});
+
+(function() {
+    var c = null;
+    try {
+        c = localStorage.getItem("ls_consent");
+    } catch (e) {}
+    if (c === "granted") {
+        gtag("consent", "update", {
+            analytics_storage: "granted"
+        });
+    }
+    var tz = "";
+    try {
+        tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "";
+    } catch (e) {}
+    if (c || !/^(Europe\/|Atlantic\/(Reykjavik|Canary|Madeira|Azores|Faroe))/.test(tz)) {
+        return;
+    }
+    document.addEventListener("DOMContentLoaded", (function() {
+        var b = document.createElement("div");
+        b.id = "ls-consent";
+        b.setAttribute("role", "dialog");
+        b.setAttribute("aria-label", "Cookie notice");
+        b.style.cssText = "position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;max-width:560px;margin:0 auto;background:#1a1c20;color:#f5f5f5;border:1px solid #d97706;border-radius:10px;padding:14px 16px;font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;box-shadow:0 6px 24px rgba(0,0,0,.45)";
+        b.innerHTML = 'We use Google Analytics to see which pages are useful to shooters. No ads, and nothing is sold. <a href="/privacy.html" style="color:#f59e0b">Privacy</a><div style="margin-top:10px;text-align:right"><button type="button" data-v="denied" style="background:none;border:1px solid #9ca3af;color:#f5f5f5;border-radius:7px;padding:7px 14px;margin-right:8px;cursor:pointer;font:inherit">No thanks</button><button type="button" data-v="granted" style="background:#d97706;border:0;color:#fff;border-radius:7px;padding:7px 18px;cursor:pointer;font:inherit;font-weight:600">OK</button></div>';
+        b.addEventListener("click", (function(ev) {
+            var v = ev.target && ev.target.getAttribute && ev.target.getAttribute("data-v");
+            if (!v) {
+                return;
+            }
+            try {
+                localStorage.setItem("ls_consent", v);
+            } catch (e) {}
+            if (v === "granted") {
+                gtag("consent", "update", {
+                    analytics_storage: "granted"
+                });
+            }
+            b.remove();
+        }));
+        document.body.appendChild(b);
+    }));
+})();
+
+gtag("js", new Date);
+
+gtag("config", "G-NVD1F3H412");
+</script><script async src="https://www.googletagmanager.com/gtag/js?id=G-NVD1F3H412"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reloading Software for Windows: What Runs on a PC | Loadscope</title>
+<meta name="description" content="Which reloading software runs on a Windows PC, what each program is for, and where Loadscope fits: scoring the ladder you actually shot and naming your best load.">
+<link rel="canonical" href="https://loadscope.app/learn/reloading-software-for-windows.html">
+<meta property="og:title" content="Reloading Software for Windows: What Runs on a PC"><meta property="og:description" content="Which reloading software runs on a Windows PC, what each program is for, and where Loadscope fits: scoring the ladder you actually shot and naming your best load.">
+<meta property="og:type" content="article"><meta property="og:url" content="https://loadscope.app/learn/reloading-software-for-windows.html">
+<meta property="og:image" content="https://loadscope.app/assets/icon.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Reloading Software for Windows: What Runs on a PC">
+<meta name="twitter:description" content="Which reloading software runs on a Windows PC, what each program is for, and where Loadscope fits: scoring the ladder you actually shot and naming your best load.">
+<meta name="twitter:image" content="https://loadscope.app/assets/icon.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Reloading Software for Windows: What Runs on a PC","description":"Which reloading software runs on a Windows PC, what each program is for, and where Loadscope fits: scoring the ladder you actually shot and naming your best load.","url":"https://loadscope.app/learn/reloading-software-for-windows.html","image":"https://loadscope.app/assets/icon.png","publisher":{"@type":"Organization","name":"Loadscope","logo":{"@type":"ImageObject","url":"https://loadscope.app/assets/icon.png"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://loadscope.app/learn/reloading-software-for-windows.html"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://loadscope.app/"},{"@type":"ListItem","position":2,"name":"Learn","item":"https://loadscope.app/learn/"},{"@type":"ListItem","position":3,"name":"Reloading Software for Windows: What Runs on a PC","item":"https://loadscope.app/learn/reloading-software-for-windows.html"}]}</script>
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32.png">
+<style>
+:root{--orange:#d97706;--bg:#0e0f12;--bg-mid:#1a1c20;--bg-light:#252830;--text:#f5f5f5;--text-dim:#9ca3af;--text-muted:#6b7280;--border:#2d3036;}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;font-size:17px}
+.container{max-width:760px;margin:0 auto;padding:0 24px}
+nav{position:sticky;top:0;background:rgba(14,15,18,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);z-index:10}
+nav .container{max-width:1080px;display:flex;align-items:center;justify-content:space-between;height:60px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:1px;color:#fff;text-decoration:none}
+.logo img{width:30px;height:30px;border-radius:7px}
+.nav-links a{color:var(--text-dim);text-decoration:none;margin-left:20px;font-size:15px}
+.nav-links a:hover{color:#fff}
+.btn{background:var(--orange);color:#fff!important;padding:8px 16px;border-radius:8px;font-weight:700}
+@media(max-width:560px){nav .container{padding:0 14px}.logo{font-size:15px;letter-spacing:.5px;white-space:nowrap}.logo img{width:26px;height:26px}.nav-links{display:flex;align-items:center}.nav-links a{margin-left:12px;font-size:14px;white-space:nowrap}.nav-links a[href='/#faq'],.nav-links a[href='/#install']{display:none}.btn{padding:7px 11px;white-space:nowrap}}
+
+article{padding:48px 0 24px}
+.crumb{color:var(--text-muted);font-size:14px;margin-bottom:18px}
+.crumb a{color:var(--text-dim);text-decoration:none}
+h1{font-size:34px;line-height:1.2;margin-bottom:14px;letter-spacing:-.4px}
+h2{font-size:23px;margin:34px 0 10px;color:#fff}
+p{color:#dfe2e6;margin-bottom:16px}
+ul,ol{margin:0 0 16px 22px}
+li{color:#dfe2e6;margin-bottom:8px}
+a{color:var(--orange)}
+.lead{font-size:19px;color:var(--text-dim);margin-bottom:8px}
+strong{color:#fff}
+.tablewrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:20px 0 28px}
+.tablewrap table{margin:0;min-width:420px}
+table{width:100%;border-collapse:collapse;margin:20px 0 28px;font-size:15px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);color:#dfe2e6;vertical-align:top}
+th{color:#fff;font-size:14px;text-transform:uppercase;letter-spacing:.03em}
+.cta{background:var(--bg-mid);border:1px solid var(--border);border-left:3px solid var(--orange);border-radius:12px;padding:22px 24px;margin:34px 0}
+.cta h3{color:#fff;font-size:19px;margin-bottom:8px}
+.cta .btn{display:inline-block;margin-top:6px;text-decoration:none}
+.related{border-top:1px solid var(--border);margin-top:40px;padding-top:24px}
+.related a{display:block;margin-bottom:8px;text-decoration:none;color:var(--text-dim)}
+.related a:hover{color:var(--orange)}
+footer{border-top:1px solid var(--border);margin-top:48px;padding:28px 0;color:var(--text-muted);font-size:14px;text-align:center}
+footer a{color:var(--orange);text-decoration:none}
+</style></head><body><nav><div class="container">
+<a class="logo" href="/"><img src="/assets/icon.png" alt="Loadscope">LOADSCOPE&trade;</a>
+<div class="nav-links"><a href="/learn/">Learn</a><a href="/#faq">FAQ</a><a href="/#install">Install</a><a class="btn" href="/">Buy Loadscope</a></div>
+</div></nav><div class="container"><article>
+<div class="crumb"><a href="/">Home</a> &rsaquo; <a href="/learn/">Learn</a></div>
+<h1>Reloading Software for Windows: What Runs on a PC</h1>
+
+<p class="lead">Windows has plenty of reloading software, and much of it does one of two jobs: predict a load from published components, or keep a log of what you loaded. Here is what each kind is for, and where scoring the ladder you actually shot fits in.</p>
+
+<p>The honest starting point: <strong>&ldquo;reloading software for Windows&rdquo; is really three different questions.</strong> Do you want to predict what a load should do before you fire it? Do you want to keep a record of what you loaded and shot? Or do you want to sit down after a range day, with your chronograph file and your targets, and work out which load to shoot? Each is a different tool.</p>
+
+<h2>Predict a load before you fire it</h2>
+<ul>
+<li><strong>QuickLOAD</strong> &mdash; a Windows program that models a cartridge from its components. It is a computer simulation, so it works alongside published load manuals, not in place of them.</li>
+<li><strong>Gordon&rsquo;s Reloading Tool</strong> &mdash; was a predictor that ran on Windows. <a href="/learn/loadscope-vs-gordons-reloading-tool.html">The project removed the download on 27 July 2026</a>.</li>
+</ul>
+
+<h2>Keep a record of what you loaded</h2>
+<p>Reloading logbooks and spreadsheets record your recipes, your round counts and what you shot. They are a good way to avoid losing a load you liked. A log tells you what you did; scoring a ladder and picking the winner is a separate job. If you keep a spreadsheet and wonder whether software is worth it, <a href="/learn/spreadsheet-vs-software-load-development.html">here is how they compare</a>.</p>
+
+<h2>Score what you actually shot</h2>
+<p>This is the job the first two leave open. After you shoot a powder ladder or a seating-depth test, you have a chronograph file and a set of targets, and you have to decide which load to shoot. Doing that by eye off a spreadsheet is how people pick a charge from a lucky three-shot group.</p>
+
+<h2>Where Loadscope fits on Windows</h2>
+<p>Full disclosure before the pitch: we make Loadscope. It runs on Windows 10 or newer, 64-bit, with no graphics card needed. It reads your chronograph file (Garmin Xero, LabRadar, MagnetoSpeed and Athlon), measures your target groups from a photo, scores every powder charge and seating depth you tested on velocity flat-spot, standard deviation, mean radius and vertical, and <strong>names your best load</strong>. Then it predicts the elevation and wind for that load and prints a DOPE card. It does not supply load data and it never suggests a charge you did not shoot.</p>
+<p>You buy it once. It installs like any Windows program, and the installer is signed by Loadscope LLC. The first time you run it, Windows may show a blue &ldquo;Windows protected your PC&rdquo; box: click <strong>More info</strong>, then <strong>Run anyway</strong>, and check that the publisher reads Loadscope LLC.</p>
+
+<div class="tablewrap"><table>
+<tr><th></th><th>Predictors (QuickLOAD)</th><th>Logbooks and spreadsheets</th><th>Loadscope</th></tr>
+<tr><td>Runs on Windows</td><td>Yes</td><td>Yes</td><td>Yes (also Mac)</td></tr>
+<tr><td>Works from</td><td>Published components</td><td>What you type in</td><td>Your chronograph file and targets</td></tr>
+<tr><td>Names your best load</td><td>No</td><td>Varies</td><td>Yes</td></tr>
+<tr><td>Predicts DOPE</td><td>No</td><td>Varies</td><td>Yes</td></tr>
+</table></div>
+
+<h2>So what should a Windows shooter run?</h2>
+<p>Most people use more than one. A predictor can help you choose where to start, a log keeps your records straight, and a scoring tool tells you which of the loads you actually shot is the one to keep. If you already keep a spreadsheet, you do not have to give it up: Loadscope reads your chronograph file directly.</p>
+
+<div class="cta"><h3>Find your best load, on the Windows PC you already own.</h3>
+<p>Loadscope reads your chronograph, measures your groups from a photo, scores every charge and seating depth, and <strong>names your best load</strong> &mdash; then predicts its DOPE and prints a range card. Windows 10 or newer, 64-bit. Also on Mac. One-time $79, no subscription, 30-day money-back.</p>
+<a class="btn" href="/">See how it works &rarr;</a></div>
+
+<div class="related"><strong style="color:#fff">Keep reading</strong><br><br><a href="/learn/best-ballistic-app-for-mac.html">Best ballistic app for Mac: what runs on macOS &rarr;</a><a href="/learn/loadscope-vs-quickload.html">Loadscope vs QuickLOAD: predict vs score &rarr;</a><a href="/learn/reloading-software-compared.html">What software do reloaders use? &rarr;</a></div>
+</article></div>
+<footer><div class="container">
+<p>&copy; 2026 Loadscope&trade;. Automated rifle load development for Mac &amp; Windows. &middot; <a href="/">loadscope.app</a></p>
+<p style="margin-top:6px"><a href="/learn/">Learn</a> &middot; <a href="/terms.html">Terms</a> &middot; <a href="/privacy.html">Privacy</a></p>
+</div></footer>
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "2faa54a51efa477c9529f0c5bc14f3bf"}'></script>
+</body></html>
