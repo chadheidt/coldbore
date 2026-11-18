@@ -19,10 +19,10 @@
    "app_release_notes": "v1.17.8 - New Save results image button, a charge with too few shots can no longer be named the winner, and half-typed entries are kept when you leave a screen. Plus fixes and improvements."
   },
   "windows": {
-   "app_version": "1.17.7",
+   "app_version": "1.17.8",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.17.7/Loadscope-Setup.exe",
-   "app_release_notes": "v1.17.7 - Loadscope now runs on a newer version of Python, the language it's built in. Nothing changes in how you use it."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.17.8/Loadscope-Setup.exe",
+   "app_release_notes": "v1.17.8 - New Save results image button, a charge with too few shots can no longer be named the winner, and half-typed entries are kept when you leave a screen. Plus fixes and improvements."
   }
  }
 }
