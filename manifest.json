@@ -1,22 +1,22 @@
 {
- "app_version": "1.17.9",
+ "app_version": "1.17.10",
  "app_download_endpoint": "https://api.loadscope.app/authorize",
  "app_download_file": "Loadscope.zip",
  "app_website_url": "https://loadscope.app/",
- "app_release_notes": "v1.17.9 - Check for Updates works again on the Mac, and a load you entered by hand now shows its Recipe Card. Plus fixes and improvements.",
+ "app_release_notes": "v1.17.10 - ShotMarker .tar files from ShotMarker's newest software (1.22) now import.",
  "template_version": "1.0",
  "template_download_url": "",
  "template_release_notes": "",
  "platforms": {
   "mac": {
-   "app_version": "1.17.9",
+   "app_version": "1.17.10",
    "app_download_file": "Loadscope.zip",
-   "app_release_notes": "v1.17.9 - Check for Updates works again on the Mac, and a load you entered by hand now shows its Recipe Card. Plus fixes and improvements."
+   "app_release_notes": "v1.17.10 - ShotMarker .tar files from ShotMarker's newest software (1.22) now import."
   },
   "mac_arm64": {
-   "app_version": "1.17.9",
+   "app_version": "1.17.10",
    "app_download_file": "Loadscope-arm64.zip",
-   "app_release_notes": "v1.17.9 - Check for Updates works again on the Mac, and a load you entered by hand now shows its Recipe Card. Plus fixes and improvements."
+   "app_release_notes": "v1.17.10 - ShotMarker .tar files from ShotMarker's newest software (1.22) now import."
   },
   "windows": {
    "app_version": "1.17.8",
