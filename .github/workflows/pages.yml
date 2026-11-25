@@ -25,6 +25,10 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: './docs'
+      # GitHub bug actions/deploy-pages#451 (Nov 2026): the deploy step can look
+      # for the just-uploaded site bundle too soon and find nothing. Wait first.
+      - name: Wait for artifact listing
+        run: sleep 10
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
