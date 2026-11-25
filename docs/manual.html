@@ -195,7 +195,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
         <li><b>Bullet</b> — pick from the library (its BC fills in) or type a custom bullet and BC.</li>
         <li><b>Powder + test charges</b> — the powder and the charge weights you loaded for the ladder.</li>
         <li><b>Primer / Brass</b> — for your records and the recipe card.</li>
-        <li><b>Zero distance</b> — the range your scope is zeroed at (under Rifle). The DOPE Card and Range &amp; DOPE work from it, and it travels with the rifle to your next load. <b>Test distance</b> (under Test Session) is a different number: how far you shot this ladder.</li>
+        <li><b>Zero distance</b> — the range your scope is zeroed at (under Rifle). The DOPE Card and Range &amp; DOPE work from it, and it travels with the rifle to your next load. <b>Test distance</b> (under Test Session) is a different number: how far you shot this ladder. Targets keep the distance they were measured at: change it later and a yellow note under the box says so; measure those targets again to use the new one.</li>
         <li><b>Round count</b> — set or add to this barrel's count. It is shared with the Barrels library and the phone companion.</li>
       </ul>
       <div class="note">You only set this up once per load. After that you just import range data.</div>
@@ -236,7 +236,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p>The <span class="btn">Measure Target</span> page measures your target groups from a photo, right in Loadscope &mdash; no separate target app required (though you can still import one if you use it). You load a photo of your target, mark your shots, and Loadscope works out the group &mdash; group size, <b>mean radius</b>, vertical &mdash; and how far it sits off your aim. Each measured target group flows through the <b>same scoring path</b> as a BallisticX import, so your Results look identical either way.</p>
       <h3>How it works</h3>
       <ul>
-        <li><b>Bring in your target groups.</b> Two ways: tap <span class="btn">Import from phone</span> to pull groups you measured on the <a href="#companion">Loadscope Ballistics</a> app straight off your phone over Wi-Fi (paired to your charges in order) &mdash; or <span class="btn">Choose target photos</span> to measure on the desktop. For desktop measuring, pick a photo for each charge, or one photo of a whole sheet with a bull per charge, with a known reference in frame (a ruler, or a 1" grid). Until a photo is loaded the page shows only these buttons; the measuring tools appear once one is in.</li>
+        <li><b>Import your target groups.</b> Two ways: tap <span class="btn">Import from phone</span> to pull groups you measured on the <a href="#companion">Loadscope Ballistics</a> app straight off your phone over Wi-Fi (paired to your charges in order) &mdash; or <span class="btn">Choose target photos</span> to measure on the desktop. For desktop measuring, pick a photo for each charge, or one photo of a whole sheet with a bull per charge, with a known reference in frame (a ruler, or a 1" grid). Until a photo is loaded the page shows only these buttons; the measuring tools appear once one is in.</li>
         <li><b>Set the scale.</b> Drag a line across something a known distance apart &mdash; a ruler, or a 1" grid square &mdash; then click <span class="btn">Set length</span> and type how far it really is. Measure in <b>inches, mm, MOA or mil</b> &mdash; pick whichever your target is printed in, and Loadscope converts the rest. Let off early? Just drag again before you confirm.</li>
         <li><b>Mark your aim, then tap each shot.</b> Loadscope does the geometry as you go.</li>
         <li><b>Add a bull for each charge.</b> Shooting a whole ladder on one target sheet? Click <span class="btn">+ Add group</span> to drop another bull on the same photo; each bull is numbered and keeps its own charge or seating depth, labeled right on the target and editable. <span class="btn">Remove group</span> takes one back off.</li>
@@ -263,6 +263,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
         <li><span class="btn">Save this load to Library</span> — keeps the winning load in your Loads library.</li>
         <li><span class="btn">Generate Recipe Card</span> — a one-page printable recipe in your browser.</li>
         <li><span class="btn">Save as PDF…</span> — save that card as a PDF.</li>
+        <li><span class="btn">Fix typed speeds</span> — shows under the worksheet when you typed a ladder's speeds in by hand. Correct a wrong number or delete a bad shot, click Save, and Loadscope re-scores the ladder. Speeds from a chronograph file can't be changed here.</li>
         <li><b>Weights</b> — on the Scoring tab, adjust how much each metric counts; Loadscope re-scores instantly from your existing data, no re-import.</li>
       </ul>
     </section>
@@ -273,11 +274,11 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <p>Enter your muzzle velocity, ballistic coefficient, zero range, sight height and conditions, and Loadscope predicts your elevation and wind from 100 to 1000 yards. The solver is an industry-standard point-mass model with G1/G7 drag curves &mdash; the same class Strelok, GeoBallistics and the free Hornady and Berger calculators run. Measured-drag solvers like Applied Ballistics and Hornady 4DOF pull ahead deep in the transonic.</p>
       <h3>Inputs</h3>
       <ul>
-        <li><b>Muzzle velocity</b> — measured from your chronograph data, or enter it.</li>
+        <li><b>Muzzle velocity</b> — measured from your chronograph data, or enter it. A load you typed in by hand gets a DOPE table too, from the speeds you typed.</li>
         <li><b>Bullet / BC / drag model</b> — pulled from your setup.</li>
         <li><b>Zero range and sight height</b> — your rifle's setup.</li>
         <li><b>Conditions</b> — temperature, and either the altitude where you shot or, if you carry a weather meter, its station pressure. The page opens on altitude and remembers the one you use. Click Update prediction and Loadscope keeps them for this load &mdash; your printed DOPE card uses them too.</li>
-        <li><b>View</b> — <b>Basic</b> shows elevation, clicks, wind and time of flight. <b>Technical</b> adds spin drift, Coriolis and lead, and a Latitude box for Coriolis.</li>
+        <li><b>View</b> — <b>Basic</b> shows elevation with its clicks, the 10 mph wind with its clicks, and time of flight. <b>Technical</b> adds spin drift, Coriolis and lead, and a Latitude box for Coriolis.</li>
       </ul>
     </section>
 
@@ -370,7 +371,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 20px 60px;color:var(--muted);fon
       <h2>Factory ammo</h2>
       <p class="lede">Test a box of factory ammo, and compare boxes against each other or against your handloads.</p>
       <p>Start with <span class="btn">+ Create New Load</span> (or open <a href="#setup">Rifle &amp; Setup</a>) and set the test to <b>Factory ammo</b>. Type what's on the box in the <b>Ammo</b> box, like <b>Hornady 140gr ELD Match</b> &mdash; that name is what marks the load as factory ammo. The lot number and BC are optional; with a BC the load gets its own DOPE Card. Click <span class="btn">Save this ammo</span>. There's no ladder to plan, because nothing is varied.</p>
-      <p>A box of ammo is <b>one group and one string</b>. Shoot a group over your chronograph, then bring both in:</p>
+      <p>A box of ammo is <b>one group and one string</b>. Shoot a group over your chronograph, then import both:</p>
       <ul>
         <li><b>Target</b> &mdash; measure the photo in <a href="#measure">Measure Target</a>, or drop your target app's file on <a href="#import">Import Data</a>.</li>
         <li><b>Velocities</b> &mdash; drop your chronograph file on Import Data. If it holds several sessions, pick the one you shot with this ammo. No file? Click <span class="btn">Enter data by hand…</span> and type the speeds.</li>
