@@ -19,10 +19,10 @@
    "app_release_notes": "v1.17.11 - Range & DOPE now shows your windage in clicks, and a load you entered by hand now gets DOPE. Plus fixes and improvements."
   },
   "windows": {
-   "app_version": "1.17.10",
+   "app_version": "1.17.11",
    "app_download_file": "Loadscope-Setup.exe",
-   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.17.10/Loadscope-Setup.exe",
-   "app_release_notes": "v1.17.10 - ShotMarker .tar files from ShotMarker's newest software (1.22) now import, and a load you entered by hand now shows its Recipe Card. Plus fixes and improvements."
+   "app_download_url": "https://github.com/chadheidt/coldbore/releases/download/v1.17.11/Loadscope-Setup.exe",
+   "app_release_notes": "v1.17.11 - Range & DOPE now shows your windage in clicks, and a load you entered by hand now gets DOPE. Plus fixes and improvements."
   }
  }
 }
